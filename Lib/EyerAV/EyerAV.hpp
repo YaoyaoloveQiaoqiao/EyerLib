@@ -27,6 +27,8 @@ namespace Eyer
     class EyerAVFrameWeight;
     class EyerAVRational;
 
+    class EyerAVReadePngList;
+
     enum EyerAVPixelFormat
     {
         Eyer_AV_PIX_FMT_UNKNOW = 0,
@@ -301,6 +303,17 @@ namespace Eyer
 
     private:
         EyerLinkedList<EyerAVFrameWeight *> frameList;
+    };
+
+    class EyerAVReadePngList
+    {
+    public:
+        EyerAVReadePngList(EyerString _path);
+        ~EyerAVReadePngList();
+
+        int read();
+    private:
+        EyerString path = "";
     };
 }
 

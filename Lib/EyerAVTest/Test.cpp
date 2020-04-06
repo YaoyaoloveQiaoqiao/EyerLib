@@ -3,7 +3,9 @@
 #include "EyerAV/EyerAV.hpp"
 #include "Path.hpp"
 
-#include "EyerAVBitmapTest.h"
+#include "EyerAVReadePngListTest.hpp"
+
+//#include "EyerAVBitmapTest.h"
 
 /*
 #include "EyerAVDecoderTest.hpp"
@@ -51,6 +53,7 @@ TEST(EyerAVFormat3, format3_read_frame){
     reader.Close();
 }
 */
+
 
 TEST(Encoder, Encoder){
     int width = 1280;
@@ -130,6 +133,7 @@ TEST(Encoder, Encoder){
 
     writer.Close();
 }
+
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
