@@ -35,7 +35,8 @@ namespace Eyer
         Eyer_AV_PIX_FMT_YUV420P = 101,
         Eyer_AV_PIX_FMT_YUVJ420P = 102,
         Eyer_AV_PIX_FMT_YUV444P = 103,
-        Eyer_AV_PIX_FMT_YUVJ444P = 104
+        Eyer_AV_PIX_FMT_YUVJ444P = 104,
+        Eyer_AV_PIX_FMT_RGBA = 105,
     };
 
     enum EyerAVStreamType{
@@ -110,6 +111,8 @@ namespace Eyer
         int InitAACFrame(int channels);
 
         int GetInfo();
+
+        int GetRGBA(unsigned char * rgbaData);
 
         EyerAVPixelFormat GetPixFormat() const;
     };

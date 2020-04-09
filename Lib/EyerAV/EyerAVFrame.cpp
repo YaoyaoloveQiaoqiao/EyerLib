@@ -167,7 +167,6 @@ namespace Eyer {
             memcpy(yData + offset, piml->frame->data[0] + i * piml->frame->linesize[0], w);
             offset += w;
         }
-
         return 0;
     }
 
@@ -381,6 +380,9 @@ namespace Eyer {
         if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ444P){
             return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P;
         }
+        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_RGBA){
+            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_RGBA;
+        }
 
         return EyerAVPixelFormat::Eyer_AV_PIX_FMT_UNKNOW;
     }
@@ -533,4 +535,24 @@ namespace Eyer {
         }
         return -1;
     }
+
+    int EyerAVFrame::GetRGBA(unsigned char * rgbaData)
+    {
+        int w = GetWidth();
+        int h = GetHeight();
+
+        if(!GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_RGBA){
+            printf("in getRGBA, it is not Eyer_AV_PIX_FMT_RGBA\n");
+            return -1;
+        }
+
+        int offset = 0;
+        for(int i=0;i<h;i++){
+            printf("for i:%d\n", i);
+            memcpy(rgbaData + offset, piml->frame->data[0] + i * piml->frame->linesize[0], w);
+            offset += w;
+        }
+        return 0;
+    }
+
 }

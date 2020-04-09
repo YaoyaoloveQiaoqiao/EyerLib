@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 
 TEST(EyerAVReadePngList, readPngList){
-    Eyer::EyerAVReadePngList * pngList = new Eyer::EyerAVReadePngList("demo.mp4");
+    Eyer::EyerAVReadePngList * pngList = new Eyer::EyerAVReadePngList("earl_000.png");
     pngList->read();
 }
 
