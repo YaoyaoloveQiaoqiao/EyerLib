@@ -63,6 +63,13 @@ namespace MB
         return 0;
     }
 
+     int MBGLDraw::PutUniform1i(MBString uniform, int val)
+    {
+        program->UseProgram();
+        program->PutUniform1i(uniform, val);
+        return 0;
+    }
+
     int MBGLDraw::SetVAO(MBGLVAO * _vao)
     {
         vao = _vao;

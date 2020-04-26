@@ -118,6 +118,12 @@ namespace MB
         MBGLDraw * textureDraw = nullptr;
     };
 
+    enum EyerGLYUV2TextureComponentColorRange
+    {
+        COLOR_RANGE_FULL = 1,
+        COLOR_RANGE_JPEG = 2,
+    };
+
     class MBGLYUV2TextureComponent : public MBGLComponent
     {
     public:
@@ -128,6 +134,8 @@ namespace MB
         int SetUTexture(MBGLTexture * uTex);
         int SetVTexture(MBGLTexture * vTex);
 
+        int SetColoRange(EyerGLYUV2TextureComponentColorRange _colorRange);
+
         virtual int Draw();
 
     private:
@@ -137,6 +145,8 @@ namespace MB
         MBGLTexture * yTex = nullptr;
         MBGLTexture * uTex = nullptr;
         MBGLTexture * vTex = nullptr;
+
+        EyerGLYUV2TextureComponentColorRange colorRange = EyerGLYUV2TextureComponentColorRange::COLOR_RANGE_FULL;
     };
 
     class MBGLCacheTexture

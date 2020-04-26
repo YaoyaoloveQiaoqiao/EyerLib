@@ -135,6 +135,7 @@ namespace MB
         int PutTexture(MBString uniform, MBGLTexture * texture, int textureIndex = 0);
         int PutMatrix4fv(MBString uniform, MBMat4x4 & mat);
         int PutUniform1f(MBString uniform, float val);
+        int PutUniform1i(MBString uniform, int val);
 
         int Draw();
     };

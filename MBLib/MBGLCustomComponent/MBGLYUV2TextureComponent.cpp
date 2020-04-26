@@ -77,7 +77,15 @@ namespace MB
             yuv2texture->PutTexture("v",vTex, 2);
         }
 
+        yuv2texture->PutUniform1i("colorRange", (int)colorRange);
+
         yuv2texture->Draw();
+        return 0;
+    }
+
+     int MBGLYUV2TextureComponent::SetColoRange(EyerGLYUV2TextureComponentColorRange _colorRange)
+    {
+        colorRange = _colorRange;
         return 0;
     }
 }
