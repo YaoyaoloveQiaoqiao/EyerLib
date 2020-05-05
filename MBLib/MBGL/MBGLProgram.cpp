@@ -70,7 +70,7 @@ namespace MB
         // Check the program
         glGetProgramiv(programId, GL_LINK_STATUS, &Result);
         glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if ( InfoLogLength > 0 ){
+        if ( InfoLogLength > 3 ){
             std::vector<char> ProgramErrorMessage(InfoLogLength+1);
             glGetProgramInfoLog(programId, InfoLogLength, NULL, &ProgramErrorMessage[0]);
             MBLog("%s\n", &ProgramErrorMessage[0]);

@@ -70,7 +70,10 @@ namespace MB{
         int InfoLogLength;
         glGetShaderiv(shaderId, GL_COMPILE_STATUS, &Result);
         glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if ( InfoLogLength > 0 ){
+
+        // MBLog("InfoLogLength: %d\n", InfoLogLength);
+
+        if ( InfoLogLength > 3 ){
             std::vector<char> ShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(shaderId, InfoLogLength, NULL, &ShaderErrorMessage[0]);
             MBLog("%s\n", &ShaderErrorMessage[0]);
