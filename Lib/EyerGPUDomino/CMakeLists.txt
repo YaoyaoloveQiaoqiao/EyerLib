@@ -19,8 +19,6 @@ target_link_libraries (EyerGPUDomino EyerCore)
 target_link_libraries (EyerGPUDomino pthread)
 target_link_libraries (EyerGPUDomino gtest)
 target_link_libraries (EyerGPUDomino EyerGL)
-target_link_libraries (EyerGPUDomino EyerType)
-target_link_libraries (EyerGPUDomino EyerGLAD)
 
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
     MESSAGE(STATUS "current platform: Linux")

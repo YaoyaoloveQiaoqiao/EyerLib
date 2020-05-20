@@ -33,8 +33,18 @@ namespace Eyer {
     {
         piml = new EyerAVFramePrivate();
         piml->frame = av_frame_alloc();
+
         *this = frame;
     }
+
+    EyerAVFrame & EyerAVFrame::operator = (const EyerAVFrame & frame)
+    {
+        av_frame_copy(piml->frame, frame.piml->frame);
+        av_frame_ref(piml->frame, frame.piml->frame);
+        return *this;
+    }
+
+    /*
     EyerAVFrame & EyerAVFrame::operator = (const EyerAVFrame & frame)
     {
         // Copy data
@@ -138,6 +148,7 @@ namespace Eyer {
 
         return *this;
     }
+    */
 
     int EyerAVFrame::GetYData(unsigned char * yData)
     {

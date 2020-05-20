@@ -30,4 +30,22 @@ namespace Eyer
                 );
         return 0;
     }
+
+
+    int EyerYUV::I420_TO_RGBA(int width, int height, unsigned char * y, unsigned char * u, unsigned char * v, unsigned char * rgbData)
+    {
+        libyuv::I420ToARGB(
+            y, 
+            width, 
+            u, 
+            width / 2, 
+            v, 
+            width / 2,
+            rgbData,
+            width * 4, 
+            width, 
+            height);
+
+        return 0;
+    }
 }

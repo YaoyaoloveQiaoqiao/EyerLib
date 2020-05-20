@@ -34,6 +34,7 @@ namespace Eyer
 
         int PushRendTask(EyerGLRenderTask * renderTask);
         int PopAndRender(int w, int h);
+        int PopAndRenderAndFree(int w, int h);
     private:
         EyerLockQueue<EyerGLRenderTask> taskQueue;
     };

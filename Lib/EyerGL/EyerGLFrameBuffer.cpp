@@ -125,16 +125,21 @@ namespace Eyer {
 
     int EyerGLFrameBuffer::Clear()
     {
+        return Clear(1.0, 1.0, 1.0, 1.0);
+    }
+
+    int EyerGLFrameBuffer::Clear(float r, float g, float b, float a)
+    {
 #ifdef QT_EYER_PLAYER
         ctx->glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         ctx->glViewport(0, 0, width, height);
-        ctx->glClearColor(0.0, 0.0, 0.0, 0.0);
+        ctx->glClearColor(r, g, b, a);
         ctx->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         ctx->glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #else
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         glViewport(0, 0, width, height);
-        glClearColor(1.0, 1.0, 1.0, 1.0);
+        glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 #endif

@@ -22,7 +22,12 @@ namespace Eyer
         int SetWH(int w, int h);
 
         int AddTaskToRenderQueue(EyerGLRenderTask * task);
+        int AddTaskToRenderAndFreeQueue(EyerGLRenderTask * task);
+        
         int AddTaskToDestoryQueue(EyerGLRenderTask * task);
+
+        int GetW();
+        int GetH();
     private:
         ANativeWindow * nativeWindow = nullptr;
 
@@ -30,6 +35,7 @@ namespace Eyer
         int h = 0;
 
         EyerGLRenderTaskQueue taskQueue;
+        EyerGLRenderTaskQueue renderAndFreeTaskQueue;
         EyerLockQueue<EyerGLRenderTask> destoryTaskQueue;
     };
 }

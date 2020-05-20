@@ -36,6 +36,21 @@ namespace Eyer
         return 0;
     }
 
+    int EyerGLRenderTaskQueue::PopAndRenderAndFree(int w, int h)
+    {
+        EyerGLRenderTask * task = nullptr;
+        taskQueue.FrontPop(&task);
+        if(task != nullptr){
+            task->Init();
+            task->SetWH(w, h);
+            task->Render();
+
+            delete task;
+        }
+
+        return 0;
+    }
+
     int EyerGLRenderTaskQueue::GetSize()
     {
         return taskQueue.Size();

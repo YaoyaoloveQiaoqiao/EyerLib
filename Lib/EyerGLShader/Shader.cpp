@@ -206,10 +206,16 @@ namespace Eyer
         uniform sampler2D v;
 
         uniform int colorRange;
+        uniform int reverseY;
 
         in vec3 outCoor;
         void main(){
             vec2 t = vec2(outCoor.x, outCoor.y);
+            if(reverseY == 0){
+            }
+            else{
+                t.y = 1.0 - t.y;
+            }
 
             vec3 yuv;
             vec3 rgb;
@@ -238,7 +244,6 @@ namespace Eyer
                 rgb = kBt601VideoRangeYUV2RGBMatrix * yuv;
             }
             if(colorRange == 2){
-
                 rgb = kBt601FullRangeYUV2RGBMatrix * yuv;
             }
 

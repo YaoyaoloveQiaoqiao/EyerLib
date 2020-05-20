@@ -178,6 +178,7 @@ namespace Eyer
         int ClearAllComponent();
 
         int Clear();
+        int Clear(float r, float g, float b, float a);
 
         int Draw();
 

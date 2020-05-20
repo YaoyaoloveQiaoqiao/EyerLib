@@ -77,9 +77,16 @@ namespace Eyer
             yuv2texture->PutTexture("v",vTex, 2);
         }
 
+        yuv2texture->PutUniform1i("reverseY", reverseY);
         yuv2texture->PutUniform1i("colorRange", (int)colorRange);
 
         yuv2texture->Draw();
+        return 0;
+    }
+
+    int EyerGLYUV2TextureComponent::SetReverseY(int _reverseY)
+    {
+        reverseY = _reverseY;
         return 0;
     }
 

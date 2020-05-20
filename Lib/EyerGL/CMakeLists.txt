@@ -22,6 +22,7 @@ add_library(
         EyerGLCustomComponent/EyerGLTest.cpp
         EyerGLCustomComponent/EyerGLTextDraw.cpp
         EyerGLCustomComponent/EyerGLYUV2TextureComponent.cpp
+        EyerGLCustomComponent/EyerGLChessboard.cpp
 
         EyerGLRenderTask/EyerGLRenderTask.cpp
         EyerGLRenderTask/EyerGLRenderTaskQueue.cpp
