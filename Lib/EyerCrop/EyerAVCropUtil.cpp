@@ -15,6 +15,7 @@ namespace Eyer
 
     int EyerAVCropUtil::GetCrop(int viewW, int viewH, int imageW, int imageH, int & targetW, int & targetH, EyerAVCropType cropType)
     {
+        /*
         if(cropType == EyerAVCropType::FIT_CENTER){
             float viewFit = viewW * 1.0 / viewH;
             float imageFit = imageW * 1.0 / imageH;
@@ -34,7 +35,12 @@ namespace Eyer
             targetW = viewW;
             targetH = viewH;
         }
-        return 0;
+        */
+
+        int transX = 0;
+        int transY = 0;
+
+        return GetCrop(viewW, viewH, imageW, imageH, targetW, targetH, transX, transY, cropType);
     }
 
     int GetCrop(int viewW, int viewH, int imageW, int imageH, int& targetW, int& targetH, int& transX, int& transY, EyerAVCropType cropType)
