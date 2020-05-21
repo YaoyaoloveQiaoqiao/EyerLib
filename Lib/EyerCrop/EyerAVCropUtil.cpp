@@ -43,7 +43,7 @@ namespace Eyer
         return GetCrop(viewW, viewH, imageW, imageH, targetW, targetH, transX, transY, cropType);
     }
 
-    int GetCrop(int viewW, int viewH, int imageW, int imageH, int& targetW, int& targetH, int& transX, int& transY, EyerAVCropType cropType)
+    int EyerAVCropUtil::GetCrop(int viewW, int viewH, int imageW, int imageH, int& targetW, int& targetH, int& transX, int& transY, EyerAVCropType cropType)
     {
         // https://www.jianshu.com/p/32e335d5b842
         float imageAspect = imageW * 1.0 / imageH;
