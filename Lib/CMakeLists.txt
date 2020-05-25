@@ -16,6 +16,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
     MESSAGE(STATUS "current platform: Linux ")
+    ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
     ADD_SUBDIRECTORY(EyerGLAD)
     ADD_SUBDIRECTORY(EyerCore)
     ADD_SUBDIRECTORY(EyerCoreTest)
@@ -38,6 +39,7 @@ IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
     ADD_SUBDIRECTORY(EyerImg)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerCrop)
+    ADD_SUBDIRECTORY(EyerVideoTweenAnimation)
     ADD_SUBDIRECTORY(googletest)
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Windows")
     MESSAGE(STATUS "current platform: Windows")
@@ -80,8 +82,9 @@ ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
     ADD_SUBDIRECTORY(EyerYUV)
     ADD_SUBDIRECTORY(Eyer)
     ADD_SUBDIRECTORY(EyerImg)
-    
-    
+    ADD_SUBDIRECTORY(EyerVideoTweenAnimation)
+    ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
+
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Darwin")
     MESSAGE(STATUS "current platform: Darwin")
     set(CMAKE_EXE_LINKER_FLAGS
