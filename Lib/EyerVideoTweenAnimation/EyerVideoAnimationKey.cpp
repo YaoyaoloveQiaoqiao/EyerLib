@@ -12,6 +12,14 @@ namespace Eyer
 
     }
 
+    EyerVideoAnimationKey::EyerVideoAnimationKey(double _t, float _x, float _y, float _z)
+    {
+        t = _t;
+        x = _x;
+        y = _y;
+        z = _z;
+    }
+
     EyerVideoAnimationKey::EyerVideoAnimationKey(const EyerVideoAnimationKey& tk)
     {
         *this = tk;

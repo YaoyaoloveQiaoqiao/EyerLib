@@ -18,6 +18,7 @@ namespace Eyer
         bool operator < (const EyerVideoAnimationKey& key2);
 
         EyerVideoAnimationKey();
+        EyerVideoAnimationKey(double t, float x, float y, float z);
         EyerVideoAnimationKey(const EyerVideoAnimationKey& tk);
 
         EyerVideoAnimationKey& operator = (const EyerVideoAnimationKey& tk);

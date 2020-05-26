@@ -7,32 +7,30 @@ namespace Eyer
     }
     EyerVideoTweenAnimation::~EyerVideoTweenAnimation()
     {
-
+        for(int i=0;i<animationKeyList.getLength();i++){
+            EyerVideoAnimationKey * animationKey = nullptr;
+            animationKeyList.find(i, animationKey);
+            if(animationKey != nullptr){
+                delete animationKey;
+            }
+        }
+        animationKeyList.clear();
     }
     int EyerVideoTweenAnimation::GetLinearValue(double t, EyerVideoAnimationKey & outKey)
     {
-        /*
-        MB::MBLinkedList<MBTransKey*>* changeKeyList = new MB::MBLinkedList<MBTransKey*>();
-        if (type == MBVideoChangeType::VIDEO_FRAGMENT_CHANGE_TRANS) {
-            *changeKeyList = transKeyList;
-        }
-        else if (type == MBVideoChangeType::VIDEO_FRAGMENT_CHANGE_SCALE) {
-            *changeKeyList = scaleKeyList;
-        }
-
-        if (changeKeyList->getLength() == 0) {
-            x = 0;
-            y = 0;
-            z = 0;
+        if (animationKeyList.getLength() == 0) {
+            outKey.x = 0;
+            outKey.y = 0;
+            outKey.z = 0;
             return 0;
         }
 
-        MBLinkedEle<MB::MBTransKey*>* currentEle = changeKeyList->head;
-        for (int i = 0; i < changeKeyList->getLength() - 1; i++) {
-            MBLinkedEle<MB::MBTransKey*>* temp = currentEle->next;
+        EyerLinkedEle<EyerVideoAnimationKey*>* currentEle = animationKeyList.head;
+        for (int i = 0; i < animationKeyList.getLength() - 1; i++) {
+            EyerLinkedEle<EyerVideoAnimationKey*>* temp = currentEle->next;
             while (temp != nullptr) {
                 if (temp->data->t < currentEle->data->t) {
-                    MB::MBTransKey* data = currentEle->data;
+                    EyerVideoAnimationKey* data = currentEle->data;
                     currentEle->data = temp->data;
                     temp->data = data;
                 }
@@ -43,46 +41,44 @@ namespace Eyer
             }
         }
 
-        MB::MBTransKey* firstdata = nullptr;
-        MB::MBTransKey* lastdata = nullptr;
-        changeKeyList->find(0, firstdata);
-        changeKeyList->find(changeKeyList->getLength() - 1, lastdata);
+        EyerVideoAnimationKey* firstdata = nullptr;
+        EyerVideoAnimationKey* lastdata = nullptr;
+        animationKeyList.find(0, firstdata);
+        animationKeyList.find(animationKeyList.getLength() - 1, lastdata);
 
         if (t < firstdata->t) {
-            x = firstdata->x;
-            y = firstdata->y;
-            z = firstdata->z;
+            outKey.x = firstdata->x;
+            outKey.y = firstdata->y;
+            outKey.z = firstdata->z;
             return 0;
         }
         else if (t > lastdata->t) {
-            x = lastdata->x;
-            y = lastdata->y;
-            z = lastdata->z;
+            outKey.x = lastdata->x;
+            outKey.y = lastdata->y;
+            outKey.z = lastdata->z;
             return 0;
         }
 
-        for (int i = 0; i < changeKeyList->getLength() - 1; i++) {
-            changeKeyList->find(i, firstdata);
-            changeKeyList->find(i + 1, lastdata);
+        for (int i = 0; i < animationKeyList.getLength() - 1; i++) {
+            animationKeyList.find(i, firstdata);
+            animationKeyList.find(i + 1, lastdata);
 
             if (t >= firstdata->t && t < lastdata->t) {
                 double tPart = (t - firstdata->t) / (lastdata->t - firstdata->t);
-                x = tPart * (lastdata->x - firstdata->x) + firstdata->x;
-                y = tPart * (lastdata->y - firstdata->y) + firstdata->y;
-                z = tPart * (lastdata->z - firstdata->z) + firstdata->z;
+                outKey.x = tPart * (lastdata->x - firstdata->x) + firstdata->x;
+                outKey.y = tPart * (lastdata->y - firstdata->y) + firstdata->y;
+                outKey.z = tPart * (lastdata->z - firstdata->z) + firstdata->z;
                 return 0;
             }
         }
 
         return 0;
-        */
-        return 0;
     }
 
     int EyerVideoTweenAnimation::AddKey(EyerVideoAnimationKey & key)
     {
-        printf("int addkey\n");
-        return 0;
+        EyerVideoAnimationKey * innerKey = new EyerVideoAnimationKey(key.t, key.x, key.y, key.y);
+        return animationKeyList.insertBack(innerKey);
     }
 
 }
