@@ -98,6 +98,8 @@ namespace Eyer {
         EyerMat4x1();
         ~EyerMat4x1();
 
+        EyerMat4x1(float x, float y, float z, float w);
+
         float x();
         float y();
         float z();

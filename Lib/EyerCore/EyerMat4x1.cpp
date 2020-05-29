@@ -6,6 +6,14 @@ namespace Eyer {
 
     }
 
+    EyerMat4x1::EyerMat4x1(float x, float y, float z, float w) : EyerMat(4, 1)
+    {
+        SetX(x);
+        SetY(y);
+        SetZ(z);
+        SetW(w);
+    }
+
     EyerMat4x1::~EyerMat4x1()
     {
 
