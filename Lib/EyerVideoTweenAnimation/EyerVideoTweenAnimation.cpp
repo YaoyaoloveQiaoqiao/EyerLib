@@ -16,6 +16,31 @@ namespace Eyer
         }
         animationKeyList.clear();
     }
+
+    EyerVideoTweenAnimation::EyerVideoTweenAnimation(const EyerVideoTweenAnimation & animation)
+    {
+        *this = animation;
+    }
+
+    EyerVideoTweenAnimation & EyerVideoTweenAnimation::operator = (const EyerVideoTweenAnimation & animation)
+    {
+        if(this == &animation){
+            return *this;
+        }
+
+        for(int i=0; i<animation.animationKeyList.getLength(); i++){
+            EyerVideoAnimationKey * animationKey = nullptr;
+            animation.animationKeyList.find(i, animationKey);
+            if(animationKey != nullptr){
+                EyerVideoAnimationKey * animationKeyNew = new EyerVideoAnimationKey(*animationKey);
+                animationKeyList.insertBack(animationKeyNew);
+            }
+
+        }
+
+        return *this;
+    }
+
     int EyerVideoTweenAnimation::GetLinearValue(double t, EyerVideoAnimationKey & outKey)
     {
         if (animationKeyList.getLength() == 0) {

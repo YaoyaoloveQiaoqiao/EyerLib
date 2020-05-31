@@ -29,6 +29,9 @@ namespace Eyer
     public:
         EyerVideoTweenAnimation();
         ~EyerVideoTweenAnimation();
+        EyerVideoTweenAnimation(const EyerVideoTweenAnimation & animation);
+        EyerVideoTweenAnimation & operator = (const EyerVideoTweenAnimation & animation);
+
         int GetLinearValue(double t, EyerVideoAnimationKey & outKey);
         int AddKey(EyerVideoAnimationKey & key);
     private:
