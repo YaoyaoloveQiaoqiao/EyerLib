@@ -32,7 +32,7 @@ namespace Eyer
         EyerVideoTweenAnimation(const EyerVideoTweenAnimation & animation);
         EyerVideoTweenAnimation & operator = (const EyerVideoTweenAnimation & animation);
 
-        int GetLinearValue(double t, EyerVideoAnimationKey & outKey);
+        int GetLinearValue(EyerVideoAnimationKey & outKey);
         int AddKey(EyerVideoAnimationKey & key);
     private:
         EyerLinkedList<EyerVideoAnimationKey*> animationKeyList;

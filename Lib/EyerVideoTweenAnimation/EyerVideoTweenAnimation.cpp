@@ -41,7 +41,7 @@ namespace Eyer
         return *this;
     }
 
-    int EyerVideoTweenAnimation::GetLinearValue(double t, EyerVideoAnimationKey & outKey)
+    int EyerVideoTweenAnimation::GetLinearValue(EyerVideoAnimationKey & outKey)
     {
         if (animationKeyList.getLength() == 0) {
             outKey.x = 0;
@@ -71,13 +71,13 @@ namespace Eyer
         animationKeyList.find(0, firstdata);
         animationKeyList.find(animationKeyList.getLength() - 1, lastdata);
 
-        if (t < firstdata->t) {
+        if (outKey.t <= firstdata->t) {
             outKey.x = firstdata->x;
             outKey.y = firstdata->y;
             outKey.z = firstdata->z;
             return 0;
         }
-        else if (t > lastdata->t) {
+        else if (outKey.t >= lastdata->t) {
             outKey.x = lastdata->x;
             outKey.y = lastdata->y;
             outKey.z = lastdata->z;
@@ -88,8 +88,8 @@ namespace Eyer
             animationKeyList.find(i, firstdata);
             animationKeyList.find(i + 1, lastdata);
 
-            if (t >= firstdata->t && t < lastdata->t) {
-                double tPart = (t - firstdata->t) / (lastdata->t - firstdata->t);
+            if (outKey.t >= firstdata->t && outKey.t <= lastdata->t) {
+                double tPart = (outKey.t - firstdata->t) / (lastdata->t - firstdata->t);
                 outKey.x = tPart * (lastdata->x - firstdata->x) + firstdata->x;
                 outKey.y = tPart * (lastdata->y - firstdata->y) + firstdata->y;
                 outKey.z = tPart * (lastdata->z - firstdata->z) + firstdata->z;

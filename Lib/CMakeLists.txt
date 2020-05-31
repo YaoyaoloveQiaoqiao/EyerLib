@@ -83,7 +83,6 @@ ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
     ADD_SUBDIRECTORY(Eyer)
     ADD_SUBDIRECTORY(EyerImg)
     ADD_SUBDIRECTORY(EyerVideoTweenAnimation)
-    ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
 
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Darwin")
     MESSAGE(STATUS "current platform: Darwin")
