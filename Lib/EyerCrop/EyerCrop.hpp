@@ -6,7 +6,13 @@ namespace Eyer
     enum EyerAVCropType
     {
         FIT_CENTER = 0,
-        FIT_XY = 1
+        FIT_XY = 1,
+        FIT_END = 2,
+        FIT_START = 3,
+        CENTER = 4,
+        CENTER_CROP = 5,
+        CENTER_INSIDE = 6,
+        MATRIX = 7
     };
 
     class EyerAVCropUtil
@@ -16,6 +22,7 @@ namespace Eyer
         ~EyerAVCropUtil();
 
         int GetCrop(int viewW, int viewH, int imageW, int imageH, int & targetW, int & targetH, EyerAVCropType cropType = EyerAVCropType::FIT_CENTER);
+        int GetCrop(int viewW, int viewH, int imageW, int imageH, int& targetW, int& targetH, int& transX, int& transY, EyerAVCropType cropType = EyerAVCropType::FIT_CENTER);
     };
 
 
