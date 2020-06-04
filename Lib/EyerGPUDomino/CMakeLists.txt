@@ -13,7 +13,8 @@ add_library(
         EyerGominoZoomBlur.cpp
         EyerCommonComponent.cpp
         EyerCommonParams.cpp
-)
+        EyerSplitScreen2.cpp
+        EyerGominoSoulout.cpp)
 
 target_link_libraries (EyerGPUDomino EyerCore)
 target_link_libraries (EyerGPUDomino pthread)

@@ -3,12 +3,12 @@
 #include "EyerGPUDomino/EyerGPUDomino.hpp"
 
 TEST(GPUDomino, GPUDomino){
-    Eyer::EyerGominoGaussianBlur gb;
+    Eyer::EyerGominoSoulout gb;
 
     Eyer::EyerGominoPip pip;
     pip << &gb;
 
-    // pip.Go()
+    //pip.Go();
 
     pip.PrintStruct();
 }
