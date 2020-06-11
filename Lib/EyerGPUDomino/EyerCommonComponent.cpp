@@ -1,6 +1,11 @@
 #include "EyerGPUDomino.hpp"
 #include "EyerGLShader/Shader.hpp"
 
+#include <iostream>
+#include <chrono>
+#include <math.h>
+using namespace std;
+
 namespace Eyer
 {
     EyerCommonComponent::EyerCommonComponent(char * V_SHADER, char * F_SHADER)
@@ -48,6 +53,8 @@ namespace Eyer
         }
     }
 
+
+    float t = 0.0f;
     int EyerCommonComponent::Draw()
     {
         if(texture != nullptr){
@@ -57,7 +64,10 @@ namespace Eyer
         draw->PutUniform1f("w", w * 1.0);
         draw->PutUniform1f("h", h * 1.0);
 
+        draw->PutUniform1f("Time", t);
         draw->Draw();
+
+        t += 0.04f;
         return 0;
     }
 

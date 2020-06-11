@@ -14,6 +14,7 @@ namespace Eyer
     class EyerGaussianBlurComponent;
     class EyerGominoCopy;
     class EyerCommonParams;
+    class EyerSplitScreen2;
 
     class EyerGomino
     {
@@ -51,6 +52,23 @@ namespace Eyer
         EyerLinkedList<EyerGomino *> gomineList;
     };
 
+    class EyerGominoSoulout : public EyerGomino
+    {
+    public:
+        EyerGominoSoulout();
+        ~EyerGominoSoulout();
+
+        virtual int Go(EyerGLTexture * input, EyerGLTexture * output, int width, int height);
+    };
+
+    class EyerSplitScreen2 : public EyerGomino
+    {
+    public:
+        EyerSplitScreen2();
+        ~EyerSplitScreen2();
+
+        virtual int Go(EyerGLTexture * input, EyerGLTexture * output, int width, int height);
+    };
 
     class EyerGominoGaussianBlur : public EyerGomino
     {
