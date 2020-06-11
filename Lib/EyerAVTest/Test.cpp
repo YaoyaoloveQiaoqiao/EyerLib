@@ -54,7 +54,7 @@ TEST(EyerAVFormat3, format3_read_frame){
 
 TEST(EyerAVTool, EyerAVTool){
     Eyer::EyerYUVLen yuvLen;
-    Eyer::EyerAVTool::getYUVLen(100, 100, yuvLen, Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV422P);
+    Eyer::EyerAVTool::GetYUVLen(100, 100, yuvLen, Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV422P);
     printf("y:%d , u: %d, v: %d\n", yuvLen.yLen, yuvLen.uLen, yuvLen.vLen);
 }
 

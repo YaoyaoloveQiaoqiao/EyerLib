@@ -350,8 +350,7 @@ namespace Eyer
     public:
         EyerAVTool();
         ~EyerAVTool();
-        static int getYUVLen(int width, int height, EyerYUVLen & yuvLen, EyerAVPixelFormat format);
-
+        static int GetYUVLen(int width, int height, EyerYUVLen & yuvLen, EyerAVPixelFormat format);
     };
 
 }
