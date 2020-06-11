@@ -52,7 +52,14 @@ TEST(EyerAVFormat3, format3_read_frame){
 }
 */
 
+TEST(EyerAVTool, EyerAVTool){
+    Eyer::EyerYUVLen yuvLen;
+    Eyer::EyerAVTool::getYUVLen(100, 100, yuvLen, Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV422P);
+    printf("y:%d , u: %d, v: %d\n", yuvLen.yLen, yuvLen.uLen, yuvLen.vLen);
+}
+
 TEST(Audio, Audio){
+    /*
     Eyer::EyerAVReader reader("/home/redknot/Videos/bbb_sunflower_2160p_60fps_normal.mp4");
 
     reader.Open();
@@ -98,9 +105,11 @@ TEST(Audio, Audio){
     }
 
     reader.Close();
+     */
 }
 
 TEST(Encoder, Encoder){
+    /*
     int width = 1280;
     int height = 720;
 
@@ -177,6 +186,7 @@ TEST(Encoder, Encoder){
     }
 
     writer.Close();
+     */
 }
 
 int main(int argc,char **argv){

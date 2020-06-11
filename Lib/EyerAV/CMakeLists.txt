@@ -30,6 +30,7 @@ add_library(
     EyerAVQueue.cpp
     EyerAVQueue.hpp
     EyerAVQueueManager.hpp
+        EyerAVTool.cpp
 )
 
 target_link_libraries (EyerAV EyerCore)

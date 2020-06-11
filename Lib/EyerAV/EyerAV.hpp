@@ -36,6 +36,10 @@ namespace Eyer
         Eyer_AV_PIX_FMT_YUVJ444P = 104,
         Eyer_AV_PIX_FMT_YUVNV12 = 105,
         Eyer_AV_PIX_FMT_YUVNV21 = 106,
+        Eyer_AV_PIX_FMT_YUV422P = 107,
+        Eyer_AV_PIX_FMT_YUVJ422P = 108,
+        Eyer_AV_PIX_FMT_YUVNV16 = 109,
+        Eyer_AV_PIX_FMT_YUVNV61 = 110,
     };
 
     enum EyerAVStreamType{
@@ -331,6 +335,25 @@ namespace Eyer
     private:
         EyerLinkedList<EyerAVFrameWeight *> frameList;
     };
+
+    class EyerYUVLen
+    {
+    public:
+        int yLen;
+        int uLen;
+        int vLen;
+        int uvLen;
+    };
+
+    class EyerAVTool
+    {
+    public:
+        EyerAVTool();
+        ~EyerAVTool();
+        static int getYUVLen(int width, int height, EyerYUVLen & yuvLen, EyerAVPixelFormat format);
+
+    };
+
 }
 
 #endif
