@@ -44,128 +44,19 @@ namespace Eyer {
         return *this;
     }
 
-    /*
-    EyerAVFrame & EyerAVFrame::operator = (const EyerAVFrame & frame)
-    {
-        // Copy data
-        // YUV 420 Data
-        int width                           = frame.piml->frame->width;
-        int height                          = frame.piml->frame->height;
-
-        // Copy width ,height
-        piml->frame->width                  = frame.piml->frame->width;
-        piml->frame->height                 = frame.piml->frame->height;
-
-        piml->frame->channels               = frame.piml->frame->channels;
-        piml->frame->channel_layout         = frame.piml->frame->channel_layout;
-        piml->frame->nb_samples             = frame.piml->frame->nb_samples;
-        piml->frame->format                 = frame.piml->frame->format;
-        piml->frame->key_frame              = frame.piml->frame->key_frame;
-        piml->frame->pict_type              = frame.piml->frame->pict_type;
-        piml->frame->sample_aspect_ratio    = frame.piml->frame->sample_aspect_ratio;
-        piml->frame->pts                    = frame.piml->frame->pts;
-        piml->frame->pkt_dts                = frame.piml->frame->pkt_dts;
-        piml->frame->coded_picture_number   = frame.piml->frame->coded_picture_number;
-        piml->frame->display_picture_number = frame.piml->frame->display_picture_number;
-        piml->frame->quality                = frame.piml->frame->quality;
-
-        // Copy linesize
-        for(int i=0;i<AV_NUM_DATA_POINTERS;i++){
-            piml->frame->linesize[i] = frame.piml->frame->linesize[i];
-        }
-
-        if(frame.GetPixFormat() < 200 && frame.GetPixFormat() >= 100){
-            // 图像
-            {
-                int linesizeIndex = 0;
-                int h = height;
-                if(frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P || frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P){
-                    h = height;
-                }
-                if(frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P || frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P){
-                    h = height;
-                }
-
-                int dataLen = h * frame.piml->frame->linesize[linesizeIndex];
-                unsigned char * data = (unsigned char *)malloc(dataLen);
-
-                memcpy(data, frame.piml->frame->data[linesizeIndex], dataLen);
-
-                piml->frame->data[linesizeIndex] = data;
-                dataManager.push_back(data);
-            }
-            {
-                int linesizeIndex = 1;
-                int h = height;
-                if(frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P || frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P){
-                    h = height / 2;
-                }
-                if(frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P || frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P){
-                    h = height;
-                }
-
-                int dataLen = h * frame.piml->frame->linesize[linesizeIndex];
-                unsigned char * data = (unsigned char *)malloc(dataLen);
-
-                memcpy(data, frame.piml->frame->data[linesizeIndex], dataLen);
-
-                piml->frame->data[linesizeIndex] = data;
-                dataManager.push_back(data);
-            }
-            {
-                int linesizeIndex = 2;
-                int h = height;
-                if(frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P || frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P){
-                    h = height / 2;
-                }
-                if(frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P || frame.GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P){
-                    h = height;
-                }
-
-                int dataLen = h * frame.piml->frame->linesize[linesizeIndex];
-                unsigned char * data = (unsigned char *)malloc(dataLen);
-
-                memcpy(data, frame.piml->frame->data[linesizeIndex], dataLen);
-
-                piml->frame->data[linesizeIndex] = data;
-                dataManager.push_back(data);
-            }
-        }
-
-        {
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_FLTP){
-                int sizePerSample = av_get_bytes_per_sample((AVSampleFormat)piml->frame->format);
-                int channelSize = piml->frame->nb_samples * sizePerSample;
-
-                for(int channelIndex=0; channelIndex<piml->frame->channels; channelIndex++){
-                    unsigned char * data = (unsigned char *)malloc(channelSize);
-                    memcpy(data, frame.piml->frame->data[channelIndex], channelSize);
-                    piml->frame->data[channelIndex] = data;
-                    dataManager.push_back(data);
-                }
-            }
-        }
-
-        return *this;
-    }
-    */
-
     int EyerAVFrame::GetYData(unsigned char * yData)
     {
         int width = GetWidth();
         int height = GetHeight();
 
-        int h = height;
         int w = width;
+        int h = height;
+        
+        EyerYUVLen yuvLen;
+        EyerAVTool::GetYUVLen(w, h, yuvLen, GetPixFormat());
 
-        if(GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P || GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P){
-            h = height;
-            w = width;
-        }
-        if(GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P || GetPixFormat() ==  EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P){
-            h = height;
-            w = width;
-        }
+        w = yuvLen.yWidth;
+        h = yuvLen.yHeight;
 
         int offset = 0;
         for(int i=0;i<h;i++){
@@ -181,13 +72,14 @@ namespace Eyer {
         int width = GetWidth();
         int height = GetHeight();
 
-        int h = height;
         int w = width;
+        int h = height;
+        
+        EyerYUVLen yuvLen;
+        EyerAVTool::GetYUVLen(w, h, yuvLen, GetPixFormat());
 
-        if(GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV12 || GetPixFormat() ==  EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV21){
-            h = height / 2;
-            w = width;
-        }
+        w = yuvLen.yWidth;
+        h = yuvLen.yHeight;
 
         int offset = 0;
         for(int i=0;i<h;i++){
@@ -203,17 +95,14 @@ namespace Eyer {
         int width = GetWidth();
         int height = GetHeight();
 
-        int h = height;
         int w = width;
+        int h = height;
+        
+        EyerYUVLen yuvLen;
+        EyerAVTool::GetYUVLen(w, h, yuvLen, GetPixFormat());
 
-        if(GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P || GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P){
-            h = height / 2;
-            w = width / 2;
-        }
-        if(GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P || GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P){
-            h = height;
-            w = width;
-        }
+        w = yuvLen.uWidth;
+        h = yuvLen.uHeight;
 
         int offset = 0;
         for(int i=0;i<h;i++){
@@ -229,17 +118,14 @@ namespace Eyer {
         int width = GetWidth();
         int height = GetHeight();
 
-        int h = height;
         int w = width;
+        int h = height;
+        
+        EyerYUVLen yuvLen;
+        EyerAVTool::GetYUVLen(w, h, yuvLen, GetPixFormat());
 
-        if(GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P || GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P){
-            h = height / 2;
-            w = width / 2;
-        }
-        if(GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P || GetPixFormat() == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P){
-            h = height;
-            w = width;
-        }
+        w = yuvLen.vWidth;
+        h = yuvLen.vHeight;
 
         int offset = 0;
         for(int i=0;i<h;i++){
@@ -270,202 +156,6 @@ namespace Eyer {
     int64_t EyerAVFrame::GetPTS()
     {
         return piml->frame->pts;
-    }
-
-    int EyerAVFrame::GetInfo() {
-        printf("===============================================================\n");
-
-        for(int i=0;i<AV_NUM_DATA_POINTERS;i++) {
-            printf("Linesize [%d]: %d\n", i, piml->frame->linesize[i]);
-        }
-        
-        printf("Width: %d\n", piml->frame->width);
-        printf("Height: %d\n", piml->frame->height);
-        printf("Channels: %d\n", piml->frame->channels);
-        // printf("channel_layout: %lld\n", piml->frame->channel_layout);
-        printf("nb_samples: %d\n", piml->frame->nb_samples);
-        printf("format: %d\n", piml->frame->format);
-
-        int sizePerSample = av_get_bytes_per_sample((AVSampleFormat)piml->frame->format);
-        printf("Size Per Sample: %d\n", sizePerSample);
-
-        {
-            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_UNSPECIFIED){
-                printf("AVColorRange: AVCOL_RANGE_UNSPECIFIED\n");
-            }
-            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_MPEG){
-                printf("AVColorRange: AVCOL_RANGE_MPEG\n");
-            }
-            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_JPEG){
-                printf("AVColorRange: AVCOL_RANGE_JPEG\n");
-            }
-            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_NB){
-                printf("AVColorRange: AVCOL_RANGE_NB\n");
-            }
-        }
-        {
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_RGB){
-                printf("AVColorSpace: AVCOL_SPC_RGB\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT709){
-                printf("AVColorSpace: AVCOL_SPC_BT709\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_UNSPECIFIED){
-                printf("AVColorSpace: AVCOL_SPC_UNSPECIFIED\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_RESERVED){
-                printf("AVColorSpace: AVCOL_SPC_RESERVED\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_FCC){
-                printf("AVColorSpace: AVCOL_SPC_FCC\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT470BG){
-                printf("AVColorSpace: AVCOL_SPC_BT470BG\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_SMPTE170M){
-                printf("AVColorSpace: AVCOL_SPC_SMPTE170M\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_SMPTE240M){
-                printf("AVColorSpace: AVCOL_SPC_SMPTE240M\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_YCGCO){
-                printf("AVColorSpace: AVCOL_SPC_YCGCO\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_YCOCG){
-                printf("AVColorSpace: AVCOL_SPC_YCOCG\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT2020_NCL){
-                printf("AVColorSpace: AVCOL_SPC_BT2020_NCL\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT2020_CL){
-                printf("AVColorSpace: AVCOL_SPC_BT2020_CL\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_SMPTE2085){
-                printf("AVColorSpace: AVCOL_SPC_SMPTE2085\n");
-            }
-            /*
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_CHROMA_DERIVED_NCL){
-                printf("AVColorSpace: AVCOL_SPC_CHROMA_DERIVED_NCL\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_CHROMA_DERIVED_CL){
-                printf("AVColorSpace: AVCOL_SPC_CHROMA_DERIVED_CL\n");
-            }
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_ICTCP){
-                printf("AVColorSpace: AVCOL_SPC_ICTCP\n");
-            }
-            */
-            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_NB){
-                printf("AVColorSpace: AVCOL_SPC_NB\n");
-            }
-        }
-
-        {
-            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV420P){
-                printf("Format: AV_PIX_FMT_YUV420P\n");
-            }
-            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ420P){
-                printf("Format: AV_PIX_FMT_YUVJ420P\n");
-            }
-            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ422P){
-                printf("Format: AV_PIX_FMT_YUVJ422P\n");
-            }
-            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_RGB24){
-                printf("Format: AV_PIX_FMT_RGB24\n");
-            }
-            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_BGR24){
-                printf("Format: AV_PIX_FMT_BGR24\n");
-            }
-            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ444P){
-                printf("Format: AV_PIX_FMT_YUVJ444P\n");
-            }
-            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV444P){
-                printf("Format: AV_PIX_FMT_YUV444P\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_NONE){
-                printf("Format: AV_SAMPLE_FMT_NONE\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_U8){
-                printf("Format: AV_SAMPLE_FMT_U8\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S16){
-                printf("Format: AV_SAMPLE_FMT_S16\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S32){
-                printf("Format: AV_SAMPLE_FMT_S32\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_FLT){
-                printf("Format: AV_SAMPLE_FMT_FLT\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_DBL){
-                printf("Format: AV_SAMPLE_FMT_DBL\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_U8P){
-                printf("Format: AV_SAMPLE_FMT_U8P\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S16P){
-                printf("Format: AV_SAMPLE_FMT_S16P\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S32P){
-                printf("Format: AV_SAMPLE_FMT_S32P\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_FLTP){
-                printf("Format: AV_SAMPLE_FMT_FLTP\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_DBLP){
-                printf("Format: AV_SAMPLE_FMT_DBLP\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S64){
-                printf("Format: AV_SAMPLE_FMT_S64\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S64P){
-                printf("Format: AV_SAMPLE_FMT_S64P\n");
-            }
-            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_NB){
-                printf("Format: AV_SAMPLE_FMT_NB\n");
-            }
-        }
-
-        {
-        }
-
-        // Print Channel Layout
-        {
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_MONO){
-                printf("Channel Layout: AV_CH_LAYOUT_MONO\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_STEREO){
-                printf("Channel Layout: AV_CH_LAYOUT_STEREO\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_2POINT1){
-                printf("Channel Layout: AV_CH_LAYOUT_2POINT1\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_SURROUND){
-                printf("Channel Layout: AV_CH_LAYOUT_SURROUND\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_2_1){
-                printf("Channel Layout: AV_CH_LAYOUT_2_1\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_4POINT0){
-                printf("Channel Layout: AV_CH_LAYOUT_4POINT0\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_3POINT1){
-                printf("Channel Layout: AV_CH_LAYOUT_3POINT1\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT0_BACK){
-                printf("Channel Layout: AV_CH_LAYOUT_5POINT0_BACK\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT0){
-                printf("Channel Layout: AV_CH_LAYOUT_5POINT0\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT1_BACK){
-                printf("Channel Layout: AV_CH_LAYOUT_5POINT1_BACK\n");
-            }
-            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT1){
-                printf("Channel Layout: AV_CH_LAYOUT_5POINT1\n");
-            }
-        }
-        
-        return 0;
     }
 
     EyerAVAudioDateType EyerAVFrame::GetAudioDateType()
@@ -506,23 +196,23 @@ namespace Eyer {
     }
 
     EyerAVPixelFormat EyerAVFrame::GetPixFormat() const {
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV420P){
+        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV420P || piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ420P ){
             return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ420P){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV444P){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ444P){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ444P;
         }
         if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_NV12){
             return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV12;
         }
         if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_NV21){
             return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV21;
+        }
+        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV422P || piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ422P){
+            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV422P;
+        }
+        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV444P || piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ444P){
+            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P;
+        }
+        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUYV422){
+            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUYV422;
         }
 
         return EyerAVPixelFormat::Eyer_AV_PIX_FMT_UNKNOW;
@@ -721,5 +411,217 @@ namespace Eyer {
             return 0;
         }
         return -1;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    int EyerAVFrame::GetInfo() {
+        printf("===============================================================\n");
+
+        for(int i=0;i<AV_NUM_DATA_POINTERS;i++) {
+            printf("Linesize [%d]: %d\n", i, piml->frame->linesize[i]);
+        }
+        
+        printf("Width: %d\n", piml->frame->width);
+        printf("Height: %d\n", piml->frame->height);
+        printf("Channels: %d\n", piml->frame->channels);
+        // printf("channel_layout: %lld\n", piml->frame->channel_layout);
+        printf("nb_samples: %d\n", piml->frame->nb_samples);
+        printf("format: %d\n", piml->frame->format);
+
+        int sizePerSample = av_get_bytes_per_sample((AVSampleFormat)piml->frame->format);
+        printf("Size Per Sample: %d\n", sizePerSample);
+
+        {
+            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_UNSPECIFIED){
+                printf("AVColorRange: AVCOL_RANGE_UNSPECIFIED\n");
+            }
+            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_MPEG){
+                printf("AVColorRange: AVCOL_RANGE_MPEG\n");
+            }
+            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_JPEG){
+                printf("AVColorRange: AVCOL_RANGE_JPEG\n");
+            }
+            if(piml->frame->color_range == AVColorRange::AVCOL_RANGE_NB){
+                printf("AVColorRange: AVCOL_RANGE_NB\n");
+            }
+        }
+        {
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_RGB){
+                printf("AVColorSpace: AVCOL_SPC_RGB\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT709){
+                printf("AVColorSpace: AVCOL_SPC_BT709\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_UNSPECIFIED){
+                printf("AVColorSpace: AVCOL_SPC_UNSPECIFIED\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_RESERVED){
+                printf("AVColorSpace: AVCOL_SPC_RESERVED\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_FCC){
+                printf("AVColorSpace: AVCOL_SPC_FCC\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT470BG){
+                printf("AVColorSpace: AVCOL_SPC_BT470BG\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_SMPTE170M){
+                printf("AVColorSpace: AVCOL_SPC_SMPTE170M\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_SMPTE240M){
+                printf("AVColorSpace: AVCOL_SPC_SMPTE240M\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_YCGCO){
+                printf("AVColorSpace: AVCOL_SPC_YCGCO\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_YCOCG){
+                printf("AVColorSpace: AVCOL_SPC_YCOCG\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT2020_NCL){
+                printf("AVColorSpace: AVCOL_SPC_BT2020_NCL\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_BT2020_CL){
+                printf("AVColorSpace: AVCOL_SPC_BT2020_CL\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_SMPTE2085){
+                printf("AVColorSpace: AVCOL_SPC_SMPTE2085\n");
+            }
+            /*
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_CHROMA_DERIVED_NCL){
+                printf("AVColorSpace: AVCOL_SPC_CHROMA_DERIVED_NCL\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_CHROMA_DERIVED_CL){
+                printf("AVColorSpace: AVCOL_SPC_CHROMA_DERIVED_CL\n");
+            }
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_ICTCP){
+                printf("AVColorSpace: AVCOL_SPC_ICTCP\n");
+            }
+            */
+            if(piml->frame->colorspace == AVColorSpace::AVCOL_SPC_NB){
+                printf("AVColorSpace: AVCOL_SPC_NB\n");
+            }
+        }
+
+        {
+            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV420P){
+                printf("Format: AV_PIX_FMT_YUV420P\n");
+            }
+            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ420P){
+                printf("Format: AV_PIX_FMT_YUVJ420P\n");
+            }
+            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ422P){
+                printf("Format: AV_PIX_FMT_YUVJ422P\n");
+            }
+            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_RGB24){
+                printf("Format: AV_PIX_FMT_RGB24\n");
+            }
+            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_BGR24){
+                printf("Format: AV_PIX_FMT_BGR24\n");
+            }
+            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ444P){
+                printf("Format: AV_PIX_FMT_YUVJ444P\n");
+            }
+            if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV444P){
+                printf("Format: AV_PIX_FMT_YUV444P\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_NONE){
+                printf("Format: AV_SAMPLE_FMT_NONE\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_U8){
+                printf("Format: AV_SAMPLE_FMT_U8\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S16){
+                printf("Format: AV_SAMPLE_FMT_S16\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S32){
+                printf("Format: AV_SAMPLE_FMT_S32\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_FLT){
+                printf("Format: AV_SAMPLE_FMT_FLT\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_DBL){
+                printf("Format: AV_SAMPLE_FMT_DBL\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_U8P){
+                printf("Format: AV_SAMPLE_FMT_U8P\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S16P){
+                printf("Format: AV_SAMPLE_FMT_S16P\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S32P){
+                printf("Format: AV_SAMPLE_FMT_S32P\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_FLTP){
+                printf("Format: AV_SAMPLE_FMT_FLTP\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_DBLP){
+                printf("Format: AV_SAMPLE_FMT_DBLP\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S64){
+                printf("Format: AV_SAMPLE_FMT_S64\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_S64P){
+                printf("Format: AV_SAMPLE_FMT_S64P\n");
+            }
+            if(piml->frame->format == AVSampleFormat::AV_SAMPLE_FMT_NB){
+                printf("Format: AV_SAMPLE_FMT_NB\n");
+            }
+        }
+
+        {
+        }
+
+        // Print Channel Layout
+        {
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_MONO){
+                printf("Channel Layout: AV_CH_LAYOUT_MONO\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_STEREO){
+                printf("Channel Layout: AV_CH_LAYOUT_STEREO\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_2POINT1){
+                printf("Channel Layout: AV_CH_LAYOUT_2POINT1\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_SURROUND){
+                printf("Channel Layout: AV_CH_LAYOUT_SURROUND\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_2_1){
+                printf("Channel Layout: AV_CH_LAYOUT_2_1\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_4POINT0){
+                printf("Channel Layout: AV_CH_LAYOUT_4POINT0\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_3POINT1){
+                printf("Channel Layout: AV_CH_LAYOUT_3POINT1\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT0_BACK){
+                printf("Channel Layout: AV_CH_LAYOUT_5POINT0_BACK\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT0){
+                printf("Channel Layout: AV_CH_LAYOUT_5POINT0\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT1_BACK){
+                printf("Channel Layout: AV_CH_LAYOUT_5POINT1_BACK\n");
+            }
+            if(piml->frame->channel_layout == AV_CH_LAYOUT_5POINT1){
+                printf("Channel Layout: AV_CH_LAYOUT_5POINT1\n");
+            }
+        }
+        
+        return 0;
     }
 }
