@@ -27,19 +27,21 @@ namespace Eyer
     class EyerAVFrameWeight;
     class EyerAVRational;
 
+    class EyerYUVLen;
+    class EyerAVTool;
+
     enum EyerAVPixelFormat
     {
-        Eyer_AV_PIX_FMT_UNKNOW = 0,
+        Eyer_AV_PIX_FMT_UNKNOW = -1,
         Eyer_AV_PIX_FMT_YUV420P = 101,
-        Eyer_AV_PIX_FMT_YUVJ420P = 102,
-        Eyer_AV_PIX_FMT_YUV444P = 103,
-        Eyer_AV_PIX_FMT_YUVJ444P = 104,
-        Eyer_AV_PIX_FMT_YUVNV12 = 105,
-        Eyer_AV_PIX_FMT_YUVNV21 = 106,
-        Eyer_AV_PIX_FMT_YUV422P = 107,
-        Eyer_AV_PIX_FMT_YUVJ422P = 108,
-        Eyer_AV_PIX_FMT_YUVNV16 = 109,
-        Eyer_AV_PIX_FMT_YUVNV61 = 110,
+
+        Eyer_AV_PIX_FMT_YUVNV12 = 102,
+        Eyer_AV_PIX_FMT_YUVNV21 = 103,
+
+        Eyer_AV_PIX_FMT_YUV422P = 104,
+        Eyer_AV_PIX_FMT_YUYV422 = 105,
+
+        Eyer_AV_PIX_FMT_YUV444P = 106,
     };
 
     enum EyerAVStreamType{
@@ -343,6 +345,16 @@ namespace Eyer
         int uLen;
         int vLen;
         int uvLen;
+
+        int yWidth;
+        int uWidth;
+        int vWidth;
+        int uvWidth;
+
+        int yHeight;
+        int uHeight;
+        int vHeight;
+        int uvHeight;
     };
 
     class EyerAVTool
