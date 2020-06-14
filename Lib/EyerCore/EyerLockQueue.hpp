@@ -20,65 +20,37 @@ namespace Eyer
 
         ~EyerLockQueue()
         {
-            mut.lock();
-            /*
-            while(queue.size() > 0){
-                T * t = queue.front();
-                queue.pop();
-                delete t;
-            }
-            */
-
+            std::lock_guard<std::mutex> lg(mut);
             while(queue.size() > 0){
                 T * t = queue.front();
                 queue.pop();
             }
-
-            mut.unlock();
-        }
-
-
-
-        int Lock()
-        {
-            mut.lock();
-            return 0;
-        }
-
-        int UnLock()
-        {
-            mut.unlock();
-            return 0;
         }
 
         int Push(T * t)
         {
-            mut.lock();
-
+            std::lock_guard<std::mutex> lg(mut);
             queue.push(t);
-
-            mut.unlock();
             return 0;
         }
 
         int Front(T ** t)
         {
+            std::lock_guard<std::mutex> lg(mut);
             int ret = -1;
-            mut.lock();
 
             if(queue.size() > 0){
                 *t = queue.front();
                 ret = 0;
             }
 
-            mut.unlock();
             return ret;
         }
 
         int FrontPop(T ** t)
         {
+            std::lock_guard<std::mutex> lg(mut);
             int ret = -1;
-            mut.lock();
 
             if(queue.size() > 0) {
                 *t = queue.front();
@@ -86,21 +58,16 @@ namespace Eyer
                 ret = 0;
             }
 
-            mut.unlock();
             return ret;
         }
 
         int Size()
         {
-            int size = 0;
-            mut.lock();
-
-            size = queue.size();
-
-            mut.unlock();
-
+            std::lock_guard<std::mutex> lg(mut);
+            int size = queue.size();
             return size;
         }
+        
     private:
         std::mutex mut;
         std::queue<T *> queue;

@@ -9,12 +9,7 @@ namespace Eyer
 
     EyerGLRenderTaskQueue::~EyerGLRenderTaskQueue()
     {
-        while(taskQueue.Size() > 0){
-            EyerGLRenderTask * task = nullptr;
-            taskQueue.FrontPop(&task);
-            if(task != nullptr){
-            }
-        }
+        
     }
 
     int EyerGLRenderTaskQueue::PushRendTask(EyerGLRenderTask * renderTask)

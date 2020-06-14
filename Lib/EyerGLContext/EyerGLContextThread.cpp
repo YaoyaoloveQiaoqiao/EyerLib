@@ -100,18 +100,26 @@ namespace Eyer
 
         glClearColor(1.0, 1.0, 0.0, 1.0);
         while(!stopFlag){
+            Eyer::EyerTime::EyerSleep(1000);
             if(taskQueue.GetSize() > 0 || renderAndFreeTaskQueue.GetSize() > 0){
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 while(taskQueue.GetSize() > 0){
                     taskQueue.PopAndRender(w, h);
                 }
-                while(renderAndFreeTaskQueue.GetSize() > 0){
-                    renderAndFreeTaskQueue.PopAndRenderAndFree(w, h);
-                }
 
-                glFinish();
-                eglSwapBuffers(mEglDisplay, window);
+                EyerLog("Queue Size: %d\n", renderAndFreeTaskQueue.GetSize());
+
+                while(renderAndFreeTaskQueue.GetSize() > 0){
+                    // EyerLog("Queue Size: %d\n", renderAndFreeTaskQueue.GetSize());
+                    renderAndFreeTaskQueue.PopAndRenderAndFree(w, h);
+
+                    glFinish();
+                    eglSwapBuffers(mEglDisplay, window);
+                }
+                
+                // glFinish();
+                // eglSwapBuffers(mEglDisplay, window);
             }
         }
 
@@ -139,6 +147,7 @@ namespace Eyer
 
     int EyerGLContextThread::AddTaskToRenderAndFreeQueue(EyerGLRenderTask * task)
     {
+        // EyerLog("Queue Size: %d\n", renderAndFreeTaskQueue.GetSize());
         renderAndFreeTaskQueue.PushRendTask(task);
         return 0;
     }
