@@ -34,7 +34,7 @@ namespace Eyer
 
         int GetLinearValue(EyerVideoAnimationKey & outKey);
         int AddKey(EyerVideoAnimationKey & key);
-    private:
+    public:
         EyerLinkedList<EyerVideoAnimationKey*> animationKeyList;
     };
 

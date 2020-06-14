@@ -35,7 +35,6 @@ namespace Eyer
                 EyerVideoAnimationKey * animationKeyNew = new EyerVideoAnimationKey(*animationKey);
                 animationKeyList.insertBack(animationKeyNew);
             }
-
         }
 
         return *this;
