@@ -148,6 +148,9 @@ namespace Eyer
     int EyerGLContextThread::AddTaskToRenderAndFreeQueue(EyerGLRenderTask * task)
     {
         // EyerLog("Queue Size: %d\n", renderAndFreeTaskQueue.GetSize());
+        while(renderAndFreeTaskQueue.GetSize() > 2){
+            renderAndFreeTaskQueue.PopAndFree();
+        }
         renderAndFreeTaskQueue.PushRendTask(task);
         return 0;
     }
