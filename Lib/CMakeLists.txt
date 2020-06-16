@@ -14,6 +14,24 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 
+IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    MESSAGE(STATUS "current platform: Linux ")
+ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    MESSAGE(STATUS "current platform: Windows")
+    ADD_DEFINITIONS(-D EYER_PLATFORM_WINDOWS)
+ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
+    MESSAGE(STATUS "current platform: Android")
+    ADD_DEFINITIONS(-D EYER_PLATFORM_ANDROID)
+ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    MESSAGE(STATUS "current platform: Darwin")
+    set(CMAKE_EXE_LINKER_FLAGS
+        "-framework IOKit -framework AudioToolbox -framework CoreGraphics -framework CoreMedia -framework Cocoa -framework VideoToolbox -framework AVFoundation -framework Security -framework CoreFoundation -framework CoreVideo -framework OpenGL -framework AppKit -framework CoreImage -framework VideoDecodeAcceleration"
+    )
+ELSE ()
+    MESSAGE(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
+ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
+
+
 FUNCTION(ModuleOption moduleName)
 IF (${moduleName})
 ADD_SUBDIRECTORY(${moduleName})
@@ -74,20 +92,3 @@ ADD_SUBDIRECTORY(EyerEventQueue)
 ADD_SUBDIRECTORY(EyerImgTest)
 ADD_SUBDIRECTORY(googletest)
 ENDIF(AL_TEST)
-
-IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
-    MESSAGE(STATUS "current platform: Linux ")
-ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Windows")
-    MESSAGE(STATUS "current platform: Windows")
-    ADD_DEFINITIONS(-D EYER_PLATFORM_WINDOWS)
-ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
-    MESSAGE(STATUS "current platform: Android")
-    ADD_DEFINITIONS(-D EYER_PLATFORM_ANDROID)
-ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Darwin")
-    MESSAGE(STATUS "current platform: Darwin")
-    set(CMAKE_EXE_LINKER_FLAGS
-        "-framework IOKit -framework AudioToolbox -framework CoreGraphics -framework CoreMedia -framework Cocoa -framework VideoToolbox -framework AVFoundation -framework Security -framework CoreFoundation -framework CoreVideo -framework OpenGL -framework AppKit -framework CoreImage -framework VideoDecodeAcceleration"
-    )
-ELSE ()
-    MESSAGE(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
-ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
