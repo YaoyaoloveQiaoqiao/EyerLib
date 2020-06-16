@@ -74,6 +74,9 @@ ModuleOption(EyerThread)
 OPTION(EyerImg           "option for EyerImg"           ON)
 ModuleOption(EyerImg)
 
+OPTION(EyerGLContext     "option for EyerGLContext"           ON)
+ModuleOption(EyerGLContext)
+
 OPTION(EyerVideoTweenAnimation           "option for EyerVideoTweenAnimation"           ON)
 ModuleOption(EyerVideoTweenAnimation)
 
