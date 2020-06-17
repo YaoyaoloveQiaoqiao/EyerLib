@@ -108,7 +108,7 @@ namespace Eyer
                     taskQueue.PopAndRender(w, h);
                 }
 
-                EyerLog("Queue Size: %d\n", renderAndFreeTaskQueue.GetSize());
+                // EyerLog("Queue Size: %d\n", renderAndFreeTaskQueue.GetSize());
 
                 while(renderAndFreeTaskQueue.GetSize() > 0){
                     // EyerLog("Queue Size: %d\n", renderAndFreeTaskQueue.GetSize());

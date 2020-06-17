@@ -29,11 +29,8 @@ namespace Eyer {
         dataManager.clear();
     }
 
-    EyerAVFrame::EyerAVFrame(const EyerAVFrame & frame)
+    EyerAVFrame::EyerAVFrame(const EyerAVFrame & frame) : EyerAVFrame()
     {
-        piml = new EyerAVFramePrivate();
-        piml->frame = av_frame_alloc();
-
         *this = frame;
     }
 
