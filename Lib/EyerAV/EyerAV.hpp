@@ -42,6 +42,9 @@ namespace Eyer
         Eyer_AV_PIX_FMT_YUYV422 = 105,
 
         Eyer_AV_PIX_FMT_YUV444P = 106,
+
+
+        Eyer_AV_PIX_FMT_RGBA = 201
     };
 
     enum EyerAVStreamType{
@@ -108,6 +111,8 @@ namespace Eyer
         int GetVData(unsigned char * vData);
         int GetUVData(unsigned char * uvData);
 
+        int GetRGBAData(unsigned char * rgbaData);
+
         float GetAudioFloatData(int channel, int index);
         int SetAudioFloatData(int channel, int index, float d);
 
@@ -134,6 +139,14 @@ namespace Eyer
         int GetInfo();
 
         EyerAVPixelFormat GetPixFormat() const;
+
+
+        int SetNULLData(int w, int h, EyerAVPixelFormat format);
+        int Scale(EyerAVFrame & dstFrame, const int dstW, const int dstH, const EyerAVPixelFormat format);
+
+
+        static int ToFFmpegPixelFormat(const EyerAVPixelFormat format);
+        static EyerAVPixelFormat ToEyerPixelFormat(const int format);
     };
 
     class EyerAVReader

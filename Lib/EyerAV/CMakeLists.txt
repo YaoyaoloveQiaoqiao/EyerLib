@@ -8,6 +8,7 @@ add_library(
     EyerAVDecoder.cpp
     EyerAVStream.cpp
     EyerAVFrame.cpp
+    EyerAVFrameUtil.cpp
     EyerAVEncoder.cpp
     EyerAVWriter.cpp
 
@@ -30,7 +31,7 @@ add_library(
     EyerAVQueue.cpp
     EyerAVQueue.hpp
     EyerAVQueueManager.hpp
-        EyerAVTool.cpp
+    EyerAVTool.cpp
 )
 
 target_link_libraries (EyerAV EyerCore)
