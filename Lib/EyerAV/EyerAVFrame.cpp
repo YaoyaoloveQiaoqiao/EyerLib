@@ -4,6 +4,10 @@ extern "C"{
 #include <libavformat/avformat.h>
 #include <libswresample/swresample.h>
 #include <libavutil/imgutils.h>
+#include <libavcodec/avcodec.h>
+#include <libavutil/pixdesc.h>
+#include <libavutil/imgutils.h>
+#include <libswscale/swscale.h>
 }
 
 #include "EyerAVEncoderPrivate.hpp"
@@ -132,6 +136,23 @@ namespace Eyer {
         return 0;
     }
 
+    int EyerAVFrame::GetRGBAData(unsigned char * rgbaData)
+    {
+        int width = GetWidth();
+        int height = GetHeight();
+
+        int w = width * 4;
+        int h = height;
+
+        int offset = 0;
+        for(int i=0;i<h;i++){
+            memcpy(rgbaData + offset, piml->frame->data[0] + i * piml->frame->linesize[0], w);
+            offset += w;
+        }
+
+        return 0;
+    }
+
     int EyerAVFrame::SetPTS(int64_t pts)
     {
         piml->frame->pts = pts;
@@ -193,26 +214,7 @@ namespace Eyer {
     }
 
     EyerAVPixelFormat EyerAVFrame::GetPixFormat() const {
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV420P || piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ420P ){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_NV12){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV12;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_NV21){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV21;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV422P || piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ422P){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV422P;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUV444P || piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUVJ444P){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV444P;
-        }
-        if(piml->frame->format == AVPixelFormat::AV_PIX_FMT_YUYV422){
-            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUYV422;
-        }
-
-        return EyerAVPixelFormat::Eyer_AV_PIX_FMT_UNKNOW;
+        return ToEyerPixelFormat(piml->frame->format);;
     }
 
     int EyerAVFrame::GetAudioPackedData(unsigned char * data)
@@ -408,6 +410,66 @@ namespace Eyer {
             return 0;
         }
         return -1;
+    }
+
+    int EyerAVFrame::SetNULLData(int w, int h, EyerAVPixelFormat format)
+    {
+        av_frame_unref(piml->frame);
+
+        AVPixelFormat ffFormat = (AVPixelFormat)ToFFmpegPixelFormat(format);
+
+
+        // int bytesNum = avpicture_get_size(AV_PIX_FMT_RGB24, w, h); 
+        int bytesNum = av_image_get_buffer_size(ffFormat, w, h, 4);
+        // printf("========bytesNum:%d==========\n", bytesNum);
+        // bytesNum = w * h * 4;
+        
+        uint8_t * buff = (uint8_t *)av_malloc(bytesNum);
+        dataManager.push_back(buff);
+        
+        memset(buff, 0, bytesNum);
+        // avpicture_fill((AVPicture *)piml->frame, buff, AV_PIX_FMT_RGB24, w, h);
+        av_image_fill_arrays(piml->frame->data, piml->frame->linesize, buff, ffFormat, w, h, 4);
+        piml->frame->format = ffFormat;
+        piml->frame->width = w;
+        piml->frame->height = h;
+        piml->frame->extended_data = piml->frame->data;
+
+        return 0;
+    }
+
+    int EyerAVFrame::Scale(EyerAVFrame & dstFrame, const int dstW, const int dstH, const EyerAVPixelFormat format)
+    {
+        dstFrame.SetNULLData(dstW, dstH, format);
+        AVPixelFormat ffFormat = (AVPixelFormat)ToFFmpegPixelFormat(format);
+
+        int srcW = GetWidth();
+        int srcH = GetHeight();
+
+        AVPixelFormat srcFormat = (AVPixelFormat)(piml->frame->format);
+        SwsContext * swsContext = sws_getContext(srcW, srcH, srcFormat, dstW, dstH, ffFormat, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+        
+        if(swsContext == nullptr){
+            // printf("!!!!!!!!!!!!!!Error!!!!!!!!!!!!!!!\n");
+            return -1;
+        }
+        
+        sws_scale(
+                swsContext,
+                (const uint8_t **)piml->frame->data,
+                piml->frame->linesize,
+                0,
+                srcH,
+                
+                // dst_data,
+                // dst_linesize
+                
+                dstFrame.piml->frame->data,
+                dstFrame.piml->frame->linesize
+                );
+        sws_freeContext(swsContext);
+        
+        return 0;
     }
 
 
