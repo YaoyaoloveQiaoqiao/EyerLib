@@ -163,11 +163,11 @@ namespace Eyer {
         return piml->frame->linesize[channel];
     }
 
-    int EyerAVFrame::GetWidth() {
+    int EyerAVFrame::GetWidth() const{
         return piml->frame->width;
     }
 
-    int EyerAVFrame::GetHeight() {
+    int EyerAVFrame::GetHeight() const{
         return piml->frame->height;
     }
 

@@ -125,8 +125,8 @@ namespace Eyer
 
         int SetVideoData420P(unsigned char * y, unsigned char * u, unsigned char * v, int width, int height);
 
-        int GetWidth();
-        int GetHeight();
+        int GetWidth() const;
+        int GetHeight() const;
 
         int GetChannels();
         int GetNBSamples();
@@ -376,6 +376,7 @@ namespace Eyer
         EyerAVTool();
         ~EyerAVTool();
         static int GetYUVLen(int width, int height, EyerYUVLen & yuvLen, EyerAVPixelFormat format);
+        static int GetYUVLen(const EyerAVFrame & avframe, EyerYUVLen & yuvLen);
     };
 
 }
