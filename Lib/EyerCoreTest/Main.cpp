@@ -244,6 +244,19 @@ TEST(EyerMath, mat){
 }
 
 
+TEST(LRUCache, LRUCache){
+    // Eyer::EyerVec4;
+    Eyer::EyerLRUMap<int, Eyer::EyerVec4> lruMap(10);
+
+    for(int i=0;i<100;i++){
+        Eyer::EyerVec4 * vec4 = new Eyer::EyerVec4();
+        lruMap.Put(i, vec4);
+
+        int size = lruMap.Size();
+        printf("Size:%d \n", size);
+    }
+}
+
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
