@@ -9,5 +9,6 @@
 #include "EyerQueue.hpp"
 #include "EyerMap.hpp"
 #include "EyerLockQueue.hpp"
+#include "EyerLRUMap.hpp"
 
 #endif
