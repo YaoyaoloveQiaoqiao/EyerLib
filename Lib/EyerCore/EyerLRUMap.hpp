@@ -3,7 +3,7 @@
 
 #include <mutex>
 #include <map>
-#include <EyerTime.hpp>
+#include "EyerTime.hpp"
 
 namespace Eyer
 {
@@ -110,7 +110,7 @@ namespace Eyer
     template <typename K, typename V>
     int EyerLRUMap<K, V>::LruRemoveHotless()
     {
-        int time = -1;
+        long long time = -1;
         K k;
         typename std::map<K, EyerLRUData<V> *>::iterator iter;
         for(iter=mapSet.begin(); iter!=mapSet.end(); iter++) {

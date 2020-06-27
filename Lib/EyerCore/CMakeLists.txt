@@ -22,6 +22,8 @@ add_library(
 
     EyerLRUMap.hpp
     EyerLockQueue.hpp
+
+    EyerTime.hpp
 )
 
 set(head_files 
