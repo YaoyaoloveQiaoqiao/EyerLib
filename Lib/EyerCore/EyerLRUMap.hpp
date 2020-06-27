@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <map>
+#include <EyerTime.hpp>
 
 namespace Eyer
 {
@@ -12,10 +13,12 @@ namespace Eyer
     {
     public:
         int hot = 0;
+        long long time;
         T * t = nullptr;
 
         EyerLRUData(T * _t){
             t = _t;
+            time = Eyer::EyerTime::GetTime();
         }
 
         ~EyerLRUData(){
@@ -74,6 +77,7 @@ namespace Eyer
 
         data->hot = 0;
         data->t = v;
+        data->time = Eyer::EyerTime::GetTime();
 
         mapSet.insert(typename std::map<K, EyerLRUData<V> *>::value_type(k, data));
         return 0;
@@ -94,6 +98,7 @@ namespace Eyer
         if(iter != mapSet.end()){
             EyerLRUData<V> * data = iter->second;
             data->hot++;
+            data->time = Eyer::EyerTime::GetTime();
             v = data->t;
 
             return 0;
@@ -105,21 +110,21 @@ namespace Eyer
     template <typename K, typename V>
     int EyerLRUMap<K, V>::LruRemoveHotless()
     {
-        int hot = -1;
+        int time = -1;
         K k;
         typename std::map<K, EyerLRUData<V> *>::iterator iter;
         for(iter=mapSet.begin(); iter!=mapSet.end(); iter++) {
-            if(hot == -1){
-                hot = iter->second->hot;
+            if(time == -1){
+                time = iter->second->time;
                 k = iter->first;
             }
-            if(hot > iter->second->hot){
-                hot = iter->second->hot;
+            if(time > iter->second->time){
+                time = iter->second->time;
                 k = iter->first;
             }
         }
 
-        if(hot >= 0){
+        if(time >= 0){
             iter = mapSet.find(k);
             if(iter != mapSet.end()){
                 EyerLRUData<V> * data = iter->second;
