@@ -4,7 +4,7 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerAV/EyerAV.hpp"
 
-int writeYuv2File(Eyer::EyerAVFrame * frame, FILE * f){
+int writeYuv420File(Eyer::EyerAVFrame * frame, FILE * f){
     if(frame->GetPixFormat() != Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P){
         return -1;
     }
@@ -12,24 +12,137 @@ int writeYuv2File(Eyer::EyerAVFrame * frame, FILE * f){
     Eyer::EyerYUVLen yuvLen;
     Eyer::EyerAVTool::GetYUVLen(*frame, yuvLen);
 
-    // EyerLog("y: %d, u: %d, v: %d\n", yuvLen.yLen, yuvLen.uLen, yuvLen.vLen);
-
     unsigned char * y = (unsigned char *)malloc(yuvLen.yLen);
     unsigned char * u = (unsigned char *)malloc(yuvLen.uLen);
     unsigned char * v = (unsigned char *)malloc(yuvLen.vLen);
-
-    // 420
-    fwrite(y, yuvLen.yLen, 1, f);
-    fwrite(u, yuvLen.uLen, 1, f);
-    fwrite(v, yuvLen.vLen, 1, f);
 
     frame->GetYData(y);
     frame->GetUData(u);
     frame->GetVData(v);
 
+    fwrite(y, yuvLen.yLen, 1, f);
+    fwrite(u, yuvLen.uLen, 1, f);
+    fwrite(v, yuvLen.vLen, 1, f);
+
     free(y);
     free(u);
     free(v);
+
+    return 0;
+}
+
+int writeYV12File(Eyer::EyerAVFrame * frame, FILE * f){
+    if(frame->GetPixFormat() != Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P){
+        return -1;
+    }
+
+    Eyer::EyerYUVLen yuvLen;
+    Eyer::EyerAVTool::GetYUVLen(*frame, yuvLen);
+
+    unsigned char * y = (unsigned char *)malloc(yuvLen.yLen);
+    unsigned char * u = (unsigned char *)malloc(yuvLen.uLen);
+    unsigned char * v = (unsigned char *)malloc(yuvLen.vLen);
+
+    frame->GetYData(y);
+    frame->GetUData(u);
+    frame->GetVData(v);
+
+    fwrite(y, yuvLen.yLen, 1, f);
+    fwrite(v, yuvLen.vLen, 1, f);
+    fwrite(u, yuvLen.uLen, 1, f);
+
+    free(y);
+    free(u);
+    free(v);
+
+    return 0;
+}
+
+int writeNV12File(Eyer::EyerAVFrame * frame, FILE * f){
+    if(frame->GetPixFormat() != Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P){
+        return -1;
+    }
+
+    Eyer::EyerYUVLen yuvLen;
+    Eyer::EyerAVTool::GetYUVLen(*frame, yuvLen);
+
+    unsigned char * y = (unsigned char *)malloc(yuvLen.yLen);
+    unsigned char * u = (unsigned char *)malloc(yuvLen.uLen);
+    unsigned char * v = (unsigned char *)malloc(yuvLen.vLen);
+
+    frame->GetYData(y);
+    frame->GetUData(u);
+    frame->GetVData(v);
+
+    fwrite(y, yuvLen.yLen, 1, f);
+
+    unsigned char * uv = (unsigned char *)malloc(frame->GetHeight() * frame->GetWidth() / 2);
+
+    int index = 0;
+    for(int h=0;h<frame->GetHeight() / 2;h++){
+        for(int w=0;w<frame->GetWidth() / 2;w++){
+            unsigned char uuu = u[h * frame->GetWidth() / 2 + w];
+            unsigned char vvv = v[h * frame->GetWidth() / 2 + w];
+
+            uv[index] = uuu;
+            index++;
+            uv[index] = vvv;
+            index++;
+        }
+    }
+
+    fwrite(uv, frame->GetHeight() * frame->GetWidth() / 2, 1, f);
+
+    free(y);
+    free(u);
+    free(v);
+
+    free(uv);
+
+    return 0;
+}
+
+
+int writeNV21File(Eyer::EyerAVFrame * frame, FILE * f){
+    if(frame->GetPixFormat() != Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P){
+        return -1;
+    }
+
+    Eyer::EyerYUVLen yuvLen;
+    Eyer::EyerAVTool::GetYUVLen(*frame, yuvLen);
+
+    unsigned char * y = (unsigned char *)malloc(yuvLen.yLen);
+    unsigned char * u = (unsigned char *)malloc(yuvLen.uLen);
+    unsigned char * v = (unsigned char *)malloc(yuvLen.vLen);
+
+    frame->GetYData(y);
+    frame->GetUData(u);
+    frame->GetVData(v);
+
+    fwrite(y, yuvLen.yLen, 1, f);
+
+    unsigned char * uv = (unsigned char *)malloc(frame->GetHeight() * frame->GetWidth() / 2);
+
+    int index = 0;
+    for(int h=0;h<frame->GetHeight() / 2;h++){
+        for(int w=0;w<frame->GetWidth() / 2;w++){
+            unsigned char uuu = u[h * frame->GetWidth() / 2 + w];
+            unsigned char vvv = v[h * frame->GetWidth() / 2 + w];
+
+            uv[index] = vvv;
+            index++;
+            uv[index] = uuu;
+            index++;
+        }
+    }
+
+    fwrite(uv, frame->GetHeight() * frame->GetWidth() / 2, 1, f);
+
+    free(y);
+    free(u);
+    free(v);
+
+    free(uv);
 
     return 0;
 }
@@ -54,6 +167,18 @@ TEST(YUV, Reader){
     sprintf(yuv420p_file_path, "/home/redknot/YUV/yuv_%s_%d_%d.yuv", "420p", videoStream.GetWidth(), videoStream.GetHeight());
     FILE * yuv420p_file = fopen(yuv420p_file_path, "wb");
 
+    char yv12_file_path[128];
+    sprintf(yv12_file_path, "/home/redknot/YUV/yv12_%s_%d_%d.yuv", "420p", videoStream.GetWidth(), videoStream.GetHeight());
+    FILE * yv12_file = fopen(yv12_file_path, "wb");
+
+    char nv12_file_path[128];
+    sprintf(nv12_file_path, "/home/redknot/YUV/nv12_%s_%d_%d.yuv", "420p", videoStream.GetWidth(), videoStream.GetHeight());
+    FILE * nv12_file = fopen(nv12_file_path, "wb");
+
+    char nv21_file_path[128];
+    sprintf(nv21_file_path, "/home/redknot/YUV/nv21_%s_%d_%d.yuv", "420p", videoStream.GetWidth(), videoStream.GetHeight());
+    FILE * nv21_file = fopen(nv21_file_path, "wb");
+
     while(1){
         Eyer::EyerAVPacket pkt;
         int ret = reader.Read(&pkt);
@@ -76,7 +201,10 @@ TEST(YUV, Reader){
                 break;
             }
 
-            writeYuv2File(&frame, yuv420p_file);
+            writeYuv420File(&frame, yuv420p_file);
+            writeYV12File(&frame, yv12_file);
+            writeNV12File(&frame, nv12_file);
+            writeNV21File(&frame, nv21_file);
         }
     }
 
@@ -87,10 +215,16 @@ TEST(YUV, Reader){
         if(ret){
             break;
         }
-        writeYuv2File(&frame, yuv420p_file);
+        writeYuv420File(&frame, yuv420p_file);
+        writeYV12File(&frame, yv12_file);
+        writeNV12File(&frame, nv12_file);
+        writeNV21File(&frame, nv21_file);
     }
 
     fclose(yuv420p_file);
+    fclose(yv12_file);
+    fclose(nv12_file);
+    fclose(nv21_file);
 
     reader.Close();
 }
