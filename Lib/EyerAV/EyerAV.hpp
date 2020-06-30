@@ -89,32 +89,56 @@ namespace Eyer
     class EyerAVFrame
     {
     public:
-        EyerAVFramePrivate * piml = nullptr;
-
-        std::vector<void *> dataManager;
-
-        int custom = 0;
-
-        double timePts = 0.0;
-    public:
         EyerAVFrame();
         ~EyerAVFrame();
 
         EyerAVFrame(const EyerAVFrame & frame);
         EyerAVFrame & operator = (const EyerAVFrame & frame);
 
-        int SetPTS(int64_t pts);
-        int64_t GetPTS();
+
+        // Video
+        int GetWidth();
+        int GetHeight();
 
         int GetYData(unsigned char * yData);
         int GetUData(unsigned char * uData);
         int GetVData(unsigned char * vData);
         int GetUVData(unsigned char * uvData);
-
         int GetRGBAData(unsigned char * rgbaData);
 
+        EyerAVPixelFormat GetPixFormat() const;
+
+        static int ToFFmpegPixelFormat(const EyerAVPixelFormat format);
+        static EyerAVPixelFormat ToEyerPixelFormat(const int format);
+
+        int SetNULLData(int w, int h, EyerAVPixelFormat format);
+        int Scale(EyerAVFrame & dstFrame, const int dstW, const int dstH, const EyerAVPixelFormat format);
+
+        // Audio
+        int GetChannels();
+        int GetSampleRate();
+        int GetNBSamples();
+        int GetPerSampleSize();
+        
+        EyerAVAudioDateType GetAudioDateType();
+
+        int InitAACFrame(int channels);
         float GetAudioFloatData(int channel, int index);
         int SetAudioFloatData(int channel, int index, float d);
+
+        
+
+
+        int SetPTS(int64_t pts);
+        int64_t GetPTS();
+
+        int GetInfo();
+
+
+
+        
+
+        
 
         int GetAudioPackedData(unsigned char * data);
 
@@ -125,28 +149,24 @@ namespace Eyer
 
         int SetVideoData420P(unsigned char * y, unsigned char * u, unsigned char * v, int width, int height);
 
-        int GetWidth();
-        int GetHeight();
+        
 
-        int GetChannels();
-        int GetNBSamples();
-        int GetPerSampleSize();
-        int GetSampleRate();
-        EyerAVAudioDateType GetAudioDateType();
+        
 
-        int InitAACFrame(int channels);
+        
 
-        int GetInfo();
+        
 
-        EyerAVPixelFormat GetPixFormat() const;
+        
 
+    public:
+        EyerAVFramePrivate * piml = nullptr;
 
-        int SetNULLData(int w, int h, EyerAVPixelFormat format);
-        int Scale(EyerAVFrame & dstFrame, const int dstW, const int dstH, const EyerAVPixelFormat format);
+        std::vector<void *> dataManager;
 
+        int custom = 0;
 
-        static int ToFFmpegPixelFormat(const EyerAVPixelFormat format);
-        static EyerAVPixelFormat ToEyerPixelFormat(const int format);
+        double timePts = 0.0;
     };
 
     class EyerAVReader
