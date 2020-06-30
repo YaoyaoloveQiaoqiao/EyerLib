@@ -149,15 +149,6 @@ namespace Eyer
 
         int SetVideoData420P(unsigned char * y, unsigned char * u, unsigned char * v, int width, int height);
 
-        
-
-        
-
-        
-
-        
-
-        
 
     public:
         EyerAVFramePrivate * piml = nullptr;
@@ -396,6 +387,7 @@ namespace Eyer
         EyerAVTool();
         ~EyerAVTool();
         static int GetYUVLen(int width, int height, EyerYUVLen & yuvLen, EyerAVPixelFormat format);
+        static int GetYUVLen(const EyerAVFrame & avframe, EyerYUVLen & yuvLen);
     };
 
 }
