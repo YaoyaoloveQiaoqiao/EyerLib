@@ -97,8 +97,8 @@ namespace Eyer
 
 
         // Video
-        int GetWidth();
-        int GetHeight();
+        int GetWidth() const;
+        int GetHeight() const;
 
         int GetYData(unsigned char * yData);
         int GetUData(unsigned char * uData);
