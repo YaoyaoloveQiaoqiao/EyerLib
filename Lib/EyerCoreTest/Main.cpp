@@ -233,8 +233,7 @@ TEST(EyerLinkedList_Test, sort){
     list.sort();
     int data1 = 20;
     list.find(0, data1);
-    EXPECT_EQ(data1, 0);
-    
+    EXPECT_EQ(data1, 0);   
 }
 
 
@@ -253,7 +252,9 @@ TEST(LRUCache, LRUCache){
         lruMap.Put(i, vec4);
 
         int size = lruMap.Size();
-        printf("Size:%d \n", size);
+        // printf("Size:%d \n", size);
+
+        EXPECT_LE(size, 10);
     }
 }
 
