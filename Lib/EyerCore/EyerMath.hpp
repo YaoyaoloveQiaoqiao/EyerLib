@@ -117,6 +117,8 @@ namespace Eyer {
 
         int SetXY1(float x, float y);
         int SetXY2(float x, float y);
+
+        float Norm();
     };
 
     class EyerMat3x1 : public EyerMat
@@ -132,6 +134,8 @@ namespace Eyer {
         int SetX(float x);
         int SetY(float y);
         int SetZ(float z);
+
+        float Norm();
     };
 
     class EyerMat2x1 : public EyerMat
@@ -149,6 +153,8 @@ namespace Eyer {
 
         int SetX(float x);
         int SetY(float y);
+
+        float Norm();
     };
 }
 
