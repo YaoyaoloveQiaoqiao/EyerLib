@@ -1,16 +1,17 @@
 #include "EyerGLContext.hpp"
 
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-
 #include "EyerGL/EyerGLRenderTask/EyerGLRenderTask.hpp"
 
 namespace Eyer
 {
+
+#ifdef EYER_PLATFORM_ANDROID
     EyerGLContextThread::EyerGLContextThread(ANativeWindow * _nativeWindow)
     {
         nativeWindow = _nativeWindow;
     }
+#else
+#endif
 
     EyerGLContextThread::~EyerGLContextThread()
     {
@@ -37,6 +38,8 @@ namespace Eyer
     void EyerGLContextThread::Run()
     {
         EyerLog("EyerGLContextThread Start\n");
+
+#ifdef EYER_PLATFORM_ANDROID
         EGLContext mEglContext;
         EGLConfig eglConfig;
         EGLSurface window;
@@ -136,6 +139,9 @@ namespace Eyer
         eglTerminate(mEglDisplay);
 
         SetStoping();
+
+#else
+#endif
         EyerLog("EyerGLContextThread End\n");
     }
 
