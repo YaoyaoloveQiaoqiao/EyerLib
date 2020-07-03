@@ -253,7 +253,7 @@ TEST(LRUCache, LRUCache){
         lruMap.Put(i, vec4);
 
         int size = lruMap.Size();
-        printf("Size:%d \n", size);
+        // printf("Size:%d \n", size);
     }
 }
 
