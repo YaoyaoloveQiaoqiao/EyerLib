@@ -3,10 +3,12 @@ include_directories (./)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/freetype_install/include/freetype2)
 
 add_library(
-        EyerType
-        EyerType.cpp
-        EyerTypeBitmap.cpp
-        EyerTypePrivate.hpp
+    EyerType
+    EyerType.hpp
+    EyerTypePrivate.hpp
+    EyerType.cpp
+    EyerTypeBitmap.cpp
+    EyerTypeMesh.cpp
 )
 
 target_link_libraries (EyerType EyerCore)
@@ -37,13 +39,13 @@ ELSE ()
 ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 set(head_files
-        EyerType.hpp
-        )
+    EyerType.hpp
+    )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerType)
 INSTALL(
-        TARGETS EyerType
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
+    TARGETS EyerType
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
 )
