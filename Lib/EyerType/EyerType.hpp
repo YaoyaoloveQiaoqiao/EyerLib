@@ -51,6 +51,19 @@ namespace Eyer
 
         EyerTypeBitmap & operator = (const EyerTypeBitmap & _bitmap);
     };
+
+
+    class EyerTypeMesh
+    {
+    public:
+        EyerTypeMesh(EyerString typeFile);
+        ~EyerTypeMesh();
+
+        int Gen(wchar_t c);
+
+    private:
+        EyerString typeFile;
+    };
 }
 
 #endif

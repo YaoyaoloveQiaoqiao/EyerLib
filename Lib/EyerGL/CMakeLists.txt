@@ -6,6 +6,11 @@ include_directories (../EyerGLAD/glad/include/)
 
 add_library(
         EyerGL
+
+        EyerGLCustomComponent/EyerGLCustomComponent.hpp
+        EyerGLRenderTask/EyerGLRenderTask.hpp
+
+        GLHeader.h
         EyerGL.hpp
         EyerGLShader.cpp
         EyerGLProgram.cpp
@@ -15,6 +20,7 @@ add_library(
         EyerGLFrameBuffer.cpp
         EyerGLComponent.cpp
 
+        EyerGLCustomComponent/EyerGLTextMeshDraw.cpp
         EyerGLCustomComponent/EyerGLFrameDraw.cpp
         EyerGLCustomComponent/EyerGLJulia.cpp
         EyerGLCustomComponent/EyerGLMVPTextureDraw.cpp
