@@ -18,6 +18,9 @@ namespace Eyer {
         if(format == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P){
             return AVPixelFormat::AV_PIX_FMT_YUV420P;
         }
+        if(format == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P){
+            return AVPixelFormat::AV_PIX_FMT_YUVJ420P;
+        }
         if(format == EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV12){
             return AVPixelFormat::AV_PIX_FMT_NV12;
         }
@@ -42,8 +45,11 @@ namespace Eyer {
 
     EyerAVPixelFormat EyerAVFrame::ToEyerPixelFormat(const int format)
     {
-        if(format == AVPixelFormat::AV_PIX_FMT_YUV420P || format == AVPixelFormat::AV_PIX_FMT_YUVJ420P ){
+        if(format == AVPixelFormat::AV_PIX_FMT_YUV420P){
             return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUV420P;
+        }
+        if(format == AVPixelFormat::AV_PIX_FMT_YUVJ420P){
+            return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVJ420P;
         }
         if(format == AVPixelFormat::AV_PIX_FMT_NV12){
             return EyerAVPixelFormat::Eyer_AV_PIX_FMT_YUVNV12;
