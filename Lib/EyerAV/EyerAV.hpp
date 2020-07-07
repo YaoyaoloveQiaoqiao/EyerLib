@@ -43,6 +43,7 @@ namespace Eyer
 
         Eyer_AV_PIX_FMT_YUV444P = 106,
 
+        Eyer_AV_PIX_FMT_YUVJ420P = 107,
 
         Eyer_AV_PIX_FMT_RGBA = 201
     };
