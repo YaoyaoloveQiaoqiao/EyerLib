@@ -59,11 +59,14 @@ namespace Eyer
         EyerAVDecoder * decoder = nullptr;
         int streamIndex = -1;
         double startTime = 0.0;
+        int isEnd = 0;
 
         EyerLinkedList<EyerAVFrame *> frameList;
 
         int ReadFrame();
         int SelectFrameInList(EyerAVFrame & frame, double ts);
+
+        int RemoveFrame();
     };
 }
 

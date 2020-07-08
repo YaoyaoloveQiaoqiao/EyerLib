@@ -40,6 +40,8 @@ namespace Eyer
             return -2;
         }
 
+        reader->SeekFrame(streamIndex, startTime);
+
         EyerAVStream stream;
         ret = reader->GetStream(stream, streamIndex);
         if(ret){
@@ -60,12 +62,37 @@ namespace Eyer
 
     int EyerVideoDecoderLine::GetFrame(EyerAVFrame & frame, double ts)
     {
+        int ret;
         while(1){
-            // 判断是否到了文件末尾
             // 先查看缓存列表中有没有合适的
+            ret = SelectFrameInList(frame, ts);
+            // EyerLog("SelectFrameInList Ret: %d\n", ret);
+            if(!ret){
+                return 0;
+            }
+
             // 读取一帧进缓存
+            ret = ReadFrame();
+            RemoveFrame();
+            // EyerLog("ReadFrame Ret: %d\n", ret);
 
+            // 判断是否到了文件末尾
+            if(isEnd){
+                // 到了文件末尾，直接拿缓存最后一帧，拿到赶紧滚
+                if(frameList.getLength() <= 0){
+                    return -1;
+                }
 
+                EyerAVFrame * f = nullptr;
+                frameList.find(frameList.getLength() - 1, f);
+
+                if(f == nullptr){
+                    return -1;
+                }
+
+                frame = *f;
+                return 0;
+            }
         }
 
         return 0;
@@ -124,6 +151,7 @@ namespace Eyer
 
                 frameList.insertBack(frame);
             }
+            isEnd = 1;
         }
         else{
             if(packet.GetStreamId() != streamIndex){
@@ -168,6 +196,8 @@ namespace Eyer
         }
         */
 
+        EyerAVFrame * frameP = nullptr;
+
         for(int i=1;i<frameList.getLength();i++){ 
             EyerAVFrame * fb = nullptr;
             frameList.find(i, fb);
@@ -177,8 +207,6 @@ namespace Eyer
 
             double tb = fb->GetPTS() * 1.0 * streamTimebase.num / streamTimebase.den;
 
-
-
             EyerAVFrame * fa = nullptr;
             frameList.find(i - 1, fa);
             if(fa == nullptr){
@@ -187,16 +215,21 @@ namespace Eyer
 
             double ta = fa->GetPTS() * 1.0 * streamTimebase.num / streamTimebase.den;
 
-
             if(ts == ta){
-
+                frameP = fa;
             }
             if(ts == tb){
-
+                frameP = fb;
             }
 
             if(ts > ta && ts < tb){
                 // 落到中间了
+                if(abs(ts - ta) > abs(ts - tb)){
+                    frameP = fb;
+                }
+                else{
+                    frameP = fa;
+                }
             }
 
             if(ts < ta && ts < tb){
@@ -205,11 +238,24 @@ namespace Eyer
             }
 
             if(ts > ta && ts > tb){
+
             }
         }
 
-        // 无论成功还是失败，都要丢帧
-        while(frameList.getLength() > 5){
+        if(frameP != nullptr){
+            frame = *frameP;
+        }
+
+        if(frameP == nullptr){
+            return -4;
+        }
+
+        return 0;
+    }
+
+    int EyerVideoDecoderLine::RemoveFrame()
+    {
+        while(frameList.getLength() > 15){
             EyerAVFrame * f = nullptr;
             frameList.find(0, f);
             if(f != nullptr){
@@ -217,7 +263,6 @@ namespace Eyer
             }
             frameList.deleteEle(0);
         }
-
         return 0;
     }
 }

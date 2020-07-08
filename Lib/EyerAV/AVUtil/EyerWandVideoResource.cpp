@@ -60,7 +60,18 @@ namespace Eyer
         // 搜索不到的情况下新建一个 Decoder Line
         if(decoderLine == nullptr){
             decoderLine = new EyerVideoDecoderLine(resPath, ts);
-            decoderLineList.insertBack(decoderLine);
+            int ret = decoderLine->Init();
+            if(ret){
+                delete decoderLine;
+                decoderLine = nullptr;
+            }
+            else{
+                decoderLineList.insertBack(decoderLine);
+            }
+        }
+
+        if(decoderLine == nullptr){
+            return -1;
         }
 
         decoderLine->GetFrame(avFrame, ts);
