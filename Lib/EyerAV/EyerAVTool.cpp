@@ -9,6 +9,11 @@ namespace Eyer
     EyerAVTool::~EyerAVTool(){
 
     }
+
+    int EyerAVTool::GetYUVLen(const EyerAVFrame & avframe, EyerYUVLen & yuvLen)
+    {
+        return GetYUVLen(avframe.GetWidth(), avframe.GetHeight(), yuvLen, avframe.GetPixFormat());
+    }
     
     int EyerAVTool::GetYUVLen(int w, int h, EyerYUVLen & yuvLen, EyerAVPixelFormat format)
     {

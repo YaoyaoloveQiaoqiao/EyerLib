@@ -1,4 +1,5 @@
 #include "EyerMath.hpp"
+#include <math.h>
 
 namespace Eyer {
     EyerMat4x1::EyerMat4x1() : EyerMat(4, 1)
@@ -97,5 +98,10 @@ namespace Eyer {
         SetZ(x);
         SetW(y);
         return 0;
+    }
+
+    float EyerMat4x1::Norm()
+    {
+        return sqrt(x() * x() + y() * y() + z() * z() + w() * w());
     }
 }

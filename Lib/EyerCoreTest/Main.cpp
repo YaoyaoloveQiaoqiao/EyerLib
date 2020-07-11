@@ -233,8 +233,7 @@ TEST(EyerLinkedList_Test, sort){
     list.sort();
     int data1 = 20;
     list.find(0, data1);
-    EXPECT_EQ(data1, 0);
-    
+    EXPECT_EQ(data1, 0);   
 }
 
 
@@ -243,6 +242,21 @@ TEST(EyerMath, mat){
     Eyer::EyerVec2 a;
 }
 
+
+TEST(LRUCache, LRUCache){
+    // Eyer::EyerVec4;
+    Eyer::EyerLRUMap<int, Eyer::EyerVec4> lruMap(10);
+
+    for(int i=0;i<100;i++){
+        Eyer::EyerVec4 * vec4 = new Eyer::EyerVec4();
+        lruMap.Put(i, vec4);
+
+        int size = lruMap.Size();
+        // printf("Size:%d \n", size);
+
+        EXPECT_LE(size, 10);
+    }
+}
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);

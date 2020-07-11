@@ -9,6 +9,16 @@ namespace Eyer
 {
     class EyerGLCacheTexture;
 
+
+    class EyerGLTextMeshDraw : public EyerGLComponent
+    {
+    public:
+        EyerGLTextMeshDraw();
+        ~EyerGLTextMeshDraw();
+
+        virtual int Draw();
+    };
+
     class EyerGLTextDraw : public EyerGLComponent
     {
     public:
