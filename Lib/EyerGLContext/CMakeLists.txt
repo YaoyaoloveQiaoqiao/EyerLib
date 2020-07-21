@@ -6,10 +6,6 @@ add_library(
         EyerGLContextThread.cpp
         )
 
-target_link_libraries (EyerGLContext EyerCore)
-target_link_libraries (EyerGLContext EyerThread)
-target_link_libraries (EyerGLContext EyerGLRenderTask)
-
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
         MESSAGE(STATUS "current platform: Linux")
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Windows")
