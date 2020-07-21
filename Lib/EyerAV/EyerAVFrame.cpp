@@ -1,4 +1,4 @@
-#include "EyerAV.hpp"
+#include "EyerAVAV.hpp"
 
 extern "C"{
 #include <libavformat/avformat.h>
@@ -169,6 +169,11 @@ namespace Eyer {
     int64_t EyerAVFrame::GetPTS()
     {
         return piml->frame->pts;
+    }
+
+    double EyerAVFrame::GetSecPTS()
+    {
+        return 0.0;
     }
 
     int EyerAVFrame::SetNULLData(int w, int h, EyerAVPixelFormat format)

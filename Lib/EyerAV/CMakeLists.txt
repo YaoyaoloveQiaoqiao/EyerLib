@@ -32,6 +32,10 @@ add_library(
     EyerAVQueue.hpp
     EyerAVQueueManager.hpp
     EyerAVTool.cpp
+
+    AVUtil/EyerWandResource.cpp
+    AVUtil/EyerWandVideoResource.cpp
+    AVUtil/EyerVideoDecoderLine.cpp
 )
 
 target_link_libraries (EyerAV EyerCore)
@@ -111,8 +115,9 @@ ELSE ()
 
 ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-set(head_files 
+set(head_files
     EyerAV.hpp
+    EyerAVAV.hpp
     EyerAVPacketQueue.hpp
     EyerAVFrameQueue.hpp
     EyerAVQueue.hpp
@@ -120,6 +125,7 @@ set(head_files
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAV)
+INSTALL(FILES AVUtil/AVUtil.hpp DESTINATION include/EyerAV/AVUtil)
 INSTALL(
     TARGETS EyerAV
     RUNTIME DESTINATION bin        
