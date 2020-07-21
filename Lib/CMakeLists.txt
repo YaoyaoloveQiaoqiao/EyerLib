@@ -53,6 +53,12 @@ ModuleOption("EyerGLAD" EyerGLAD)
 OPTION(EyerGL           "option for EyerGL"             ON)
 ModuleOption("EyerGL" EyerGL)
 
+OPTION(EyerGLCustomComponent        "option for EyerGLCustomComponent"             ON)
+ModuleOption("EyerGLCustomComponent" EyerGLCustomComponent)
+
+OPTION(EyerGLRenderTask             "option for EyerGLRenderTask"                   ON)
+ModuleOption("EyerGLRenderTask" EyerGLRenderTask)
+
 OPTION(EyerYUV           "option for EyerYUV"           ON)
 ModuleOption("EyerYUV" EyerYUV)
 

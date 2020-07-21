@@ -13,7 +13,7 @@ namespace Eyer
     {
         piml = new EyerAVWriterPrivate();
         piml->path = _path;
-        av_register_all();
+        // av_register_all();
         avformat_network_init();
 
         avformat_alloc_output_context2(&piml->formatCtx, NULL, NULL, piml->path.str);

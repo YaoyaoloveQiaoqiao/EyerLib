@@ -3,7 +3,7 @@
 
 namespace Eyer
 {
-    EyerGLTest::EyerGLTest()
+    EyerGLSingleTextureDraw::EyerGLSingleTextureDraw()
     {
         float vertex[] = {
                 1.0, 1.0, 0.0,
@@ -22,7 +22,8 @@ namespace Eyer
                 0, 2, 3
         };
 
-        textureDraw = new EyerGLDraw(GL_SHADER::TEST2_VERTEX_SHADER, GL_SHADER::TEST2_FRAGMENT_SHADER);
+
+        textureDraw = new EyerGLDraw(EYER_GL_SHADER::SINGLE_TEXTURE_VERTEX_SHADER, EYER_GL_SHADER::SINGLE_TEXTURE_FRAGMENT_SHADER);
         textureDraw->Init();
 
         vao = new EyerGLVAO();
@@ -34,7 +35,7 @@ namespace Eyer
         textureDraw->SetVAO(vao);
     }
 
-    EyerGLTest::~EyerGLTest()
+    EyerGLSingleTextureDraw::~EyerGLSingleTextureDraw()
     {
         if(textureDraw != nullptr){
             delete textureDraw;
@@ -46,8 +47,19 @@ namespace Eyer
         }
     }
 
-    int EyerGLTest::Draw()
+    int EyerGLSingleTextureDraw::SetTexture(EyerGLTexture * _texture)
     {
+        texture = _texture;
+
+        return 0;
+    }
+
+    int EyerGLSingleTextureDraw::Draw()
+    {
+        if(texture != nullptr){
+            textureDraw->PutTexture("imageTex",texture);
+        }
+
         textureDraw->Draw();
         return 0;
     }

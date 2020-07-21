@@ -22,7 +22,7 @@ namespace Eyer
                 0, 2, 3
         };
 
-        yuv2texture = new EyerGLDraw(GL_SHADER::YUV_2_TEXTURE_VERTEX_SHADER, GL_SHADER::YUV_2_TEXTURE_FRAGMENT_SHADER);
+        yuv2texture = new EyerGLDraw(EYER_GL_SHADER::YUV_2_TEXTURE_VERTEX_SHADER, EYER_GL_SHADER::YUV_2_TEXTURE_FRAGMENT_SHADER);
         yuv2texture->Init();
 
         vao = new EyerGLVAO();

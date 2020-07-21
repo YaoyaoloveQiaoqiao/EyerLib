@@ -3,7 +3,7 @@
 
 namespace Eyer
 {
-    EyerGLSingleTextureDraw::EyerGLSingleTextureDraw()
+    EyerGLMVPTextureDraw::EyerGLMVPTextureDraw()
     {
         float vertex[] = {
                 1.0, 1.0, 0.0,
@@ -23,7 +23,7 @@ namespace Eyer
         };
 
 
-        textureDraw = new EyerGLDraw(GL_SHADER::SINGLE_TEXTURE_VERTEX_SHADER, GL_SHADER::SINGLE_TEXTURE_FRAGMENT_SHADER);
+        textureDraw = new EyerGLDraw(EYER_GL_SHADER::MVP_TEXTURE_VERTEX_SHADER, EYER_GL_SHADER::MVP_TEXTURE_FRAGMENT_SHADER);
         textureDraw->Init();
 
         vao = new EyerGLVAO();
@@ -35,7 +35,7 @@ namespace Eyer
         textureDraw->SetVAO(vao);
     }
 
-    EyerGLSingleTextureDraw::~EyerGLSingleTextureDraw()
+    EyerGLMVPTextureDraw::~EyerGLMVPTextureDraw()
     {
         if(textureDraw != nullptr){
             delete textureDraw;
@@ -47,20 +47,28 @@ namespace Eyer
         }
     }
 
-    int EyerGLSingleTextureDraw::SetTexture(EyerGLTexture * _texture)
+    int EyerGLMVPTextureDraw::SetTexture(EyerGLTexture * _texture)
     {
         texture = _texture;
-
         return 0;
     }
 
-    int EyerGLSingleTextureDraw::Draw()
+    int EyerGLMVPTextureDraw::SetMVP(EyerMat4x4 & _mvp)
+    {
+        mvp = _mvp;
+        return 0;
+    }
+
+    int EyerGLMVPTextureDraw::Draw()
     {
         if(texture != nullptr){
             textureDraw->PutTexture("imageTex",texture);
         }
 
+        textureDraw->PutMatrix4fv("mvp", mvp);
+
         textureDraw->Draw();
+
         return 0;
     }
 }

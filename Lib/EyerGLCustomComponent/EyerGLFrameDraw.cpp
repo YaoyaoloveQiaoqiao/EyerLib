@@ -22,7 +22,7 @@ namespace Eyer
                 0, 2, 3
         };
 
-        textureDraw = new EyerGLDraw(GL_SHADER::FRAME_VERTEX_SHADER, GL_SHADER::FRAME_FRAGMENT_SHADER);
+        textureDraw = new EyerGLDraw(EYER_GL_SHADER::FRAME_VERTEX_SHADER, EYER_GL_SHADER::FRAME_FRAGMENT_SHADER);
         textureDraw->Init();
 
 

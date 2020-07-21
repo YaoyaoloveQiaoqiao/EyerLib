@@ -36,7 +36,7 @@ namespace Eyer
             typeCreator->Init();
         }
         {
-            pointDraw = new EyerGLDraw(GL_SHADER::POINT_VERTEX_SHADER, GL_SHADER::POINT_FRAGMENT_SHADER);
+            pointDraw = new EyerGLDraw(EYER_GL_SHADER::POINT_VERTEX_SHADER, EYER_GL_SHADER::POINT_FRAGMENT_SHADER);
             pointDraw->Init();
 
             pointVao = new EyerGLVAO();
@@ -48,7 +48,7 @@ namespace Eyer
         }
 
         {
-            textDraw = new EyerGLDraw(GL_SHADER::TEXT_VERTEX_SHADER, GL_SHADER::TEXT_FRAGMENT_SHADER);
+            textDraw = new EyerGLDraw(EYER_GL_SHADER::TEXT_VERTEX_SHADER, EYER_GL_SHADER::TEXT_FRAGMENT_SHADER);
             textDraw->Init();
 
             vao = new EyerGLVAO();

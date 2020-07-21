@@ -1,6 +1,6 @@
 #include "EyerGLContext.hpp"
 
-#include "EyerGL/EyerGLRenderTask/EyerGLRenderTask.hpp"
+#include "EyerGLRenderTask/EyerGLRenderTask.hpp"
 
 namespace Eyer
 {

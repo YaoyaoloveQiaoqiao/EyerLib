@@ -2,7 +2,7 @@
 #define	EYER_LIB_GL_RENDER_TASK_H
 
 #include "EyerCore/EyerCore.hpp"
-#include "EyerGL/EyerGLCustomComponent/EyerGLCustomComponent.hpp"
+#include "EyerGLCustomComponent/EyerGLCustomComponent.hpp"
 
 namespace Eyer
 {
