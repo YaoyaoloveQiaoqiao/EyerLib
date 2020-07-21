@@ -16,6 +16,8 @@ add_library(
         EyerGLTexture.cpp
         EyerGLFrameBuffer.cpp
         EyerGLComponent.cpp
+        EyerGLRenderTask.cpp
+        EyerGLRenderTaskQueue.cpp
         )
 
 target_link_libraries (EyerGL EyerCore)

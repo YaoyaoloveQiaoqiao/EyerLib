@@ -3,21 +3,9 @@
 
 #include "EyerCore/EyerCore.hpp"
 #include "EyerThread/EyerThread.hpp"
-#include "EyerGLCustomComponent/EyerGLCustomComponent.hpp"
-#include "EyerGLRenderTask/EyerGLRenderTask.hpp"
 
-#ifdef EYER_PLATFORM_ANDROID
-#include <android/native_window_jni.h>
-#include <GLES3/gl3.h>
-#include <GLES3/gl3ext.h>
-
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-#else
-
-#endif
-
-
+#include "EyerGL/EyerGL.hpp"
+#include "EyerGL/GLHeader.h"
 
 namespace Eyer
 {
