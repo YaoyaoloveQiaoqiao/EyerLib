@@ -1,4 +1,4 @@
-#include "EyerGLRenderTask.hpp"
+#include "EyerGL.hpp"
 
 namespace Eyer
 {
@@ -16,7 +16,6 @@ namespace Eyer
     {
         w = _w;
         h = _h;
-        
         return 0;
     }
 }

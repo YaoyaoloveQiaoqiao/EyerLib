@@ -16,10 +16,9 @@ add_library(
         EyerGLTexture.cpp
         EyerGLFrameBuffer.cpp
         EyerGLComponent.cpp
+        EyerGLRenderTask.cpp
+        EyerGLRenderTaskQueue.cpp
         )
-
-target_link_libraries (EyerGL EyerCore)
-target_link_libraries (EyerGL gtest)
 
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
         MESSAGE(STATUS "current platform: Linux")
@@ -35,6 +34,7 @@ ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 set(head_files
         EyerGL.hpp
+        GLHeader.h
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerGL)

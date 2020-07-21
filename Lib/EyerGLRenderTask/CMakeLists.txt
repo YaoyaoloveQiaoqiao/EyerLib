@@ -8,9 +8,6 @@ add_library(
     EyerGLRenderTask
     
     EyerGLRenderTask.hpp
-
-    EyerGLRenderTask.cpp
-    EyerGLRenderTaskQueue.cpp
     JuliaRenderTask.cpp
     YUVRenderTask.cpp
     )
