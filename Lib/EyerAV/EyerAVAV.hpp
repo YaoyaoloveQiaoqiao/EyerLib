@@ -59,6 +59,19 @@ namespace Eyer
         EYER_AV_SAMPLE_FMT_FLTP = 1
     };
 
+    class EyerAVRational
+    {
+    public:
+        int num = 0;
+        int den = 0;
+
+        EyerAVRational();
+        EyerAVRational(const EyerAVRational & avRational);
+        ~EyerAVRational();
+
+        EyerAVRational & operator = (const EyerAVRational & avRational);
+    };
+
     class EyerAVPacket
     {
     public:
@@ -81,6 +94,8 @@ namespace Eyer
 
         int SetLast();
         int IsLast();
+
+        int GetSize();
     };
 
     enum EyerAVAudioDateType
@@ -224,11 +239,14 @@ namespace Eyer
     public:
         int streamIndex = -1;
         EyerAVStreamPrivate * piml = nullptr;
-
+        EyerAVRational timebase;
         double duration = 0;
     public:
         EyerAVStream();
         ~EyerAVStream();
+
+        EyerAVStream(const EyerAVStream & stream);
+        const EyerAVStream & operator = (const EyerAVStream & stream);
 
         EyerAVStreamType GetStreamType();
 
@@ -325,19 +343,6 @@ namespace Eyer
         int SetH(int h);
 
         EyerAVBitmapFormat GetFormat();
-    };
-
-    class EyerAVRational
-    {
-    public:
-        int num = 0;
-        int den = 0;
-
-        EyerAVRational();
-        EyerAVRational(const EyerAVRational & avRational);
-        ~EyerAVRational();
-
-        EyerAVRational & operator = (const EyerAVRational & avRational);
     };
 
 

@@ -86,4 +86,9 @@ namespace Eyer
         piml->isLastPacket = 1;
         return 0;
     }
+
+    int EyerAVPacket::GetSize()
+    {
+        return piml->packet->size;
+    }
 }
