@@ -75,4 +75,20 @@ namespace Eyer
         piml->packet->stream_index = id;
         return 0;
     }
+
+    int EyerAVPacket::IsLast()
+    {
+        return piml->isLastPacket;
+    }
+
+    int EyerAVPacket::SetLast()
+    {
+        piml->isLastPacket = 1;
+        return 0;
+    }
+
+    int EyerAVPacket::GetSize()
+    {
+        return piml->packet->size;
+    }
 }
