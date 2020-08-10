@@ -78,6 +78,9 @@ namespace Eyer
         int SetDTS(uint64_t dts);
 
         int SetStreamId(int id);
+
+        int SetLast();
+        int IsLast();
     };
 
     enum EyerAVAudioDateType
@@ -152,6 +155,9 @@ namespace Eyer
         int SetVideoData420P(unsigned char * y, unsigned char * u, unsigned char * v, int width, int height);
 
 
+
+        int SetLast();
+        int IsLast();
     public:
         EyerAVFramePrivate * piml = nullptr;
 
