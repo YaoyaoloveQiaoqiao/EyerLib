@@ -1,5 +1,6 @@
 include_directories (../)
 include_directories (./)
+include_directories (../EyerAV)
 
 add_library(
     EyerAV
@@ -36,7 +37,9 @@ add_library(
     AVUtil/EyerWandResource.cpp
     AVUtil/EyerWandVideoResource.cpp
     AVUtil/EyerVideoDecoderLine.cpp
-)
+        EyerAVBitstreamFilter.cpp
+        EyerAVBitstreamFilter.hpp
+        EyerAVBitstreamFilterPrivate.hpp)
 
 target_link_libraries (EyerAV EyerCore)
 

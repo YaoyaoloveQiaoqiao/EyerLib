@@ -189,6 +189,49 @@ TEST(Encoder, Encoder){
     */
 }
 
+TEST(EyerAVBitstreamFilter, EyerAVBitstreamFilter){
+    Eyer::EyerAVReader reader("/Users/lichi/annie/xinxiaomen.mp4");
+    int ret = reader.Open();
+    if(ret){
+        printf("Open Fail ret: %d\n", ret);
+        return;
+    }
+
+    int videoStreamIndex = reader.GetVideoStreamIndex();
+
+    Eyer::EyerAVStream stream;
+    reader.GetStream(stream, videoStreamIndex);
+
+    Eyer::EyerAVDecoder decoder;
+    decoder.Init(&stream);
+
+    FILE * file = fopen("./xin.h264", "wb");
+
+    Eyer::EyerAVBitstreamFilter avBitstreamFilter;
+    while (1){
+        Eyer::EyerAVPacket packet;
+        ret = reader.Read(&packet);
+        if(ret){
+            break;
+        }
+
+        if(packet.GetStreamId() != videoStreamIndex){
+            continue;
+        }
+
+        unsigned char * dstData = nullptr;
+        int dstLen = 0;
+        avBitstreamFilter.Filter(stream, &packet, &dstData, &dstLen);
+
+        printf("dstLen: %d\n", dstLen);
+        fwrite(dstData, dstLen, 1, file);
+    }
+
+    fclose(file);
+
+    reader.Close();
+}
+
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
