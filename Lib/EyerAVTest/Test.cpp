@@ -207,7 +207,9 @@ TEST(EyerAVBitstreamFilter, EyerAVBitstreamFilter){
 
     FILE * file = fopen("./xin.h264", "wb");
 
-    Eyer::EyerAVBitstreamFilter avBitstreamFilter;
+    Eyer::EyerAVBitstreamFilter::QueryAllBitstreamFilter();
+
+    Eyer::EyerAVBitstreamFilter avBitstreamFilter(Eyer::EyerAVBitstreamFilterType::h264_mp4toannexb, stream);
     while (1){
         Eyer::EyerAVPacket packet;
         ret = reader.Read(&packet);
@@ -219,12 +221,45 @@ TEST(EyerAVBitstreamFilter, EyerAVBitstreamFilter){
             continue;
         }
 
-        unsigned char * dstData = nullptr;
-        int dstLen = 0;
-        avBitstreamFilter.Filter(stream, &packet, &dstData, &dstLen);
+        avBitstreamFilter.SendPacket(&packet);
+        while(1){
+            Eyer::EyerAVPacket outPacket;
+            ret = avBitstreamFilter.ReceivePacket(&outPacket);
+            if(ret){
+                break;
+            }
 
-        printf("dstLen: %d\n", dstLen);
-        fwrite(dstData, dstLen, 1, file);
+            printf("dstLen: %d\n", outPacket.GetSize());
+
+            for(int i=0;i<10;i++){
+                printf("%d ", outPacket.GetDataPtr()[i]);
+            }
+            printf("\n");
+            for(int i=0;i<outPacket.GetSize()-4;i++){
+                unsigned char * dataPtr = outPacket.GetDataPtr();
+                if(dataPtr[i] == 0){
+                    if(dataPtr[i + 1] == 0){
+                        if(dataPtr[i + 2] == 0){
+                            if(dataPtr[i + 3] == 1){
+                                printf("Miao!!!!\n");
+                                printf("nalu type: %d\n", dataPtr[i + 4] & 0x1F);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // printf("nalu type: %d\n", outPacket.GetDataPtr()[4] & 0x1F);
+            printf("\n\n");
+
+            fwrite(outPacket.GetDataPtr(), outPacket.GetSize(), 1, file);
+        }
+
+
+
+
+
+
     }
 
     fclose(file);
