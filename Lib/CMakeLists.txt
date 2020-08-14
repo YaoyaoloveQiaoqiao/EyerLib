@@ -10,6 +10,9 @@ SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/install/)
 
 include_directories (googletest/googletest/include)
 
+include_directories (EyerGLAD/glad/include/)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/include)
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
@@ -88,6 +91,7 @@ ModuleOption("EyerVideoTweenAnimation" EyerVideoTweenAnimation)
 
 OPTION(AL_TEST           "option for AL_TEST"           ON)
 IF (AL_TEST)
+    ADD_SUBDIRECTORY(googletest)
     ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
     ADD_SUBDIRECTORY(EyerCoreTest)
     ADD_SUBDIRECTORY(EyerAVTest)
@@ -100,5 +104,4 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerEventQueue)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerYUVTest)
-    ADD_SUBDIRECTORY(googletest)
 ENDIF(AL_TEST)

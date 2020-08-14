@@ -91,4 +91,9 @@ namespace Eyer
     {
         return piml->packet->size;
     }
+
+    unsigned char * EyerAVPacket::GetDataPtr()
+    {
+        return piml->packet->data;
+    }
 }

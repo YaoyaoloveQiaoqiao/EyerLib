@@ -16,6 +16,7 @@ target_link_libraries (EyerAVTest EyerCore)
 target_link_libraries (EyerAVTest EyerAV)
 target_link_libraries (EyerAVTest EyerGL)
 target_link_libraries (EyerAVTest EyerYUV)
+target_link_libraries (EyerAVTest gtest)
 
 INSTALL(
         TARGETS EyerAVTest

@@ -1,9 +1,6 @@
 include_directories (../)
 include_directories (./)
 
-include_directories (${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/include)
-include_directories (../EyerGLAD/glad/include/)
-
 add_library(
         EyerGL
 
