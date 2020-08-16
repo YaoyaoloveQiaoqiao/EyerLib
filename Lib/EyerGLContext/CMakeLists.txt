@@ -1,17 +1,19 @@
 include_directories (../)
 include_directories (./)
 
-add_library(
-        EyerGLContext
-        EyerGLContextThread.cpp
-        )
-
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
         MESSAGE(STATUS "current platform: Linux")
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Windows")
         MESSAGE(STATUS "current platform: Windows")
+        add_library(
+                EyerGLContext
+                EyerGLContextThread_Windows.cpp)
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
         MESSAGE(STATUS "current platform: Android")
+        add_library(
+                EyerGLContext
+                EyerGLContextThread_Android.cpp)
+
 ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Darwin")
         MESSAGE(STATUS "current platform: Darwin")
 ELSE ()
