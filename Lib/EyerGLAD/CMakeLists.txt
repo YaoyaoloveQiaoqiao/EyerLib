@@ -30,6 +30,10 @@ set(head_files
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerGLAD)
+
+INSTALL(FILES glad/include/glad/glad.h DESTINATION include/glad)
+INSTALL(FILES glad/include/KHR/khrplatform.h DESTINATION include/KHR)
+
 INSTALL(
         TARGETS EyerGLAD
         RUNTIME DESTINATION bin
