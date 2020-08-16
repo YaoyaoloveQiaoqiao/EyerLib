@@ -62,8 +62,8 @@ namespace Eyer
                 queueSize = taskQueue.Size();
             }
             if(queueSize <= 0){
-                glfwSwapBuffers(window);
-                glfwPollEvents();
+                // glfwSwapBuffers(window);
+                // glfwPollEvents();
             }
         }
 
