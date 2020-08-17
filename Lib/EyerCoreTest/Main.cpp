@@ -258,6 +258,51 @@ TEST(LRUCache, LRUCache){
     }
 }
 
+
+TEST(Map, MapTest){
+    std::map<Eyer::EyerString, Eyer::EyerString> m;
+
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("a", "miaowu_a"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("b", "miaowu_b"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("c", "miaowu_c"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("d", "miaowu_d"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("e", "miaowu_e"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("f", "miaowu_f"));
+
+    int size = m.size();
+
+    EyerLog("Map Size: %d\n", size);
+
+    std::map<Eyer::EyerString, Eyer::EyerString>::iterator iter;
+    for(iter = m.begin(); iter != m.end(); iter++){
+        EyerLog("key: %s   value: %s\n", iter->first.str, iter->second.str);
+    }
+
+    {
+        std::map<Eyer::EyerString, Eyer::EyerString>::iterator it;
+        it = m.find(Eyer::EyerString("a"));
+        if (it != m.end()){
+            EyerLog("key: %s   value: %s\n", it->first.str, it->second.str);
+        }
+    }
+
+    {
+        std::map<Eyer::EyerString, Eyer::EyerString>::iterator it;
+        it = m.find(Eyer::EyerString("b"));
+        if (it != m.end()){
+            EyerLog("key: %s   value: %s\n", it->first.str, it->second.str);
+        }
+    }
+    {
+        std::map<Eyer::EyerString, Eyer::EyerString>::iterator it;
+        it = m.find(Eyer::EyerString("c"));
+        if (it != m.end()){
+            EyerLog("key: %s   value: %s\n", it->first.str, it->second.str);
+        }
+    }
+
+}
+
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

@@ -50,7 +50,7 @@ namespace Eyer {
         return *this;
     }
 
-    bool EyerString::operator == (const EyerString & s)
+    bool EyerString::operator == (const EyerString & s) const
     {
         if(IsEmpty() && s.IsEmpty()){
             return true;
@@ -71,20 +71,20 @@ namespace Eyer {
         return false;
     }
 
-    bool EyerString::operator > (const EyerString & s)
+    bool EyerString::operator > (const EyerString & s) const
     {
         if(strcmp(str, s.str) > 0){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
-    bool EyerString::operator < (const EyerString & s)
+    bool EyerString::operator < (const EyerString & s) const
     {
         if(strcmp(str, s.str) < 0){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     EyerString EyerString::operator + (const EyerString & s){
