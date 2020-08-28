@@ -67,7 +67,11 @@ class EventLoopEvent : public Eyer::EyerRunnable
 {
     virtual void Run(){
         EyerLog("Start Event\n");
+        for(int i=0;i<5;i++){
+            // Eyer::EyerTime::EyerSleepMilliseconds(1000 * 1);
+        }
         Eyer::EyerTime::EyerSleepMilliseconds(1000 * 1);
+
         EyerLog("End Event\n");
     }
 };
@@ -78,19 +82,23 @@ TEST(Eyer, EyerEventLoop){
         EventLoopThread eventLoopThread;
         eventLoopThread.Start();
 
-        EventLoopEvent event;
-        eventLoopThread.PushEvent(&event);
+        for(int j=0;j<10;j++){
+            EventLoopEvent event;
+            eventLoopThread.PushEvent(&event);
 
-        EyerLog("Start Event Loop\n");
-        eventLoopThread.StartEventLoop();
-        long long startTime = Eyer::EyerTime::GetTime();
+            EyerLog("Start Event Loop A\n");
+            long long startTime = Eyer::EyerTime::GetTime();
+            eventLoopThread.StartEventLoop();
+            EyerLog("Start Event Loop B\n");
 
-        eventLoopThread.StopEventLoop();
-        long long endTime = Eyer::EyerTime::GetTime();
-        EyerLog("End Event Loop\n");
+            EyerLog("End Event Loop A\n");
+            eventLoopThread.StopEventLoop();
+            long long endTime = Eyer::EyerTime::GetTime();
+            EyerLog("End Event Loop B\n");
 
-        if(endTime - startTime <= 500){
-            EyerLog("Error!!!!!!!!!!   %lld\n", endTime - startTime);
+            if(endTime - startTime <= 500){
+                EyerLog("Error!!!!!!!!!!   %lld\n", endTime - startTime);
+            }
         }
 
         eventLoopThread.Stop();
