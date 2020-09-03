@@ -17,10 +17,10 @@ namespace Eyer {
         bool IsEmpty() const;
 
         EyerString & operator = (const EyerString & s);
-        bool operator == (const EyerString & s);
+        bool operator == (const EyerString & s) const;
 
-        bool operator > (const EyerString & s);
-        bool operator < (const EyerString & s);
+        bool operator > (const EyerString & s) const;
+        bool operator < (const EyerString & s) const;
 
         EyerString operator + (const EyerString & s);
 

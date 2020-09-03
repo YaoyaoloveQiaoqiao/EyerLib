@@ -27,6 +27,7 @@ public:
     }
 };
 
+/*
 TEST(Eyer, EyerThread){
     TimeThread a("A");
     TimeThread b("B");
@@ -34,10 +35,75 @@ TEST(Eyer, EyerThread){
     a.Start();
     b.Start();
 
-    Eyer::EyerTime::EyerSleep(1000 * 1000 * 10);
+    Eyer::EyerTime::EyerSleep(1000 * 1000 * 1);
 
     a.Stop();
     b.Stop();
+}
+ */
+
+
+class EventLoopThread : public Eyer::EyerThread
+{
+public:
+    EventLoopThread()
+    {
+
+    }
+
+    ~EventLoopThread()
+    {
+
+    }
+
+    virtual void Run() {
+        while(!stopFlag){
+            EventLoop();
+        }
+    }
+};
+
+class EventLoopEvent : public Eyer::EyerRunnable
+{
+    virtual void Run(){
+        EyerLog("Start Event\n");
+        for(int i=0;i<5;i++){
+            // Eyer::EyerTime::EyerSleepMilliseconds(1000 * 1);
+        }
+        Eyer::EyerTime::EyerSleepMilliseconds(1000 * 1);
+
+        EyerLog("End Event\n");
+    }
+};
+
+TEST(Eyer, EyerEventLoop){
+    for(int i=0;i<50;i++){
+        EyerLog("=======================================\n");
+        EventLoopThread eventLoopThread;
+        eventLoopThread.Start();
+
+        for(int j=0;j<10;j++){
+            EventLoopEvent event;
+            eventLoopThread.PushEvent(&event);
+
+            EyerLog("Start Event Loop A\n");
+            long long startTime = Eyer::EyerTime::GetTime();
+            eventLoopThread.StartEventLoop();
+            EyerLog("Start Event Loop B\n");
+
+            EyerLog("End Event Loop A\n");
+            eventLoopThread.StopEventLoop();
+            long long endTime = Eyer::EyerTime::GetTime();
+            EyerLog("End Event Loop B\n");
+
+            if(endTime - startTime <= 500){
+                EyerLog("Error!!!!!!!!!!   %lld\n", endTime - startTime);
+            }
+        }
+
+        eventLoopThread.Stop();
+    }
+
 }
 
 int main(int argc,char **argv)

@@ -19,6 +19,7 @@ namespace Eyer
         static EyerString TimeFormat();
 
         static int EyerSleep(int time);
+        static int EyerSleepMilliseconds(int time);
     };
 }
 

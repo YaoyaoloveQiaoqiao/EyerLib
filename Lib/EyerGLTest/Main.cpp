@@ -9,10 +9,11 @@
 
 TEST(GLContext, GLContextTest){
     Eyer::EyerGLContextThread glCtx;
+    // glCtx.Run();
     glCtx.Start();
 
-    for(int i=0;i<100;i++){
-        Eyer::EyerTime::EyerSleep(1000 * 1000);
+    for(int i=0;i<5;i++){
+        Eyer::EyerTime::EyerSleepMilliseconds(1000);
     }
 
     glCtx.Stop();
