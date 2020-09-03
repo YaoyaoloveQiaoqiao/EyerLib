@@ -29,8 +29,8 @@ TEST(EyerNet, EyerHttpPool){
     std::vector<Eyer::EyerHttpTask *> taskList;
     for(int i=0;i<10;i++){
         Eyer::EyerHttpTask * httpTask = new Eyer::EyerHttpTask();
-        Eyer::EyerString url = Eyer::EyerString("http://redknot.cn/sohu/hls/shuw_000") + Eyer::EyerString::Number(i) + Eyer::EyerString(".ts");
-        // Eyer::EyerString url = "https://www.baidu.com";
+        // Eyer::EyerString url = Eyer::EyerString("http://redknot.cn/sohu/hls/shuw_000") + Eyer::EyerString::Number(i) + Eyer::EyerString(".ts");
+        Eyer::EyerString url = "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd";
         EyerLog("Url: %s\n", url.str);
         httpTask->SetUrl(url);
         httpPool.AddTask(*httpTask);
