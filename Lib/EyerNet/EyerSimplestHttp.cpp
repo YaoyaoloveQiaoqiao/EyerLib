@@ -9,7 +9,7 @@ namespace Eyer
 {
     size_t EyerSimplestHttp::write_data(void *buffer, size_t size, size_t nmemb, void *userp)
     {
-        EyerLog("size: %d, nmemb: %d\n", size, nmemb);
+        // EyerLog("size: %d, nmemb: %d\n", size, nmemb);
         EyerSimplestHttp * http = (EyerSimplestHttp *)userp;
         http->SetDate((unsigned char *)buffer, size * nmemb);
         return size * nmemb;
@@ -26,12 +26,13 @@ namespace Eyer
 
     }
 
-    int EyerSimplestHttp::Get(unsigned char * data, EyerString url)
+    int EyerSimplestHttp::Get(Eyer::EyerBuffer & _buffer, EyerString url)
     {
         int finalRet = -1;
         CURL * curl = curl_easy_init();
         if(curl) {
-            curl_easy_setopt(curl, CURLOPT_URL, "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd");
+            buffer.Clear();
+            curl_easy_setopt(curl, CURLOPT_URL, url.str);
             curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2);
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
@@ -42,9 +43,8 @@ namespace Eyer
                 fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
             }else{
                 finalRet = 0;
-                //
+                _buffer = buffer;
             }
-
             curl_easy_cleanup(curl);
         }
         return finalRet;
@@ -52,17 +52,7 @@ namespace Eyer
 
     int EyerSimplestHttp::SetDate(unsigned char * _data, int _dataLen)
     {
-        if(data != nullptr){
-            free(data);
-            data = nullptr;
-            dataLen = 0;
-        }
-
-        dataLen = _dataLen;
-        data = (unsigned char *)malloc(dataLen);
-
-        memcpy(data, _data, dataLen);
-
+        buffer.Append(_data, _dataLen);
         return 0;
     }
 }

@@ -10,5 +10,6 @@
 #include "EyerMap.hpp"
 #include "EyerLockQueue.hpp"
 #include "EyerLRUMap.hpp"
+#include "EyerBuffer.hpp"
 
 #endif

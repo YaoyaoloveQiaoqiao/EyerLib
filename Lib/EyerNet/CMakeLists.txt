@@ -5,7 +5,8 @@ add_library(
         EyerNet
         EyerNet.cpp
         EyerSimplestHttp.cpp
-)
+        EyerHttpTask.cpp
+        EyerHttpPool.cpp EyerHttpPool.hpp)
 
 target_link_libraries (
         EyerNet

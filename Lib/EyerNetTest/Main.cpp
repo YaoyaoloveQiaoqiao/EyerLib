@@ -23,58 +23,69 @@ TEST(EyerNet, cURL_support){
     curl_global_cleanup();
 }
 
-TEST(EyerNet, cURL_10_at_a_time){
-    /*
-    curl_global_init(CURL_GLOBAL_ALL);
+TEST(EyerNet, EyerHttpPool){
+    Eyer::EyerHttpPool httpPool;
 
-    CURLM * cm = curl_multi_init();
+    std::vector<Eyer::EyerHttpTask *> taskList;
+    for(int i=0;i<10;i++){
+        Eyer::EyerHttpTask * httpTask = new Eyer::EyerHttpTask();
+        Eyer::EyerString url = Eyer::EyerString("http://redknot.cn/sohu/hls/shuw_000") + Eyer::EyerString::Number(i) + Eyer::EyerString(".ts");
+        // Eyer::EyerString url = "https://www.baidu.com";
+        EyerLog("Url: %s\n", url.str);
+        httpTask->SetUrl(url);
+        httpPool.AddTask(*httpTask);
 
-    curl_multi_setopt(cm, CURLMOPT_MAXCONNECTS, (long)MAX_PARALLEL);
-
-    for(int transfers = 0; transfers < MAX_PARALLEL; transfers++){
-        CURL *eh = curl_easy_init();
-        curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, write_cb);
-        curl_easy_setopt(eh, CURLOPT_URL, urls[i]);
-        curl_easy_setopt(eh, CURLOPT_PRIVATE, urls[i]);
-        curl_multi_add_handle(cm, eh);
+        taskList.push_back(httpTask);
     }
-     */
+
+
+    httpPool.Start();
+
+    while(httpPool.StillRunning()){
+        // EyerLog("Loop\n");
+        httpPool.Loop();
+    }
+
+    for(int i=0;i<taskList.size();i++){
+        Eyer::EyerHttpTask * httpTask = taskList.at(i);
+
+        Eyer::EyerBuffer buffer;
+        httpTask->GetBuffer(buffer);
+
+        EyerLog("Buffer Len: %d\n", buffer.GetBuffer(nullptr));
+
+        delete httpTask;
+    }
 }
 
 TEST(EyerNet, cURL_Http2_download){
 
 }
 
-size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
-{
-    EyerLog("size: %d, nmemb: %d\n", size, nmemb);
-    return size * nmemb;
-}
-
 TEST(EyerNet, cURL){
-    CURL *curl;
-    CURLcode res;
 
-    EyerLog("cURL Test\n");
-
-    curl = curl_easy_init();
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd");
-        curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2);
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, NULL);
-
-        res = curl_easy_perform(curl);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-
-        curl_easy_cleanup(curl);
-    }
 }
 
 TEST(EyerNet, EyerSimplestHttp){
     Eyer::EyerSimplestHttp http;
-    int ret = http.Get(nullptr, "https://www.baidu.com");
+
+    Eyer::EyerBuffer buffer;
+    // int ret = http.Get(buffer, "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd");
+    int ret = http.Get(buffer, "http://redknot.cn/sohu/hls/shuw_0001.ts");
+
+    ASSERT_EQ(ret, 0) << "Network Error";
+
+    int dataLen = buffer.GetBuffer(nullptr);
+
+    unsigned char * data = (unsigned char *)malloc(dataLen);
+
+    buffer.GetBuffer(data);
+
+    FILE * f = fopen("a.ts", "wb");
+    fwrite(data, 1, dataLen, f);
+    fclose(f);
+
+    free(data);
 }
 
 int main(int argc,char **argv){
