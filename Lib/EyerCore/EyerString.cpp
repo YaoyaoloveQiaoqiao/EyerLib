@@ -50,6 +50,16 @@ namespace Eyer {
         return *this;
     }
 
+    EyerString & EyerString::operator = (const char * s)
+    {
+        ClearStr();
+
+        int _strLen = strlen(s) + 1;
+        str = (char *)malloc(_strLen);
+        memcpy(str, s, _strLen);
+        return *this;
+    }
+
     bool EyerString::operator == (const EyerString & s) const
     {
         if(IsEmpty() && s.IsEmpty()){

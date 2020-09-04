@@ -12,8 +12,8 @@ include_directories (googletest/googletest/include)
 
 include_directories (EyerGLAD/glad/include/)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/include)
-
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/curl_install/include)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -94,6 +94,9 @@ ModuleOption("EyerVideoTweenAnimation" EyerVideoTweenAnimation)
 OPTION(EyerNet           "option for EyerNet"           ON)
 ModuleOption("EyerNet" EyerNet)
 
+OPTION(EyerDASH           "option for EyerDASH"           ON)
+ModuleOption("EyerDASH" EyerDASH)
+
 OPTION(AL_TEST           "option for AL_TEST"           ON)
 IF (AL_TEST)
     ADD_SUBDIRECTORY(googletest)
@@ -110,4 +113,5 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerYUVTest)
     ADD_SUBDIRECTORY(EyerNetTest)
+    ADD_SUBDIRECTORY(EyerDashTest)
 ENDIF(AL_TEST)

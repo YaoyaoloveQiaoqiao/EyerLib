@@ -17,6 +17,9 @@ namespace Eyer {
         bool IsEmpty() const;
 
         EyerString & operator = (const EyerString & s);
+
+        EyerString & operator = (const char * s);
+
         bool operator == (const EyerString & s) const;
 
         bool operator > (const EyerString & s) const;
