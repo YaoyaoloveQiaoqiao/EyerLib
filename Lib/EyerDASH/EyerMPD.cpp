@@ -85,7 +85,15 @@ END:
 
             EyerSegmentTemplate segmentTemplate = adaptationSet->GetSegmentTemplate();
             printf("\t\t\tSegmentTemplate:\n");
-            printf("\t\t\t\tInitialization:%s\n", segmentTemplate.GetInitialization().str);
+            printf("\t\t\t\tinitialization: %s\n", segmentTemplate.GetInitialization().str);
+            printf("\t\t\t\tmedia: %s\n", segmentTemplate.GetMedia().str);
+
+            int repSize = adaptationSet->GetRepresentationSize();
+            for(int repId = 0; repId < repSize; repId++){
+                EyerRepresentation representation = adaptationSet->GetRepresentation(repId);
+                printf("\t\t\tRepresentation:\n");
+                printf("\t\t\t\tid: %s\n", representation.GetId().str);
+            }
         }
         printf("<=========================== MPD End ===========================>\n");
         return 0;

@@ -22,12 +22,14 @@ namespace Eyer
     EyerSegmentTemplate & EyerSegmentTemplate::operator = (const EyerSegmentTemplate & segmentTemplate)
     {
         initialization = segmentTemplate.initialization;
+        media = segmentTemplate.media;
         return *this;
     }
 
     int EyerSegmentTemplate::LoadFromXML(void * node){
         xmlNode * segmentTemplateNode = (xmlNode *)node;
         SetInitialization((char *)xmlGetProp(segmentTemplateNode, BAD_CAST"initialization"));
+        media = (char *)xmlGetProp(segmentTemplateNode, BAD_CAST"media");
         return 0;
     }
 
@@ -40,5 +42,10 @@ namespace Eyer
     EyerString & EyerSegmentTemplate::GetInitialization()
     {
         return initialization;
+    }
+
+    EyerString & EyerSegmentTemplate::GetMedia()
+    {
+        return media;
     }
 }

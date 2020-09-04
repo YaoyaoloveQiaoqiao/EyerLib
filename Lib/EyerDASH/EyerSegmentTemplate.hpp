@@ -17,8 +17,11 @@ namespace Eyer{
 
         EyerString & GetInitialization();
         int SetInitialization(char * str);
+
+        EyerString & GetMedia();
     private:
         EyerString initialization;
+        EyerString media;
     };
 }
 

@@ -1,6 +1,7 @@
 #include "EyerAdaptationSet.hpp"
 #include <libxml2/libxml/parser.h>
 #include "EyerCore/EyerCore.hpp"
+#include "EyerRepresentation.hpp"
 
 namespace Eyer
 {
@@ -11,7 +12,10 @@ namespace Eyer
 
     EyerAdaptationSet::~EyerAdaptationSet()
     {
-
+        for(int i=0;i<representationList.size();i++){
+            delete representationList[i];
+        }
+        representationList.clear();
     }
 
     EyerAdaptationSet::EyerAdaptationSet(const EyerAdaptationSet & adaptationSet) : EyerAdaptationSet()
@@ -22,6 +26,16 @@ namespace Eyer
     EyerAdaptationSet & EyerAdaptationSet::operator = (const EyerAdaptationSet & adaptationSet)
     {
         segmentTemplate = adaptationSet.segmentTemplate;
+
+        for(int i=0;i<representationList.size();i++){
+            delete representationList[i];
+        }
+        representationList.clear();
+
+        for(int i=0;i<adaptationSet.representationList.size();i++){
+            EyerRepresentation * representation = new EyerRepresentation(*adaptationSet.representationList[i]);
+            representationList.push_back(representation);
+        }
         return *this;
     }
 
@@ -35,6 +49,9 @@ namespace Eyer
                 segmentTemplate.LoadFromXML(representationNode);
             }
             if (xmlStrcasecmp(representationNode->name, BAD_CAST "Representation") == 0){
+                EyerRepresentation * representation = new EyerRepresentation();
+                representation->LoadFromXML(representationNode);
+                representationList.push_back(representation);
             }
         }
 
@@ -45,9 +62,20 @@ namespace Eyer
     {
         return segmentTemplate;
     }
+
     int EyerAdaptationSet::SetSegmentTemplate(EyerSegmentTemplate & _segmentTemplate)
     {
         segmentTemplate = _segmentTemplate;
         return 0;
+    }
+
+    int EyerAdaptationSet::GetRepresentationSize()
+    {
+        return representationList.size();
+    }
+
+    EyerRepresentation & EyerAdaptationSet::GetRepresentation(int i)
+    {
+        return *representationList[i];
     }
 }
