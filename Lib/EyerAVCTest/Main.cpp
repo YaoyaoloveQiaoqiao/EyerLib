@@ -8,6 +8,15 @@ TEST(EyerAVC, AnnexB){
     Eyer::EyerAnnexB annexB;
     annexB.Open(url);
 
+    while(1){
+        Eyer::EyerNALU nalu(8 * 1024 * 1024);
+        int ret = annexB.GetAnnexBNALU(nalu);
+        EyerLog("nalu len: %d, nalu type: %d\n", nalu.len, nalu.nal_unit_type);
+        if(ret <= 0){
+            break;
+        }
+    }
+
     annexB.Close();
 }
 

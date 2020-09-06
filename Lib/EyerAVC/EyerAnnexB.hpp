@@ -15,10 +15,11 @@ namespace Eyer{
 
         int Reset();
 
-        int GetAnnexBNALU();
+        int GetAnnexBNALU(EyerNALU & nalu);
     private:
         int getChunk();
         unsigned char getfbyte();
+        int FindStartCode (unsigned char * Buf, int zeros_in_startcode);
 
         FILE * bitStreamFile = nullptr;
         unsigned char * iobuffer = nullptr;
