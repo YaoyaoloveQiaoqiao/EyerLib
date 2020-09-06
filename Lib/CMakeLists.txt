@@ -1,6 +1,17 @@
-PROJECT(EYE_Lib)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(EyerLib
+        VERSION 1.0.0.0
+        )
+
+
+message( STATUS "CMAKE_PROJECT_NAME    = ${CMAKE_PROJECT_NAME}" )
+message( STATUS "PROJECT_VERSION_MAJOR = ${PROJECT_VERSION_MAJOR}" )
+message( STATUS "PROJECT_VERSION_MINOR = ${PROJECT_VERSION_MINOR}" )
+message( STATUS "PROJECT_VERSION_PATCH = ${PROJECT_VERSION_PATCH}" )
+message( STATUS "PROJECT_VERSION_TWEAK = ${PROJECT_VERSION_TWEAK}" )
+message( STATUS "PROJECT_HOMEPAGE_URL = ${PROJECT_HOMEPAGE_URL}")
+message( STATUS "CMAKE_PROJECT_DESCRIPTION = ${CMAKE_PROJECT_DESCRIPTION}" )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -14,6 +25,10 @@ include_directories (EyerGLAD/glad/include/)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/curl_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include/libxml2)
+
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/curl_install/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/lib)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
