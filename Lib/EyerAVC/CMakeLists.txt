@@ -4,7 +4,11 @@ include_directories (./)
 add_library(
         EyerAVC
         EyerAnnexB.cpp
-        EyerAnnexB.hpp EyerNALU.cpp EyerNALU.hpp)
+        EyerAnnexB.hpp
+        EyerNALU.cpp
+        EyerNALU.hpp
+        EyerSlice.cpp
+        EyerSlice.hpp EyerSPS.cpp EyerSPS.hpp)
 
 target_link_libraries (
         EyerAVC

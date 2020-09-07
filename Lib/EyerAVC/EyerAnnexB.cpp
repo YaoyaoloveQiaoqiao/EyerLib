@@ -87,7 +87,7 @@ namespace Eyer{
         unsigned char * pBuf = buf;
 
         if (nextstartcodebytes != 0) {
-            for (i = 0; i<nextstartcodebytes - 1; i++){
+            for (i = 0; i<nextstartcodebytes - 1; i++) {
                 (*pBuf++) = 0;
                 pos++;
             }
@@ -129,8 +129,9 @@ namespace Eyer{
             nalu.startcodeprefix_len = 4;
         }
 
-        if(!isFirstByteStreamNALU && LeadingZero8BitsCount > 0)
-        {
+        // EyerLog("startcodeprefix_len: %d\n", nalu.startcodeprefix_len);
+
+        if(!isFirstByteStreamNALU && LeadingZero8BitsCount > 0) {
             EyerLog ("get_annex_b_NALU: The leading_zero_8bits syntax can only be present in the first byte stream NAL unit, return -1\n");
             return -1;
         }
@@ -220,6 +221,13 @@ namespace Eyer{
             is_eof = true;
             return 0;
         }
+
+        /*
+        for(int i=0;i<100;i++){
+            printf(" %d ", iobuffer[i]);
+        }
+        printf("\n\n");
+        */
 
         bytesinbuffer = readbytes;
         iobufferread = iobuffer;

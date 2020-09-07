@@ -11,8 +11,6 @@ TEST(EyerDashTest, EyerAdaptationSet){
 
     Eyer::EyerSegmentTemplate segmentTemplateA;
     segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
-
-
 }
 
 TEST(EyerDashTest, SegmentTemplate){

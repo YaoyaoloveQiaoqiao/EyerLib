@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 namespace Eyer {
+
     EyerNALU::EyerNALU(int buffersize)
     {
         max_size = buffersize;

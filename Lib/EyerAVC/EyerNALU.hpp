@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 namespace Eyer {
-    typedef enum {
+     enum NaluType {
         NALU_TYPE_SLICE    = 1,
         NALU_TYPE_DPA      = 2,
         NALU_TYPE_DPB      = 3,
@@ -17,7 +17,7 @@ namespace Eyer {
         NALU_TYPE_EOSEQ    = 10,
         NALU_TYPE_EOSTREAM = 11,
         NALU_TYPE_FILL     = 12,
-    } NaluType;
+    };
 
     typedef enum {
         NALU_PRIORITY_HIGHEST     = 3,
@@ -28,8 +28,10 @@ namespace Eyer {
 
     class EyerNALU {
     public:
-        EyerNALU(int buffersize);
+        EyerNALU(int buffersize = MAX_NALU_SIZE);
         ~EyerNALU();
+
+        const static int MAX_NALU_SIZE = 8 * 1024 * 1024;
 
     public:
         int       startcodeprefix_len;   //!< 4 for parameter sets and first slice in picture, 3 for everything else (suggested)
