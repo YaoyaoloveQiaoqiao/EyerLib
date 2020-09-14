@@ -28,7 +28,7 @@ namespace Eyer{
 
         unsigned  int chroma_format_idc;                                // ue(v)
 
-        
+
     };
 }
 

@@ -31,6 +31,8 @@ namespace Eyer {
         EyerNALU(int buffersize = MAX_NALU_SIZE);
         ~EyerNALU();
 
+        int ToRBSP();
+
         const static int MAX_NALU_SIZE = 8 * 1024 * 1024;
 
     public:

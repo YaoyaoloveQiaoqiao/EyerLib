@@ -8,7 +8,7 @@ add_library(
         EyerNALU.cpp
         EyerNALU.hpp
         EyerSlice.cpp
-        EyerSlice.hpp EyerSPS.cpp EyerSPS.hpp)
+        EyerSlice.hpp EyerSPS.cpp EyerSPS.hpp EyerAVCCommon.cpp EyerAVCCommon.hpp)
 
 target_link_libraries (
         EyerAVC

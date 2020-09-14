@@ -17,6 +17,45 @@ namespace Eyer
         adaptationSetList.clear();
     }
 
+    int EyerMPD::SetBaseURL(EyerString & baseURL)
+    {
+        return 0;
+    }
+
+    int EyerMPD::GetInitURL()
+    {
+        return 0;
+    }
+
+    int EyerMPD::GetVideoURL(int number)
+    {
+        EyerAdaptationSet videoAdaptationSet;
+        int ret = GetAudioAdaptationSet(videoAdaptationSet);
+        if(ret){
+            return -1;
+        }
+
+        EyerSegmentTemplate segmentTemplate;
+        ret = videoAdaptationSet.GetSegmentTemplate(segmentTemplate);
+        if(ret){
+            return -1;
+        }
+
+        EyerString media = segmentTemplate.GetMedia();
+        EyerString mediaUrl = baseUrl + media;
+
+        EyerLog("media url: %s\n", mediaUrl.str);
+
+
+
+        /*
+        EyerString initialization = segmentTemplate.GetInitialization();
+        EyerLog("initialization: %s\n", initialization.str);
+        */
+
+        return 0;
+    }
+
     int EyerMPD::LoadMPD(EyerBuffer & buffer)
     {
         int bufferLen = buffer.GetBuffer(nullptr);
@@ -76,14 +115,20 @@ END:
 
     int EyerMPD::PrintInfo()
     {
+        int ret = 0;
         printf("<===========================MPD Start===========================>\n");
         printf("\tBaseURL: %s\n", baseUrl.str);
         printf("\tPeriod:\n");
         for(int i=0;i<adaptationSetList.size();i++){
             printf("\t\tAdaptationSet:\n");
             EyerAdaptationSet * adaptationSet = adaptationSetList[i];
+            printf("\t\t\tContent Type:%s\n", adaptationSet->GetContentType().str);
 
-            EyerSegmentTemplate segmentTemplate = adaptationSet->GetSegmentTemplate();
+            EyerSegmentTemplate segmentTemplate;
+            ret = adaptationSet->GetSegmentTemplate(segmentTemplate);
+            if(ret){
+                continue;
+            }
             printf("\t\t\tSegmentTemplate:\n");
             printf("\t\t\t\tinitialization: %s\n", segmentTemplate.GetInitialization().str);
             printf("\t\t\t\tmedia: %s\n", segmentTemplate.GetMedia().str);
@@ -97,5 +142,29 @@ END:
         }
         printf("<=========================== MPD End ===========================>\n");
         return 0;
+    }
+
+    int EyerMPD::GetVideoAdaptationSet(EyerAdaptationSet & videoAdaptationSet)
+    {
+        for(int i=0;i<adaptationSetList.size();i++) {
+            EyerAdaptationSet *adaptationSet = adaptationSetList[i];
+            if(adaptationSet->GetContentType() == "video"){
+                videoAdaptationSet = *adaptationSet;
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    int EyerMPD::GetAudioAdaptationSet(EyerAdaptationSet & audioAdaptationSet)
+    {
+        for(int i=0;i<adaptationSetList.size();i++) {
+            EyerAdaptationSet *adaptationSet = adaptationSetList[i];
+            if(adaptationSet->GetContentType() == "audio"){
+                audioAdaptationSet = *adaptationSet;
+                return 0;
+            }
+        }
+        return -1;
     }
 }

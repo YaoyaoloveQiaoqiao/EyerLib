@@ -41,6 +41,8 @@ TEST(EyerDashTest, MPD){
     Eyer::EyerMPD mpd;
     mpd.LoadMPD(buffer);
     mpd.PrintInfo();
+
+    mpd.GetVideoURL(10);
 }
 
 int main(int argc,char **argv){

@@ -12,11 +12,16 @@ TEST(EyerAVC, AnnexB){
     while(1){
         Eyer::EyerNALU nalu(8 * 1024 * 1024);
         int ret = annexB.GetAnnexBNALU(nalu);
-        EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
+        // EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
         if(ret <= 0){
             break;
         }
 
+        int len = nalu.len;
+        nalu.ToRBSP();
+        if(len != nalu.len){
+            EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
+        }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             EyerLog("SPS\n");
         }

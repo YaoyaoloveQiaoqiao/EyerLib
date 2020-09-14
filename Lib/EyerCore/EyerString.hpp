@@ -27,6 +27,9 @@ namespace Eyer {
 
         EyerString operator + (const EyerString & s);
 
+        int Replace(EyerString & substr, EyerString & replacement);
+
+
         static EyerString Number(int num, EyerString format = "%d");
 
         static EyerString Number(long num);
