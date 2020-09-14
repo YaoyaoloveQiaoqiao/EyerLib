@@ -38,8 +38,9 @@ namespace Eyer
 
     int EyerHttpPool::Loop()
     {
-        // curl_multi_perform(piml->multi_handle, &piml->still_running);
+        curl_multi_perform(piml->multi_handle, &piml->still_running);
 
+        /*
         struct timeval timeout;
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
@@ -103,6 +104,7 @@ namespace Eyer
                 printf("response_code: %lld\n", response_code);
             }
         } while(m);
+         */
 
         return 0;
     }

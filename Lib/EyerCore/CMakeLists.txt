@@ -24,7 +24,7 @@ add_library(
     EyerLockQueue.hpp
 
     EyerTime.hpp
-        EyerBuffer.cpp EyerBuffer.hpp)
+        EyerBuffer.cpp EyerBuffer.hpp string_ext.cpp string_ext.h)
 
 set(head_files 
     EyerString.hpp

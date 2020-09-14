@@ -36,12 +36,19 @@ namespace Eyer
             EyerRepresentation * representation = new EyerRepresentation(*adaptationSet.representationList[i]);
             representationList.push_back(representation);
         }
+
+        contentType = adaptationSet.contentType;
+
         return *this;
     }
 
     int EyerAdaptationSet::LoadFromXML(void * node)
     {
         xmlNode * adaptationSetNode = (xmlNode *)node;
+
+        xmlChar * contentTypeValue = xmlGetProp(adaptationSetNode, (xmlChar *)"contentType");
+
+        contentType = EyerString((char *)contentTypeValue);
 
         xmlNode * representationNode = nullptr;
         for(representationNode = adaptationSetNode->children; representationNode; representationNode = representationNode->next) {
@@ -58,9 +65,10 @@ namespace Eyer
         return 0;
     }
 
-    EyerSegmentTemplate & EyerAdaptationSet::GetSegmentTemplate()
+    int EyerAdaptationSet::GetSegmentTemplate(EyerSegmentTemplate & _segmentTemplate)
     {
-        return segmentTemplate;
+        _segmentTemplate = segmentTemplate;
+        return 0;
     }
 
     int EyerAdaptationSet::SetSegmentTemplate(EyerSegmentTemplate & _segmentTemplate)
@@ -77,5 +85,10 @@ namespace Eyer
     EyerRepresentation & EyerAdaptationSet::GetRepresentation(int i)
     {
         return *representationList[i];
+    }
+
+    EyerString & EyerAdaptationSet::GetContentType()
+    {
+        return contentType;
     }
 }

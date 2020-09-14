@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include <stdarg.h>
+#include "string_ext.h"
 
 namespace Eyer {
     EyerString::EyerString()
@@ -149,6 +150,13 @@ namespace Eyer {
             str = nullptr;
         }
 
+        return 0;
+    }
+
+    int EyerString::Replace(EyerString & substr, EyerString & replacement)
+    {
+        char outStr[2048];
+        // strrpl();
         return 0;
     }
 

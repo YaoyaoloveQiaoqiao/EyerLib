@@ -11,8 +11,6 @@ TEST(EyerDashTest, EyerAdaptationSet){
 
     Eyer::EyerSegmentTemplate segmentTemplateA;
     segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
-
-
 }
 
 TEST(EyerDashTest, SegmentTemplate){
@@ -43,6 +41,8 @@ TEST(EyerDashTest, MPD){
     Eyer::EyerMPD mpd;
     mpd.LoadMPD(buffer);
     mpd.PrintInfo();
+
+    mpd.GetVideoURL(10);
 }
 
 int main(int argc,char **argv){

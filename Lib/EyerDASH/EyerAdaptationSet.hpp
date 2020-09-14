@@ -17,13 +17,17 @@ namespace Eyer{
         int LoadFromXML(void * node);
 
 
-        EyerSegmentTemplate & GetSegmentTemplate();
+        int GetSegmentTemplate(EyerSegmentTemplate & segmentTemplate);
         int SetSegmentTemplate(EyerSegmentTemplate & segmentTemplate);
 
         int GetRepresentationSize();
         EyerRepresentation & GetRepresentation(int i);
+
+        EyerString & GetContentType();
+
     private:
         EyerSegmentTemplate segmentTemplate;
+        EyerString contentType;
         std::vector<EyerRepresentation *> representationList;
     };
 }

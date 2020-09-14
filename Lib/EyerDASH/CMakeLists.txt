@@ -5,7 +5,12 @@ add_library(
         EyerDASH
         # SHARED
         EyerMPD.cpp
-        EyerAdaptationSet.cpp EyerAdaptationSet.hpp EyerSegmentTemplate.cpp EyerSegmentTemplate.hpp EyerRepresentation.cpp EyerRepresentation.hpp)
+        EyerAdaptationSet.cpp
+        EyerAdaptationSet.hpp
+        EyerSegmentTemplate.cpp
+        EyerSegmentTemplate.hpp
+        EyerRepresentation.cpp
+        EyerRepresentation.hpp)
 
 set(head_files
         EyerDASH.hpp
