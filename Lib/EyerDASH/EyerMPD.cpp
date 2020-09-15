@@ -31,6 +31,7 @@ namespace Eyer
         }
 
         EyerSegmentTemplate segmentTemplate;
+        ret = videoAdaptationSet.GetSegmentTemplate(segmentTemplate);
         if(ret){
             return -1;
         }
