@@ -65,6 +65,8 @@ FUNCTION(ModuleTestOption moduleName moduleTestName moduleOption)
     ENDIF(${moduleOption})
 ENDFUNCTION(ModuleTestOption)
 
+ADD_SUBDIRECTORY(googletest)
+
 OPTION(EyerCore         "option for EyerCore"           ON)
 ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
 
@@ -124,7 +126,6 @@ ModuleOption("EyerAVC" EyerAVC)
 
 OPTION(AL_TEST           "option for AL_TEST"           ON)
 IF (AL_TEST)
-    ADD_SUBDIRECTORY(googletest)
     ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
     # ADD_SUBDIRECTORY(EyerCoreTest)
     ADD_SUBDIRECTORY(EyerAVTest)
