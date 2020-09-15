@@ -72,7 +72,7 @@ ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
 OPTION(EyerNet           "option for EyerNet"           ON)
 ModuleTestOption("EyerNet" "EyerNetTest" EyerNet)
 
-OPTION(EyerDASH           "option for EyerDASH"           ON)
+OPTION(EyerDASH           "option for EyerDASH"         ON)
 ModuleTestOption("EyerDASH" "EyerDashTest" EyerDASH)
 
 OPTION(EyerAV           "option for EyerAV"             ON)
