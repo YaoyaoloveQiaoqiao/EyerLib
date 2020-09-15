@@ -70,6 +70,12 @@ ADD_SUBDIRECTORY(googletest)
 OPTION(EyerCore         "option for EyerCore"           ON)
 ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
 
+OPTION(EyerNet           "option for EyerNet"           ON)
+ModuleTestOption("EyerNet" "EyerNetTest" EyerNet)
+
+OPTION(EyerDASH           "option for EyerDASH"           ON)
+ModuleTestOption("EyerDASH" "EyerDashTest" EyerDASH)
+
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
 
@@ -115,19 +121,12 @@ ModuleOption("EyerGLContext" EyerGLContext)
 OPTION(EyerVideoTweenAnimation           "option for EyerVideoTweenAnimation"           ON)
 ModuleOption("EyerVideoTweenAnimation" EyerVideoTweenAnimation)
 
-OPTION(EyerNet           "option for EyerNet"           ON)
-ModuleOption("EyerNet" EyerNet)
-
-OPTION(EyerDASH           "option for EyerDASH"           ON)
-ModuleOption("EyerDASH" EyerDASH)
-
 OPTION(EyerAVC           "option for EyerAVC"           ON)
 ModuleOption("EyerAVC" EyerAVC)
 
 OPTION(AL_TEST           "option for AL_TEST"           ON)
 IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
-    # ADD_SUBDIRECTORY(EyerCoreTest)
     ADD_SUBDIRECTORY(EyerAVTest)
     ADD_SUBDIRECTORY(EyerGLTest)
     ADD_SUBDIRECTORY(EyerRender)
@@ -138,7 +137,5 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerEventQueue)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerYUVTest)
-    ADD_SUBDIRECTORY(EyerNetTest)
-    ADD_SUBDIRECTORY(EyerDashTest)
     ADD_SUBDIRECTORY(EyerAVCTest)
 ENDIF(AL_TEST)
