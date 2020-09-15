@@ -19,9 +19,3 @@ jobs:
     
     - name: test-core
       run: cd Lib/build && cd EyerCoreTest && ./EyerCoreTest
-
-    - name: test-net
-      run: cd Lib/build && cd EyerNetTest && ./EyerNetTest
-
-    - name: test-dash
-      run: cd Lib/build && cd EyerDashTest && ./EyerDashTest
