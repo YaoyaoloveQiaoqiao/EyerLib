@@ -87,6 +87,8 @@ namespace Eyer
 
     int EyerMPD::LoadMPD(EyerBuffer & buffer)
     {
+        int finalRet = 0;
+
         int bufferLen = buffer.GetBuffer(nullptr);
         // EyerLog("mpd file length: %d\n", bufferLen);
 
@@ -106,12 +108,14 @@ namespace Eyer
 
         if (nullptr == pDoc) {
             fprintf(stderr,"Document not parsed successfully. \n");
+            finalRet = -1;
             goto END;
         }
 
         pRoot = xmlDocGetRootElement(pDoc);
         if (nullptr == pRoot) {
             fprintf(stderr,"empty document\n");
+            finalRet = -1;
             goto END;
         }
 
@@ -139,7 +143,7 @@ END:
             free(xmlStr);
             xmlStr = nullptr;
         }
-        return 0;
+        return finalRet;
     }
 
     int EyerMPD::PrintInfo()
