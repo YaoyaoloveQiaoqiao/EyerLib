@@ -15,7 +15,7 @@ jobs:
     - name: configure
       run: cd Lib && mkdir build && cd build && cmake ../ -DEyerCore=ON -DEyerNet=OFF -DEyerDASH=OFF -DEyerAV=OFF -DEyerCrop=OFF -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerYUV=OFF -DEyerGLWindow=OFF -DEyerType=OFF -DEyerGPUDomino=OFF -DEyerGLShader=OFF -DEyerThread=OFF -DEyerImg=OFF -DEyerGLContext=OFF -DEyerVideoTweenAnimation=OFF -DEyerAVC=OFF -DAL_TEST=OFF
     - name: build
-      run: cd Lib/build && make
+      run: cd Lib/build && make clean && make
     
     - name: test-core
       run: cd Lib/build && cd EyerCoreTest && ./EyerCoreTest
