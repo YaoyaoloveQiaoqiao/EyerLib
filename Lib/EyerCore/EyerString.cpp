@@ -153,10 +153,15 @@ namespace Eyer {
         return 0;
     }
 
-    int EyerString::Replace(EyerString & substr, EyerString & replacement)
+    int EyerString::Replace(const EyerString & substr, const EyerString & replacement)
     {
-        char outStr[2048];
-        // strrpl();
+        char outStr[1024 * 128];
+        memset(outStr, 0, 2048);
+
+        strrpl(str, outStr, 2048, substr.str, replacement.str);
+
+        *this = outStr;
+
         return 0;
     }
 

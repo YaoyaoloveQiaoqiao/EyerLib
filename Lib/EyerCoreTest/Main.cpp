@@ -37,16 +37,14 @@ TEST(EyerString, string){
 
         EXPECT_TRUE(strAB == "strAstrB");
     }
-}
 
-TEST(RedString_Test,string){
-    
-}
+    for(int i=0;i<100;i++){
+        Eyer::EyerString strSrc = "My name is {$name}. I am {$age} years old.";
+        strSrc.Replace("{$name}", "Redknot");
+        strSrc.Replace("{$age}", Eyer::EyerString::Number(20));
 
-TEST(RedArgs_Test, args){
-}
-
-TEST(RedBtte_Test, byte){
+        EXPECT_TRUE(strSrc == "My name is Redknot. I am 20 years old.") << "Replace Error";
+    }
 }
 
 TEST(EyerTime, time){
@@ -95,24 +93,6 @@ TEST(EyerLinkedList_Test, insert_delete){
     EXPECT_EQ(data1, 0);
     EyerLog("2. data1:%d\n", data1);	
 }
-
-/*
-TEST(EyerLinkedList_Test, mem){
-    Eyer::EyerGLWindow windows("aaa", 100, 100);
-    windows.Open();
-
-    while(!windows.ShouldClose()){
-
-        Eyer::EyerLinkedList<Eyer::EyerGLComponent *> aList;
-        aList.clear();
-
-        windows.Loop();
-    }
-
-
-    windows.Clear();
-}
-*/
 
 TEST(EyerLinkedList_Test, insertBack){
     Eyer::EyerLinkedList<int> list;
@@ -245,7 +225,6 @@ TEST(EyerMath, mat){
 
 
 TEST(LRUCache, LRUCache){
-    // Eyer::EyerVec4;
     Eyer::EyerLRUMap<int, Eyer::EyerVec4> lruMap(10);
 
     for(int i=0;i<100;i++){
@@ -253,7 +232,6 @@ TEST(LRUCache, LRUCache){
         lruMap.Put(i, vec4);
 
         int size = lruMap.Size();
-        // printf("Size:%d \n", size);
 
         EXPECT_LE(size, 10);
     }
