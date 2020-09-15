@@ -63,7 +63,7 @@ FUNCTION(ModuleTestOption moduleName moduleTestName moduleOption)
         ADD_SUBDIRECTORY(${moduleName})
         ADD_SUBDIRECTORY(${moduleTestName})
     ENDIF(${moduleOption})
-ENDFUNCTION(ModuleOption)
+ENDFUNCTION(ModuleTestOption)
 
 OPTION(EyerCore         "option for EyerCore"           ON)
 ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
