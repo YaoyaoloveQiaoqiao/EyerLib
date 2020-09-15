@@ -8,15 +8,14 @@ env:
 
 jobs:
   build-test:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: cd Lib && \mkdir build && cd build && cmake ../ -DEyerCore=OFF -DEyerAV=OFF -DEyerCrop=OFF -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerYUV=OFF -DEyerGLWindow=OFF -DEyerType=OFF -DEyerGPUDomino=OFF -DEyerGLShader=OFF -DEyerThread=OFF -DEyerImg=OFF -DEyerGLContext=OFF -DEyerVideoTweenAnimation=OFF -DEyerNet=OFF -DEyerDASH=OFF -DEyerAVC=OFF -DAL_TEST=OFF
+      run: cd Lib && mkdir build && cd build && cmake ../ -DEyerCore=ON -DEyerNet=OFF -DEyerDASH=OFF -DEyerAV=OFF -DEyerCrop=OFF -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerYUV=OFF -DEyerGLWindow=OFF -DEyerType=OFF -DEyerGPUDomino=OFF -DEyerGLShader=OFF -DEyerThread=OFF -DEyerImg=OFF -DEyerGLContext=OFF -DEyerVideoTweenAnimation=OFF -DEyerAVC=OFF -DAL_TEST=OFF
     - name: build
-      run: cd Lib/build && make
+      run: cd Lib/build && make clean && make
+    
+    - name: test-core
+      run: cd Lib/build && cd EyerCoreTest && ./EyerCoreTest

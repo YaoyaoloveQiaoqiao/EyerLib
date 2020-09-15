@@ -4,7 +4,6 @@ PROJECT(EyerLib
         VERSION 1.0.0.0
         )
 
-
 message( STATUS "CMAKE_PROJECT_NAME    = ${CMAKE_PROJECT_NAME}" )
 message( STATUS "PROJECT_VERSION_MAJOR = ${PROJECT_VERSION_MAJOR}" )
 message( STATUS "PROJECT_VERSION_MINOR = ${PROJECT_VERSION_MINOR}" )
@@ -58,8 +57,23 @@ FUNCTION(ModuleOption moduleName moduleOption)
     ENDIF(${moduleOption})
 ENDFUNCTION(ModuleOption)
 
+FUNCTION(ModuleTestOption moduleName moduleTestName moduleOption)
+    IF (${moduleOption})
+        ADD_SUBDIRECTORY(${moduleName})
+        ADD_SUBDIRECTORY(${moduleTestName})
+    ENDIF(${moduleOption})
+ENDFUNCTION(ModuleTestOption)
+
+ADD_SUBDIRECTORY(googletest)
+
 OPTION(EyerCore         "option for EyerCore"           ON)
-ModuleOption("EyerCore" EyerCore)
+ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
+
+OPTION(EyerNet           "option for EyerNet"           ON)
+ModuleTestOption("EyerNet" "EyerNetTest" EyerNet)
+
+OPTION(EyerDASH           "option for EyerDASH"         ON)
+ModuleTestOption("EyerDASH" "EyerDashTest" EyerDASH)
 
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
@@ -106,20 +120,12 @@ ModuleOption("EyerGLContext" EyerGLContext)
 OPTION(EyerVideoTweenAnimation           "option for EyerVideoTweenAnimation"           ON)
 ModuleOption("EyerVideoTweenAnimation" EyerVideoTweenAnimation)
 
-OPTION(EyerNet           "option for EyerNet"           ON)
-ModuleOption("EyerNet" EyerNet)
-
-OPTION(EyerDASH           "option for EyerDASH"           ON)
-ModuleOption("EyerDASH" EyerDASH)
-
 OPTION(EyerAVC           "option for EyerAVC"           ON)
 ModuleOption("EyerAVC" EyerAVC)
 
 OPTION(AL_TEST           "option for AL_TEST"           ON)
 IF (AL_TEST)
-    ADD_SUBDIRECTORY(googletest)
     ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
-    ADD_SUBDIRECTORY(EyerCoreTest)
     ADD_SUBDIRECTORY(EyerAVTest)
     ADD_SUBDIRECTORY(EyerGLTest)
     ADD_SUBDIRECTORY(EyerRender)
@@ -130,7 +136,5 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerEventQueue)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerYUVTest)
-    ADD_SUBDIRECTORY(EyerNetTest)
-    ADD_SUBDIRECTORY(EyerDashTest)
     ADD_SUBDIRECTORY(EyerAVCTest)
 ENDIF(AL_TEST)
