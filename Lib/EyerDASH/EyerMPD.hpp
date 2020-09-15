@@ -16,8 +16,8 @@ namespace Eyer{
 
         int PrintInfo();
 
-        int GetInitURL();
-        int GetVideoURL(int number);
+        int GetInitURL(EyerString & url, int representationIndex);
+        int GetVideoURL(EyerString & url, int number, int representationIndex);
 
         int GetVideoAdaptationSet(EyerAdaptationSet & videoAdaptationSet);
         int GetAudioAdaptationSet(EyerAdaptationSet & audioAdaptationSet);

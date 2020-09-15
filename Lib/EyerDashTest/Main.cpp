@@ -42,7 +42,24 @@ TEST(EyerDashTest, MPD){
     mpd.LoadMPD(buffer);
     mpd.PrintInfo();
 
-    mpd.GetVideoURL(10);
+    Eyer::EyerString m4vUrl;
+
+    int representationIndex = 2;
+
+    ret = mpd.GetInitURL(m4vUrl, representationIndex);
+
+    Eyer::EyerURLUtil urlUtil(url);
+    m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
+    printf("%s\n", m4vUrl.str);
+
+    for(int i=1;i<=100;i++){
+        ret = mpd.GetVideoURL(m4vUrl, i, representationIndex);
+        if(ret){
+            break;
+        }
+        m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
+        printf("%s\n", m4vUrl.str);
+    }
 }
 
 int main(int argc,char **argv){

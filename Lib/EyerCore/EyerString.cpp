@@ -165,6 +165,33 @@ namespace Eyer {
         return 0;
     }
 
+    int EyerString::Split(EyerString * resArr, const EyerString & splitStr)
+    {
+        if(resArr == nullptr){
+            EyerString temp = *this;
+
+            splitVec.clear();
+
+            char * p = strtok(temp.str, splitStr.str);
+            splitVec.push_back(p);
+
+            while(p != NULL){
+                p = strtok(NULL, splitStr.str);
+                if(p == NULL){
+                    break;
+                }
+                splitVec.push_back(p);
+            }
+        }
+        else {
+            for(int i=0;i<splitVec.size();i++){
+                resArr[i] = splitVec[i];
+            }
+        }
+
+        return splitVec.size();
+    }
+
     EyerString EyerString::Number(int num, EyerString format)
     {
         char str[1024];

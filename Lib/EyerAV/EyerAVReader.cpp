@@ -8,6 +8,66 @@ extern "C"{
 #include "EyerAVPacketPrivate.hpp"
 #include "EyerAVStreamPrivate.hpp"
 
+#include "EyerNet/EyerNet.hpp"
+#include "EyerDASH/EyerDASH.hpp"
+
+int index_index = 0;
+
+int read_packet(void *opaque, uint8_t *buf, int buf_size)
+{
+    printf("Miaomiao read_packet bufsize: %d\n", buf_size);
+
+    Eyer::EyerSimplestHttp http;
+
+    Eyer::EyerString url = "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd";
+    Eyer::EyerBuffer buffer;
+    int ret = http.Get(buffer, url);
+    if(ret){
+        EyerLog("Read mpd file error");
+    }
+
+    Eyer::EyerMPD mpd;
+    mpd.LoadMPD(buffer);
+
+
+    Eyer::EyerString m4vUrl;
+
+    int representationIndex = 2;
+
+
+    ret = mpd.GetVideoURL(m4vUrl, index_index, representationIndex);
+
+    Eyer::EyerURLUtil urlUtil(url);
+    m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
+    printf("%s\n", m4vUrl.str);
+
+    index_index++;
+
+
+    int bufferLen = 0;
+    {
+        Eyer::EyerSimplestHttp http;
+        Eyer::EyerBuffer buffer;
+        int ret = http.Get(buffer, m4vUrl);
+        if(ret){
+            EyerLog("Read m4v file error");
+        }
+
+        bufferLen = buffer.GetBuffer(nullptr);
+        buffer.GetBuffer(buf);
+
+        printf("Buffer Len: %d\n", bufferLen);
+    }
+
+    return bufferLen;
+}
+
+int64_t seek_func(void *opaque, int64_t offset, int whence)
+{
+    printf("Miaomiao seek_func offset: %lld, whence: %d\n", offset, whence);
+    return -1;
+}
+
 namespace Eyer
 {
     EyerAVReader::EyerAVReader(EyerString _path)
@@ -18,7 +78,23 @@ namespace Eyer
         av_register_all();
         avformat_network_init();
 
+
+
+        int nBufferSize = 1024 * 1024 * 10;
+        unsigned char * pBuffer = new unsigned char[nBufferSize];
+
+        AVIOContext* pIOCtx = avio_alloc_context(pBuffer, nBufferSize,
+                                                 0,
+                                                 NULL,
+                                                 read_packet,
+                                                 0,
+                                                 0);
+
+
         piml->formatCtx = avformat_alloc_context();
+
+        // piml->formatCtx->pb = pIOCtx;
+
     }
 
     EyerAVReader::~EyerAVReader()

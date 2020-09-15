@@ -45,6 +45,22 @@ TEST(EyerString, string){
 
         EXPECT_TRUE(strSrc == "My name is Redknot. I am 20 years old.") << "Replace Error";
     }
+
+    Eyer::EyerString url = "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd";
+    int size = url.Split(nullptr, "/");
+    Eyer::EyerString * strList = new Eyer::EyerString[size];
+
+    size = url.Split(strList, "/");
+
+    for(int i=0;i<size;i++){
+        // printf("str: %s\n", strList[i].str);
+    }
+
+    delete [] strList;
+
+    Eyer::EyerURLUtil urlUtil("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd");
+    Eyer::EyerString m4vPath = urlUtil.GetAbsolutePath("./bbb_30fps_1920x1080_8000k/bbb_30fps_1920x1080_8000k_0.m4v");
+    printf("%s\n", m4vPath.str);
 }
 
 TEST(EyerTime, time){

@@ -1,6 +1,8 @@
 #ifndef	EYER_CORE_STRING_H
 #define	EYER_CORE_STRING_H
 
+#include <vector>
+
 namespace Eyer {
     class EyerString
     {
@@ -29,11 +31,16 @@ namespace Eyer {
 
         int Replace(const EyerString & substr, const EyerString & replacement);
 
+        int Split(EyerString * resArr, const EyerString & splitStr);
+
 
         static EyerString Number(int num, EyerString format = "%d");
 
         static EyerString Number(long num);
         static EyerString Number(long long num);
+
+    private:
+        std::vector<EyerString> splitVec;
     };
 }
 
