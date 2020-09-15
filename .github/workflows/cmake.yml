@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: ”cd Lib && \mkdir build && cd build && cmake ../ -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerGLWindow=OFF -DEyerGPUDomino=OFF -DEyerGLContext=OFF“
+      run: cd Lib && \mkdir build && cd build && cmake ../ -DEyerCore=OFF -DEyerAV=OFF -DEyerCrop=OFF -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerYUV=OFF -DEyerGLWindow=OFF -DEyerType=OFF -DEyerGPUDomino=OFF -DEyerGLShader=OFF -DEyerThread=OFF -DEyerImg=OFF -DEyerGLContext=OFF -DEyerVideoTweenAnimation=OFF -DEyerNet=OFF -DEyerDASH=OFF -DEyerAVC=OFF -DAL_TEST=OFF
     - name: build
       run: cd Lib/build && make
