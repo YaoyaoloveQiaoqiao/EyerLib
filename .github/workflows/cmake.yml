@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: cd Lib && mkdir build && cd build && cmake ../
+      run: cd Lib && mkdir build && cd build && cmake ../ -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerGLWindow=OFF -DEyerGPUDomino=OFF -DEyerGLContext=OFF
     - name: build
       run: cd Lib/build && make
