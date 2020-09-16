@@ -11,12 +11,16 @@ namespace Eyer{
         EyerBuffer & operator = (const EyerBuffer & buffer);
 
         int Append(unsigned char * _buf, int _bufLen);
+        int Append(const EyerBuffer & buffer);
 
         int CutOff(EyerBuffer & buffer, int len);
 
         int GetBuffer(unsigned char * _buf = nullptr);
 
+        int GetLen();
+
         int Clear();
+
     private:
         unsigned char * buf = nullptr;
         int bufLen = 0;

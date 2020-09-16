@@ -3,6 +3,7 @@
 
 #include "EyerCore/EyerCore.hpp"
 #include "EyerMPD.hpp"
+#include "EyerDASHReaderThread.hpp"
 
 namespace Eyer{
     class EyerDASHReader {
@@ -16,15 +17,14 @@ namespace Eyer{
         int seek_packet(void * opaque, int64_t offset, int whence);
 
     private:
-        int LoadMPD();
-
-    private:
         EyerString mpdUrl;
         EyerString cacheUrl;
 
-        Eyer::EyerMPD * mpd = nullptr;
-
         int index = 0;
+
+        EyerDASHReaderThread * readerThread = nullptr;
+
+        EyerBuffer dataBuffer;
     };
 }
 

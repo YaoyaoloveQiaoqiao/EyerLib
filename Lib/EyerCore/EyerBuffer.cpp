@@ -52,6 +52,11 @@ namespace Eyer{
         return 0;
     }
 
+    int EyerBuffer::Append(const EyerBuffer & buffer)
+    {
+        return Append(buffer.buf, buffer.bufLen);
+    }
+
     int EyerBuffer::CutOff(EyerBuffer & buffer, int len)
     {
         if(len > bufLen){
@@ -86,6 +91,11 @@ namespace Eyer{
         memcpy(_buf, buf, bufLen);
 
         return 0;
+    }
+
+    int EyerBuffer::GetLen()
+    {
+        return GetBuffer();
     }
 
     int EyerBuffer::Clear()

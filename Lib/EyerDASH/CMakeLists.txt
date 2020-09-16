@@ -10,7 +10,7 @@ add_library(
         EyerSegmentTemplate.cpp
         EyerSegmentTemplate.hpp
         EyerRepresentation.cpp
-        EyerRepresentation.hpp EyerDASHReader.cpp EyerDASHReader.hpp)
+        EyerRepresentation.hpp EyerDASHReader.cpp EyerDASHReader.hpp EyerDASHReaderThread.cpp EyerDASHReaderThread.hpp)
 
 set(head_files
         EyerDASH.hpp
