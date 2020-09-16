@@ -12,7 +12,9 @@ namespace Eyer{
 
         int Append(unsigned char * _buf, int _bufLen);
 
-        int GetBuffer(unsigned char * _buf);
+        int CutOff(EyerBuffer & buffer, int len);
+
+        int GetBuffer(unsigned char * _buf = nullptr);
 
         int Clear();
     private:

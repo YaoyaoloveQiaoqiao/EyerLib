@@ -348,6 +348,55 @@ TEST(EyerBuffer, EyerBufferTest){
     free(bB);
 }
 
+TEST(EyerBuffer, EyerBufferCutOffTest){
+
+
+    for(int index=0;index<100;index++) {
+        int bALen = 50;
+        unsigned char *bA = (unsigned char *) malloc(bALen);
+        memset(bA, 'A', bALen);
+        Eyer::EyerBuffer bufferA;
+        bufferA.Clear();
+        bufferA.Append(bA, bALen);
+
+        {
+            int bufferALen = bufferA.GetBuffer(nullptr);
+            unsigned char *bufferAData = (unsigned char *) malloc(bufferALen);
+
+            bufferA.GetBuffer(bufferAData);
+
+            for (int i = 0; i < bufferALen; i++) {
+                printf(" %c ", bufferAData[i]);
+            }
+            printf("\n");
+
+            free(bufferAData);
+        }
+
+        {
+            Eyer::EyerBuffer bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen + 20);
+            ASSERT_LT(ret, 0) << "Length Test Error";
+        }
+        {
+            Eyer::EyerBuffer bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen);
+            ASSERT_EQ(ret, 0) << "Length Test Error";
+
+            ASSERT_EQ(bufferA.GetBuffer(), 0) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), bALen) << "Cut Fail\n";
+
+            Eyer::EyerBuffer bufferC;
+            bufferB.CutOff(bufferC, 15);
+
+            ASSERT_EQ(bufferC.GetBuffer(), 15) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), 35) << "Cut Fail\n";
+        }
+
+        free(bA);
+    }
+}
+
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

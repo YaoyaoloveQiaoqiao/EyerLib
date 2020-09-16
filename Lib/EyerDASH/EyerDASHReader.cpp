@@ -57,6 +57,7 @@ namespace Eyer
         }
 
         int bufferLen = buffer.GetBuffer(nullptr);
+        printf("Buffer len: %d, Target buffer len: %d\n", bufferLen, buf_size);
         buffer.GetBuffer(buf);
 
         index++;

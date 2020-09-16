@@ -14,8 +14,6 @@ extern "C"{
 
 int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
-    printf("Miaomiao read_packet bufsize: %d\n", buf_size);
-
     Eyer::EyerDASHReader * dashReader = (Eyer::EyerDASHReader * )opaque;
     return dashReader->read_packet(opaque, buf, buf_size);
 }

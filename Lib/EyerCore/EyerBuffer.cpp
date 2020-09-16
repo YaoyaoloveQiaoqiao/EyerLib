@@ -52,6 +52,31 @@ namespace Eyer{
         return 0;
     }
 
+    int EyerBuffer::CutOff(EyerBuffer & buffer, int len)
+    {
+        if(len > bufLen){
+            return -1;
+        }
+
+        buffer.Clear();
+        buffer.Append(buf, len);
+
+        int distBufLen = bufLen - len;
+
+        unsigned char * tempBuf = (unsigned char *)malloc(distBufLen);
+        memcpy(tempBuf, buf + len, distBufLen);
+
+        if(buf != nullptr){
+            free(buf);
+            buf = nullptr;
+        }
+
+        bufLen = distBufLen;
+        buf = tempBuf;
+
+        return 0;
+    }
+
     int EyerBuffer::GetBuffer(unsigned char * _buf)
     {
         if(_buf == nullptr){
