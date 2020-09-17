@@ -28,7 +28,7 @@ namespace Eyer
         unsigned char mpdStr[1024 * 1024];
         buffer.GetBuffer((unsigned char *)mpdStr);
         printf("%s\n", mpdStr);
-         */
+        */
 
         Eyer::EyerMPD mpd;
         ret = mpd.LoadMPD(buffer);
