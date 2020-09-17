@@ -333,7 +333,7 @@ TEST(EyerBuffer, EyerBufferTest){
     printf("\n");
 
     for(int i=0;i<bufferLen;i++){
-        printf(" %c ", buf[i]);
+        // printf(" %c ", buf[i]);
         if(i < 10){
             ASSERT_EQ(buf[i], 'A') << "Buffer Error";
         }
@@ -365,10 +365,12 @@ TEST(EyerBuffer, EyerBufferCutOffTest){
 
             bufferA.GetBuffer(bufferAData);
 
+            /*
             for (int i = 0; i < bufferALen; i++) {
                 printf(" %c ", bufferAData[i]);
             }
             printf("\n");
+            */
 
             free(bufferAData);
         }
