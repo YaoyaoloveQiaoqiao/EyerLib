@@ -22,15 +22,39 @@ namespace Eyer
         return 0;
     }
 
-    int EyerMPD::GetInitURL()
+    int EyerMPD::GetInitURL(EyerString & url, int representationIndex)
     {
+        EyerAdaptationSet videoAdaptationSet;
+        int ret = GetVideoAdaptationSet(videoAdaptationSet);
+        if(ret){
+            return -1;
+        }
+
+        EyerSegmentTemplate segmentTemplate;
+        ret = videoAdaptationSet.GetSegmentTemplate(segmentTemplate);
+        if(ret){
+            return -1;
+        }
+
+        EyerString initialization = baseUrl + segmentTemplate.GetInitialization();
+        // EyerLog("initializationTemplate: %s\n", initialization.str);
+
+        if(representationIndex >= videoAdaptationSet.GetRepresentationSize()){
+            return -2;
+        }
+
+        EyerString representationId = videoAdaptationSet.GetRepresentation(representationIndex).GetId();
+        initialization.Replace("$RepresentationID$", representationId);
+
+        url = initialization;
+
         return 0;
     }
 
-    int EyerMPD::GetVideoURL(int number)
+    int EyerMPD::GetVideoURL(EyerString & url, int number, int representationIndex)
     {
         EyerAdaptationSet videoAdaptationSet;
-        int ret = GetAudioAdaptationSet(videoAdaptationSet);
+        int ret = GetVideoAdaptationSet(videoAdaptationSet);
         if(ret){
             return -1;
         }
@@ -44,27 +68,34 @@ namespace Eyer
         EyerString media = segmentTemplate.GetMedia();
         EyerString mediaUrl = baseUrl + media;
 
-        EyerLog("media url: %s\n", mediaUrl.str);
+        if(representationIndex >= videoAdaptationSet.GetRepresentationSize()){
+            return -2;
+        }
 
+        EyerString representationId = videoAdaptationSet.GetRepresentation(representationIndex).GetId();
+        // EyerLog("representationId: %s\n", representationId.str);
 
+        mediaUrl.Replace("$RepresentationID$", representationId);
+        mediaUrl.Replace("$Number$", Eyer::EyerString::Number(number));
 
-        /*
-        EyerString initialization = segmentTemplate.GetInitialization();
-        EyerLog("initialization: %s\n", initialization.str);
-        */
+        // EyerLog("media url: %s\n", mediaUrl.str);
+
+        url = mediaUrl;
 
         return 0;
     }
 
     int EyerMPD::LoadMPD(EyerBuffer & buffer)
     {
+        int finalRet = 0;
+
         int bufferLen = buffer.GetBuffer(nullptr);
-        EyerLog("mpd file length: %d\n", bufferLen);
+        // EyerLog("mpd file length: %d\n", bufferLen);
 
         char * xmlStr = (char *)malloc(bufferLen);
         buffer.GetBuffer((unsigned char *)xmlStr);
 
-        printf("%s\n", xmlStr);
+        // printf("%s\n", xmlStr);
 
 
         // 解析 Xml
@@ -77,12 +108,14 @@ namespace Eyer
 
         if (nullptr == pDoc) {
             fprintf(stderr,"Document not parsed successfully. \n");
+            finalRet = -1;
             goto END;
         }
 
         pRoot = xmlDocGetRootElement(pDoc);
         if (nullptr == pRoot) {
             fprintf(stderr,"empty document\n");
+            finalRet = -1;
             goto END;
         }
 
@@ -110,7 +143,7 @@ END:
             free(xmlStr);
             xmlStr = nullptr;
         }
-        return 0;
+        return finalRet;
     }
 
     int EyerMPD::PrintInfo()

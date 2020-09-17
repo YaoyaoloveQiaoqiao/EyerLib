@@ -45,6 +45,22 @@ TEST(EyerString, string){
 
         EXPECT_TRUE(strSrc == "My name is Redknot. I am 20 years old.") << "Replace Error";
     }
+
+    Eyer::EyerString url = "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd";
+    int size = url.Split(nullptr, "/");
+    Eyer::EyerString * strList = new Eyer::EyerString[size];
+
+    size = url.Split(strList, "/");
+
+    for(int i=0;i<size;i++){
+        // printf("str: %s\n", strList[i].str);
+    }
+
+    delete [] strList;
+
+    Eyer::EyerURLUtil urlUtil("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd");
+    Eyer::EyerString m4vPath = urlUtil.GetAbsolutePath("./bbb_30fps_1920x1080_8000k/bbb_30fps_1920x1080_8000k_0.m4v");
+    printf("%s\n", m4vPath.str);
 }
 
 TEST(EyerTime, time){
@@ -330,6 +346,55 @@ TEST(EyerBuffer, EyerBufferTest){
     free(buf);
     free(bA);
     free(bB);
+}
+
+TEST(EyerBuffer, EyerBufferCutOffTest){
+
+
+    for(int index=0;index<100;index++) {
+        int bALen = 50;
+        unsigned char *bA = (unsigned char *) malloc(bALen);
+        memset(bA, 'A', bALen);
+        Eyer::EyerBuffer bufferA;
+        bufferA.Clear();
+        bufferA.Append(bA, bALen);
+
+        {
+            int bufferALen = bufferA.GetBuffer(nullptr);
+            unsigned char *bufferAData = (unsigned char *) malloc(bufferALen);
+
+            bufferA.GetBuffer(bufferAData);
+
+            for (int i = 0; i < bufferALen; i++) {
+                printf(" %c ", bufferAData[i]);
+            }
+            printf("\n");
+
+            free(bufferAData);
+        }
+
+        {
+            Eyer::EyerBuffer bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen + 20);
+            ASSERT_LT(ret, 0) << "Length Test Error";
+        }
+        {
+            Eyer::EyerBuffer bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen);
+            ASSERT_EQ(ret, 0) << "Length Test Error";
+
+            ASSERT_EQ(bufferA.GetBuffer(), 0) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), bALen) << "Cut Fail\n";
+
+            Eyer::EyerBuffer bufferC;
+            bufferB.CutOff(bufferC, 15);
+
+            ASSERT_EQ(bufferC.GetBuffer(), 15) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), 35) << "Cut Fail\n";
+        }
+
+        free(bA);
+    }
 }
 
 int main(int argc,char **argv){
