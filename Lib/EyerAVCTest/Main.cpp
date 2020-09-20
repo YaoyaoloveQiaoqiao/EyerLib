@@ -3,8 +3,8 @@
 #include "EyerAVC/EyerAVC.hpp"
 
 TEST(EyerAVC, AnnexB){
-    // Eyer::EyerString url = "C:/Video/video.h264";
-    Eyer::EyerString url = "/Users/lichi/annie/xinxiaomen.h264";
+    Eyer::EyerString url = "C:/Video/video.h264";
+    // Eyer::EyerString url = "/Users/lichi/annie/xinxiaomen.h264";
 
     Eyer::EyerAnnexB annexB;
     annexB.Open(url);
@@ -20,7 +20,7 @@ TEST(EyerAVC, AnnexB){
         int len = nalu.len;
         nalu.ToRBSP();
         if(len != nalu.len){
-            EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
+            // EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             EyerLog("SPS\n");
