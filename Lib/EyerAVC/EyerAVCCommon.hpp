@@ -2,6 +2,14 @@
 #define EYERLIB_EYERAVCCOMMON_HPP
 
 namespace Eyer{
+
+    typedef unsigned char byte;
+
+    typedef enum {
+        FALSE,
+        TRUE
+    } Boolean;
+
     class EyerAVCCommon {
     public:
         static const int ZEROBYTES_SHORTSTARTCODE = 2;

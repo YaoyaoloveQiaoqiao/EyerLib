@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <EyerAVC/EyerSPS.hpp>
 #include "EyerCore/EyerCore.hpp"
 #include "EyerAVC/EyerAVC.hpp"
 
@@ -19,11 +20,14 @@ TEST(EyerAVC, AnnexB){
 
         int len = nalu.len;
         nalu.ToRBSP();
+
         if(len != nalu.len){
-            EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
+            // EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             EyerLog("SPS\n");
+            Eyer::EyerSPS sps(nalu);
+            sps.PrintInfo();
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_PPS){
             EyerLog("PPS\n");
