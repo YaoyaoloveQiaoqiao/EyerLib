@@ -62,7 +62,7 @@ namespace Eyer{
         EyerLog("constrained_set3_flag: %d\n", constrained_set3_flag);
         EyerLog("constrained_set4_flag: %d\n", constrained_set4_flag);
         EyerLog("constrained_set5_flag: %d\n", constrained_set5_flag);
-        
+
         return 0;
     }
 }
