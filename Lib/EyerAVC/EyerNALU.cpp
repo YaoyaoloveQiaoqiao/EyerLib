@@ -20,6 +20,19 @@ namespace Eyer {
         }
     }
 
+    EyerNALU::EyerNALU(const EyerNALU & _nalu) : EyerNALU(MAX_NALU_SIZE)
+    {
+        *this = _nalu;
+    }
+
+    EyerNALU & EyerNALU::operator = (const EyerNALU & _nalu)
+    {
+        len = _nalu.len;
+        memcpy(buf, _nalu.buf, len);
+
+        return *this;
+    }
+
     int EyerNALU::ToRBSP()
     {
         len = EyerAVCCommon::EBSPtoRBSP(buf, len, 1);

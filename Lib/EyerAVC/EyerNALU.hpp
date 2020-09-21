@@ -31,6 +31,9 @@ namespace Eyer {
         EyerNALU(int buffersize = MAX_NALU_SIZE);
         ~EyerNALU();
 
+        EyerNALU(const EyerNALU & _nalu);
+        EyerNALU & operator = (const EyerNALU & _nalu);
+
         int ToRBSP();
         int ToSODB();
 

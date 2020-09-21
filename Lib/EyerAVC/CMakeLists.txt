@@ -15,6 +15,10 @@ add_library(
         EyerAVCCommon.hpp
         EyerAVC_VLC.cpp
         EyerAVC_VLC.hpp
+        EyerBitStream.cpp
+        EyerBitStream.hpp
+        EyerSyntaxElement.cpp
+        EyerSyntaxElement.hpp
 )
 
 target_link_libraries (

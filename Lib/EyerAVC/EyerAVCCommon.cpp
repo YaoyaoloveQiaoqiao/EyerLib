@@ -71,8 +71,6 @@ namespace Eyer{
             ctr_bit= streamBuffer[last_byte_pos - 1] & (0x01<<(bitoffset));
         }
 
-        return(last_byte_pos);
-
-        return 0;
+        return last_byte_pos;
     }
 }
