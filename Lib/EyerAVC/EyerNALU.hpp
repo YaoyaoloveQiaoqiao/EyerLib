@@ -32,6 +32,7 @@ namespace Eyer {
         ~EyerNALU();
 
         int ToRBSP();
+        int ToSODB();
 
         const static int MAX_NALU_SIZE = 8 * 1024 * 1024;
 

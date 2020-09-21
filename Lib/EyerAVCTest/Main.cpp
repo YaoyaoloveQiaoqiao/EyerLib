@@ -19,9 +19,8 @@ TEST(EyerAVC, AnnexB){
 
         int len = nalu.len;
         nalu.ToRBSP();
-        if(len != nalu.len){
-            EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
-        }
+        nalu.ToSODB();
+
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             EyerLog("SPS\n");
         }

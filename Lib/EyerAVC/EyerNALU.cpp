@@ -25,4 +25,10 @@ namespace Eyer {
         len = EyerAVCCommon::EBSPtoRBSP(buf, len, 1);
         return 0;
     }
+
+    int EyerNALU::ToSODB()
+    {
+        len = EyerAVCCommon::RBSPtoSODB(buf, len - 1);
+        return 0;
+    }
 }

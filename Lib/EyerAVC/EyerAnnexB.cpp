@@ -222,13 +222,6 @@ namespace Eyer{
             return 0;
         }
 
-        /*
-        for(int i=0;i<100;i++){
-            printf(" %d ", iobuffer[i]);
-        }
-        printf("\n\n");
-        */
-
         bytesinbuffer = readbytes;
         iobufferread = iobuffer;
 
