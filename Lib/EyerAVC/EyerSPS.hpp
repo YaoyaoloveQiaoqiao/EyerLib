@@ -36,6 +36,8 @@ namespace Eyer{
         Boolean   constrained_set3_flag;                                // u(1)
         Boolean   constrained_set4_flag;                                // u(1)
         Boolean   constrained_set5_flag;                                // u(1)
+        unsigned  int level_idc;                                        // u(8)
+        unsigned  int seq_parameter_set_id;                             // ue(v)
     };
 }
 
