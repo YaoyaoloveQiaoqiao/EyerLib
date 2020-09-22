@@ -3,6 +3,8 @@
 #include "EyerAVC_VLC.hpp"
 #include "EyerCore/EyerLog.hpp"
 
+#include <stdio.h>
+
 namespace Eyer{
     EyerSPS::EyerSPS(EyerNALU & _nalu)
     {
@@ -35,7 +37,6 @@ namespace Eyer{
 
         int reserved_zero;
 
-
         constrained_set0_flag                  = EyerAVC_VLC::read_u_1  (   "SPS: constrained_set0_flag"                 , &bitStream, &usedBits);
         constrained_set1_flag                  = EyerAVC_VLC::read_u_1  (   "SPS: constrained_set1_flag"                 , &bitStream, &usedBits);
         constrained_set2_flag                  = EyerAVC_VLC::read_u_1  (   "SPS: constrained_set2_flag"                 , &bitStream, &usedBits);
@@ -44,6 +45,10 @@ namespace Eyer{
         constrained_set5_flag                  = EyerAVC_VLC::read_u_1  (   "SPS: constrained_set5_flag"                 , &bitStream, &usedBits);
 
         reserved_zero                          = EyerAVC_VLC::read_u_v  (2, "SPS: reserved_zero_2bits"          , &bitStream, &usedBits);
+
+        level_idc                              = EyerAVC_VLC::read_u_v  (8, "SPS: level_idc"                    , &bitStream, &usedBits);
+
+        seq_parameter_set_id                   = EyerAVC_VLC::read_ue_v ("SPS: seq_parameter_set_id"                     , &bitStream, &usedBits);
 
     }
 
@@ -62,6 +67,10 @@ namespace Eyer{
         EyerLog("constrained_set3_flag: %d\n", constrained_set3_flag);
         EyerLog("constrained_set4_flag: %d\n", constrained_set4_flag);
         EyerLog("constrained_set5_flag: %d\n", constrained_set5_flag);
+
+        EyerLog("level_idc: %d\n", level_idc);
+
+        EyerLog("seq_parameter_set_id: %d\n", seq_parameter_set_id);
 
         return 0;
     }

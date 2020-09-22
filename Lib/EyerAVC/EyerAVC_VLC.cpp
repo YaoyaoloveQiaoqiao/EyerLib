@@ -5,7 +5,19 @@
 
 namespace Eyer
 {
-    int EyerAVC_VLC::read_u_v (int LenInBits, char * tracestring, EyerBitStream *bitstream, int *used_bits)
+    int EyerAVC_VLC::read_ue_v (char *tracestring, EyerBitStream * bitstream, int * used_bits)
+    {
+        EyerSyntaxElement symbol;
+
+        symbol.type = SE_HEADER;
+
+        readSyntaxElement_VLC (&symbol, bitstream);
+        *used_bits+=symbol.len;
+
+        return symbol.value1;
+    }
+
+    int EyerAVC_VLC::read_u_v (int LenInBits, char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
         EyerSyntaxElement symbol;
 
@@ -18,7 +30,7 @@ namespace Eyer
         return symbol.inf;
     }
 
-    Boolean EyerAVC_VLC::read_u_1 (char *tracestring, EyerBitStream * bitstream, int *used_bits)
+    Boolean EyerAVC_VLC::read_u_1 (char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
         return (Boolean) read_u_v (1, tracestring, bitstream, used_bits);
     }
@@ -38,6 +50,18 @@ namespace Eyer
         return 1;
     }
 
+    int EyerAVC_VLC::readSyntaxElement_VLC(EyerSyntaxElement *sym, EyerBitStream * currStream)
+    {
+        sym->len = GetVLCSymbol (currStream->streamBuffer, currStream->frame_bitoffset, &(sym->inf), currStream->bitstream_length);
+        if (sym->len == -1)
+            return -1;
+
+        currStream->frame_bitoffset += sym->len;
+        sym->linfo_ue(sym->len, sym->inf, &(sym->value1), &(sym->value2));
+
+        return 1;
+    }
+
     int EyerAVC_VLC::GetBits (unsigned char * buffer,int totbitoffset, int *info, int bitcount, int numbits)
     {
         if ((totbitoffset + numbits ) > bitcount) {
@@ -50,12 +74,10 @@ namespace Eyer
             unsigned char * curbyte  = &(buffer[byteoffset]);
             int inf = 0;
 
-            while (numbits--)
-            {
+            while (numbits--) {
                 inf <<=1;
                 inf |= ((*curbyte)>> (bitoffset--)) & 0x01;
-                if (bitoffset == -1 )
-                { //Move onto next byte to get all of numbits
+                if (bitoffset == -1 ) { //Move onto next byte to get all of numbits
                     curbyte++;
                     bitoffset = 7;
                 }
@@ -65,6 +87,46 @@ namespace Eyer
             }
             *info = inf;
 
+            return bitcounter;           // return absolute offset in bit from start of frame
+        }
+    }
+
+    int EyerAVC_VLC::GetVLCSymbol (byte buffer[],int totbitoffset,int *info, int bytecount)
+    {
+        long byteoffset = (totbitoffset >> 3);         // byte from start of buffer
+        int  bitoffset  = (7 - (totbitoffset & 0x07)); // bit from start of byte
+        int  bitcounter = 1;
+        int  len        = 0;
+        byte *cur_byte  = &(buffer[byteoffset]);
+        int  ctr_bit    = ((*cur_byte) >> (bitoffset)) & 0x01;  // control bit for current bit posision
+
+        while (ctr_bit == 0) {                 // find leading 1 bit
+            len++;
+            bitcounter++;
+            bitoffset--;
+            bitoffset &= 0x07;
+            cur_byte  += (bitoffset == 7);
+            byteoffset+= (bitoffset == 7);
+            ctr_bit    = ((*cur_byte) >> (bitoffset)) & 0x01;
+        }
+
+        if (byteoffset + ((len + 7) >> 3) > bytecount){
+            return -1;
+        }
+        else {
+            // make infoword
+            int inf = 0;                          // shortest possible code is 1, then info is always 0
+
+            while (len--) {
+                bitoffset --;
+                bitoffset &= 0x07;
+                cur_byte  += (bitoffset == 7);
+                bitcounter++;
+                inf <<= 1;
+                inf |= ((*cur_byte) >> (bitoffset)) & 0x01;
+            }
+
+            *info = inf;
             return bitcounter;           // return absolute offset in bit from start of frame
         }
     }
