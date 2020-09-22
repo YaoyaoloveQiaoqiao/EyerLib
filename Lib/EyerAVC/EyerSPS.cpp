@@ -4,6 +4,8 @@
 #include "EyerCore/EyerLog.hpp"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 namespace Eyer{
     EyerSPS::EyerSPS(EyerNALU & _nalu)
@@ -50,6 +52,22 @@ namespace Eyer{
 
         seq_parameter_set_id                   = EyerAVC_VLC::read_ue_v ("SPS: seq_parameter_set_id"                     , &bitStream, &usedBits);
 
+
+        // Fidelity Range Extensions stuff
+        chroma_format_idc = 1;
+
+        if((profile_idc == FREXT_HP   ) ||
+           (profile_idc == FREXT_Hi10P) ||
+           (profile_idc == FREXT_Hi422) ||
+           (profile_idc == FREXT_Hi444) ||
+           (profile_idc == FREXT_CAVLC444))
+        {
+            chroma_format_idc                       = EyerAVC_VLC::read_ue_v ("SPS: chroma_format_idc"                       , &bitStream, &usedBits);
+            if(chroma_format_idc == YUV444){
+
+            }
+        }
+
     }
 
     EyerSPS::~EyerSPS()
@@ -59,7 +77,9 @@ namespace Eyer{
 
     int EyerSPS::PrintInfo()
     {
-        EyerLog("profile_idc: %d\n", profile_idc);
+        char profile_idc_str[128];
+        GetProfileIDC(profile_idc_str, profile_idc);
+        EyerLog("profile_idc: %s\n", profile_idc_str);
 
         EyerLog("constrained_set0_flag: %d\n", constrained_set0_flag);
         EyerLog("constrained_set1_flag: %d\n", constrained_set1_flag);
@@ -72,6 +92,42 @@ namespace Eyer{
 
         EyerLog("seq_parameter_set_id: %d\n", seq_parameter_set_id);
 
+        EyerLog("chroma_format_idc: %d\n", chroma_format_idc);
+
+        return 0;
+    }
+
+
+
+    int EyerSPS::GetProfileIDC(char * str, unsigned int & profileIdc)
+    {
+        if(profileIdc == ProfileIDC::NO_PROFILE){
+            memcpy(str, "NO_PROFILE", strlen("NO_PROFILE") + 1);
+        }
+        if(profileIdc == ProfileIDC::FREXT_CAVLC444){
+            memcpy(str, "FREXT_CAVLC444", strlen("FREXT_CAVLC444") + 1);
+        }
+        if(profileIdc == ProfileIDC::BASELINE){
+            memcpy(str, "BASELINE", strlen("BASELINE") + 1);
+        }
+        if(profileIdc == ProfileIDC::MAIN){
+            memcpy(str, "MAIN", strlen("MAIN") + 1);
+        }
+        if(profileIdc == ProfileIDC::EXTENDED){
+            memcpy(str, "EXTENDED", strlen("EXTENDED") + 1);
+        }
+        if(profileIdc == ProfileIDC::FREXT_HP){
+            memcpy(str, "FREXT_HP", strlen("FREXT_HP") + 1);
+        }
+        if(profileIdc == ProfileIDC::FREXT_Hi10P){
+            memcpy(str, "FREXT_Hi10P", strlen("FREXT_Hi10P") + 1);
+        }
+        if(profileIdc == ProfileIDC::FREXT_Hi422){
+            memcpy(str, "FREXT_Hi422", strlen("FREXT_Hi422") + 1);
+        }
+        if(profileIdc == ProfileIDC::FREXT_Hi444){
+            memcpy(str, "FREXT_Hi444", strlen("FREXT_Hi444") + 1);
+        }
         return 0;
     }
 }

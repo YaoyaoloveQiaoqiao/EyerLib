@@ -4,8 +4,8 @@
 #include "EyerAVC/EyerAVC.hpp"
 
 TEST(EyerAVC, AnnexB){
-    // Eyer::EyerString url = "C:/Video/video.h264";
-    Eyer::EyerString url = "/Users/lichi/annie/xinxiaomen.h264";
+    Eyer::EyerString url = "C:/Video/video.h264";
+    // Eyer::EyerString url = "/Users/lichi/annie/xinxiaomen.h264";
 
     Eyer::EyerAnnexB annexB;
     annexB.Open(url);

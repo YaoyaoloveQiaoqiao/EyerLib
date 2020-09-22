@@ -19,12 +19,24 @@ namespace Eyer{
         STEREO_HIGH    = 128       //!< YUV 4:2:0/8  "Stereo High"
     } ProfileIDC;
 
+
+
+    typedef enum {
+        CF_UNKNOWN = -1,     //!< Unknown color format
+        YUV400     =  0,     //!< Monochrome
+        YUV420     =  1,     //!< 4:2:0
+        YUV422     =  2,     //!< 4:2:2
+        YUV444     =  3      //!< 4:4:4
+    } ColorFormat;
+
     class EyerSPS {
     public:
         EyerSPS(EyerNALU & _nalu);
         ~EyerSPS();
 
         int PrintInfo();
+
+        static int GetProfileIDC(char * str, unsigned int & profileIdc);
 
     private:
         EyerNALU nalu;
@@ -38,6 +50,7 @@ namespace Eyer{
         Boolean   constrained_set5_flag;                                // u(1)
         unsigned  int level_idc;                                        // u(8)
         unsigned  int seq_parameter_set_id;                             // ue(v)
+        unsigned  int chroma_format_idc;                                // ue(v)
     };
 }
 

@@ -5,7 +5,7 @@
 
 namespace Eyer
 {
-    int EyerAVC_VLC::read_ue_v (char *tracestring, EyerBitStream * bitstream, int * used_bits)
+    int EyerAVC_VLC::read_ue_v (const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
         EyerSyntaxElement symbol;
 
@@ -17,7 +17,7 @@ namespace Eyer
         return symbol.value1;
     }
 
-    int EyerAVC_VLC::read_u_v (int LenInBits, char * tracestring, EyerBitStream * bitstream, int * used_bits)
+    int EyerAVC_VLC::read_u_v (int LenInBits, const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
         EyerSyntaxElement symbol;
 
@@ -30,7 +30,7 @@ namespace Eyer
         return symbol.inf;
     }
 
-    Boolean EyerAVC_VLC::read_u_1 (char * tracestring, EyerBitStream * bitstream, int * used_bits)
+    Boolean EyerAVC_VLC::read_u_1 (const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
         return (Boolean) read_u_v (1, tracestring, bitstream, used_bits);
     }
