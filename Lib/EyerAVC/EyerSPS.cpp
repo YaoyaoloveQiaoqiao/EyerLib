@@ -142,9 +142,8 @@ namespace Eyer{
 
     int EyerSPS::PrintInfo()
     {
-        char profile_idc_str[128];
-        GetProfileIDC(profile_idc_str, profile_idc);
-        EyerLog("profile_idc: %s\n", profile_idc_str);
+        EyerLog("==============================================================\n");
+        EyerLog("profile_idc: %u\n", profile_idc);
 
         EyerLog("constrained_set0_flag: %d\n", constrained_set0_flag);
         EyerLog("constrained_set1_flag: %d\n", constrained_set1_flag);
@@ -157,16 +156,44 @@ namespace Eyer{
 
         EyerLog("seq_parameter_set_id: %d\n", seq_parameter_set_id);
 
-        EyerLog("chroma_format_idc: %d\n", chroma_format_idc);
+        EyerLog("\tchroma_format_idc: %d\n", chroma_format_idc);
+        EyerLog("\tbit_depth_luma_minus8: %d\n", bit_depth_luma_minus8);
+        EyerLog("\tbit_depth_chroma_minus8: %d\n", bit_depth_chroma_minus8);
+        EyerLog("\tlossless_qpprime_flag: %d\n", lossless_qpprime_flag);
+        EyerLog("\tseq_scaling_matrix_present_flag: %d\n", seq_scaling_matrix_present_flag);
+
+        EyerLog("log2_max_frame_num_minus4: %d\n", log2_max_frame_num_minus4);
+        EyerLog("pic_order_cnt_type: %d\n", pic_order_cnt_type);
+
+        EyerLog("\tlog2_max_pic_order_cnt_lsb_minus4: %d\n", log2_max_pic_order_cnt_lsb_minus4);
+
+
+        EyerLog("num_ref_frames: %d\n", num_ref_frames);
+        EyerLog("gaps_in_frame_num_value_allowed_flag: %d\n", gaps_in_frame_num_value_allowed_flag);
+        EyerLog("pic_width_in_mbs_minus1: %d\n", pic_width_in_mbs_minus1);
+        EyerLog("pic_height_in_map_units_minus1: %d\n", pic_height_in_map_units_minus1);
+
+        EyerLog("frame_mbs_only_flag: %d\n", frame_mbs_only_flag);
+        if(frame_mbs_only_flag){
+            EyerLog("\tmb_adaptive_frame_field_flag: %d\n", mb_adaptive_frame_field_flag);
+        }
+
+        EyerLog("direct_8x8_inference_flag: %d\n", direct_8x8_inference_flag);
+
+
+
+        EyerLog("frame_cropping_flag: %d\n", frame_cropping_flag);
+        if (frame_cropping_flag){
+            EyerLog("\tframe_crop_left_offset: %d\n", frame_crop_left_offset);
+            EyerLog("\tframe_crop_right_offset: %d\n", frame_crop_right_offset);
+            EyerLog("\tframe_crop_top_offset: %d\n", frame_crop_top_offset);
+            EyerLog("\tframe_crop_bottom_offset: %d\n", frame_crop_bottom_offset);
+        }
 
 
 
 
-        EyerLog("bit_depth_luma_minus8: %d\n", bit_depth_luma_minus8);
-        EyerLog("bit_depth_chroma_minus8: %d\n", bit_depth_chroma_minus8);
-
-        EyerLog("seq_scaling_matrix_present_flag: %d\n", seq_scaling_matrix_present_flag);
-
+        EyerLog("==============================================================\n");
         return 0;
     }
 
