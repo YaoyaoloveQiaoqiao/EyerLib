@@ -7,6 +7,7 @@
 namespace Eyer{
     class EyerAVC_VLC {
     public:
+        static int read_se_v                (const char * tracestring, EyerBitStream * bitstream, int * used_bits);
         static int read_ue_v                (const char * tracestring, EyerBitStream * bitstream, int * used_bits);
         static int read_u_v                 (int LenInBits, const char * tracestring, EyerBitStream * bitstream, int * used_bits);
         static Boolean read_u_1             (const char * tracestring, EyerBitStream * bitstream, int * used_bits);
