@@ -2,6 +2,12 @@
 #define EYERLIB_EYERSYNTAXELEMENT_HPP
 
 namespace Eyer{
+
+    enum SyntaxElementMappingType{
+        linfo_ue,
+        linfo_se
+    };
+
     class EyerSyntaxElement {
     public:
         int           type;                  //!< type of syntax element for data part.
@@ -13,9 +19,15 @@ namespace Eyer{
         int           context;               //!< CABAC context
         int           k;                     //!< CABAC context for coeff_count,uv
 
-
+    private:
+        int mappingType = SyntaxElementMappingType::linfo_se;
     public:
+        int SetMappingType(SyntaxElementMappingType type);
+        void mapping(int len, int info, int * value1, int * dummy);
+
+    private:
         void linfo_ue(int len, int info, int * value1, int * dummy);
+        void linfo_se(int len, int info, int * value1, int * dummy);
     };
 }
 

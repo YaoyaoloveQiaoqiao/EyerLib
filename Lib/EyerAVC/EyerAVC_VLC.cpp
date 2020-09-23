@@ -1,3 +1,4 @@
+#include "EyerCore/EyerCore.hpp"
 #include "EyerAVC_VLC.hpp"
 #include "EyerSyntaxElement.hpp"
 
@@ -5,32 +6,45 @@
 
 namespace Eyer
 {
-    int EyerAVC_VLC::read_ue_v (char *tracestring, EyerBitStream * bitstream, int * used_bits)
+    int EyerAVC_VLC::read_se_v (const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
+        EyerLog("%s\n", tracestring);
+
         EyerSyntaxElement symbol;
-
         symbol.type = SE_HEADER;
-
+        symbol.SetMappingType(SyntaxElementMappingType::linfo_se);
         readSyntaxElement_VLC (&symbol, bitstream);
-        *used_bits+=symbol.len;
+        *used_bits += symbol.len;
+        return symbol.value1;
+    }
+
+    int EyerAVC_VLC::read_ue_v (const char * tracestring, EyerBitStream * bitstream, int * used_bits)
+    {
+        EyerLog("%s\n", tracestring);
+
+        EyerSyntaxElement symbol;
+        symbol.type = SE_HEADER;
+        symbol.SetMappingType(SyntaxElementMappingType::linfo_ue);
+        readSyntaxElement_VLC (&symbol, bitstream);
+        *used_bits += symbol.len;
 
         return symbol.value1;
     }
 
-    int EyerAVC_VLC::read_u_v (int LenInBits, char * tracestring, EyerBitStream * bitstream, int * used_bits)
+    int EyerAVC_VLC::read_u_v (int LenInBits, const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
-        EyerSyntaxElement symbol;
+        EyerLog("%s\n", tracestring);
 
+        EyerSyntaxElement symbol;
         symbol.inf = 0;
         symbol.type = SE_HEADER;
         symbol.len = LenInBits;
         readSyntaxElement_FLC (&symbol, bitstream);
         *used_bits += symbol.len;
-
         return symbol.inf;
     }
 
-    Boolean EyerAVC_VLC::read_u_1 (char * tracestring, EyerBitStream * bitstream, int * used_bits)
+    Boolean EyerAVC_VLC::read_u_1 (const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
         return (Boolean) read_u_v (1, tracestring, bitstream, used_bits);
     }
@@ -57,7 +71,7 @@ namespace Eyer
             return -1;
 
         currStream->frame_bitoffset += sym->len;
-        sym->linfo_ue(sym->len, sym->inf, &(sym->value1), &(sym->value2));
+        sym->mapping(sym->len, sym->inf, &(sym->value1), &(sym->value2));
 
         return 1;
     }
