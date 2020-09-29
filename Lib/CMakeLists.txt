@@ -75,6 +75,9 @@ ModuleTestOption("EyerNet" "EyerNetTest" EyerNet)
 OPTION(EyerDASH           "option for EyerDASH"         ON)
 ModuleTestOption("EyerDASH" "EyerDashTest" EyerDASH)
 
+OPTION(EyerAVC           "option for EyerAVC"           ON)
+ModuleTestOption("EyerAVC" "EyerAVCTest" EyerAVC)
+
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
 
@@ -120,9 +123,6 @@ ModuleOption("EyerGLContext" EyerGLContext)
 OPTION(EyerVideoTweenAnimation           "option for EyerVideoTweenAnimation"           ON)
 ModuleOption("EyerVideoTweenAnimation" EyerVideoTweenAnimation)
 
-OPTION(EyerAVC           "option for EyerAVC"           ON)
-ModuleOption("EyerAVC" EyerAVC)
-
 OPTION(AL_TEST           "option for AL_TEST"           ON)
 IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
@@ -136,5 +136,4 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerEventQueue)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerYUVTest)
-    ADD_SUBDIRECTORY(EyerAVCTest)
 ENDIF(AL_TEST)
