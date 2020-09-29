@@ -28,6 +28,9 @@ target_link_libraries (
 
 set(head_files
         EyerAVC.hpp
+        EyerAnnexB.hpp
+        EyerSlice.hpp
+        EyerNALU.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
