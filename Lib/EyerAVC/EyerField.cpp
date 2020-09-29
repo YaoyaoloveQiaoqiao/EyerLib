@@ -1,0 +1,67 @@
+#include "EyerField.hpp"
+
+namespace Eyer
+{
+    EyerField::EyerField()
+    {
+
+    }
+
+    EyerField::EyerField(const EyerString & _key, const Boolean & _val)
+    {
+        key = _key;
+        boolVal = _val;
+
+        type = EyerFieldType::BOOL;
+    }
+
+    EyerField::EyerField(const EyerString & _key, const unsigned int & _val)
+    {
+        key = _key;
+        unsignedIntVal = _val;
+
+        type = EyerFieldType::UNSIGNED_INT;
+    }
+
+    EyerField::~EyerField()
+    {
+
+    }
+
+    EyerField::EyerField(const EyerField & field) : EyerField()
+    {
+        *this = field;
+    }
+
+    EyerField EyerField::operator = (const EyerField & field)
+    {
+        type = field.type;
+
+        key = field.key;
+
+        boolVal = field.boolVal;
+        unsignedIntVal = field.unsignedIntVal;
+
+        return *this;
+    }
+
+    EyerString & EyerField::GetKey()
+    {
+        return key;
+    }
+
+    EyerFieldType & EyerField::GetType()
+    {
+        return type;
+    }
+
+    unsigned int & EyerField::GetUnsignedIntVal()
+    {
+        return unsignedIntVal;
+    }
+
+    Boolean & EyerField::GetBooleanVal()
+    {
+        return boolVal;
+    }
+}

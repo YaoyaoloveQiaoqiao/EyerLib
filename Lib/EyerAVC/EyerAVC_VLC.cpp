@@ -8,7 +8,7 @@ namespace Eyer
 {
     int EyerAVC_VLC::read_se_v (const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
-        EyerLog("%s\n", tracestring);
+        // EyerLog("%s\n", tracestring);
 
         EyerSyntaxElement symbol;
         symbol.type = SE_HEADER;
@@ -20,7 +20,7 @@ namespace Eyer
 
     int EyerAVC_VLC::read_ue_v (const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
-        EyerLog("%s\n", tracestring);
+        // EyerLog("%s\n", tracestring);
 
         EyerSyntaxElement symbol;
         symbol.type = SE_HEADER;
@@ -33,7 +33,7 @@ namespace Eyer
 
     int EyerAVC_VLC::read_u_v (int LenInBits, const char * tracestring, EyerBitStream * bitstream, int * used_bits)
     {
-        EyerLog("%s\n", tracestring);
+        // EyerLog("%s\n", tracestring);
 
         EyerSyntaxElement symbol;
         symbol.inf = 0;

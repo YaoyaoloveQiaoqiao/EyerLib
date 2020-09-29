@@ -9,10 +9,10 @@ namespace Eyer
     }
     void EyerSyntaxElement::mapping(int len, int info, int * value1, int * dummy)
     {
-        if(mappingType = SyntaxElementMappingType::linfo_se){
+        if(mappingType == SyntaxElementMappingType::linfo_se){
             linfo_se(len, info, value1, dummy);
         }
-        if(mappingType = SyntaxElementMappingType::linfo_ue){
+        if(mappingType == SyntaxElementMappingType::linfo_ue){
             linfo_ue(len, info, value1, dummy);
         }
     }
