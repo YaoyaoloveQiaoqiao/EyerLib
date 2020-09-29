@@ -7,20 +7,24 @@ namespace Eyer
 
     }
 
-    EyerField::EyerField(const EyerString & _key, const Boolean & _val)
+    EyerField::EyerField(const EyerString & _key, const Boolean & _val, int _level)
     {
         key = _key;
         boolVal = _val;
 
         type = EyerFieldType::BOOL;
+
+        level = _level;
     }
 
-    EyerField::EyerField(const EyerString & _key, const unsigned int & _val)
+    EyerField::EyerField(const EyerString & _key, const unsigned int & _val, int _level)
     {
         key = _key;
         unsignedIntVal = _val;
 
         type = EyerFieldType::UNSIGNED_INT;
+
+        level = _level;
     }
 
     EyerField::~EyerField()
@@ -63,5 +67,10 @@ namespace Eyer
     Boolean & EyerField::GetBooleanVal()
     {
         return boolVal;
+    }
+
+    int EyerField::GetLevel()
+    {
+        return level;
     }
 }
