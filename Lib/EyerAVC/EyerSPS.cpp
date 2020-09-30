@@ -203,6 +203,9 @@ namespace Eyer{
             else if(type == EyerFieldType::UNSIGNED_INT){
                 EyerLog("%s%s = %u\n", levelStr.str, key.str, field->GetUnsignedIntVal());
             }
+            else if(type == EyerFieldType::INT){
+                EyerLog("%s%s = %d\n", levelStr.str, key.str, field->GetIntVal());
+            }
             else{
 
             }
