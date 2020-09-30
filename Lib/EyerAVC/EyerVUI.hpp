@@ -6,6 +6,9 @@
 namespace Eyer{
     class EyerVUI {
     public:
+        EyerVUI();
+        ~EyerVUI();
+    public:
         Boolean      aspect_ratio_info_present_flag;                   // u(1)
         unsigned int aspect_ratio_idc;                                 // u(8)
         unsigned short sar_width;                                      // u(16)

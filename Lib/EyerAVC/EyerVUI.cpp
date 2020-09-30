@@ -3,4 +3,13 @@
 
 namespace Eyer
 {
+    EyerVUI::EyerVUI()
+    {
+
+    }
+
+    EyerVUI::~EyerVUI()
+    {
+
+    }
 }

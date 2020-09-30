@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <EyerAVC/EyerSPS.hpp>
 #include "EyerCore/EyerCore.hpp"
 #include "EyerAVC/EyerAVC.hpp"
 
@@ -30,6 +29,8 @@ TEST(EyerAVC, AnnexB){
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_PPS){
             EyerLog("PPS\n");
+            Eyer::EyerPPS pps(nalu);
+            pps.PrintInfo();
         }
     }
 

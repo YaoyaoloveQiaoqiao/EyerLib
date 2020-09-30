@@ -27,6 +27,16 @@ namespace Eyer
         level = _level;
     }
 
+    EyerField::EyerField(const EyerString & _key, const int & _val, int _level)
+    {
+        key = _key;
+        intVal = _val;
+
+        type = EyerFieldType::INT;
+
+        level = _level;
+    }
+
     EyerField::~EyerField()
     {
 
@@ -67,6 +77,11 @@ namespace Eyer
     Boolean & EyerField::GetBooleanVal()
     {
         return boolVal;
+    }
+
+    int & EyerField::GetIntVal()
+    {
+        return intVal;
     }
 
     int EyerField::GetLevel()

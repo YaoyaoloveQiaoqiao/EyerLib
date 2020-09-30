@@ -8,6 +8,7 @@ namespace Eyer{
     enum EyerFieldType{
         BOOL = 1,
         UNSIGNED_INT = 2,
+        INT = 3
     };
 
     class EyerField {
@@ -15,6 +16,7 @@ namespace Eyer{
         EyerField();
         EyerField(const EyerString & key, const Boolean & val, int level = 0);
         EyerField(const EyerString & key, const unsigned int & val, int level = 0);
+        EyerField(const EyerString & key, const int & val, int level = 0);
         ~EyerField();
 
         EyerField(const EyerField & field);
@@ -25,6 +27,7 @@ namespace Eyer{
         EyerFieldType & GetType();
 
         unsigned int & GetUnsignedIntVal();
+        int & GetIntVal();
         Boolean & GetBooleanVal();
 
         int GetLevel();
@@ -36,6 +39,7 @@ namespace Eyer{
 
         Boolean boolVal                     = Boolean::TRUE;
         unsigned int unsignedIntVal         = 0;
+        int intVal                          = 0;
 
         int level = 0;
     };
