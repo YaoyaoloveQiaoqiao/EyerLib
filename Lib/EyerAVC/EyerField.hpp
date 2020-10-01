@@ -20,19 +20,20 @@ namespace Eyer{
         ~EyerField();
 
         EyerField(const EyerField & field);
-        EyerField operator = (const EyerField & field);
+        EyerField & operator = (const EyerField & field);
 
         EyerString & GetKey();
 
-        EyerFieldType & GetType();
+        EyerFieldType GetType();
 
-        unsigned int & GetUnsignedIntVal();
-        int & GetIntVal();
-        Boolean & GetBooleanVal();
+        unsigned int GetUnsignedIntVal();
+        int GetIntVal();
+        Boolean GetBooleanVal();
 
         int GetLevel();
 
     private:
+
         EyerFieldType type = EyerFieldType::BOOL;
 
         EyerString key;

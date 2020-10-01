@@ -7,7 +7,7 @@ namespace Eyer
 
     }
 
-    EyerField::EyerField(const EyerString & _key, const Boolean & _val, int _level)
+    EyerField::EyerField(const EyerString & _key, const Boolean & _val, int _level) : EyerField()
     {
         key = _key;
         boolVal = _val;
@@ -17,7 +17,7 @@ namespace Eyer
         level = _level;
     }
 
-    EyerField::EyerField(const EyerString & _key, const unsigned int & _val, int _level)
+    EyerField::EyerField(const EyerString & _key, const unsigned int & _val, int _level) : EyerField()
     {
         key = _key;
         unsignedIntVal = _val;
@@ -27,7 +27,7 @@ namespace Eyer
         level = _level;
     }
 
-    EyerField::EyerField(const EyerString & _key, const int & _val, int _level)
+    EyerField::EyerField(const EyerString & _key, const int & _val, int _level) : EyerField()
     {
         key = _key;
         intVal = _val;
@@ -47,7 +47,7 @@ namespace Eyer
         *this = field;
     }
 
-    EyerField EyerField::operator = (const EyerField & field)
+    EyerField & EyerField::operator = (const EyerField & field)
     {
         type = field.type;
 
@@ -65,22 +65,22 @@ namespace Eyer
         return key;
     }
 
-    EyerFieldType & EyerField::GetType()
+    EyerFieldType EyerField::GetType()
     {
         return type;
     }
 
-    unsigned int & EyerField::GetUnsignedIntVal()
+    unsigned int EyerField::GetUnsignedIntVal()
     {
         return unsignedIntVal;
     }
 
-    Boolean & EyerField::GetBooleanVal()
+    Boolean EyerField::GetBooleanVal()
     {
         return boolVal;
     }
 
-    int & EyerField::GetIntVal()
+    int EyerField::GetIntVal()
     {
         return intVal;
     }
