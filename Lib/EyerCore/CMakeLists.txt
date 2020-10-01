@@ -45,6 +45,7 @@ set(head_files
         EyerMapEle.hpp
         EyerLockQueue.hpp
         EyerLRUMap.hpp
+        EyerBuffer.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCore)
