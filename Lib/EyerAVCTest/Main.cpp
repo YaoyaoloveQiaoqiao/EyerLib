@@ -25,12 +25,16 @@ TEST(EyerAVC, AnnexB){
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             EyerLog("SPS\n");
             Eyer::EyerSPS sps(nalu);
-            sps.PrintInfo();
+            // sps.PrintInfo();
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_PPS){
             EyerLog("PPS\n");
             Eyer::EyerPPS pps(nalu);
-            pps.PrintInfo();
+            // pps.PrintInfo();
+        }
+
+        if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_IDR){
+            EyerLog("IDR\n");
         }
     }
 
