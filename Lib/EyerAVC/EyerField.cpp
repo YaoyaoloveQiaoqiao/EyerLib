@@ -57,6 +57,8 @@ namespace Eyer
         unsignedIntVal = field.unsignedIntVal;
         intVal = field.intVal;
 
+        level = field.level;
+
         return *this;
     }
 
