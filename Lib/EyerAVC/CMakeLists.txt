@@ -39,6 +39,7 @@ set(head_files
         EyerSyntaxElement.hpp
         EyerVUI.hpp
         EyerSlice.hpp
+        EyerNAL.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
