@@ -29,10 +29,16 @@ target_link_libraries (
 set(head_files
         EyerAVC.hpp
         EyerAnnexB.hpp
-        EyerSlice.hpp
+        EyerAVC_VLC.hpp
+        EyerAVCCommon.hpp
+        EyerBitStream.hpp
+        EyerField.hpp
         EyerNALU.hpp
-        EyerSPS.hpp
         EyerPPS.hpp
+        EyerSPS.hpp
+        EyerSyntaxElement.hpp
+        EyerVUI.hpp
+        EyerSlice.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
