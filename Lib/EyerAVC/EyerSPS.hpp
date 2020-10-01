@@ -6,6 +6,7 @@
 #include "EyerBitStream.hpp"
 #include "EyerVUI.hpp"
 #include "EyerField.hpp"
+#include "EyerNAL.hpp"
 #include <vector>
 
 namespace Eyer{
@@ -26,8 +27,6 @@ namespace Eyer{
         STEREO_HIGH    = 128       //!< YUV 4:2:0/8  "Stereo High"
     } ProfileIDC;
 
-
-
     typedef enum {
         CF_UNKNOWN = -1,     //!< Unknown color format
         YUV400     =  0,     //!< Monochrome
@@ -36,23 +35,16 @@ namespace Eyer{
         YUV444     =  3      //!< 4:4:4
     } ColorFormat;
 
-    class EyerSPS {
+    class EyerSPS : public EyerNAL{
     public:
         EyerSPS(EyerNALU & _nalu);
         ~EyerSPS();
 
-        int PrintInfo();
-
+        virtual NaluType GetNalType();
     private:
-        void ScalingList(int * scalingList, int sizeOfScalingList, Boolean * useDefaultScalingMatrix, EyerBitStream * bitstream, int * used_bits);
-
         int LoadVUI(EyerBitStream * bitstream, int * used_bits);
 
     private:
-        EyerNALU nalu;
-
-        std::vector<EyerField *> fieldList;
-
         unsigned int profile_idc;                                       // u(8)
         Boolean   constrained_set0_flag;                                // u(1)
         Boolean   constrained_set1_flag;                                // u(1)

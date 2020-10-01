@@ -55,6 +55,7 @@ namespace Eyer
 
         boolVal = field.boolVal;
         unsignedIntVal = field.unsignedIntVal;
+        intVal = field.intVal;
 
         return *this;
     }

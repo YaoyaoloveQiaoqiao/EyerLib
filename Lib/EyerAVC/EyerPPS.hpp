@@ -4,23 +4,19 @@
 #include "EyerNALU.hpp"
 #include "EyerField.hpp"
 #include <vector>
+#include "EyerNAL.hpp"
 
 #define MAXnum_slice_groups_minus1  8
 
 namespace Eyer
 {
-    class EyerPPS {
+    class EyerPPS : public EyerNAL{
     public:
         EyerPPS(EyerNALU & _nalu);
         ~EyerPPS();
 
-        int PrintInfo();
-
+        virtual NaluType GetNalType();
     private:
-        EyerNALU nalu;
-
-        std::vector<EyerField *> fieldList;
-
         unsigned int pic_parameter_set_id;                             // ue(v)
         unsigned int seq_parameter_set_id;                             // ue(v)
         Boolean   entropy_coding_mode_flag;                            // u(1)
