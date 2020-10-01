@@ -4,6 +4,11 @@
 
 namespace Eyer
 {
+    NaluType EyerPPS::GetNalType()
+    {
+        return NaluType::NALU_TYPE_PPS;
+    }
+
     EyerPPS::EyerPPS(EyerNALU & _nalu)
     {
         nalu = _nalu;
@@ -97,34 +102,5 @@ namespace Eyer
             delete fieldList[i];
         }
         fieldList.clear();
-    }
-
-    int EyerPPS::PrintInfo()
-    {
-        EyerLog("==============================================================\n");
-        for(int i=0;i<fieldList.size();i++){
-            EyerField * field = fieldList[i];
-            EyerString key = field->GetKey();
-            EyerFieldType type = field->GetType();
-
-            EyerString levelStr = "";
-            for(int i=0;i<field->GetLevel();i++){
-                levelStr = levelStr + "\t";
-            }
-            if(type == EyerFieldType::BOOL){
-                EyerLog("%s%s = %d\n", levelStr.str, key.str, (int)field->GetBooleanVal());
-            }
-            else if(type == EyerFieldType::UNSIGNED_INT){
-                EyerLog("%s%s = %u\n", levelStr.str, key.str, field->GetUnsignedIntVal());
-            }
-            else if(type == EyerFieldType::INT){
-                EyerLog("%s%s = %d\n", levelStr.str, key.str, field->GetIntVal());
-            }
-            else{
-
-            }
-        }
-        EyerLog("==============================================================\n");
-        return 0;
     }
 }
