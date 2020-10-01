@@ -5,6 +5,8 @@
 TEST(EyerAVC, AnnexB){
     Eyer::EyerString url = "./demo_video.h264";
 
+    std::vector<Eyer::EyerNAL *> nalList;
+
     Eyer::EyerAnnexB annexB;
     annexB.Open(url);
 
@@ -24,12 +26,16 @@ TEST(EyerAVC, AnnexB){
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             EyerLog("SPS\n");
-            Eyer::EyerSPS sps(nalu);
+            Eyer::EyerSPS * sps = new Eyer::EyerSPS(nalu);
+
+            nalList.push_back(sps);
             // sps.PrintInfo();
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_PPS){
             EyerLog("PPS\n");
-            Eyer::EyerPPS pps(nalu);
+            Eyer::EyerPPS * pps = new Eyer::EyerPPS(nalu);
+
+            nalList.push_back(pps);
             // pps.PrintInfo();
         }
 
@@ -39,6 +45,24 @@ TEST(EyerAVC, AnnexB){
     }
 
     annexB.Close();
+
+    for(int i=0;i<nalList.size();i++){
+        Eyer::EyerNAL * nal = nalList[i];
+        for(int j=0;j<nal->GetFieldSize();j++){
+            Eyer::EyerField field;
+            // nal->GetField(field, j);
+        }
+    }
+
+    for(int i=0;i<nalList.size();i++){
+        delete nalList[i];
+    }
+    nalList.clear();
+}
+
+TEST(EyerAVC, EyerField){
+    Eyer::EyerField fieldA("abc", 12);
+    Eyer::EyerField fieldB = fieldA;
 }
 
 int main(int argc,char **argv){

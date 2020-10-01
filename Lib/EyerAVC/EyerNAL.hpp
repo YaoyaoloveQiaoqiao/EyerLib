@@ -10,7 +10,7 @@ namespace Eyer {
     class EyerNAL {
     public:
         EyerNAL();
-        ~EyerNAL();
+        virtual ~EyerNAL();
 
         int PrintInfo();
 

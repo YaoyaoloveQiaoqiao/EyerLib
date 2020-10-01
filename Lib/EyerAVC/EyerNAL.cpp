@@ -21,7 +21,8 @@ namespace Eyer {
 
     int EyerNAL::GetField(EyerField & field, int index)
     {
-        field = *fieldList.at(index);
+        EyerField * f = fieldList.at(index);
+        field = *f;
         return 0;
     }
 
