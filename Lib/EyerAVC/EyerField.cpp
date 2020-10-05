@@ -7,7 +7,7 @@ namespace Eyer
 
     }
 
-    EyerField::EyerField(const EyerString & _key, const Boolean & _val, int _level) : EyerField()
+    EyerField::EyerField(const EyerString & _key, const Boolean & _val, const EyerString & _remarks, int _level) : EyerField()
     {
         key = _key;
         boolVal = _val;
@@ -15,9 +15,11 @@ namespace Eyer
         type = EyerFieldType::BOOL;
 
         level = _level;
+
+        remarks = _remarks;
     }
 
-    EyerField::EyerField(const EyerString & _key, const unsigned int & _val, int _level) : EyerField()
+    EyerField::EyerField(const EyerString & _key, const unsigned int & _val, const EyerString & _remarks, int _level) : EyerField()
     {
         key = _key;
         unsignedIntVal = _val;
@@ -25,9 +27,11 @@ namespace Eyer
         type = EyerFieldType::UNSIGNED_INT;
 
         level = _level;
+
+        remarks = _remarks;
     }
 
-    EyerField::EyerField(const EyerString & _key, const int & _val, int _level) : EyerField()
+    EyerField::EyerField(const EyerString & _key, const int & _val, const EyerString & _remarks, int _level) : EyerField()
     {
         key = _key;
         intVal = _val;
@@ -35,6 +39,19 @@ namespace Eyer
         type = EyerFieldType::INT;
 
         level = _level;
+
+        remarks = _remarks;
+    }
+
+    EyerField::EyerField(const EyerString & _key, const EyerString & _remarks, int _level)
+    {
+        key = _key;
+
+        type = EyerFieldType::VOID;
+
+        level = _level;
+
+        remarks = _remarks;
     }
 
     EyerField::~EyerField()
@@ -58,6 +75,8 @@ namespace Eyer
         intVal = field.intVal;
 
         level = field.level;
+
+        remarks = field.remarks;
 
         return *this;
     }
@@ -90,5 +109,10 @@ namespace Eyer
     int EyerField::GetLevel()
     {
         return level;
+    }
+
+    EyerString & EyerField::GetRemarks()
+    {
+        return remarks;
     }
 }

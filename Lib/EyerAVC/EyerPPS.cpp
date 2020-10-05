@@ -45,7 +45,7 @@ namespace Eyer
         // FMO stuff begins here
         if (num_slice_groups_minus1 > 0){
             slice_group_map_type                        = EyerAVC_VLC::read_ue_v ("PPS: slice_group_map_type"                , &bitStream, &usedBits);
-            fieldList.push_back(new EyerField("slice_group_map_type", slice_group_map_type, 1));
+            fieldList.push_back(new EyerField("slice_group_map_type", slice_group_map_type, nullptr, 1));
             if (slice_group_map_type == 0) {
                 for (int i=0; i<=num_slice_groups_minus1; i++) {
                     run_length_minus1[i] = EyerAVC_VLC::read_ue_v("PPS: run_length_minus1 [i]", &bitStream, &usedBits);

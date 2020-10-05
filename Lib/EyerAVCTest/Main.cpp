@@ -56,7 +56,17 @@ TEST(EyerAVC, AnnexB){
         Eyer::EyerNAL * nal = nalList[i];
         for(int j=0;j<nal->GetFieldSize();j++){
             Eyer::EyerField field;
-            // nal->GetField(field, j);
+            nal->GetField(field, j);
+
+            if(field.GetType() == Eyer::EyerFieldType::UNSIGNED_INT){
+                EyerLog("%s = %u, %s\n", field.GetKey().str, field.GetUnsignedIntVal(), field.GetRemarks().str);
+            }
+            if(field.GetType() == Eyer::EyerFieldType::BOOL){
+                EyerLog("%s = %d, %s\n", field.GetKey().str, field.GetBooleanVal(), field.GetRemarks().str);
+            }
+            if(field.GetType() == Eyer::EyerFieldType::INT){
+                EyerLog("%s = %d, %s\n", field.GetKey().str, field.GetIntVal(), field.GetRemarks().str);
+            }
         }
     }
 

@@ -44,14 +44,16 @@ namespace Eyer{
     private:
         int LoadVUI(EyerBitStream * bitstream, int * used_bits);
 
+        int GetWH(EyerVec2 & wh);
+
     private:
-        unsigned int profile_idc;                                       // u(8)
-        Boolean   constrained_set0_flag;                                // u(1)
-        Boolean   constrained_set1_flag;                                // u(1)
-        Boolean   constrained_set2_flag;                                // u(1)
-        Boolean   constrained_set3_flag;                                // u(1)
-        Boolean   constrained_set4_flag;                                // u(1)
-        Boolean   constrained_set5_flag;                                // u(1)
+        unsigned int profile_idc                                        = 0;// u(8)
+        Boolean   constrained_set0_flag                                 = Boolean::FALSE;// u(1)
+        Boolean   constrained_set1_flag                                 = Boolean::FALSE;// u(1)
+        Boolean   constrained_set2_flag                                 = Boolean::FALSE;// u(1)
+        Boolean   constrained_set3_flag                                 = Boolean::FALSE;// u(1)
+        Boolean   constrained_set4_flag                                 = Boolean::FALSE;// u(1)
+        Boolean   constrained_set5_flag                                 = Boolean::FALSE;// u(1)
         unsigned  int level_idc;                                        // u(8)
         unsigned  int seq_parameter_set_id;                             // ue(v)
 
