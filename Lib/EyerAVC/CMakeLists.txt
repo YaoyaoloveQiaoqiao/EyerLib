@@ -7,8 +7,6 @@ add_library(
         EyerAnnexB.hpp
         EyerNALU.cpp
         EyerNALU.hpp
-        EyerSlice.cpp
-        EyerSlice.hpp
         EyerSPS.cpp
         EyerSPS.hpp
         EyerAVCCommon.cpp
@@ -31,7 +29,10 @@ add_library(
         EyerSEI.hpp
         EyerIDR.cpp
         EyerIDR.hpp
-)
+        EyerSLICEBase.cpp
+        EyerSLICEBase.hpp
+        EyerSLICE.cpp
+        EyerSLICE.hpp)
 
 target_link_libraries (
         EyerAVC
@@ -50,10 +51,11 @@ set(head_files
         EyerSPS.hpp
         EyerSyntaxElement.hpp
         EyerVUI.hpp
-        EyerSlice.hpp
         EyerNAL.hpp
         EyerSEI.hpp
         EyerIDR.hpp
+        EyerSLICE.hpp
+        EyerSLICEBase.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)

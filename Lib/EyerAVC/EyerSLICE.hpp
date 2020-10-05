@@ -2,16 +2,20 @@
 #define EYERLIB_EYERSLICE_HPP
 
 #include "EyerNALU.hpp"
-#include "EyerNAL.hpp"
+#include "EyerSLICEBase.hpp"
 
-namespace Eyer{
-    class EyerSlice : public EyerNAL{
+namespace Eyer
+{
+    class EyerSLICE : public EyerSLICEBase
+    {
     public:
-        EyerSlice(EyerNALU & nalu);
-        ~EyerSlice();
+        EyerSLICE(EyerNALU & _nalu);
+        ~EyerSLICE();
 
         virtual NaluType GetNalType();
     };
 }
+
+
 
 #endif //EYERLIB_EYERSLICE_HPP
