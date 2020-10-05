@@ -19,7 +19,7 @@ add_library(
         EyerBitStream.hpp
         EyerSyntaxElement.cpp
         EyerSyntaxElement.hpp
-        EyerVUI.cpp EyerVUI.hpp EyerField.cpp EyerField.hpp EyerPPS.cpp EyerPPS.hpp EyerNAL.cpp EyerNAL.hpp)
+        EyerVUI.cpp EyerVUI.hpp EyerField.cpp EyerField.hpp EyerPPS.cpp EyerPPS.hpp EyerNAL.cpp EyerNAL.hpp EyerSEI.cpp EyerSEI.hpp EyerIDR.cpp EyerIDR.hpp)
 
 target_link_libraries (
         EyerAVC
