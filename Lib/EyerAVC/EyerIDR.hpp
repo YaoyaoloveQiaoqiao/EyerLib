@@ -12,6 +12,11 @@ namespace Eyer
         ~EyerIDR();
 
         virtual NaluType GetNalType();
+
+    private:
+        int                 start_mb_nr;   //!< MUST be set by NAL even in case of ei_flag == 1
+        int                 slice_type;    //!< slice type
+        int                 pic_parameter_set_id;   //!<the ID of the picture parameter set the
     };
 }
 
