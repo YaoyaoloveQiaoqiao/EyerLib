@@ -25,6 +25,16 @@ namespace Eyer{
         NALU_TYPE_FILL     = 12,
     };
 
+    typedef enum
+    {
+        P_SLICE = 0,
+        B_SLICE = 1,
+        I_SLICE = 2,
+        SP_SLICE = 3,
+        SI_SLICE = 4,
+        NUM_SLICE_TYPES = 5
+    } SliceType;
+
     class EyerAVCCommon {
     public:
         static const int ZEROBYTES_SHORTSTARTCODE = 2;

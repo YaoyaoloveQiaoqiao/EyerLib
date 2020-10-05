@@ -44,6 +44,9 @@ TEST(EyerAVC, AnnexB){
 
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_IDR){
             EyerLog("IDR\n");
+
+            Eyer::EyerIDR * idr = new Eyer::EyerIDR(nalu);
+            nalList.push_back(idr);
         }
     }
 
