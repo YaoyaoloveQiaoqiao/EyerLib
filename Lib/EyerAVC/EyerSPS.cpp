@@ -7,7 +7,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-namespace Eyer{
+namespace Eyer
+{
+    NaluType EyerSPS::GetNalType()
+    {
+        return NaluType::NALU_TYPE_SPS;
+    }
+
     EyerSPS::EyerSPS(EyerNALU & _nalu)
     {
         nalu = _nalu;
@@ -22,7 +28,9 @@ namespace Eyer{
         bitStream.frame_bitoffset = 0;
 
         int usedBits = 0;
+
         profile_idc = EyerAVC_VLC::read_u_v(8, "SPS: profile_idc", &bitStream, &usedBits);
+        fieldList.push_back(new EyerField("profile_idc", profile_idc));
 
         if ((profile_idc != BASELINE       ) &&
             (profile_idc != MAIN           ) &&
@@ -46,11 +54,21 @@ namespace Eyer{
         constrained_set4_flag                  = EyerAVC_VLC::read_u_1  (   "SPS: constrained_set4_flag"                 , &bitStream, &usedBits);
         constrained_set5_flag                  = EyerAVC_VLC::read_u_1  (   "SPS: constrained_set5_flag"                 , &bitStream, &usedBits);
 
+        fieldList.push_back(new EyerField("constrained_set0_flag", constrained_set0_flag));
+        fieldList.push_back(new EyerField("constrained_set1_flag", constrained_set1_flag));
+        fieldList.push_back(new EyerField("constrained_set2_flag", constrained_set2_flag));
+        fieldList.push_back(new EyerField("constrained_set3_flag", constrained_set3_flag));
+        fieldList.push_back(new EyerField("constrained_set4_flag", constrained_set4_flag));
+        fieldList.push_back(new EyerField("constrained_set5_flag", constrained_set5_flag));
+
         reserved_zero                          = EyerAVC_VLC::read_u_v  (2, "SPS: reserved_zero_2bits"          , &bitStream, &usedBits);
+        fieldList.push_back(new EyerField("reserved_zero_2bits", reserved_zero));
 
         level_idc                              = EyerAVC_VLC::read_u_v  (8, "SPS: level_idc"                    , &bitStream, &usedBits);
+        fieldList.push_back(new EyerField("level_idc", level_idc));
 
         seq_parameter_set_id                   = EyerAVC_VLC::read_ue_v ("SPS: seq_parameter_set_id"                     , &bitStream, &usedBits);
+        fieldList.push_back(new EyerField("seq_parameter_set_id", seq_parameter_set_id));
 
 
         // Fidelity Range Extensions stuff
@@ -63,25 +81,25 @@ namespace Eyer{
            (profile_idc == FREXT_CAVLC444))
         {
             chroma_format_idc                       = EyerAVC_VLC::read_ue_v ("SPS: chroma_format_idc"                       , &bitStream, &usedBits);
+            fieldList.push_back(new EyerField("chroma_format_idc", chroma_format_idc, 1));
+
             if(chroma_format_idc == YUV444){
                 separate_colour_plane_flag          = EyerAVC_VLC::read_u_1  ("SPS: separate_colour_plane_flag"              , &bitStream, &usedBits);
             }
 
             bit_depth_luma_minus8                   = EyerAVC_VLC::read_ue_v ("SPS: bit_depth_luma_minus8"                   , &bitStream, &usedBits);
             bit_depth_chroma_minus8                 = EyerAVC_VLC::read_ue_v ("SPS: bit_depth_chroma_minus8"                 , &bitStream, &usedBits);
-
-            /*
-            if((bit_depth_luma_minus8 + 8 > sizeof(imgpel) * 8) || (bit_depth_chroma_minus8 + 8> sizeof(imgpel) * 8)){
-                EyerLog ("Source picture has higher bit depth than imgpel data type. \nPlease recompile with larger data type for imgpel.");
-            }
-            */
-
             lossless_qpprime_flag                   = EyerAVC_VLC::read_u_1  ("SPS: lossless_qpprime_y_zero_flag"            , &bitStream, &usedBits);
             seq_scaling_matrix_present_flag         = EyerAVC_VLC::read_u_1  ("SPS: seq_scaling_matrix_present_flag"         , &bitStream, &usedBits);
 
+            fieldList.push_back(new EyerField("bit_depth_luma_minus8", bit_depth_luma_minus8, 1));
+            fieldList.push_back(new EyerField("bit_depth_chroma_minus8", bit_depth_chroma_minus8, 1));
+            fieldList.push_back(new EyerField("lossless_qpprime_flag", lossless_qpprime_flag, 1));
+            fieldList.push_back(new EyerField("seq_scaling_matrix_present_flag", seq_scaling_matrix_present_flag, 1));
+
             if(seq_scaling_matrix_present_flag) {
                 int scalingList = (chroma_format_idc != YUV444) ? 8 : 12;
-                EyerLog("scalingList: %d\n", scalingList);
+                // EyerLog("scalingList: %d\n", scalingList);
                 for(int i=0;i<scalingList;i++){
                     seq_scaling_list_present_flag[i]= EyerAVC_VLC::read_u_1  ("SPS: seq_scaling_list_present_flag"        , &bitStream, &usedBits);
                     if(seq_scaling_list_present_flag[i]){
@@ -99,14 +117,24 @@ namespace Eyer{
         log2_max_frame_num_minus4                   = EyerAVC_VLC::read_ue_v ("SPS: log2_max_frame_num_minus4"                          , &bitStream, &usedBits);
         pic_order_cnt_type                          = EyerAVC_VLC::read_ue_v ("SPS: pic_order_cnt_type"                                 , &bitStream, &usedBits);
 
+        fieldList.push_back(new EyerField("log2_max_frame_num_minus4", log2_max_frame_num_minus4));
+        fieldList.push_back(new EyerField("pic_order_cnt_type", pic_order_cnt_type));
+
         if(pic_order_cnt_type == 0){
             log2_max_pic_order_cnt_lsb_minus4       = EyerAVC_VLC::read_ue_v ("SPS: log2_max_pic_order_cnt_lsb_minus4"                  , &bitStream, &usedBits);
+            fieldList.push_back(new EyerField("log2_max_pic_order_cnt_lsb_minus4", log2_max_pic_order_cnt_lsb_minus4, 1));
         }
         else if(pic_order_cnt_type == 1){
             delta_pic_order_always_zero_flag        = EyerAVC_VLC::read_u_1  ("SPS: delta_pic_order_always_zero_flag"                   , &bitStream, &usedBits);
             offset_for_non_ref_pic                  = EyerAVC_VLC::read_se_v ("SPS: offset_for_non_ref_pic"                             , &bitStream, &usedBits);
             offset_for_top_to_bottom_field          = EyerAVC_VLC::read_se_v ("SPS: offset_for_top_to_bottom_field"                     , &bitStream, &usedBits);
             num_ref_frames_in_pic_order_cnt_cycle   = EyerAVC_VLC::read_ue_v ("SPS: num_ref_frames_in_pic_order_cnt_cycle"              , &bitStream, &usedBits);
+
+            fieldList.push_back(new EyerField("delta_pic_order_always_zero_flag", delta_pic_order_always_zero_flag, 1));
+            fieldList.push_back(new EyerField("offset_for_non_ref_pic", offset_for_non_ref_pic, 1));
+            fieldList.push_back(new EyerField("offset_for_top_to_bottom_field", offset_for_top_to_bottom_field, 1));
+            fieldList.push_back(new EyerField("num_ref_frames_in_pic_order_cnt_cycle", num_ref_frames_in_pic_order_cnt_cycle, 1));
+
             for(int i=0;i<num_ref_frames_in_pic_order_cnt_cycle;i++){
                 offset_for_ref_frame[i]             = EyerAVC_VLC::read_se_v ("SPS: offset_for_ref_frame[i]"                            , &bitStream, &usedBits);
             }
@@ -118,139 +146,155 @@ namespace Eyer{
         pic_height_in_map_units_minus1              = EyerAVC_VLC::read_ue_v ("SPS: pic_height_in_map_units_minus1"                     , &bitStream, &usedBits);
         frame_mbs_only_flag                         = EyerAVC_VLC::read_u_1  ("SPS: frame_mbs_only_flag"                                , &bitStream, &usedBits);
 
+        fieldList.push_back(new EyerField("num_ref_frames", num_ref_frames));
+        fieldList.push_back(new EyerField("gaps_in_frame_num_value_allowed_flag", gaps_in_frame_num_value_allowed_flag));
+        fieldList.push_back(new EyerField("pic_width_in_mbs_minus1", pic_width_in_mbs_minus1));
+        fieldList.push_back(new EyerField("pic_height_in_map_units_minus1", pic_height_in_map_units_minus1));
+        fieldList.push_back(new EyerField("frame_mbs_only_flag", frame_mbs_only_flag));
+
         if(frame_mbs_only_flag){
             mb_adaptive_frame_field_flag            = EyerAVC_VLC::read_u_1  ("SPS: mb_adaptive_frame_field_flag"                        , &bitStream, &usedBits);
+            fieldList.push_back(new EyerField("mb_adaptive_frame_field_flag", mb_adaptive_frame_field_flag, 1));
         }
 
         direct_8x8_inference_flag                   = EyerAVC_VLC::read_u_1  ("SPS: direct_8x8_inference_flag"                           , &bitStream, &usedBits);
         frame_cropping_flag                         = EyerAVC_VLC::read_u_1  ("SPS: frame_cropping_flag"                                 , &bitStream, &usedBits);
+
+        fieldList.push_back(new EyerField("direct_8x8_inference_flag", direct_8x8_inference_flag));
+        fieldList.push_back(new EyerField("frame_cropping_flag", frame_cropping_flag));
 
         if (frame_cropping_flag){
             frame_crop_left_offset                  = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_left_offset"                                 , &bitStream, &usedBits);
             frame_crop_right_offset                 = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_right_offset"                                , &bitStream, &usedBits);
             frame_crop_top_offset                   = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_top_offset"                                  , &bitStream, &usedBits);
             frame_crop_bottom_offset                = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_bottom_offset"                               , &bitStream, &usedBits);
+
+            fieldList.push_back(new EyerField("frame_crop_left_offset", frame_crop_left_offset, 1));
+            fieldList.push_back(new EyerField("frame_crop_right_offset", frame_crop_right_offset, 1));
+            fieldList.push_back(new EyerField("frame_crop_top_offset", frame_crop_top_offset, 1));
+            fieldList.push_back(new EyerField("frame_crop_bottom_offset", frame_crop_bottom_offset, 1));
         }
 
         vui_parameters_present_flag                 = EyerAVC_VLC::read_u_1  ("SPS: vui_parameters_present_flag"                            , &bitStream, &usedBits);
+        fieldList.push_back(new EyerField("vui_parameters_present_flag", vui_parameters_present_flag));
+
+        if(vui_parameters_present_flag){
+            LoadVUI(&bitStream, &usedBits);
+        }
     }
 
     EyerSPS::~EyerSPS()
     {
-
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
+        }
+        fieldList.clear();
     }
 
-    int EyerSPS::PrintInfo()
+    int EyerSPS::LoadVUI(EyerBitStream * bitstream, int * used_bits)
     {
-        char profile_idc_str[128];
-        GetProfileIDC(profile_idc_str, profile_idc);
-        EyerLog("profile_idc: %s\n", profile_idc_str);
+        fieldList.push_back(new EyerField("vui_parameters[]", 0));
 
-        EyerLog("constrained_set0_flag: %d\n", constrained_set0_flag);
-        EyerLog("constrained_set1_flag: %d\n", constrained_set1_flag);
-        EyerLog("constrained_set2_flag: %d\n", constrained_set2_flag);
-        EyerLog("constrained_set3_flag: %d\n", constrained_set3_flag);
-        EyerLog("constrained_set4_flag: %d\n", constrained_set4_flag);
-        EyerLog("constrained_set5_flag: %d\n", constrained_set5_flag);
+        vui.matrix_coefficients = 2;
 
-        EyerLog("level_idc: %d\n", level_idc);
+        vui.aspect_ratio_info_present_flag      = EyerAVC_VLC::read_u_1  ("VUI: aspect_ratio_info_present_flag", bitstream, used_bits);
+        fieldList.push_back(new EyerField("aspect_ratio_info_present_flag", vui.aspect_ratio_info_present_flag, 1));
 
-        EyerLog("seq_parameter_set_id: %d\n", seq_parameter_set_id);
+        if(vui.aspect_ratio_info_present_flag){
+            vui.aspect_ratio_idc                = EyerAVC_VLC::read_u_v  ( 8, "VUI: aspect_ratio_idc"              , bitstream, used_bits);
+            fieldList.push_back(new EyerField("aspect_ratio_idc", vui.aspect_ratio_idc, 2));
 
-        EyerLog("chroma_format_idc: %d\n", chroma_format_idc);
-
-
-
-
-        EyerLog("bit_depth_luma_minus8: %d\n", bit_depth_luma_minus8);
-        EyerLog("bit_depth_chroma_minus8: %d\n", bit_depth_chroma_minus8);
-
-        EyerLog("seq_scaling_matrix_present_flag: %d\n", seq_scaling_matrix_present_flag);
-
-        return 0;
-    }
-
-    /*
-     * 0   1   2   3
-     * 4   5   6   7
-     * 8   9   10  11
-     * 12  13  14  15
-     */
-    static const byte ZZ_SCAN[16]  =
-    {
-            0,  1,  4,  8,  5,  2,  3,  6,  9, 12, 13, 10,  7, 11, 14, 15
-    };
-
-    /*
-     * 0   1   2   3   4   5   6   7
-     * 8   9   10  11  12  13  14  15
-     * 16  17  18  19  20  21  22  23
-     * 24  25  26  27  28  29  30  31
-     * 32  33  34  35  36  37  38  39
-     * 40  41  42  43  44  45  46  47
-     * 48  49  50  51  52  53  54  55
-     * 56  57  58  59  60  61  62  63
-     */
-    static const byte ZZ_SCAN8[64] =
-    {
-            0,  1,  8, 16,  9,  2,  3, 10, 17, 24, 32, 25, 18, 11,  4,  5,
-            12, 19, 26, 33, 40, 48, 41, 34, 27, 20, 13,  6,  7, 14, 21, 28,
-            35, 42, 49, 56, 57, 50, 43, 36, 29, 22, 15, 23, 30, 37, 44, 51,
-            58, 59, 52, 45, 38, 31, 39, 46, 53, 60, 61, 54, 47, 55, 62, 63
-    };
-
-
-    void EyerSPS::ScalingList(int * scalingList, int sizeOfScalingList, Boolean * useDefaultScalingMatrix, EyerBitStream * bitstream, int * used_bits)
-    {
-        int j, scanj;
-        int delta_scale, lastScale, nextScale;
-
-        lastScale      = 8;
-        nextScale      = 8;
-
-        for(j=0; j<sizeOfScalingList; j++) {
-            scanj = (sizeOfScalingList==16) ? ZZ_SCAN[j]:ZZ_SCAN8[j];
-
-            if(nextScale!=0) {
-                delta_scale = EyerAVC_VLC::read_se_v ("   : delta_sl   "                           , bitstream, used_bits);
-                nextScale = (lastScale + delta_scale + 256) % 256;
-                *useDefaultScalingMatrix = (Boolean) (scanj==0 && nextScale==0);
+            if (255 == vui.aspect_ratio_idc){
+                vui.sar_width                   = (unsigned short) EyerAVC_VLC::read_u_v  (16, "VUI: sar_width"                     , bitstream, used_bits);
+                vui.sar_height                  = (unsigned short) EyerAVC_VLC::read_u_v  (16, "VUI: sar_height"                    , bitstream, used_bits);
             }
+        }
 
-            scalingList[scanj] = (nextScale==0) ? lastScale:nextScale;
-            lastScale = scalingList[scanj];
+        vui.overscan_info_present_flag          = EyerAVC_VLC::read_u_1  ("VUI: overscan_info_present_flag"        , bitstream, used_bits);
+        fieldList.push_back(new EyerField("overscan_info_present_flag", vui.overscan_info_present_flag, 1));
+        if (vui.overscan_info_present_flag) {
+            vui.overscan_appropriate_flag       = EyerAVC_VLC::read_u_1  ("VUI: overscan_appropriate_flag"         , bitstream, used_bits);
+            fieldList.push_back(new EyerField("overscan_appropriate_flag", vui.overscan_appropriate_flag, 2));
         }
-    }
 
-    int EyerSPS::GetProfileIDC(char * str, unsigned int & profileIdc)
-    {
-        if(profileIdc == ProfileIDC::NO_PROFILE){
-            memcpy(str, "NO_PROFILE", strlen("NO_PROFILE") + 1);
+        vui.video_signal_type_present_flag      = EyerAVC_VLC::read_u_1  ("VUI: video_signal_type_present_flag"    , bitstream, used_bits);
+        fieldList.push_back(new EyerField("video_signal_type_present_flag", vui.video_signal_type_present_flag, 1));
+
+        if (vui.video_signal_type_present_flag) {
+            vui.video_format                    = EyerAVC_VLC::read_u_v  ( 3,"VUI: video_format"                               , bitstream, used_bits);
+            vui.video_full_range_flag           = EyerAVC_VLC::read_u_1  (   "VUI: video_full_range_flag"                               , bitstream, used_bits);
+            vui.colour_description_present_flag = EyerAVC_VLC::read_u_1  (   "VUI: color_description_present_flag"                      , bitstream, used_bits);
+
+            fieldList.push_back(new EyerField("video_format", vui.video_format, 2));
+            fieldList.push_back(new EyerField("video_full_range_flag", vui.video_full_range_flag, 2));
+            fieldList.push_back(new EyerField("colour_description_present_flag", vui.colour_description_present_flag, 2));
+
+            if(vui.colour_description_present_flag) {
+                vui.colour_primaries              = EyerAVC_VLC::read_u_v  ( 8,"VUI: colour_primaries"                                              , bitstream, used_bits);
+                vui.transfer_characteristics      = EyerAVC_VLC::read_u_v  ( 8,"VUI: transfer_characteristics"                                      , bitstream, used_bits);
+                vui.matrix_coefficients           = EyerAVC_VLC::read_u_v  ( 8,"VUI: matrix_coefficients"                        , bitstream, used_bits);
+            }
         }
-        if(profileIdc == ProfileIDC::FREXT_CAVLC444){
-            memcpy(str, "FREXT_CAVLC444", strlen("FREXT_CAVLC444") + 1);
+
+        vui.chroma_location_info_present_flag     = EyerAVC_VLC::read_u_1  (   "VUI: chroma_loc_info_present_flag"                        , bitstream, used_bits);
+        fieldList.push_back(new EyerField("chroma_location_info_present_flag", vui.chroma_location_info_present_flag, 1));
+
+        if(vui.chroma_location_info_present_flag) {
+            vui.chroma_sample_loc_type_top_field     = EyerAVC_VLC::read_ue_v  ( "VUI: chroma_sample_loc_type_top_field"                            , bitstream, used_bits);
+            vui.chroma_sample_loc_type_bottom_field  = EyerAVC_VLC::read_ue_v  ( "VUI: chroma_sample_loc_type_bottom_field"                         , bitstream, used_bits);
+
+            fieldList.push_back(new EyerField("chroma_sample_loc_type_top_field", vui.chroma_sample_loc_type_top_field, 2));
+            fieldList.push_back(new EyerField("chroma_sample_loc_type_bottom_field", vui.chroma_sample_loc_type_bottom_field, 2));
         }
-        if(profileIdc == ProfileIDC::BASELINE){
-            memcpy(str, "BASELINE", strlen("BASELINE") + 1);
+
+        vui.timing_info_present_flag          = EyerAVC_VLC::read_u_1  ("VUI: timing_info_present_flag"           , bitstream, used_bits);
+        fieldList.push_back(new EyerField("timing_info_present_flag", vui.timing_info_present_flag, 1));
+
+        if (vui.timing_info_present_flag) {
+            vui.num_units_in_tick               = EyerAVC_VLC::read_u_v  (32,"VUI: num_units_in_tick"               , bitstream, used_bits);
+            vui.time_scale                      = EyerAVC_VLC::read_u_v  (32,"VUI: time_scale"                      , bitstream, used_bits);
+            vui.fixed_frame_rate_flag           = EyerAVC_VLC::read_u_1  (   "VUI: fixed_frame_rate_flag"                    , bitstream, used_bits);
         }
-        if(profileIdc == ProfileIDC::MAIN){
-            memcpy(str, "MAIN", strlen("MAIN") + 1);
+
+        vui.nal_hrd_parameters_present_flag     = EyerAVC_VLC::read_u_1  ("VUI: nal_hrd_parameters_present_flag"             , bitstream, used_bits);
+        fieldList.push_back(new EyerField("nal_hrd_parameters_present_flag", vui.nal_hrd_parameters_present_flag, 1));
+        if (vui.nal_hrd_parameters_present_flag){
+            // TODO ReadHRDParameters
         }
-        if(profileIdc == ProfileIDC::EXTENDED){
-            memcpy(str, "EXTENDED", strlen("EXTENDED") + 1);
+        vui.vcl_hrd_parameters_present_flag   = EyerAVC_VLC::read_u_1  ("VUI: vcl_hrd_parameters_present_flag"               , bitstream, used_bits);
+        fieldList.push_back(new EyerField("vcl_hrd_parameters_present_flag", vui.vcl_hrd_parameters_present_flag, 1));
+        if (vui.vcl_hrd_parameters_present_flag) {
+            // TODO ReadHRDParameters
         }
-        if(profileIdc == ProfileIDC::FREXT_HP){
-            memcpy(str, "FREXT_HP", strlen("FREXT_HP") + 1);
+
+        if (vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag) {
+            vui.low_delay_hrd_flag             =  EyerAVC_VLC::read_u_1  ("VUI: low_delay_hrd_flag"                 , bitstream, used_bits);
         }
-        if(profileIdc == ProfileIDC::FREXT_Hi10P){
-            memcpy(str, "FREXT_Hi10P", strlen("FREXT_Hi10P") + 1);
+
+        vui.pic_struct_present_flag            =  EyerAVC_VLC::read_u_1  ("VUI: pic_struct_present_flag   "         , bitstream, used_bits);
+        vui.bitstream_restriction_flag         =  EyerAVC_VLC::read_u_1  ("VUI: bitstream_restriction_flag"         , bitstream, used_bits);
+
+        fieldList.push_back(new EyerField("pic_struct_present_flag", vui.pic_struct_present_flag, 1));
+        fieldList.push_back(new EyerField("bitstream_restriction_flag", vui.bitstream_restriction_flag, 1));
+
+        if (vui.bitstream_restriction_flag){
+            vui.motion_vectors_over_pic_boundaries_flag =  EyerAVC_VLC::read_u_1  ("VUI: motion_vectors_over_pic_boundaries_flag", bitstream, used_bits);
+            vui.max_bytes_per_pic_denom                 =  EyerAVC_VLC::read_ue_v ("VUI: max_bytes_per_pic_denom"                , bitstream, used_bits);
+            vui.max_bits_per_mb_denom                   =  EyerAVC_VLC::read_ue_v ("VUI: max_bits_per_mb_denom"                  , bitstream, used_bits);
+            vui.log2_max_mv_length_horizontal           =  EyerAVC_VLC::read_ue_v ("VUI: log2_max_mv_length_horizontal"          , bitstream, used_bits);
+            vui.log2_max_mv_length_vertical             =  EyerAVC_VLC::read_ue_v ("VUI: log2_max_mv_length_vertical"            , bitstream, used_bits);
+            vui.num_reorder_frames                      =  EyerAVC_VLC::read_ue_v ("VUI: num_reorder_frames"                     , bitstream, used_bits);
+            vui.max_dec_frame_buffering                 =  EyerAVC_VLC::read_ue_v ("VUI: max_dec_frame_buffering"                , bitstream, used_bits);
+
+            fieldList.push_back(new EyerField("motion_vectors_over_pic_boundaries_flag", vui.motion_vectors_over_pic_boundaries_flag, 2));
+            fieldList.push_back(new EyerField("max_bytes_per_pic_denom", vui.max_bytes_per_pic_denom, 2));
+            fieldList.push_back(new EyerField("max_bits_per_mb_denom", vui.max_bits_per_mb_denom, 2));
+            fieldList.push_back(new EyerField("log2_max_mv_length_horizontal", vui.log2_max_mv_length_horizontal, 2));
+            fieldList.push_back(new EyerField("log2_max_mv_length_vertical", vui.log2_max_mv_length_vertical, 2));
+            fieldList.push_back(new EyerField("num_reorder_frames", vui.num_reorder_frames, 2));
+            fieldList.push_back(new EyerField("max_dec_frame_buffering", vui.max_dec_frame_buffering, 2));
         }
-        if(profileIdc == ProfileIDC::FREXT_Hi422){
-            memcpy(str, "FREXT_Hi422", strlen("FREXT_Hi422") + 1);
-        }
-        if(profileIdc == ProfileIDC::FREXT_Hi444){
-            memcpy(str, "FREXT_Hi444", strlen("FREXT_Hi444") + 1);
-        }
+
         return 0;
     }
 }

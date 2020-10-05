@@ -1,6 +1,8 @@
 #include "EyerAnnexB.hpp"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "EyerAVCCommon.hpp"
 
 namespace Eyer{
     EyerAnnexB::EyerAnnexB()

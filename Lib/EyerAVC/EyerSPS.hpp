@@ -4,6 +4,10 @@
 #include "EyerNALU.hpp"
 #include "EyerAVCCommon.hpp"
 #include "EyerBitStream.hpp"
+#include "EyerVUI.hpp"
+#include "EyerField.hpp"
+#include "EyerNAL.hpp"
+#include <vector>
 
 namespace Eyer{
 
@@ -23,8 +27,6 @@ namespace Eyer{
         STEREO_HIGH    = 128       //!< YUV 4:2:0/8  "Stereo High"
     } ProfileIDC;
 
-
-
     typedef enum {
         CF_UNKNOWN = -1,     //!< Unknown color format
         YUV400     =  0,     //!< Monochrome
@@ -33,22 +35,16 @@ namespace Eyer{
         YUV444     =  3      //!< 4:4:4
     } ColorFormat;
 
-    class EyerSPS {
+    class EyerSPS : public EyerNAL{
     public:
         EyerSPS(EyerNALU & _nalu);
         ~EyerSPS();
 
-        int PrintInfo();
-
-        static int GetProfileIDC(char * str, unsigned int & profileIdc);
-
-
-
-        void ScalingList(int * scalingList, int sizeOfScalingList, Boolean * useDefaultScalingMatrix, EyerBitStream * bitstream, int * used_bits);
+        virtual NaluType GetNalType();
+    private:
+        int LoadVUI(EyerBitStream * bitstream, int * used_bits);
 
     private:
-        EyerNALU nalu;
-
         unsigned int profile_idc;                                       // u(8)
         Boolean   constrained_set0_flag;                                // u(1)
         Boolean   constrained_set1_flag;                                // u(1)
@@ -93,19 +89,22 @@ namespace Eyer{
         Boolean   frame_mbs_only_flag;                                  // u(1)
 
         Boolean   mb_adaptive_frame_field_flag;                         // u(1)
-        Boolean   direct_8x8_inference_flag;                        // u(1)
-        Boolean   frame_cropping_flag;                              // u(1)
+        Boolean   direct_8x8_inference_flag;                            // u(1)
+        Boolean   frame_cropping_flag;                                  // u(1)
 
-        unsigned int frame_crop_left_offset;                // ue(v)
-        unsigned int frame_crop_right_offset;               // ue(v)
-        unsigned int frame_crop_top_offset;                 // ue(v)
-        unsigned int frame_crop_bottom_offset;              // ue(v)
-        Boolean   vui_parameters_present_flag;                      // u(1)
+        unsigned int frame_crop_left_offset;                            // ue(v)
+        unsigned int frame_crop_right_offset;                           // ue(v)
+        unsigned int frame_crop_top_offset;                             // ue(v)
+        unsigned int frame_crop_bottom_offset;                          // ue(v)
+
+        Boolean   vui_parameters_present_flag;                          // u(1)
 
         unsigned  int separate_colour_plane_flag;                       // u(1)
 
 
         int lossless_qpprime_flag;
+
+        EyerVUI vui;
     };
 }
 

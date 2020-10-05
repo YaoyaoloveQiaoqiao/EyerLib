@@ -5,17 +5,6 @@
 
 namespace Eyer{
     class EyerBitStream {
-        /*
-        int           read_len;           //!< actual position in the codebuffer, CABAC only
-        int           code_len;           //!< overall codebuffer length, CABAC only
-        // CAVLC Decoding
-        int           frame_bitoffset;    //!< actual position in the codebuffer, bit-oriented, CAVLC only
-        int           bitstream_length;   //!< over codebuffer lnegth, byte oriented, CAVLC only
-        // ErrorConcealment
-        unsigned char * streamBuffer;      //!< actual codebuffer for read bytes
-        int           ei_flag;            //!< error indication, 0: no error, else unspecified error
-        */
-
     public:
         int           read_len;           //!< actual position in the codebuffer, CABAC only
         int           code_len;           //!< overall codebuffer length, CABAC only

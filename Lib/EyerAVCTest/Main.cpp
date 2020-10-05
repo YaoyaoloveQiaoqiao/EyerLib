@@ -1,12 +1,14 @@
 #include <gtest/gtest.h>
-#include <EyerAVC/EyerSPS.hpp>
 #include "EyerCore/EyerCore.hpp"
 #include "EyerAVC/EyerAVC.hpp"
 
 TEST(EyerAVC, AnnexB){
     // Eyer::EyerString url = "C:/Video/video.h264";
     // Eyer::EyerString url = "/Users/lichi/annie/xinxiaomen.h264";
-    Eyer::EyerString url = "/Users/lichi/annie/xinxiaomen.h264";
+    // Eyer::EyerString url = "/Users/lichi/annie/xinxiaomen.h264";
+    Eyer::EyerString url = "./demo_video.h264";
+
+    std::vector<Eyer::EyerNAL *> nalList;
 
     Eyer::EyerAnnexB annexB;
     annexB.Open(url);
@@ -27,15 +29,43 @@ TEST(EyerAVC, AnnexB){
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             EyerLog("SPS\n");
-            Eyer::EyerSPS sps(nalu);
-            sps.PrintInfo();
+            Eyer::EyerSPS * sps = new Eyer::EyerSPS(nalu);
+
+            nalList.push_back(sps);
+            // sps.PrintInfo();
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_PPS){
             EyerLog("PPS\n");
+            Eyer::EyerPPS * pps = new Eyer::EyerPPS(nalu);
+
+            nalList.push_back(pps);
+            // pps.PrintInfo();
+        }
+
+        if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_IDR){
+            EyerLog("IDR\n");
         }
     }
 
     annexB.Close();
+
+    for(int i=0;i<nalList.size();i++){
+        Eyer::EyerNAL * nal = nalList[i];
+        for(int j=0;j<nal->GetFieldSize();j++){
+            Eyer::EyerField field;
+            // nal->GetField(field, j);
+        }
+    }
+
+    for(int i=0;i<nalList.size();i++){
+        delete nalList[i];
+    }
+    nalList.clear();
+}
+
+TEST(EyerAVC, EyerField){
+    Eyer::EyerField fieldA("abc", 12);
+    Eyer::EyerField fieldB = fieldA;
 }
 
 int main(int argc,char **argv){
