@@ -19,7 +19,19 @@ add_library(
         EyerBitStream.hpp
         EyerSyntaxElement.cpp
         EyerSyntaxElement.hpp
-        EyerVUI.cpp EyerVUI.hpp EyerField.cpp EyerField.hpp EyerPPS.cpp EyerPPS.hpp EyerNAL.cpp EyerNAL.hpp EyerSEI.cpp EyerSEI.hpp EyerIDR.cpp EyerIDR.hpp)
+        EyerVUI.cpp
+        EyerVUI.hpp
+        EyerField.cpp
+        EyerField.hpp
+        EyerPPS.cpp
+        EyerPPS.hpp
+        EyerNAL.cpp
+        EyerNAL.hpp
+        EyerSEI.cpp
+        EyerSEI.hpp
+        EyerIDR.cpp
+        EyerIDR.hpp
+)
 
 target_link_libraries (
         EyerAVC
@@ -40,6 +52,8 @@ set(head_files
         EyerVUI.hpp
         EyerSlice.hpp
         EyerNAL.hpp
+        EyerSEI.hpp
+        EyerIDR.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
