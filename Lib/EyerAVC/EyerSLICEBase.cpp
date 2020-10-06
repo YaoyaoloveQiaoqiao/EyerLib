@@ -27,7 +27,8 @@ namespace Eyer
         }
 
         slice_type = (SliceType) tmp;
-        fieldList.push_back(new EyerField("slice_type", slice_type));
+        EyerString slice_type_str = EyerENUMUtil::GetSliceTypeStr((SliceType)slice_type);
+        fieldList.push_back(new EyerField("slice_type", slice_type, slice_type_str));
 
         pic_parameter_set_id = EyerAVC_VLC::read_ue_v ("SH: pic_parameter_set_id", &bitStream, &usedBits);
         fieldList.push_back(new EyerField("pic_parameter_set_id", pic_parameter_set_id));

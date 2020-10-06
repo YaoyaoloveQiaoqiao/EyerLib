@@ -32,7 +32,7 @@ add_library(
         EyerSLICEBase.cpp
         EyerSLICEBase.hpp
         EyerSLICE.cpp
-        EyerSLICE.hpp)
+        EyerSLICE.hpp EyerENUMUtil.cpp)
 
 target_link_libraries (
         EyerAVC

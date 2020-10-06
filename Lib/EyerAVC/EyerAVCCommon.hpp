@@ -1,6 +1,8 @@
 #ifndef EYERLIB_EYERAVCCOMMON_HPP
 #define EYERLIB_EYERAVCCOMMON_HPP
 
+#include "EyerCore/EyerCore.hpp"
+
 namespace Eyer{
 
     typedef unsigned char byte;
@@ -56,6 +58,11 @@ namespace Eyer{
         YUV422     =  2,     //!< 4:2:2
         YUV444     =  3      //!< 4:4:4
     } ColorFormat;
+
+    class EyerENUMUtil {
+    public:
+        static EyerString GetSliceTypeStr(const SliceType & sliceType);
+    };
 
     class EyerAVCCommon {
     public:
