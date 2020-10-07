@@ -7,9 +7,15 @@ namespace Eyer {
 
     EyerNALU::EyerNALU(int buffersize)
     {
-        max_size = buffersize;
-        buf = (unsigned char * )malloc(max_size);
-        memset(buf, 0, max_size);
+        if(buffersize <= 0){
+            max_size = 0;
+            buf = nullptr;
+        }
+        else {
+            max_size = buffersize;
+            buf = (unsigned char * )malloc(max_size);
+            memset(buf, 0, max_size);
+        }
     }
 
     EyerNALU::~EyerNALU()
@@ -27,8 +33,19 @@ namespace Eyer {
 
     EyerNALU & EyerNALU::operator = (const EyerNALU & _nalu)
     {
+        if(buf != nullptr){
+            free(buf);
+            buf = nullptr;
+        }
+
+        max_size = _nalu.len;
         len = _nalu.len;
+        buf = (unsigned char *)malloc(len);
+
         memcpy(buf, _nalu.buf, len);
+
+        // len = _nalu.len;
+        // memcpy(buf, _nalu.buf, len);
 
         return *this;
     }
