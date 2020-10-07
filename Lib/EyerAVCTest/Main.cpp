@@ -13,10 +13,11 @@ TEST(EyerAVC, AnnexB){
     Eyer::EyerAnnexB annexB;
     annexB.Open(url);
 
+    int index = 0;
+
     while(1){
         Eyer::EyerNALU nalu(8 * 1024 * 1024);
         int ret = annexB.GetAnnexBNALU(nalu);
-        // EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
         if(ret <= 0){
             break;
         }
@@ -24,36 +25,38 @@ TEST(EyerAVC, AnnexB){
         int len = nalu.len;
         nalu.ToRBSP();
 
-        if(len != nalu.len){
-            // EyerLog("nalu len: %d, nalu type: %d, nalu startcodelen: %d\n", nalu.len, nalu.nal_unit_type, nalu.startcodeprefix_len);
-        }
-        if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
-            EyerLog("SPS\n");
-            Eyer::EyerSPS * sps = new Eyer::EyerSPS(nalu);
+        EyerLog("%d\n", index);
+        index++;
 
+        if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
+            Eyer::EyerSPS * sps = new Eyer::EyerSPS(nalu);
             nalList.push_back(sps);
-            // sps.PrintInfo();
         }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_PPS){
-            EyerLog("PPS\n");
             Eyer::EyerPPS * pps = new Eyer::EyerPPS(nalu);
-
             nalList.push_back(pps);
-            // pps.PrintInfo();
         }
-
+        if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SEI){
+            Eyer::EyerSEI * sei = new Eyer::EyerSEI(nalu);
+            nalList.push_back(sei);
+        }
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_IDR){
-            EyerLog("IDR\n");
-
             Eyer::EyerIDR * idr = new Eyer::EyerIDR(nalu);
             nalList.push_back(idr);
+        }
+        if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SLICE){
+            Eyer::EyerSLICE * slice = new Eyer::EyerSLICE(nalu);
+            nalList.push_back(slice);
         }
     }
 
     annexB.Close();
 
+    EyerLog("Nal List: %d\n", nalList.size());
+
     for(int i=0;i<nalList.size();i++){
         Eyer::EyerNAL * nal = nalList[i];
+        EyerLog("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n");
         for(int j=0;j<nal->GetFieldSize();j++){
             Eyer::EyerField field;
             nal->GetField(field, j);

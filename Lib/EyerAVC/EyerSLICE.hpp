@@ -1,7 +1,7 @@
 #ifndef EYERLIB_EYERSLICE_HPP
 #define EYERLIB_EYERSLICE_HPP
 
-#include "EyerNALU.hpp"
+#include "EyerNAL.hpp"
 #include "EyerSLICEBase.hpp"
 
 namespace Eyer
@@ -15,7 +15,5 @@ namespace Eyer
         virtual NaluType GetNalType();
     };
 }
-
-
 
 #endif //EYERLIB_EYERSLICE_HPP
