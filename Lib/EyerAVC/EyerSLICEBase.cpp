@@ -3,7 +3,7 @@
 
 namespace Eyer
 {
-    EyerSLICEBase::EyerSLICEBase(EyerNALU & _nalu)
+    EyerSLICEBase::EyerSLICEBase(EyerNALU & _nalu) : EyerNAL()
     {
         nalu = _nalu;
 

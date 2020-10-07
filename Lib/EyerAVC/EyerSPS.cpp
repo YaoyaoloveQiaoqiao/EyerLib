@@ -14,7 +14,7 @@ namespace Eyer
         return NaluType::NALU_TYPE_SPS;
     }
 
-    EyerSPS::EyerSPS(EyerNALU & _nalu)
+    EyerSPS::EyerSPS(EyerNALU & _nalu) : EyerNAL()
     {
         nalu = _nalu;
 

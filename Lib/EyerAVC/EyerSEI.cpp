@@ -7,7 +7,7 @@ namespace Eyer
         return NaluType::NALU_TYPE_SEI;
     }
 
-    EyerSEI::EyerSEI(EyerNALU & _nalu)
+    EyerSEI::EyerSEI(EyerNALU & _nalu) : EyerNAL()
     {
         nalu = _nalu;
     }
