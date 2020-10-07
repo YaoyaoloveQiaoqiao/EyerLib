@@ -7,9 +7,9 @@ namespace Eyer {
 
     EyerNALU::EyerNALU(int buffersize)
     {
-        printf("NALU: %d\n", buffersize);
+        printf("EyerNALU A\n");
         max_size = buffersize;
-        buf = (unsigned char * )malloc(buffersize);
+        buf = (unsigned char * )malloc(max_size);
         memset(buf, 0, max_size);
     }
 
@@ -23,6 +23,7 @@ namespace Eyer {
 
     EyerNALU::EyerNALU(const EyerNALU & _nalu) : EyerNALU(MAX_NALU_SIZE)
     {
+        printf("EyerNALU B\n");
         *this = _nalu;
     }
 

@@ -9,7 +9,7 @@ namespace Eyer
         return NaluType::NALU_TYPE_PPS;
     }
 
-    EyerPPS::EyerPPS(EyerNALU & _nalu)
+    EyerPPS::EyerPPS(EyerNALU & _nalu) : EyerNAL()
     {
         nalu = _nalu;
 
