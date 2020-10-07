@@ -13,8 +13,6 @@ TEST(EyerAVC, AnnexB){
     Eyer::EyerAnnexB annexB;
     annexB.Open(url);
 
-    int index = 0;
-
     while(1){
         Eyer::EyerNALU nalu(8 * 1024 * 1024);
         int ret = annexB.GetAnnexBNALU(nalu);
@@ -24,9 +22,6 @@ TEST(EyerAVC, AnnexB){
 
         int len = nalu.len;
         nalu.ToRBSP();
-
-        EyerLog("%d\n", index);
-        index++;
 
         if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SPS){
             Eyer::EyerSPS * sps = new Eyer::EyerSPS(nalu);
