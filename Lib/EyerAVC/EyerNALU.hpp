@@ -23,7 +23,7 @@ namespace Eyer {
         int ToRBSP();
         int ToSODB();
 
-        const static int MAX_NALU_SIZE = 8 * 1024 * 1024;
+        const static int MAX_NALU_SIZE = 2 * 1024 * 1024;
 
     public:
         int       startcodeprefix_len;   //!< 4 for parameter sets and first slice in picture, 3 for everything else (suggested)
