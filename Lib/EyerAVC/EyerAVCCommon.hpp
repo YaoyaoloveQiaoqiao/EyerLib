@@ -59,6 +59,18 @@ namespace Eyer{
         YUV444     =  3      //!< 4:4:4
     } ColorFormat;
 
+    typedef enum
+    {
+        // YUV
+        PLANE_Y = 0,  // PLANE_Y
+        PLANE_U = 1,  // PLANE_Cb
+        PLANE_V = 2,  // PLANE_Cr
+        // RGB
+        PLANE_G = 0,
+        PLANE_B = 1,
+        PLANE_R = 2
+    } ColorPlane;
+
     class EyerENUMUtil {
     public:
         static EyerString GetSliceTypeStr(const SliceType & sliceType);
