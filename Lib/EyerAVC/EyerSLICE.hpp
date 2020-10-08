@@ -3,6 +3,7 @@
 
 #include "EyerNAL.hpp"
 #include "EyerSLICEBase.hpp"
+#include "EyerAVCCommon.hpp"
 
 namespace Eyer
 {
@@ -13,6 +14,8 @@ namespace Eyer
         ~EyerSLICE();
 
         virtual NaluType GetNalType();
+
+        const SliceType & GetSliceType();
     };
 }
 

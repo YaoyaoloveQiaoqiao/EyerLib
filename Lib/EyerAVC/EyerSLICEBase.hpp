@@ -17,9 +17,19 @@ namespace Eyer{
         virtual NaluType GetNalType() = 0;
 
     public:
-        int                 start_mb_nr;   //!< MUST be set by NAL even in case of ei_flag == 1
+        int idr_flag;
+        int idr_pic_id;
+        int nal_reference_idc;                       //!< nal_reference_idc from NAL unit
+
+        int                 first_mb_in_slice;   //!< MUST be set by NAL even in case of ei_flag == 1
         int                 slice_type;    //!< slice type
         int                 pic_parameter_set_id;   //!<the ID of the picture parameter set the
+
+        int colour_plane_id;               //!< colour_plane_id of the current coded slice
+        unsigned int        frame_num;   //frame_num for this frame
+        unsigned int        field_pic_flag;
+
+        byte                bottom_field_flag;
     };
 }
 

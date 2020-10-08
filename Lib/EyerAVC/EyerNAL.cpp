@@ -4,7 +4,7 @@
 #include "EyerAVC_VLC.hpp"
 
 namespace Eyer {
-    EyerNAL::EyerNAL()
+    EyerNAL::EyerNAL() : nalu(-1)
     {
 
     }
