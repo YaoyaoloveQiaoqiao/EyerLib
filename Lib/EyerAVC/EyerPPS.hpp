@@ -12,6 +12,7 @@ namespace Eyer
 {
     class EyerPPS : public EyerNAL{
     public:
+        EyerPPS();
         EyerPPS(EyerNALU & _nalu);
         ~EyerPPS();
 

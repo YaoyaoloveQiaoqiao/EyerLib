@@ -9,5 +9,6 @@
 #include "EyerPPS.hpp"
 #include "EyerSPS.hpp"
 #include "EyerSEI.hpp"
+#include "EyerAVCDecoder.hpp"
 
 #endif //EYE_LIB_AVC_HPP

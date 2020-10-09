@@ -14,6 +14,11 @@ namespace Eyer
         return NaluType::NALU_TYPE_SPS;
     }
 
+    EyerSPS::EyerSPS() : EyerNAL()
+    {
+        valid = Boolean::FALSE;
+    }
+
     EyerSPS::EyerSPS(EyerNALU & _nalu) : EyerNAL()
     {
         nalu = _nalu;
@@ -205,6 +210,8 @@ namespace Eyer
         if(vui_parameters_present_flag){
             LoadVUI(&bitStream, &usedBits);
         }
+
+        valid = Boolean::TRUE;
     }
 
     EyerSPS::~EyerSPS()

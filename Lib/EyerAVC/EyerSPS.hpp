@@ -15,6 +15,7 @@ namespace Eyer{
 
     class EyerSPS : public EyerNAL{
     public:
+        EyerSPS();
         EyerSPS(EyerNALU & _nalu);
         ~EyerSPS();
 

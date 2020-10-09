@@ -47,23 +47,23 @@ TEST(EyerAVC, AnnexB){
 
     annexB.Close();
 
-    EyerLog("Nal List: %d\n", nalList.size());
+    // EyerLog("Nal List: %d\n", nalList.size());
 
     for(int i=0;i<nalList.size();i++){
         Eyer::EyerNAL * nal = nalList[i];
-        EyerLog("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n");
+        // EyerLog("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n");
         for(int j=0;j<nal->GetFieldSize();j++){
             Eyer::EyerField field;
             nal->GetField(field, j);
 
             if(field.GetType() == Eyer::EyerFieldType::UNSIGNED_INT){
-                EyerLog("%s = %u, %s\n", field.GetKey().str, field.GetUnsignedIntVal(), field.GetRemarks().str);
+                // EyerLog("%s = %u, %s\n", field.GetKey().str, field.GetUnsignedIntVal(), field.GetRemarks().str);
             }
             if(field.GetType() == Eyer::EyerFieldType::BOOL){
-                EyerLog("%s = %d, %s\n", field.GetKey().str, field.GetBooleanVal(), field.GetRemarks().str);
+                // EyerLog("%s = %d, %s\n", field.GetKey().str, field.GetBooleanVal(), field.GetRemarks().str);
             }
             if(field.GetType() == Eyer::EyerFieldType::INT){
-                EyerLog("%s = %d, %s\n", field.GetKey().str, field.GetIntVal(), field.GetRemarks().str);
+                // EyerLog("%s = %d, %s\n", field.GetKey().str, field.GetIntVal(), field.GetRemarks().str);
             }
         }
     }
@@ -72,6 +72,12 @@ TEST(EyerAVC, AnnexB){
         delete nalList[i];
     }
     nalList.clear();
+}
+
+TEST(EyerAVC, Decoder)
+{
+    Eyer::EyerAVCDecoder avcDeocder("./demo_video.h264");
+    avcDeocder.DecodeAll();
 }
 
 TEST(EyerAVC, EyerField){

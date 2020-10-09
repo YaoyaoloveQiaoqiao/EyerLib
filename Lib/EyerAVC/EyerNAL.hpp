@@ -19,13 +19,16 @@ namespace Eyer {
 
         virtual NaluType GetNalType() = 0;
 
+
+        Boolean IsValid();
+
     protected:
         EyerNALU nalu;
         std::vector<EyerField *> fieldList;
         void ScalingList(int * scalingList, int sizeOfScalingList, Boolean * useDefaultScalingMatrix, EyerBitStream * bitstream, int * used_bits);
 
-    private:
-
+    public:
+        Boolean valid = Boolean::FALSE;
     };
 }
 

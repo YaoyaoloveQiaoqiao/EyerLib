@@ -32,7 +32,11 @@ add_library(
         EyerSLICEBase.cpp
         EyerSLICEBase.hpp
         EyerSLICE.cpp
-        EyerSLICE.hpp EyerENUMUtil.cpp)
+        EyerSLICE.hpp
+        EyerENUMUtil.cpp
+        EyerAVCDecoder.cpp
+        EyerAVCDecoder.hpp
+)
 
 target_link_libraries (
         EyerAVC
@@ -56,6 +60,7 @@ set(head_files
         EyerIDR.hpp
         EyerSLICE.hpp
         EyerSLICEBase.hpp
+        EyerAVCDecoder.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)

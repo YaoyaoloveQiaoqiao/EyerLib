@@ -26,6 +26,11 @@ namespace Eyer {
         return 0;
     }
 
+    Boolean EyerNAL::IsValid()
+    {
+        return valid;
+    }
+
     int EyerNAL::PrintInfo()
     {
         EyerLog("==============================================================\n");
