@@ -38,7 +38,7 @@ namespace Eyer{
 
     private:
         EyerFieldType type = EyerFieldType::BOOL;
-        EyerString key;
+        EyerString key = "";
 
         Boolean boolVal                     = Boolean::TRUE;
         unsigned int unsignedIntVal         = 0;
@@ -46,7 +46,7 @@ namespace Eyer{
 
         int level = 0;
 
-        EyerString remarks;
+        EyerString remarks = "";
     };
 }
 

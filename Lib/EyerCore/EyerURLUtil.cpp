@@ -32,6 +32,7 @@ namespace Eyer
 
         delete [] strList;
 
+
         return dirPath + relativePath;
     }
 }

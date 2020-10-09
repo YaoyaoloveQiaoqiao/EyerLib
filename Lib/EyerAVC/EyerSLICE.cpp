@@ -10,7 +10,7 @@ namespace Eyer
         return NaluType::NALU_TYPE_SLICE;
     }
 
-    EyerSLICE::EyerSLICE(EyerNALU & _nalu) : EyerSLICEBase(_nalu)
+    EyerSLICE::EyerSLICE(EyerNALU & _nalu, EyerSPS & _sps, EyerPPS & _pps) : EyerSLICEBase(_nalu, _sps, _pps)
     {
 
     }

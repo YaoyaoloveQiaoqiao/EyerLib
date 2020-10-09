@@ -18,6 +18,8 @@ namespace Eyer{
 
         EyerSPS sps;
         EyerPPS pps;
+
+        std::vector<Eyer::EyerNAL *> nalList;
     };
 }
 

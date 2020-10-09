@@ -216,10 +216,6 @@ namespace Eyer
 
     EyerSPS::~EyerSPS()
     {
-        for(int i=0;i<fieldList.size();i++){
-            delete fieldList[i];
-        }
-        fieldList.clear();
     }
 
     int EyerSPS::GetWH(EyerVec2 & wh)

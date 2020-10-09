@@ -20,7 +20,6 @@ namespace Eyer {
 
         EyerString & operator = (const EyerString & s);
 
-        EyerString & operator = (const char * s);
 
         bool operator == (const EyerString & s) const;
 
@@ -30,7 +29,6 @@ namespace Eyer {
         EyerString operator + (const EyerString & s);
 
         int Replace(const EyerString & substr, const EyerString & replacement);
-
         int Split(EyerString * resArr, const EyerString & splitStr);
 
 

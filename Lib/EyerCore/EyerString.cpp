@@ -13,7 +13,7 @@ namespace Eyer {
 
     }
 
-    EyerString::EyerString(const EyerString & str)
+    EyerString::EyerString(const EyerString & str) : EyerString()
     {
         *this = str;
     }
@@ -25,11 +25,11 @@ namespace Eyer {
 
     EyerString::EyerString(const char _str[])
     {
-        ClearStr();
-
         if(_str == nullptr){
             return;
         }
+
+        ClearStr();
 
         int _strLen = strlen(_str) + 1;
         str = (char *)malloc(_strLen);
@@ -38,26 +38,20 @@ namespace Eyer {
 
     EyerString & EyerString::operator = (const EyerString & s)
     {
-        ClearStr();
+        if(this == &s){
+            return *this;
+        }
 
         if(s.str == nullptr){
             return *this;
         }
 
+        ClearStr();
+
         int _strLen = strlen(s.str) + 1;
         str = (char *)malloc(_strLen);
         memcpy(str, s.str, _strLen);
 
-        return *this;
-    }
-
-    EyerString & EyerString::operator = (const char * s)
-    {
-        ClearStr();
-
-        int _strLen = strlen(s) + 1;
-        str = (char *)malloc(_strLen);
-        memcpy(str, s, _strLen);
         return *this;
     }
 
@@ -164,6 +158,7 @@ namespace Eyer {
 
         return 0;
     }
+
 
     int EyerString::Split(EyerString * resArr, const EyerString & splitStr)
     {

@@ -7,16 +7,21 @@
 #include "EyerVUI.hpp"
 #include "EyerField.hpp"
 #include "EyerNAL.hpp"
+#include "EyerSPS.hpp"
+#include "EyerPPS.hpp"
 
 namespace Eyer{
     class EyerSLICEBase : public EyerNAL {
     public:
-        EyerSLICEBase(EyerNALU & _nalu);
+        EyerSLICEBase(EyerNALU & _nalu, EyerSPS & _sps, EyerPPS & _pps);
         ~EyerSLICEBase();
 
         virtual NaluType GetNalType() = 0;
 
     public:
+        EyerSPS sps;
+        EyerPPS pps;
+
         int idr_flag;
         int idr_pic_id;
         int nal_reference_idc;                       //!< nal_reference_idc from NAL unit

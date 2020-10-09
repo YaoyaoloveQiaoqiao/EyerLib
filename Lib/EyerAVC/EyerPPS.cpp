@@ -104,9 +104,5 @@ namespace Eyer
 
     EyerPPS::~EyerPPS()
     {
-        for(int i=0;i<fieldList.size();i++){
-            delete fieldList[i];
-        }
-        fieldList.clear();
     }
 }

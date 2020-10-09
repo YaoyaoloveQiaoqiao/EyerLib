@@ -10,7 +10,7 @@ namespace Eyer
     class EyerSLICE : public EyerSLICEBase
     {
     public:
-        EyerSLICE(EyerNALU & _nalu);
+        EyerSLICE(EyerNALU & _nalu, EyerSPS & _sps, EyerPPS & _pps);
         ~EyerSLICE();
 
         virtual NaluType GetNalType();

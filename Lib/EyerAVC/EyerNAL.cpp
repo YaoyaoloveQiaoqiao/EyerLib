@@ -11,7 +11,27 @@ namespace Eyer {
 
     EyerNAL::~EyerNAL()
     {
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
+        }
+        fieldList.clear();
+    }
 
+    EyerNAL::EyerNAL(const EyerNAL & nal) : EyerNAL()
+    {
+        *this = nal;
+    }
+
+    EyerNAL & EyerNAL::operator = (const EyerNAL & nal)
+    {
+        nalu = nal.nalu;
+        valid = nal.valid;
+        for(int i=0;i<nal.fieldList.size();i++) {
+            EyerField * field = nal.fieldList[i];
+            EyerField * fieldTmp = new EyerField(*field);
+            fieldList.push_back(fieldTmp);
+        }
+        return *this;
     }
 
     int EyerNAL::GetFieldSize()
