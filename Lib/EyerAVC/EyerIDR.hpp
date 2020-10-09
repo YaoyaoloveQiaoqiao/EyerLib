@@ -9,7 +9,7 @@ namespace Eyer
     class EyerIDR : public EyerSLICEBase
     {
     public:
-        EyerIDR(EyerNALU & _nalu);
+        EyerIDR(EyerNALU & _nalu, EyerSPS & _sps, EyerPPS & _pps);
         ~EyerIDR();
 
         virtual NaluType GetNalType();

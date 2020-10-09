@@ -9,6 +9,11 @@ namespace Eyer
         return NaluType::NALU_TYPE_PPS;
     }
 
+    EyerPPS::EyerPPS() : EyerNAL()
+    {
+        valid = Boolean::FALSE;
+    }
+
     EyerPPS::EyerPPS(EyerNALU & _nalu) : EyerNAL()
     {
         nalu = _nalu;
@@ -94,13 +99,10 @@ namespace Eyer
         fieldList.push_back(new EyerField("redundant_pic_cnt_present_flag", redundant_pic_cnt_present_flag));
 
         // TODO more_rbsp_data
+        valid = Boolean::TRUE;
     }
 
     EyerPPS::~EyerPPS()
     {
-        for(int i=0;i<fieldList.size();i++){
-            delete fieldList[i];
-        }
-        fieldList.clear();
     }
 }

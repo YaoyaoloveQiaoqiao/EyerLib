@@ -3,8 +3,11 @@
 
 namespace Eyer
 {
-    EyerSLICEBase::EyerSLICEBase(EyerNALU & _nalu) : EyerNAL()
+    EyerSLICEBase::EyerSLICEBase(EyerNALU & _nalu, EyerSPS & _sps, EyerPPS & _pps) : EyerNAL()
     {
+        sps = _sps;
+        pps = _pps;
+
         nalu = _nalu;
 
         nalu.ToSODB();

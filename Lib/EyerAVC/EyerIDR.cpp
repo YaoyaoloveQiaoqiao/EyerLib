@@ -10,7 +10,7 @@ namespace Eyer
         return NaluType::NALU_TYPE_IDR;
     }
 
-    EyerIDR::EyerIDR(EyerNALU & _nalu) : EyerSLICEBase(_nalu)
+    EyerIDR::EyerIDR(EyerNALU & _nalu, EyerSPS & _sps, EyerPPS & _pps) : EyerSLICEBase(_nalu, _sps, _pps)
     {
 
     }
