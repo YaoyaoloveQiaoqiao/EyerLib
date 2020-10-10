@@ -25,7 +25,7 @@ namespace Eyer{
 
         int GetWH(EyerVec2 & wh);
 
-    private:
+    public:
         unsigned int profile_idc                                        = 0;// u(8)
         Boolean   constrained_set0_flag                                 = Boolean::FALSE;// u(1)
         Boolean   constrained_set1_flag                                 = Boolean::FALSE;// u(1)

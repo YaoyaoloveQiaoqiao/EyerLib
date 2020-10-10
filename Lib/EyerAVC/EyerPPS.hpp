@@ -17,7 +17,8 @@ namespace Eyer
         ~EyerPPS();
 
         virtual NaluType GetNalType();
-    private:
+
+    public:
         unsigned int pic_parameter_set_id;                             // ue(v)
         unsigned int seq_parameter_set_id;                             // ue(v)
         Boolean   entropy_coding_mode_flag;                            // u(1)
