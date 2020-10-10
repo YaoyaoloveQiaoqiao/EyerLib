@@ -26,15 +26,56 @@ namespace Eyer{
         int idr_pic_id;
         int nal_reference_idc;                       //!< nal_reference_idc from NAL unit
 
-        int                 first_mb_in_slice;   //!< MUST be set by NAL even in case of ei_flag == 1
-        int                 slice_type;    //!< slice type
         int                 pic_parameter_set_id;   //!<the ID of the picture parameter set the
 
-        int colour_plane_id;               //!< colour_plane_id of the current coded slice
+        int                 first_mb_in_slice;   //!< MUST be set by NAL even in case of ei_flag == 1
+        int                 slice_type;    //!< slice type
+
+        int                 model_number;  //!< cabac model number
         unsigned int        frame_num;   //frame_num for this frame
         unsigned int        field_pic_flag;
 
         byte                bottom_field_flag;
+        int                 mb_aff_frame_flag;
+        int                 direct_spatial_mv_pred_flag;       //!< Indicator for direct mode type (1 for Spatial, 0 for Temporal)
+        int                 num_ref_idx_active[2];             //!< number of
+
+        int                 qp;
+        int                 slice_qp_delta;
+        int                 qs;
+        int                 slice_qs_delta;
+
+
+        //the following is for slice header syntax elements of poc
+        // for poc mode 0.
+        unsigned int pic_order_cnt_lsb;
+        int delta_pic_order_cnt_bottom;
+        // for poc mode 1.
+        int delta_pic_order_cnt[2];
+
+
+
+
+
+        //weighted prediction
+        unsigned short weighted_pred_flag;
+        unsigned short weighted_bipred_idc;
+
+        unsigned short luma_log2_weight_denom;
+        unsigned short chroma_log2_weight_denom;
+
+
+
+        short               DFDisableIdc;     //!< Disable deblocking filter on slice
+        short               DFAlphaC0Offset;  //!< Alpha and C0 offset for filtering slice
+        short               DFBetaOffset;     //!< Beta offset for filtering slice
+
+
+
+        int colour_plane_id;                       //!< colour_plane_id of the current coded slice
+        int redundant_pic_cnt;
+        int sp_switch;                             //!< 1 for switching sp, 0 for normal sp
+        int slice_group_change_cycle;
     };
 }
 

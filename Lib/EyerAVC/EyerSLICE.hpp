@@ -15,7 +15,7 @@ namespace Eyer
 
         virtual NaluType GetNalType();
 
-        const SliceType & GetSliceType();
+        SliceType GetSliceType();
     };
 }
 

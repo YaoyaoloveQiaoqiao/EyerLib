@@ -20,7 +20,7 @@ namespace Eyer
 
     }
 
-    const SliceType & EyerSLICE::GetSliceType()
+    SliceType EyerSLICE::GetSliceType()
     {
         return (SliceType)slice_type;
     }

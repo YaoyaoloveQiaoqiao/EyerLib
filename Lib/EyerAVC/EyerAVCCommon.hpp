@@ -71,6 +71,14 @@ namespace Eyer{
         PLANE_R = 2
     } ColorPlane;
 
+    enum {
+        LIST_0 = 0,
+        LIST_1 = 1,
+        BI_PRED = 2,
+        BI_PRED_L0 = 3,
+        BI_PRED_L1 = 4
+    };
+
     class EyerENUMUtil {
     public:
         static EyerString GetSliceTypeStr(const SliceType & sliceType);

@@ -29,6 +29,8 @@ namespace Eyer {
         std::vector<EyerField *> fieldList;
         void ScalingList(int * scalingList, int sizeOfScalingList, Boolean * useDefaultScalingMatrix, EyerBitStream * bitstream, int * used_bits);
         Boolean valid = Boolean::FALSE;
+
+        unsigned CeilLog2( unsigned uiVal);
     };
 }
 

@@ -130,4 +130,17 @@ namespace Eyer {
             lastScale = scalingList[scanj];
         }
     }
+
+
+    unsigned EyerNAL::CeilLog2(unsigned uiVal)
+    {
+        unsigned uiTmp = uiVal-1;
+        unsigned uiRet = 0;
+
+        while( uiTmp != 0 ) {
+            uiTmp >>= 1;
+            uiRet++;
+        }
+        return uiRet;
+    }
 }
