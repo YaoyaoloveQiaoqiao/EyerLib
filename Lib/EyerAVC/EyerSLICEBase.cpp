@@ -182,7 +182,7 @@ namespace Eyer
         fieldList.push_back(new EyerField("qs", qs));
         fieldList.push_back(new EyerField("slice_qs_delta", slice_qs_delta));
         */
-        
+
         if (pps.deblocking_filter_control_present_flag) {
             DFDisableIdc = (short) EyerAVC_VLC::read_ue_v ("SH: disable_deblocking_filter_idc", &bitStream, &usedBits);
 
