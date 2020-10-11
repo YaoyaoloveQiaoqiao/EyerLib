@@ -44,8 +44,14 @@ namespace Eyer {
 
         memcpy(buf, _nalu.buf, len);
 
-        // len = _nalu.len;
-        // memcpy(buf, _nalu.buf, len);
+
+        startcodeprefix_len = _nalu.startcodeprefix_len;
+        len = _nalu.len;
+        max_size = _nalu.max_size;
+        forbidden_bit = _nalu.forbidden_bit;
+        nal_unit_type = _nalu.nal_unit_type;
+        nal_reference_idc = _nalu.nal_reference_idc;
+        lost_packets = _nalu.lost_packets;
 
         return *this;
     }
