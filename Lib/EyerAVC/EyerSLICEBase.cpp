@@ -71,11 +71,13 @@ namespace Eyer
                 bottom_field_flag = FALSE;
             }
         }
+        fieldList.push_back(new EyerField("field_pic_flag", field_pic_flag, "", 1));
 
         mb_aff_frame_flag = (sps.mb_adaptive_frame_field_flag && (field_pic_flag==0));
 
         if (idr_flag) {
             idr_pic_id = EyerAVC_VLC::read_ue_v("SH: idr_pic_id", &bitStream, &usedBits);
+            fieldList.push_back(new EyerField("idr_pic_id", idr_pic_id, "", 1));
         }
 
 
@@ -89,9 +91,9 @@ namespace Eyer
             else {
                 delta_pic_order_cnt_bottom = 0;
             }
-
-            fieldList.push_back(new EyerField("delta_pic_order_cnt_bottom", delta_pic_order_cnt_bottom));
         }
+
+        fieldList.push_back(new EyerField("pic_order_cnt_lsb", pic_order_cnt_lsb, "", 1));
 
         if (sps.pic_order_cnt_type == 1) {
             if (!sps.delta_pic_order_always_zero_flag) {
@@ -107,9 +109,6 @@ namespace Eyer
                 delta_pic_order_cnt[ 0 ] = 0;
                 delta_pic_order_cnt[ 1 ] = 0;
             }
-
-            fieldList.push_back(new EyerField("delta_pic_order_cnt[0]", delta_pic_order_cnt[0]));
-            fieldList.push_back(new EyerField("delta_pic_order_cnt[1]", delta_pic_order_cnt[1]));
         }
 
         if (pps.redundant_pic_cnt_present_flag) {
@@ -135,9 +134,6 @@ namespace Eyer
         if (slice_type != B_SLICE) {
             num_ref_idx_active[LIST_1] = 0;
         }
-
-        fieldList.push_back(new EyerField("num_ref_idx_active[LIST_0]", num_ref_idx_active[LIST_0]));
-        fieldList.push_back(new EyerField("num_ref_idx_active[LIST_1]", num_ref_idx_active[LIST_1]));
 
 
         //TODO ref_pic_list_reordering(currSlice);
@@ -182,7 +178,7 @@ namespace Eyer
         fieldList.push_back(new EyerField("qs", qs));
         fieldList.push_back(new EyerField("slice_qs_delta", slice_qs_delta));
         */
-        
+
         if (pps.deblocking_filter_control_present_flag) {
             DFDisableIdc = (short) EyerAVC_VLC::read_ue_v ("SH: disable_deblocking_filter_idc", &bitStream, &usedBits);
 

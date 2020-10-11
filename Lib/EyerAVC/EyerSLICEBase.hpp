@@ -26,14 +26,14 @@ namespace Eyer{
         int idr_pic_id;
         int nal_reference_idc;                       //!< nal_reference_idc from NAL unit
 
-        int                 pic_parameter_set_id;   //!<the ID of the picture parameter set the
+        int                 pic_parameter_set_id        = 0;   //!<the ID of the picture parameter set the
 
-        int                 first_mb_in_slice;   //!< MUST be set by NAL even in case of ei_flag == 1
-        int                 slice_type;    //!< slice type
+        int                 first_mb_in_slice           = 0;   //!< MUST be set by NAL even in case of ei_flag == 1
+        int                 slice_type                  = 0;    //!< slice type
 
         int                 model_number;  //!< cabac model number
         unsigned int        frame_num;   //frame_num for this frame
-        unsigned int        field_pic_flag;
+        unsigned int        field_pic_flag              = 0;
 
         byte                bottom_field_flag;
         int                 mb_aff_frame_flag;
@@ -48,7 +48,7 @@ namespace Eyer{
 
         //the following is for slice header syntax elements of poc
         // for poc mode 0.
-        unsigned int pic_order_cnt_lsb;
+        unsigned int pic_order_cnt_lsb                          = 0;
         int delta_pic_order_cnt_bottom;
         // for poc mode 1.
         int delta_pic_order_cnt[2];
