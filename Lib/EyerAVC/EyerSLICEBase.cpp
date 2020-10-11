@@ -85,15 +85,14 @@ namespace Eyer
         //////////////// pic_order_cnt_type /////////////////////
         if (sps.pic_order_cnt_type == 0) {
             pic_order_cnt_lsb = EyerAVC_VLC::read_u_v(sps.log2_max_pic_order_cnt_lsb_minus4 + 4, "SH: pic_order_cnt_lsb", &bitStream, &usedBits);
-            if(pps.bottom_field_pic_order_in_frame_present_flag  ==  1 && !field_pic_flag ){
+            fieldList.push_back(new EyerField("pic_order_cnt_lsb", pic_order_cnt_lsb, "", 1));
+            if(pps.bottom_field_pic_order_in_frame_present_flag == 1 && !field_pic_flag){
                 delta_pic_order_cnt_bottom = EyerAVC_VLC::read_se_v("SH: delta_pic_order_cnt_bottom", &bitStream, &usedBits);
             }
             else {
                 delta_pic_order_cnt_bottom = 0;
             }
         }
-
-        fieldList.push_back(new EyerField("pic_order_cnt_lsb", pic_order_cnt_lsb, "", 1));
 
         if (sps.pic_order_cnt_type == 1) {
             if (!sps.delta_pic_order_always_zero_flag) {
