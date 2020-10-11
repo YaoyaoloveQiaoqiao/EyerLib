@@ -135,7 +135,8 @@ namespace Eyer
         }
 
 
-        //TODO ref_pic_list_reordering(currSlice);
+        //ref_pic_list_reordering(currSlice);
+        ref_pic_list_reordering(&bitStream, &usedBits);
 
 
         weighted_pred_flag = (unsigned short) ((slice_type == P_SLICE || slice_type == SP_SLICE)
@@ -149,7 +150,8 @@ namespace Eyer
         }
 
         if (nal_reference_idc) {
-            //TODO dec_ref_pic_marking(p_Vid, currStream, currSlice);
+            // dec_ref_pic_marking(p_Vid, currStream, currSlice);
+            dec_ref_pic_marking(&bitStream, &usedBits);
         }
 
         if (pps.entropy_coding_mode_flag && slice_type != I_SLICE && slice_type != SI_SLICE) {
@@ -171,16 +173,13 @@ namespace Eyer
             qs = 26 + pps.pic_init_qs_minus26 + val;
         }
 
-        /*
         fieldList.push_back(new EyerField("qp", qp));
         fieldList.push_back(new EyerField("slice_qp_delta", slice_qp_delta));
         fieldList.push_back(new EyerField("qs", qs));
         fieldList.push_back(new EyerField("slice_qs_delta", slice_qs_delta));
-        */
 
         if (pps.deblocking_filter_control_present_flag) {
             DFDisableIdc = (short) EyerAVC_VLC::read_ue_v ("SH: disable_deblocking_filter_idc", &bitStream, &usedBits);
-
             if (DFDisableIdc != 1) {
                 DFAlphaC0Offset = (short) (2 * EyerAVC_VLC::read_se_v("SH: slice_alpha_c0_offset_div2", &bitStream, &usedBits));
                 DFBetaOffset    = (short) (2 * EyerAVC_VLC::read_se_v("SH: slice_beta_offset_div2", &bitStream, &usedBits));
@@ -192,6 +191,9 @@ namespace Eyer
         else {
             DFDisableIdc = DFAlphaC0Offset = DFBetaOffset = 0;
         }
+        fieldList.push_back(new EyerField("disable_deblocking_filter_idc", DFDisableIdc, "", 1));
+        fieldList.push_back(new EyerField("slice_alpha_c0_offset_div2", DFAlphaC0Offset, "", 2));
+        fieldList.push_back(new EyerField("slice_beta_offset_div2", DFBetaOffset, "", 2));
 
         /*
         if ( is_HI_intra_only_profile(active_sps->profile_idc, active_sps->constrained_set3_flag) && (p_Inp->intra_profile_deblocking == 0) )
@@ -222,5 +224,109 @@ namespace Eyer
     EyerSLICEBase::~EyerSLICEBase()
     {
 
+    }
+
+    int EyerSLICEBase::ref_pic_list_reordering(EyerBitStream * bitStream, int * usedBits)
+    {
+        fieldList.push_back(new EyerField("ref_pic_list_reordering[]"));
+
+        //TODO Free
+        alloc_ref_pic_list_reordering_buffer();
+
+        int val;
+        int i;
+        if (slice_type != I_SLICE && slice_type != SI_SLICE) {
+            val = ref_pic_list_reordering_flag[LIST_0] = EyerAVC_VLC::read_u_1 ("SH: ref_pic_list_reordering_flag_l0", bitStream, usedBits);
+            fieldList.push_back(new EyerField("ref_pic_list_reordering_flag[LIST_0]", ref_pic_list_reordering_flag[LIST_0], "", 1));
+
+            if (val){
+                i = 0;
+                do {
+                    val = modification_of_pic_nums_idc[LIST_0][i] = EyerAVC_VLC::read_ue_v("SH: modification_of_pic_nums_idc_l0", bitStream, usedBits);
+                    if (val==0 || val==1) {
+                        abs_diff_pic_num_minus1[LIST_0][i] = EyerAVC_VLC::read_ue_v("SH: abs_diff_pic_num_minus1_l0", bitStream, usedBits);
+                    }
+                    else {
+                        if (val==2) {
+                            long_term_pic_idx[LIST_0][i] = EyerAVC_VLC::read_ue_v("SH: long_term_pic_idx_l0", bitStream, usedBits);
+                        }
+                    }
+                    i++;
+                } while(val != 3);
+            }
+        }
+
+        if (slice_type == B_SLICE) {
+            val = ref_pic_list_reordering_flag[LIST_1] = EyerAVC_VLC::read_u_1 ("SH: ref_pic_list_reordering_flag_l1", bitStream, usedBits);
+            fieldList.push_back(new EyerField("ref_pic_list_reordering_flag[LIST_1]", ref_pic_list_reordering_flag[LIST_1], "", 1));
+            if (val) {
+                i = 0;
+                do {
+                    val = modification_of_pic_nums_idc[LIST_1][i] = EyerAVC_VLC::read_ue_v("SH: modification_of_pic_nums_idc_l1", bitStream, usedBits);
+                    if (val==0 || val==1) {
+                        abs_diff_pic_num_minus1[LIST_1][i] = EyerAVC_VLC::read_ue_v("SH: abs_diff_pic_num_minus1_l1", bitStream, usedBits);
+                    }
+                    else {
+                        if (val == 2) {
+                            long_term_pic_idx[LIST_1][i] = EyerAVC_VLC::read_ue_v("SH: long_term_pic_idx_l1", bitStream, usedBits);
+                        }
+                    }
+                    i++;
+                } while (val != 3);
+            }
+        }
+
+        if(redundant_pic_cnt && (slice_type != I_SLICE) ) {
+            redundant_slice_ref_idx = abs_diff_pic_num_minus1[LIST_0][0] + 1;
+            fieldList.push_back(new EyerField("redundant_slice_ref_idx", redundant_slice_ref_idx, "", 1));
+        }
+
+        return 0;
+    }
+
+    int EyerSLICEBase::alloc_ref_pic_list_reordering_buffer()
+    {
+        if (slice_type != I_SLICE && slice_type != SI_SLICE) {
+            int size = num_ref_idx_active[LIST_0] + 1;
+            modification_of_pic_nums_idc[LIST_0] = (int *)calloc(size ,sizeof(int));
+            abs_diff_pic_num_minus1[LIST_0] = (int *)calloc(size,sizeof(int));
+            long_term_pic_idx[LIST_0] = (int *)calloc(size,sizeof(int));
+        }
+        else {
+            modification_of_pic_nums_idc[LIST_0] = NULL;
+            abs_diff_pic_num_minus1[LIST_0] = NULL;
+            long_term_pic_idx[LIST_0] = NULL;
+        }
+
+        if (slice_type == B_SLICE) {
+            int size = num_ref_idx_active[LIST_1] + 1;
+            modification_of_pic_nums_idc[LIST_1] = (int *)calloc(size,sizeof(int));
+            abs_diff_pic_num_minus1[LIST_1] = (int *)calloc(size,sizeof(int));
+            long_term_pic_idx[LIST_1] = (int *)calloc(size,sizeof(int));
+        }
+        else {
+            modification_of_pic_nums_idc[LIST_1] = NULL;
+            abs_diff_pic_num_minus1[LIST_1] = NULL;
+            long_term_pic_idx[LIST_1] = NULL;
+        }
+        return 0;
+    }
+
+
+    int EyerSLICEBase::dec_ref_pic_marking(EyerBitStream * bitStream, int * usedBits)
+    {
+        fieldList.push_back(new EyerField("dec_ref_pic_marking[]"));
+
+        if (idr_flag) {
+            no_output_of_prior_pics_flag = EyerAVC_VLC::read_u_1("SH: no_output_of_prior_pics_flag", bitStream, usedBits);
+            long_term_reference_flag = EyerAVC_VLC::read_u_1("SH: long_term_reference_flag", bitStream, usedBits);
+
+            fieldList.push_back(new EyerField("no_output_of_prior_pics_flag", no_output_of_prior_pics_flag, "", 1));
+            fieldList.push_back(new EyerField("long_term_reference_flag", long_term_reference_flag, "", 1));
+        }
+
+        // TODO
+
+        return 0;
     }
 }

@@ -18,6 +18,14 @@ namespace Eyer{
 
         virtual NaluType GetNalType() = 0;
 
+
+    private:
+        int ref_pic_list_reordering(EyerBitStream * bitStream, int * usedBits);
+
+        int dec_ref_pic_marking(EyerBitStream * bitStream, int * usedBits);
+
+        int alloc_ref_pic_list_reordering_buffer();
+
     public:
         EyerSPS sps;
         EyerPPS pps;
@@ -76,6 +84,24 @@ namespace Eyer{
         int redundant_pic_cnt;
         int sp_switch;                             //!< 1 for switching sp, 0 for normal sp
         int slice_group_change_cycle;
+
+
+
+
+
+
+        int                 ref_pic_list_reordering_flag[2];
+        int                 *modification_of_pic_nums_idc[2];
+        int                 *abs_diff_pic_num_minus1[2];
+        int                 *long_term_pic_idx[2];
+
+        int redundant_slice_ref_idx;     //!< reference index of redundant slice
+
+
+
+
+        int no_output_of_prior_pics_flag;
+        int long_term_reference_flag;
     };
 }
 
