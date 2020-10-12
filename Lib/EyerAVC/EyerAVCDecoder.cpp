@@ -53,12 +53,10 @@ namespace Eyer
                 Eyer::EyerIDR * idr = new Eyer::EyerIDR(nalu, sps, pps);
                 nalList.push_back(idr);
             }
-            /*
             if(nalu.nal_unit_type == Eyer::NaluType::NALU_TYPE_SLICE){
                 Eyer::EyerSLICE * slice = new Eyer::EyerSLICE(nalu, sps, pps);
                 nalList.push_back(slice);
             }
-             */
         }
 
         annexB.Close();

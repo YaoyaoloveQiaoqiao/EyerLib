@@ -21,10 +21,9 @@ namespace Eyer{
 
     private:
         int ref_pic_list_reordering(EyerBitStream * bitStream, int * usedBits);
-
         int dec_ref_pic_marking(EyerBitStream * bitStream, int * usedBits);
-
         int alloc_ref_pic_list_reordering_buffer();
+        int pred_weight_table(EyerBitStream * bitStream, int * usedBits);
 
     public:
         EyerSPS sps;
@@ -100,8 +99,18 @@ namespace Eyer{
 
 
 
+
+        short wp_round_luma;
+        short wp_round_chroma;
+        int luma_weight_flag_l0, luma_weight_flag_l1, chroma_weight_flag_l0, chroma_weight_flag_l1;
+
+
+
+
         int no_output_of_prior_pics_flag;
         int long_term_reference_flag;
+
+        int adaptive_ref_pic_buffering_flag;
     };
 }
 
