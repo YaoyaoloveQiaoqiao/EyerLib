@@ -157,23 +157,23 @@ namespace Eyer
 
 
         /////////////////////////////////////////////
-        pic_width_in_mbs_minus1                     = EyerAVC_VLC::read_ue_v ("SPS: pic_width_in_mbs_minus1"                            , &bitStream, &usedBits);
-        pic_height_in_map_units_minus1              = EyerAVC_VLC::read_ue_v ("SPS: pic_height_in_map_units_minus1"                     , &bitStream, &usedBits);
+        pic_width_in_mbs_minus1                     = EyerAVC_VLC::read_ue_v ("SPS: pic_width_in_mbs_minus1"                                    , &bitStream, &usedBits);
+        pic_height_in_map_units_minus1              = EyerAVC_VLC::read_ue_v ("SPS: pic_height_in_map_units_minus1"                             , &bitStream, &usedBits);
 
-        frame_mbs_only_flag                         = EyerAVC_VLC::read_u_1  ("SPS: frame_mbs_only_flag"                                , &bitStream, &usedBits);
+        frame_mbs_only_flag                         = EyerAVC_VLC::read_u_1  ("SPS: frame_mbs_only_flag"                                        , &bitStream, &usedBits);
 
-        if(frame_mbs_only_flag){
-            mb_adaptive_frame_field_flag            = EyerAVC_VLC::read_u_1  ("SPS: mb_adaptive_frame_field_flag"                        , &bitStream, &usedBits);
+        if(!frame_mbs_only_flag){
+            mb_adaptive_frame_field_flag            = EyerAVC_VLC::read_u_1  ("SPS: mb_adaptive_frame_field_flag"                               , &bitStream, &usedBits);
         }
 
-        direct_8x8_inference_flag                   = EyerAVC_VLC::read_u_1  ("SPS: direct_8x8_inference_flag"                           , &bitStream, &usedBits);
-        frame_cropping_flag                         = EyerAVC_VLC::read_u_1  ("SPS: frame_cropping_flag"                                 , &bitStream, &usedBits);
+        direct_8x8_inference_flag                   = EyerAVC_VLC::read_u_1  ("SPS: direct_8x8_inference_flag"                                  , &bitStream, &usedBits);
+        frame_cropping_flag                         = EyerAVC_VLC::read_u_1  ("SPS: frame_cropping_flag"                                        , &bitStream, &usedBits);
 
         if (frame_cropping_flag){
-            frame_crop_left_offset                  = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_left_offset"                                 , &bitStream, &usedBits);
-            frame_crop_right_offset                 = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_right_offset"                                , &bitStream, &usedBits);
-            frame_crop_top_offset                   = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_top_offset"                                  , &bitStream, &usedBits);
-            frame_crop_bottom_offset                = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_bottom_offset"                               , &bitStream, &usedBits);
+            frame_crop_left_offset                  = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_left_offset"                                     , &bitStream, &usedBits);
+            frame_crop_right_offset                 = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_right_offset"                                    , &bitStream, &usedBits);
+            frame_crop_top_offset                   = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_top_offset"                                      , &bitStream, &usedBits);
+            frame_crop_bottom_offset                = EyerAVC_VLC::read_ue_v ("SPS: frame_crop_bottom_offset"                                   , &bitStream, &usedBits);
         }
 
         EyerVec2 wh;
@@ -195,8 +195,6 @@ namespace Eyer
             fieldList.push_back(new EyerField("frame_crop_bottom_offset", frame_crop_bottom_offset, nullptr, 1));
         }
 
-        // fieldList.push_back(new EyerField("w", (int)wh.x(), nullptr, 1));
-        // fieldList.push_back(new EyerField("h", (int)wh.y(), nullptr, 1));
         /////////////////////////////////////////////
 
 

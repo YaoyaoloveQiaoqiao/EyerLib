@@ -65,18 +65,18 @@ namespace Eyer{
 
         unsigned int num_ref_frames;                                    // ue(v)
         Boolean   gaps_in_frame_num_value_allowed_flag;                 // u(1)
-        unsigned int pic_width_in_mbs_minus1;                           // ue(v)
-        unsigned int pic_height_in_map_units_minus1;                    // ue(v)
+        unsigned int pic_width_in_mbs_minus1                            = 0;// ue(v)
+        unsigned int pic_height_in_map_units_minus1                     = 0;// ue(v)
         Boolean   frame_mbs_only_flag;                                  // u(1)
 
         Boolean   mb_adaptive_frame_field_flag;                         // u(1)
         Boolean   direct_8x8_inference_flag;                            // u(1)
-        Boolean   frame_cropping_flag;                                  // u(1)
+        Boolean   frame_cropping_flag                                   = Boolean::FALSE;// u(1)
 
-        unsigned int frame_crop_left_offset;                            // ue(v)
-        unsigned int frame_crop_right_offset;                           // ue(v)
-        unsigned int frame_crop_top_offset;                             // ue(v)
-        unsigned int frame_crop_bottom_offset;                          // ue(v)
+        unsigned int frame_crop_left_offset                             = 0;// ue(v)
+        unsigned int frame_crop_right_offset                            = 0;// ue(v)
+        unsigned int frame_crop_top_offset                              = 0;// ue(v)
+        unsigned int frame_crop_bottom_offset                           = 0;// ue(v)
 
         Boolean   vui_parameters_present_flag;                          // u(1)
 

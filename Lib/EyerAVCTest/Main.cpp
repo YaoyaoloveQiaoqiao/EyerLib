@@ -68,7 +68,7 @@ TEST(EyerAVC, AnnexB){
 
 TEST(EyerAVC, Decoder)
 {
-    Eyer::EyerAVCDecoder avcDeocder("./demo_video.h264");
+    Eyer::EyerAVCDecoder avcDeocder("./demo_video_176x144.h264");
     avcDeocder.DecodeAll();
 }
 
