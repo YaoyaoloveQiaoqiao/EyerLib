@@ -36,6 +36,8 @@ add_library(
         EyerENUMUtil.cpp
         EyerAVCDecoder.cpp
         EyerAVCDecoder.hpp
+        EyerSliceData.cpp
+        EyerSliceData.hpp
 )
 
 target_link_libraries (

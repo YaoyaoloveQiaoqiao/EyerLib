@@ -10,5 +10,6 @@
 #include "EyerSPS.hpp"
 #include "EyerSEI.hpp"
 #include "EyerAVCDecoder.hpp"
+#include "EyerSliceData.hpp"
 
 #endif //EYE_LIB_AVC_HPP
