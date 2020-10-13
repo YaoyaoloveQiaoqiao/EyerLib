@@ -63,6 +63,7 @@ set(head_files
         EyerSLICE.hpp
         EyerSLICEBase.hpp
         EyerAVCDecoder.hpp
+        EyerSliceData.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)

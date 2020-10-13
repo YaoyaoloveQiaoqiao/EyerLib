@@ -194,7 +194,6 @@ namespace Eyer
             fieldList.push_back(new EyerField("frame_crop_top_offset", frame_crop_top_offset, nullptr, 1));
             fieldList.push_back(new EyerField("frame_crop_bottom_offset", frame_crop_bottom_offset, nullptr, 1));
         }
-
         /////////////////////////////////////////////
 
 
