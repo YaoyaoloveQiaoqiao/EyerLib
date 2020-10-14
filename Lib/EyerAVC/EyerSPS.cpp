@@ -182,7 +182,7 @@ namespace Eyer
         fieldList.push_back(new EyerField("pic_width_in_mbs_minus1", pic_width_in_mbs_minus1, EyerString::Number((int)wh.x()), 0));
         fieldList.push_back(new EyerField("pic_height_in_map_units_minus1", pic_height_in_map_units_minus1, EyerString::Number((int)wh.y()), 0));
         fieldList.push_back(new EyerField("frame_mbs_only_flag", frame_mbs_only_flag));
-        if(frame_mbs_only_flag){
+        if(!frame_mbs_only_flag){
             fieldList.push_back(new EyerField("mb_adaptive_frame_field_flag", mb_adaptive_frame_field_flag, nullptr, 1));
         }
 
