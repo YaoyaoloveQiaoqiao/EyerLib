@@ -38,7 +38,7 @@ add_library(
         EyerAVCDecoder.hpp
         EyerSliceData.cpp
         EyerSliceData.hpp
-)
+        EyerSliceHeader.cpp EyerSliceHeader.hpp)
 
 target_link_libraries (
         EyerAVC

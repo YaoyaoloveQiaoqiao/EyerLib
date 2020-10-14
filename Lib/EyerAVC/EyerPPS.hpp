@@ -3,8 +3,8 @@
 
 #include "EyerNALU.hpp"
 #include "EyerField.hpp"
-#include <vector>
 #include "EyerNAL.hpp"
+#include <vector>
 
 #define MAXnum_slice_groups_minus1  8
 

@@ -217,6 +217,12 @@ namespace Eyer
         p_Vid->PicSizeInMbs   = p_Vid->PicWidthInMbs * p_Vid->PicHeightInMbs;
         p_Vid->FrameSizeInMbs = p_Vid->PicWidthInMbs * p_Vid->FrameHeightInMbs;
         */
+
+        EyerSliceHeader sliceHeader;
+        sliceHeader.first_mb_in_slice = first_mb_in_slice;
+        sliceHeader.mb_aff_frame_flag = mb_aff_frame_flag;
+        sliceHeader.slice_type = slice_type;
+        sliceData.Parse(sps, pps, sliceHeader, &bitStream, &usedBits);
     }
 
     EyerSLICEBase::~EyerSLICEBase()

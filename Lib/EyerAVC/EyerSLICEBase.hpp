@@ -9,6 +9,8 @@
 #include "EyerNAL.hpp"
 #include "EyerSPS.hpp"
 #include "EyerPPS.hpp"
+#include "EyerSliceData.hpp"
+#include "EyerSliceHeader.hpp"
 
 namespace Eyer{
     class EyerSLICEBase : public EyerNAL {
@@ -17,7 +19,6 @@ namespace Eyer{
         ~EyerSLICEBase();
 
         virtual NaluType GetNalType() = 0;
-
 
     private:
         int ref_pic_list_reordering(EyerBitStream * bitStream, int * usedBits);
@@ -111,6 +112,9 @@ namespace Eyer{
         int long_term_reference_flag;
 
         int adaptive_ref_pic_buffering_flag;
+
+
+        EyerSliceData sliceData;
     };
 }
 
