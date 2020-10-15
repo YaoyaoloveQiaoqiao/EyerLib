@@ -19,9 +19,12 @@ namespace Eyer
 
     EyerSliceHeader & EyerSliceHeader::operator = (const EyerSliceHeader & sliceHeader)
     {
-        first_mb_in_slice = sliceHeader.first_mb_in_slice;
-        mb_aff_frame_flag = sliceHeader.mb_aff_frame_flag;
-        slice_type = sliceHeader.slice_type;
+        first_mb_in_slice       = sliceHeader.first_mb_in_slice;
+        mb_aff_frame_flag       = sliceHeader.mb_aff_frame_flag;
+        slice_type              = sliceHeader.slice_type;
+
+        nalu                    = sliceHeader.nalu;
+
         return *this;
     }
 }

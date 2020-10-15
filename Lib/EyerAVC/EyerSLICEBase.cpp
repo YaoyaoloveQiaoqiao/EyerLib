@@ -219,9 +219,10 @@ namespace Eyer
         */
 
         EyerSliceHeader sliceHeader;
-        sliceHeader.first_mb_in_slice = first_mb_in_slice;
-        sliceHeader.mb_aff_frame_flag = mb_aff_frame_flag;
-        sliceHeader.slice_type = slice_type;
+        sliceHeader.first_mb_in_slice           = first_mb_in_slice;
+        sliceHeader.mb_aff_frame_flag           = mb_aff_frame_flag;
+        sliceHeader.slice_type                  = slice_type;
+        sliceHeader.nalu                        = nalu;
         sliceData.Parse(sps, pps, sliceHeader, &bitStream, &usedBits);
     }
 

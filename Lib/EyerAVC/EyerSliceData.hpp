@@ -15,6 +15,8 @@ namespace Eyer
         int Parse(EyerSPS & _sps, EyerPPS & _pps, EyerSliceHeader & _sliceHeader, EyerBitStream * bitstream, int * used_bits);
 
     private:
+        int MacroblockLayer(EyerBitStream * bitstream, int * used_bits);
+    private:
         EyerSPS sps;
         EyerPPS pps;
     };

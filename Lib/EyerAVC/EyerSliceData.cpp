@@ -48,7 +48,8 @@ namespace Eyer
                     int mb_field_decoding_flag = EyerAVC_VLC::read_ue_v("mb_field_decoding_flag", bitStream, usedBits);
                     EyerLog("mb_field_decoding_flag: %d\n", mb_field_decoding_flag);
                 }
-                //TODO macroblock_layer();
+
+                MacroblockLayer(bitStream, usedBits);
 
                 int mb_type = EyerAVC_VLC::read_ue_v("mb_type", bitStream, usedBits);
                 EyerLog("mb_type: %d\n", mb_type);
@@ -58,6 +59,8 @@ namespace Eyer
 
             if(!pps.entropy_coding_mode_flag){
                 //TODO more_rbspdata();
+                int naluLen = sliceHeader.nalu.len;
+                EyerLog("Nalu Len: %d, %d\n", naluLen, *usedBits);
             }
             else{
                 //TODO CABAC
@@ -65,6 +68,13 @@ namespace Eyer
         }
         while(more_data_flag);
 
+        return 0;
+    }
+
+    int EyerSliceData::MacroblockLayer(EyerBitStream * bitstream, int * used_bits)
+    {
+        //TODO macroblock_layer();
+        EyerLog("macroblock_layer()\n");
         return 0;
     }
 }
