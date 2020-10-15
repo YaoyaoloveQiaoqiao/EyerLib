@@ -34,8 +34,7 @@ namespace Eyer
         av_register_all();
         avformat_network_init();
 
-
-
+        /*
         int nBufferSize = 1024 * 1024 * 2;
         unsigned char * pBuffer = new unsigned char[nBufferSize];
 
@@ -49,11 +48,12 @@ namespace Eyer
                                                  read_packet,
                                                  0,
                                                  0);
+                                                 */
 
 
         piml->formatCtx = avformat_alloc_context();
 
-        piml->formatCtx->pb = pIOCtx;
+        // piml->formatCtx->pb = pIOCtx;
 
     }
 

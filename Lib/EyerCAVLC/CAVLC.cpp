@@ -114,7 +114,7 @@ namespace Eyer
         }
 
         for(int a=0;a<runIdx;a++){
-            for(int b=0;b<runIdx;b++){
+            for(int b=a+1;b<runIdx;b++){
                 zerosLeft[a] += zerosLeft[b];
             }
         }
