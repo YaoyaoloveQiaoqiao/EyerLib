@@ -39,7 +39,7 @@ add_library(
     AVUtil/EyerVideoDecoderLine.cpp
     EyerAVBitstreamFilter.cpp
     EyerAVBitstreamFilter.hpp
-    EyerAVBitstreamFilterPrivate.hpp)
+    EyerAVBitstreamFilterPrivate.hpp ../EyerCAVLC/EyerCAVLC.hpp)
 
 target_link_libraries (EyerAV EyerCore)
 
