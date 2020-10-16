@@ -40,6 +40,8 @@ namespace Eyer
         mpd.PrintInfo();
 
         int representationIndex = 3;
+
+
         {
             EyerString m4vUrl;
             mpd.GetInitURL(m4vUrl, representationIndex);
@@ -47,7 +49,7 @@ namespace Eyer
             Eyer::EyerURLUtil urlUtil(mpdUrl);
             m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
 
-            printf("m4v url: %s\n", m4vUrl.str);
+            EyerLog("m4v url: %s\n", m4vUrl.str);
 
             Eyer::EyerSimplestHttp http;
             Eyer::EyerBuffer m4vBuffer;
@@ -56,7 +58,21 @@ namespace Eyer
                 dataBuffer->Append(m4vBuffer);
             }
         }
+        /*
+        {
+            EyerString m4aUrl = "https:/redknot.cn/DASH/./audio/xiaomai_dashinit.mp4";
 
+            EyerLog("m4a url: %s\n", m4aUrl.str);
+
+            Eyer::EyerSimplestHttp http;
+            Eyer::EyerBuffer m4aBuffer;
+
+            ret = http.Get(m4aBuffer, m4aUrl);
+            if(!ret){
+                dataBuffer->Append(m4aBuffer);
+            }
+        }
+        */
 
         int index = 1;
         while(!stopFlag){
@@ -71,7 +87,8 @@ namespace Eyer
             Eyer::EyerURLUtil urlUtil(mpdUrl);
             m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
 
-            printf("m4v url: %s\n", m4vUrl.str);
+            // EyerLog("m4v url: %s\n", m4vUrl.str);
+            // m4vUrl = EyerString("https:/redknot.cn/DASH/./audio/xiaomai_dash") + EyerString::Number(index) + ".m4s";
 
             Eyer::EyerSimplestHttp http;
             Eyer::EyerBuffer m4vBuffer;
