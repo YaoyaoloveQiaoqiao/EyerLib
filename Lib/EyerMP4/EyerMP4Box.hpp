@@ -2,6 +2,7 @@
 #define EYERLIB_EYERMP4BOX_HPP
 
 #include "EyerCore/EyerCore.hpp"
+#include <string.h>
 
 namespace Eyer
 {
