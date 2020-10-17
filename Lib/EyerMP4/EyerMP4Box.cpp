@@ -5,6 +5,7 @@
 #include "EyerMP4Box_mvhd.hpp"
 #include "EyerMP4Box_trak.hpp"
 #include "EyerMP4Box_tkhd.hpp"
+#include <string.h>
 
 namespace Eyer
 {
