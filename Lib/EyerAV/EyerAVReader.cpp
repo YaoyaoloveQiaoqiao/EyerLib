@@ -34,13 +34,12 @@ namespace Eyer
         av_register_all();
         avformat_network_init();
 
-        /*
+
         int nBufferSize = 1024 * 1024 * 2;
         unsigned char * pBuffer = new unsigned char[nBufferSize];
 
         // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd"));
         EyerDASHReader * dashReader = new EyerDASHReader(EyerString("https://redknot.cn/DASH/xiaomai_dash.mpd"));
-
 
         AVIOContext* pIOCtx = avio_alloc_context(pBuffer, nBufferSize,
                                                  0,
@@ -48,12 +47,12 @@ namespace Eyer
                                                  read_packet,
                                                  0,
                                                  0);
-                                                 */
+
 
 
         piml->formatCtx = avformat_alloc_context();
 
-        // piml->formatCtx->pb = pIOCtx;
+        piml->formatCtx->pb = pIOCtx;
 
     }
 

@@ -1,5 +1,6 @@
 #include "CAVLC.hpp"
-#include "math.h"
+#include <math.h>
+#include <string.h>
 
 namespace Eyer
 {

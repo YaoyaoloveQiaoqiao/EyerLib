@@ -10,7 +10,11 @@ TEST(A, ATest){
         return;
     }
 
+    int streamCount = reader.GetStreamCount();
+    printf("Stream Count: %d\n", streamCount);
+
     int videoStreamIndex = reader.GetVideoStreamIndex();
+
 
     Eyer::EyerAVStream stream;
     reader.GetStream(stream, videoStreamIndex);
@@ -20,7 +24,6 @@ TEST(A, ATest){
 
     Eyer::EyerAVBitstreamFilter::QueryAllBitstreamFilter();
 
-    Eyer::EyerAVBitstreamFilter avBitstreamFilter(Eyer::EyerAVBitstreamFilterType::h264_mp4toannexb, stream);
     while (1){
         Eyer::EyerAVPacket packet;
         ret = reader.Read(&packet);
@@ -28,7 +31,18 @@ TEST(A, ATest){
             break;
         }
 
-        EyerLog("Packet: %lld\n", packet.GetPTS());
+        // EyerLog("Packet: %lld\n", packet.GetPTS());
+
+        decoder.SendPacket(&packet);
+        while(1){
+            Eyer::EyerAVFrame avFrame;
+            ret = decoder.RecvFrame(&avFrame);
+            if(ret){
+                break;
+            }
+
+            printf("w:%d, h:%d\n", avFrame.GetWidth(), avFrame.GetHeight());
+        }
     }
 
     reader.Close();

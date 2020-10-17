@@ -81,6 +81,9 @@ ModuleTestOption("EyerAVC" "EyerAVCTest" EyerAVC)
 OPTION(EyerCAVLC           "option for EyerCAVLC"           ON)
 ModuleTestOption("EyerCAVLC" "EyerCAVLCTest" EyerCAVLC)
 
+OPTION(EyerMP4           "option for EyerMP4"           ON)
+ModuleTestOption("EyerMP4" "EyerMP4Test" EyerMP4)
+
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
 
