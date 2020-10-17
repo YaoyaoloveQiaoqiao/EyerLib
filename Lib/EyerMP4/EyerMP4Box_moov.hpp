@@ -8,13 +8,16 @@
 
 namespace Eyer
 {
-    class EyerMP4Box_moov  : public EyerMP4Box {
+    class EyerMP4Box_moov : public EyerMP4Box {
     public:
-        EyerMP4Box_moov(int _boxSize, const EyerBuffer & _buffer);
+        EyerMP4Box_moov(const EyerBuffer & _buffer);
         ~EyerMP4Box_moov();
 
+        virtual BoxType GetType();
+
+        virtual int PrintInfo();
+
     private:
-        EyerBuffer buffer;
     };
 }
 

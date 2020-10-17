@@ -30,15 +30,18 @@ namespace Eyer
 
     class EyerMP4Box_ftyp : public EyerMP4Box {
     public:
-        EyerMP4Box_ftyp(int _boxSize, const EyerBuffer & _buffer);
+        EyerMP4Box_ftyp(const EyerBuffer & _buffer);
         ~EyerMP4Box_ftyp();
 
-    private:
-        EyerBuffer buffer;
+        virtual BoxType GetType();
 
+        virtual int PrintInfo();
+
+    private:
         unsigned char major_brand[MAX_FTYP_BRABDS_LEN + 1];
         int minor_version;
 
+        int brandsNum = 0;
         T_BOX4FTYP_BRAN compatible_brands[MAX_FTYP_BRABDS_NUM];
     };
 }

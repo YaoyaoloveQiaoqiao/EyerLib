@@ -3,16 +3,16 @@ include_directories (./)
 
 add_library(
         EyerMP4
+        EyerMP4Constant.hpp
         EyerMP4.hpp
         EyerMP4.cpp
-        EyerMP4Deserialize.cpp
-        EyerMP4Deserialize.hpp
         EyerMP4Box.cpp
         EyerMP4Box.hpp
         EyerMP4Box_ftyp.cpp
         EyerMP4Box_ftyp.hpp
-        EyerMP4Constant.hpp
-        EyerMP4Box_moov.cpp EyerMP4Box_moov.hpp)
+        EyerMP4Box_moov.cpp
+        EyerMP4Box_moov.hpp
+        EyerMP4Box_mvhd.cpp EyerMP4Box_mvhd.hpp)
 
 target_link_libraries (
         EyerCore
