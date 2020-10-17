@@ -45,7 +45,7 @@ TEST(EyerMP4, EyerMP4Test)
                 moov->PrintInfo();
                 while(1){
                     Eyer::EyerMP4Box * subbox = nullptr;
-                    int ret = moov->Get(&subbox);
+                    ret = moov->Get(&subbox);
                     if(ret){
                         break;
                     }
@@ -53,6 +53,26 @@ TEST(EyerMP4, EyerMP4Test)
                         continue;
                     }
                     subbox->PrintInfo();
+
+                    if(subbox->GetType() == Eyer::BoxType::TRAK){
+                        Eyer::EyerMP4Box_trak * trak = (Eyer::EyerMP4Box_trak *)subbox;
+                        while(1){
+                            Eyer::EyerMP4Box * trakSub = nullptr;
+                            ret = trak->Get(&trakSub);
+                            if(ret){
+                                break;
+                            }
+                            if(trakSub == nullptr){
+                                continue;
+                            }
+                            trakSub->PrintInfo();
+                        }
+                    }
+
+                    if(subbox != nullptr){
+                        delete subbox;
+                        subbox = nullptr;
+                    }
                 }
             }
             else{

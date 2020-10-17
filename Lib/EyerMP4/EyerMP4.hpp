@@ -4,6 +4,9 @@
 #include "EyerMP4Box.hpp"
 #include "EyerMP4Box_ftyp.hpp"
 #include "EyerMP4Box_moov.hpp"
+#include "EyerMP4Box_mvhd.hpp"
+#include "EyerMP4Box_trak.hpp"
+#include "EyerMP4Box_tkhd.hpp"
 
 namespace Eyer{
     class EyerMP4 {

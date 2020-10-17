@@ -10,7 +10,9 @@ namespace Eyer
         UNKNOW = 0,
         FTYP = 1,
         MOOV = 2,
-        MVHD = 3
+        MVHD = 3,
+        TRAK = 4,
+        TKHD = 5
     };
 
     class EyerMP4Box {

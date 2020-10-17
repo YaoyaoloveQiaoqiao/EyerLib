@@ -3,6 +3,8 @@
 #include "EyerMP4Box_ftyp.hpp"
 #include "EyerMP4Box_moov.hpp"
 #include "EyerMP4Box_mvhd.hpp"
+#include "EyerMP4Box_trak.hpp"
+#include "EyerMP4Box_tkhd.hpp"
 
 namespace Eyer
 {
@@ -70,6 +72,12 @@ namespace Eyer
         }
         else if (0 == strcmp((char *)boxType, BOX_TYPE_MVHD)){
             *box = new EyerMP4Box_mvhd(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_TRAK)){
+            *box = new EyerMP4Box_trak(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_TKHD)){
+            *box = new EyerMP4Box_tkhd(boxDataBuffer);
         }
 
         return 0;

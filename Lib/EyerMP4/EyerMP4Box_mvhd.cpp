@@ -6,7 +6,6 @@ namespace Eyer
     {
         //// <==========================================>
         int dataLen = buffer.GetBuffer();
-        printf("dataLen: %d\n", dataLen);
         unsigned char * dataArr = (unsigned char *)malloc(dataLen);
         unsigned char * data = dataArr;
         buffer.GetBuffer(data);
