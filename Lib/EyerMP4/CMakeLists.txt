@@ -5,12 +5,14 @@ add_library(
         EyerMP4
         EyerMP4.hpp
         EyerMP4.cpp
-
-        mp4.h
-        mp4.c
-        stream.c
-        stream.h
-)
+        EyerMP4Deserialize.cpp
+        EyerMP4Deserialize.hpp
+        EyerMP4Box.cpp
+        EyerMP4Box.hpp
+        EyerMP4Box_ftyp.cpp
+        EyerMP4Box_ftyp.hpp
+        EyerMP4Constant.hpp
+        EyerMP4Box_moov.cpp EyerMP4Box_moov.hpp)
 
 target_link_libraries (
         EyerCore
