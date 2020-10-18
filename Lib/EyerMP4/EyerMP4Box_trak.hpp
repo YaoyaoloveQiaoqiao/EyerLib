@@ -14,8 +14,8 @@ namespace Eyer
         ~EyerMP4Box_trak();
 
         virtual BoxType GetType();
-
         virtual int PrintInfo();
+        virtual bool HasSub();
     };
 }
 

@@ -50,8 +50,13 @@ namespace Eyer
     int EyerMP4Box_mvhd::PrintInfo()
     {
         printf("========MVHD========\n");
-        printf("\tcreation_time: %d, modification_time: %d, timescale: %d, duration: %d, rate: %f, volume: %f, next_track_id: %d\n",
+        printf("creation_time: %d, modification_time: %d, timescale: %d, duration: %d, rate: %f, volume: %f, next_track_id: %d\n",
                creation_time, modification_time, timescale, duration, rate, volume, next_track_id);
         return 0;
+    }
+
+    bool EyerMP4Box_mvhd::HasSub()
+    {
+        return false;
     }
 }

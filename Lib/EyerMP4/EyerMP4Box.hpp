@@ -14,7 +14,8 @@ namespace Eyer
         MVHD = 3,
         TRAK = 4,
         TKHD = 5,
-        EDTS = 6
+        EDTS = 6,
+        MDHD = 7
     };
 
     class EyerMP4Box {
@@ -24,7 +25,7 @@ namespace Eyer
 
         int Get(EyerMP4Box * * box);
 
-
+        virtual bool HasSub();
         virtual BoxType GetType();
         virtual int PrintInfo();
 

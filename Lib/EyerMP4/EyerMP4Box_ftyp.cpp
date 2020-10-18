@@ -39,7 +39,7 @@ namespace Eyer
     int EyerMP4Box_ftyp::PrintInfo()
     {
         printf("========FTYP========\n");
-        printf("\tmajor_brand: %s, minor_version: %d, compatible_brands: ", major_brand, minor_version);
+        printf("major_brand: %s, minor_version: %d, compatible_brands: ", major_brand, minor_version);
 
         for (int i=0; i<brandsNum; i++) {
             if (i==brandsNum-1) {
@@ -52,5 +52,10 @@ namespace Eyer
 
         printf("\n");
         return 0;
+    }
+
+    bool EyerMP4Box_ftyp::HasSub()
+    {
+        return false;
     }
 }

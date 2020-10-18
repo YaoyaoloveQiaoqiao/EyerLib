@@ -8,6 +8,8 @@
 #include "EyerMP4Box_trak.hpp"
 #include "EyerMP4Box_tkhd.hpp"
 #include "EyerMP4Box_edts.hpp"
+#include "EyerMP4Box_mdia.hpp"
+#include "EyerMP4Box_mdhd.hpp"
 
 namespace Eyer{
     class EyerMP4 {

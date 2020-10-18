@@ -64,8 +64,13 @@ namespace Eyer
     int EyerMP4Box_tkhd::PrintInfo()
     {
         printf("========TKHD========\n");
-        printf("\t\t\tflags: %d, creation_time: %d, modification_time: %d, track_id: %d, duration: %d, layer: %d, alternate_group: %d, volume: %f, width: %f, height: %f\n",
+        printf("flags: %d, creation_time: %d, modification_time: %d, track_id: %d, duration: %d, layer: %d, alternate_group: %d, volume: %f, width: %f, height: %f\n",
                flags, creation_time, modification_time, track_id, duration, layer, alternate_group, volume, width, height);
         return 0;
+    }
+
+    bool EyerMP4Box_tkhd::HasSub()
+    {
+        return false;
     }
 }

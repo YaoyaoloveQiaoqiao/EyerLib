@@ -6,6 +6,8 @@
 #include "EyerMP4Box_trak.hpp"
 #include "EyerMP4Box_tkhd.hpp"
 #include "EyerMP4Box_edts.hpp"
+#include "EyerMP4Box_mdia.hpp"
+#include "EyerMP4Box_mdhd.hpp"
 #include <string.h>
 
 namespace Eyer
@@ -84,6 +86,12 @@ namespace Eyer
         else if (0 == strcmp((char *)boxType, BOX_TYPE_EDTS)){
             *box = new EyerMP4Box_edts(boxDataBuffer);
         }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_MDIA)){
+            *box = new EyerMP4Box_mdia(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_MDHD)){
+            *box = new EyerMP4Box_mdhd(boxDataBuffer);
+        }
 
         return 0;
     }
@@ -94,9 +102,13 @@ namespace Eyer
         return BoxType::UNKNOW;
     }
 
+    bool EyerMP4Box::HasSub()
+    {
+        return true;
+    }
+
     int EyerMP4Box::PrintInfo()
     {
-
         return 0;
     }
 }

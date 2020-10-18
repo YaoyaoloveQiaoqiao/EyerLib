@@ -24,4 +24,9 @@ namespace Eyer
         printf("========TRAK========\n");
         return 0;
     }
+
+    bool EyerMP4Box_trak::HasSub()
+    {
+        return true;
+    }
 }

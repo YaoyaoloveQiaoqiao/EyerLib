@@ -52,8 +52,8 @@ namespace Eyer
         ~EyerMP4Box_mvhd();
 
         virtual BoxType GetType();
-
         virtual int PrintInfo();
+        virtual bool HasSub();
 
     private:
         int creation_time;
