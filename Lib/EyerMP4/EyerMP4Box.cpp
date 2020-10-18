@@ -5,6 +5,7 @@
 #include "EyerMP4Box_mvhd.hpp"
 #include "EyerMP4Box_trak.hpp"
 #include "EyerMP4Box_tkhd.hpp"
+#include "EyerMP4Box_edts.hpp"
 #include <string.h>
 
 namespace Eyer
@@ -79,6 +80,9 @@ namespace Eyer
         }
         else if (0 == strcmp((char *)boxType, BOX_TYPE_TKHD)){
             *box = new EyerMP4Box_tkhd(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_EDTS)){
+            *box = new EyerMP4Box_edts(boxDataBuffer);
         }
 
         return 0;
