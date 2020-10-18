@@ -22,4 +22,9 @@ namespace Eyer
         printf("========MOOV========\n");
         return 0;
     }
+
+    bool EyerMP4Box_moov::HasSub()
+    {
+        return true;
+    }
 }

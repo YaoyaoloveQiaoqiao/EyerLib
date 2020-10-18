@@ -5,6 +5,12 @@
 #include "EyerMP4Box_mvhd.hpp"
 #include "EyerMP4Box_trak.hpp"
 #include "EyerMP4Box_tkhd.hpp"
+#include "EyerMP4Box_edts.hpp"
+#include "EyerMP4Box_mdia.hpp"
+#include "EyerMP4Box_mdhd.hpp"
+#include "EyerMP4Box_hdlr.hpp"
+#include "EyerMP4Box_minf.hpp"
+#include "EyerMP4Box_stbl.hpp"
 #include <string.h>
 
 namespace Eyer
@@ -12,6 +18,7 @@ namespace Eyer
     EyerMP4Box::EyerMP4Box(const EyerBuffer & _buffer)
     {
         buffer = _buffer;
+        totalBuffer = _buffer;
     }
 
     EyerMP4Box::~EyerMP4Box()
@@ -64,7 +71,7 @@ namespace Eyer
 
 
 
-        printf("boxType: %s\n", boxType);
+        // printf("boxType: %s\n", boxType);
         if (0 == strcmp((char *)boxType, BOX_TYPE_FTYPE)) {
             *box = new EyerMP4Box_ftyp(boxDataBuffer);
         }
@@ -80,6 +87,24 @@ namespace Eyer
         else if (0 == strcmp((char *)boxType, BOX_TYPE_TKHD)){
             *box = new EyerMP4Box_tkhd(boxDataBuffer);
         }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_EDTS)){
+            *box = new EyerMP4Box_edts(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_MDIA)){
+            *box = new EyerMP4Box_mdia(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_MDHD)){
+            *box = new EyerMP4Box_mdhd(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_HDLR)){
+            *box = new EyerMP4Box_hdlr(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_MINF)){
+            *box = new EyerMP4Box_minf(boxDataBuffer);
+        }
+        else if (0 == strcmp((char *)boxType, BOX_TYPE_STBL)){
+            *box = new EyerMP4Box_stbl(boxDataBuffer);
+        }
 
         return 0;
     }
@@ -90,9 +115,18 @@ namespace Eyer
         return BoxType::UNKNOW;
     }
 
+    bool EyerMP4Box::HasSub()
+    {
+        return true;
+    }
+
     int EyerMP4Box::PrintInfo()
     {
-
         return 0;
+    }
+
+    int EyerMP4Box::GetTotalBuffer(unsigned char * data)
+    {
+        return totalBuffer.GetBuffer(data);
     }
 }

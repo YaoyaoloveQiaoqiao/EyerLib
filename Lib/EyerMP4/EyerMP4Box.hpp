@@ -13,7 +13,13 @@ namespace Eyer
         MOOV = 2,
         MVHD = 3,
         TRAK = 4,
-        TKHD = 5
+        TKHD = 5,
+        EDTS = 6,
+        MDHD = 7,
+        HDLR = 8,
+        MDIA = 9,
+        MINF = 10,
+        STBL = 11
     };
 
     class EyerMP4Box {
@@ -23,12 +29,15 @@ namespace Eyer
 
         int Get(EyerMP4Box * * box);
 
-
+        virtual bool HasSub();
         virtual BoxType GetType();
         virtual int PrintInfo();
 
+        int GetTotalBuffer(unsigned char * data = nullptr);
+
     protected:
         EyerBuffer buffer;
+        EyerBuffer totalBuffer;
     };
 }
 

@@ -61,8 +61,8 @@ namespace Eyer
         ~EyerMP4Box_tkhd();
 
         virtual BoxType GetType();
-
         virtual int PrintInfo();
+        virtual bool HasSub();
 
     private:
         int flags;

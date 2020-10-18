@@ -33,8 +33,8 @@ namespace Eyer
         EyerMP4Box_ftyp(const EyerBuffer & _buffer);
         ~EyerMP4Box_ftyp();
 
+        virtual bool HasSub();
         virtual BoxType GetType();
-
         virtual int PrintInfo();
 
     private:
