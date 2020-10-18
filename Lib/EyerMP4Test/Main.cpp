@@ -39,8 +39,8 @@ int GetSubBox(Eyer::EyerMP4Box & box, int depth){
 
 TEST(EyerMP4, EyerMP4Test)
 {
-    FILE * fp = fopen("/Users/yuqiaomiao/boy.mp4", "rb");
-    // FILE * fp = fopen("C://Video/bbb_1080p.mp4", "rb");
+    // FILE * fp = fopen("/Users/yuqiaomiao/boy.mp4", "rb");
+    FILE * fp = fopen("C://Video/bbb_1080p.mp4", "rb");
 
 
     fseek(fp, 0, SEEK_END);

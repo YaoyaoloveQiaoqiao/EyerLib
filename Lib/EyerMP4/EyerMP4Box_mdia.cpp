@@ -14,7 +14,7 @@ namespace Eyer
 
     BoxType EyerMP4Box_mdia::GetType()
     {
-
+        return BoxType::MDIA;
     }
 
     int EyerMP4Box_mdia::PrintInfo()

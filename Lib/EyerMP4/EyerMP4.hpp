@@ -10,6 +10,9 @@
 #include "EyerMP4Box_edts.hpp"
 #include "EyerMP4Box_mdia.hpp"
 #include "EyerMP4Box_mdhd.hpp"
+#include "EyerMP4Box_hdlr.hpp"
+#include "EyerMP4Box_minf.hpp"
+#include "EyerMP4Box_stbl.hpp"
 
 namespace Eyer{
     class EyerMP4 {
