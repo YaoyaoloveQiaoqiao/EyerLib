@@ -1,18 +1,22 @@
 #include <gtest/gtest.h>
 #include <curl/curl.h>
+
 #include "EyerNet/EyerNet.hpp"
-#include "EyerCore/EyerCore.hpp"
-#include <stdlib.h>
-#include <libxml2/libxml/parser.h>
 #include "EyerDASH/EyerDASH.hpp"
 
-TEST(EyerDashTest, EyerAdaptationSet){
-    Eyer::EyerAdaptationSet adaptationSet;
-
-    Eyer::EyerSegmentTemplate segmentTemplateA;
-    segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
+TEST(EyerDashTest, EyerSegmentTemplateTest){
+    Eyer::EyerRepresentation representation;
+    // int a = 1;
+    // Eyer::EyerSegmentTemplate * segmentTemplateA = new Eyer::EyerSegmentTemplate();
 }
 
+TEST(EyerDashTest, EyerAdaptationSet){
+    // Eyer::EyerAdaptationSet adaptationSet;
+
+    // Eyer::EyerSegmentTemplate segmentTemplateA;
+    // segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
+}
+/*
 TEST(EyerDashTest, SegmentTemplate){
     Eyer::EyerSegmentTemplate segmentTemplateA;
     segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
@@ -61,6 +65,7 @@ TEST(EyerDashTest, MPD){
         printf("%s\n", m4vUrl.str);
     }
 }
+ */
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
