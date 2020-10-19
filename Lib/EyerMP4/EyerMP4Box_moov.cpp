@@ -2,6 +2,11 @@
 
 namespace Eyer
 {
+    EyerMP4Box_moov::EyerMP4Box_moov() : EyerMP4Box()
+    {
+
+    }
+
     EyerMP4Box_moov::EyerMP4Box_moov(const EyerBuffer & _buffer) : EyerMP4Box(_buffer)
     {
 

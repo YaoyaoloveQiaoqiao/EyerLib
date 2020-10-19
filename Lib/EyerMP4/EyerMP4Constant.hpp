@@ -23,6 +23,10 @@
 #define BOX_TYPE_STCO "stco"
 #define BOX_TYPE_UDTA "udta"
 
+#define BOX_TYPE_MVEX "mvex"
+#define BOX_TYPE_TREX "trex"
+#define BOX_TYPE_MEHD "mehd"
+
 #define MAX_BOX_SIZE_LEN 4
 #define MAX_BOX_TYPE_LEN 4
 #define MAX_HANDLER_TYPE_LEN 4
@@ -37,5 +41,27 @@
 #define MAX_PRE_DEFINE_LEN 24
 #define MAX_MATRIX_LEN 36
 #define MAX_HDLR_NAME_LEN 100
+
+namespace Eyer
+{
+    enum BoxType
+    {
+        UNKNOW = 0,
+        FTYP = 1,
+        MOOV = 2,
+        MVHD = 3,
+        TRAK = 4,
+        TKHD = 5,
+        EDTS = 6,
+        MDHD = 7,
+        HDLR = 8,
+        MDIA = 9,
+        MINF = 10,
+        STBL = 11,
+        MVEX = 12,
+        TREX = 13,
+        MEHD = 14
+    };
+}
 
 #endif //EYERLIB_EYERMP4CONSTANT_HPP

@@ -30,6 +30,7 @@ namespace Eyer
 
     class EyerMP4Box_ftyp : public EyerMP4Box {
     public:
+        EyerMP4Box_ftyp();
         EyerMP4Box_ftyp(const EyerBuffer & _buffer);
         ~EyerMP4Box_ftyp();
 

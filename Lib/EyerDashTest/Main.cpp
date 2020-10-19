@@ -4,19 +4,13 @@
 #include "EyerNet/EyerNet.hpp"
 #include "EyerDASH/EyerDASH.hpp"
 
-TEST(EyerDashTest, EyerSegmentTemplateTest){
-    Eyer::EyerRepresentation representation;
-    // int a = 1;
-    // Eyer::EyerSegmentTemplate * segmentTemplateA = new Eyer::EyerSegmentTemplate();
-}
-
 TEST(EyerDashTest, EyerAdaptationSet){
-    // Eyer::EyerAdaptationSet adaptationSet;
+    Eyer::EyerAdaptationSet adaptationSet;
 
-    // Eyer::EyerSegmentTemplate segmentTemplateA;
-    // segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
+    Eyer::EyerSegmentTemplate segmentTemplateA;
+    segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
 }
-/*
+
 TEST(EyerDashTest, SegmentTemplate){
     Eyer::EyerSegmentTemplate segmentTemplateA;
     segmentTemplateA.SetInitialization("$RepresentationID$/$RepresentationID$_0.m4v");
@@ -65,7 +59,6 @@ TEST(EyerDashTest, MPD){
         printf("%s\n", m4vUrl.str);
     }
 }
- */
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);

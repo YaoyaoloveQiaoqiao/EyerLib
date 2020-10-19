@@ -10,6 +10,7 @@ namespace Eyer
 {
     class EyerMP4Box_trak : public EyerMP4Box {
     public:
+        EyerMP4Box_trak();
         EyerMP4Box_trak(const EyerBuffer & _buffer);
         ~EyerMP4Box_trak();
 

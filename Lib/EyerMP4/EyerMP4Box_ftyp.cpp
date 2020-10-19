@@ -3,6 +3,11 @@
 
 namespace Eyer
 {
+    EyerMP4Box_ftyp::EyerMP4Box_ftyp() : EyerMP4Box()
+    {
+
+    }
+
     EyerMP4Box_ftyp::EyerMP4Box_ftyp(const EyerBuffer & _buffer) : EyerMP4Box(_buffer)
     {
         int bufferDataLen = buffer.GetBuffer();

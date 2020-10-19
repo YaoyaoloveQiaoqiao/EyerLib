@@ -1,23 +1,23 @@
 add_executable(
-        EyerDashTest
+        EyerDASHTest
         Main.cpp
 )
 
 include_directories (../)
 
-target_link_libraries (EyerDashTest EyerDASH)
-target_link_libraries (EyerDashTest EyerNet)
-target_link_libraries (EyerDashTest EyerCore)
-target_link_libraries (EyerDashTest gtest)
+target_link_libraries (EyerDASHTest EyerDASH)
+target_link_libraries (EyerDASHTest EyerNet)
+target_link_libraries (EyerDASHTest EyerCore)
+target_link_libraries (EyerDASHTest gtest)
 
 target_link_libraries (
-        EyerDashTest
+        EyerDASHTest
         curl
         xml2
 )
 
 INSTALL(
-        TARGETS EyerDashTest
+        TARGETS EyerDASHTest
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib

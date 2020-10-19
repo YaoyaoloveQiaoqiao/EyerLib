@@ -48,6 +48,7 @@ namespace Eyer
 {
     class EyerMP4Box_mvhd : public EyerMP4Box {
     public:
+        EyerMP4Box_mvhd();
         EyerMP4Box_mvhd(const EyerBuffer & _buffer);
         ~EyerMP4Box_mvhd();
 

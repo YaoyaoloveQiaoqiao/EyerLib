@@ -30,6 +30,12 @@ add_library(
         EyerMP4Box_minf.hpp
         EyerMP4Box_stbl.cpp
         EyerMP4Box_stbl.hpp
+        EyerMP4Box_mvex.cpp
+        EyerMP4Box_mvex.hpp
+        EyerMP4Box_trex.cpp
+        EyerMP4Box_trex.hpp
+        EyerMP4Box_mehd.cpp
+        EyerMP4Box_mehd.hpp
 )
 
 target_link_libraries (
@@ -38,7 +44,21 @@ target_link_libraries (
 
 set(head_files
         EyerMP4.hpp
-        )
+        EyerMP4Box_ftyp.hpp
+        EyerMP4Box_moov.hpp
+        EyerMP4Box_mvhd.hpp
+        EyerMP4Box_trak.hpp
+        EyerMP4Box_tkhd.hpp
+        EyerMP4Box_edts.hpp
+        EyerMP4Box_mdia.hpp
+        EyerMP4Box_mdhd.hpp
+        EyerMP4Box_hdlr.hpp
+        EyerMP4Box_minf.hpp
+        EyerMP4Box_stbl.hpp
+        EyerMP4Box_mvex.hpp
+        EyerMP4Box_trex.hpp
+        EyerMP4Box_mehd.hpp
+)
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerMP4)
 INSTALL(

@@ -13,6 +13,9 @@
 #include "EyerMP4Box_hdlr.hpp"
 #include "EyerMP4Box_minf.hpp"
 #include "EyerMP4Box_stbl.hpp"
+#include "EyerMP4Box_mvex.hpp"
+#include "EyerMP4Box_trex.hpp"
+#include "EyerMP4Box_mehd.hpp"
 
 namespace Eyer{
     class EyerMP4 {
