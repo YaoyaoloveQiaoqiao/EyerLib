@@ -34,6 +34,21 @@ namespace Eyer
 
     }
 
+    EyerMP4Box::EyerMP4Box(const EyerMP4Box & _box) : EyerMP4Box()
+    {
+        *this = _box;
+    }
+
+    EyerMP4Box & EyerMP4Box::operator = (const EyerMP4Box & _box)
+    {
+        buffer = _box.buffer;
+        totalBuffer = _box.totalBuffer;
+
+        printf("EyerMP4Box & EyerMP4Box::operator = (const EyerMP4Box & _box)\n");
+
+        return *this;
+    }
+
     int EyerMP4Box::Get(EyerMP4Box * * box)
     {
         return Get(box, buffer);
@@ -155,6 +170,63 @@ namespace Eyer
     EyerBuffer & EyerMP4Box::GetTotalBuffer()
     {
         return totalBuffer;
+    }
+
+    EyerBuffer EyerMP4Box::GetTotalBufferWithHead()
+    {
+        int totalBufferLen = totalBuffer.GetLen();
+        int len = 8 + totalBufferLen;
+        char head[8];
+
+        head[0] = *((char *)&len + 3);
+        head[1] = *((char *)&len + 2);
+        head[2] = *((char *)&len + 1);
+        head[3] = *((char *)&len + 0);
+
+        BoxType type = GetType();
+
+        head[4] = type.GetA();
+        head[5] = type.GetB();
+        head[6] = type.GetC();
+        head[7] = type.GetD();
+
+        EyerBuffer buffer;
+
+        buffer.Append((unsigned char *)head, 8);
+        buffer.Append(totalBuffer);
+
+        return buffer;
+    }
+
+    int EyerMP4Box::AddSubBox(EyerMP4Box & subBox)
+    {
+        if(!HasSub()) {
+            return -1;
+        }
+
+        EyerBuffer subBuffer = subBox.GetTotalBuffer();
+
+        int len = 8 + subBuffer.GetLen();
+        char head[8];
+
+        head[0] = *((char *)&len + 3);
+        head[1] = *((char *)&len + 2);
+        head[2] = *((char *)&len + 1);
+        head[3] = *((char *)&len + 0);
+
+        BoxType type = subBox.GetType();
+
+        head[4] = type.GetA();
+        head[5] = type.GetB();
+        head[6] = type.GetC();
+        head[7] = type.GetD();
+
+        totalBuffer.Append((unsigned char *)head, 8);
+        totalBuffer.Append(subBuffer);
+
+        buffer = totalBuffer;
+
+        return 0;
     }
 
     int EyerMP4Box::GetMOOV(EyerMP4Box_moov & moov)
@@ -285,6 +357,101 @@ namespace Eyer
         return finalRet;
     }
 
+    int EyerMP4Box::GetMVEX(EyerMP4Box_mvex & mvex)
+    {
+        if(!HasSub()){
+            return -1;
+        }
+
+        EyerBuffer buf = buffer;
+
+        int finalRet = -1;
+        while (1){
+            EyerMP4Box * box = nullptr;
+            int ret = Get(&box, buf);
+            if(ret){
+                break;
+            }
+            if(box == nullptr){
+                continue;
+            }
+
+            if(box->GetType() == BoxType::MVEX){
+                mvex = *((EyerMP4Box_mvex *)box);
+                finalRet = 0;
+            }
+
+            if(box != nullptr){
+                delete box;
+                box = nullptr;
+            }
+        }
+        return finalRet;
+    }
+
+    int EyerMP4Box::GetMEHD(EyerMP4Box_mehd & mehd)
+    {
+        if(!HasSub()){
+            return -1;
+        }
+
+        EyerBuffer buf = buffer;
+
+        int finalRet = -1;
+        while (1){
+            EyerMP4Box * box = nullptr;
+            int ret = Get(&box, buf);
+            if(ret){
+                break;
+            }
+            if(box == nullptr){
+                continue;
+            }
+
+            if(box->GetType() == BoxType::MEHD){
+                mehd = *((EyerMP4Box_mehd *)box);
+                finalRet = 0;
+            }
+
+            if(box != nullptr){
+                delete box;
+                box = nullptr;
+            }
+        }
+        return finalRet;
+    }
+
+    int EyerMP4Box::GetTREX(EyerMP4Box_trex & trex)
+    {
+        if(!HasSub()){
+            return -1;
+        }
+
+        EyerBuffer buf = buffer;
+
+        int finalRet = -1;
+        while (1){
+            EyerMP4Box * box = nullptr;
+            int ret = Get(&box, buf);
+            if(ret){
+                break;
+            }
+            if(box == nullptr){
+                continue;
+            }
+
+            if(box->GetType() == BoxType::TREX){
+                trex = *((EyerMP4Box_trex *)box);
+                finalRet = 0;
+            }
+
+            if(box != nullptr){
+                delete box;
+                box = nullptr;
+            }
+        }
+        return finalRet;
+    }
 
     int EyerMP4Box::PrintAll()
     {

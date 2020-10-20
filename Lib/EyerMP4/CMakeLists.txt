@@ -36,6 +36,7 @@ add_library(
         EyerMP4Box_trex.hpp
         EyerMP4Box_mehd.cpp
         EyerMP4Box_mehd.hpp
+        BoxType.cpp
 )
 
 target_link_libraries (

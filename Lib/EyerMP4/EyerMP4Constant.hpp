@@ -44,24 +44,45 @@
 
 namespace Eyer
 {
-    enum BoxType
+    class BoxType
     {
-        UNKNOW = 0,
-        FTYP = 1,
-        MOOV = 2,
-        MVHD = 3,
-        TRAK = 4,
-        TKHD = 5,
-        EDTS = 6,
-        MDHD = 7,
-        HDLR = 8,
-        MDIA = 9,
-        MINF = 10,
-        STBL = 11,
-        MVEX = 12,
-        TREX = 13,
-        MEHD = 14
+    public:
+        BoxType(int id, char a, char b, char c, char d);
+        ~BoxType();
+
+        bool operator == (const BoxType boxType);
+
+        char GetA();
+        char GetB();
+        char GetC();
+        char GetD();
+
+    private:
+        int id = 0;
+        char a;
+        char b;
+        char c;
+        char d;
+
+    public:
+        static BoxType UNKNOW;
+        static BoxType FTYP;
+        static BoxType MOOV;
+        static BoxType MVHD;
+        static BoxType TRAK;
+        static BoxType TKHD;
+        static BoxType EDTS;
+        static BoxType MDHD;
+        static BoxType HDLR;
+        static BoxType MDIA;
+        static BoxType MINF;
+        static BoxType STBL;
+        static BoxType MVEX;
+        static BoxType TREX;
+        static BoxType MEHD;
     };
+
+
 }
 
 #endif //EYERLIB_EYERMP4CONSTANT_HPP

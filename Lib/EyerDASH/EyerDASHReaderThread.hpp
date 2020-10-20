@@ -3,6 +3,7 @@
 
 #include "EyerThread/EyerThread.hpp"
 #include "EyerCore/EyerCore.hpp"
+#include "EyerMP4/EyerMP4.hpp"
 
 namespace Eyer{
     class EyerDASHReaderThread : public EyerThread {
@@ -11,6 +12,14 @@ namespace Eyer{
         ~EyerDASHReaderThread();
 
         virtual void Run();
+
+        int ParseMP4(
+                EyerMP4Box_ftyp _outftyp,
+                EyerMP4Box_mvhd _outmvhd,
+                EyerMP4Box_mehd _outmehd,
+                EyerMP4Box_trex _outtrex,
+                EyerMP4Box_trak _outtrak,
+                EyerMP4Box & box);
 
     private:
         EyerString & mpdUrl;
