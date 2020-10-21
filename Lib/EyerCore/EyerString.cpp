@@ -196,7 +196,7 @@ namespace Eyer {
         return str;
     }
 
-    EyerString Number(long num)
+    EyerString EyerString::Number(long num)
     {
         char str[1024];
 
@@ -205,7 +205,7 @@ namespace Eyer {
         return str;
     }
 
-    EyerString Number(long long num)
+    EyerString EyerString::Number(long long num)
     {
         char str[1024];
 

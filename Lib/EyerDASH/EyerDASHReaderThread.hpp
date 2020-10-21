@@ -14,11 +14,11 @@ namespace Eyer{
         virtual void Run();
 
         int ParseMP4(
-                EyerMP4Box_ftyp _outftyp,
-                EyerMP4Box_mvhd _outmvhd,
-                EyerMP4Box_mehd _outmehd,
-                EyerMP4Box_trex _outtrex,
-                EyerMP4Box_trak _outtrak,
+                EyerMP4Box_ftyp & _outftyp,
+                EyerMP4Box_mvhd & _outmvhd,
+                EyerMP4Box_mehd & _outmehd,
+                EyerMP4Box_trex & _outtrex,
+                EyerMP4Box_trak & _outtrak,
                 EyerMP4Box & box);
 
     private:
