@@ -15,6 +15,9 @@ namespace Eyer
     private:
         uint8_t major_brand[4];
         uint32_t minor_version = 0;
+
+        int compatible_brands_len = 0;
+        uint8_t compatible_brands[4][4];
     };
 }
 

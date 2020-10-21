@@ -2,10 +2,11 @@
 #define EYERLIB_MP4BOXMVHD_HPP
 
 #include "MP4Box.hpp"
+#include "MP4FullBox.hpp"
 
 namespace Eyer
 {
-    class MP4BoxMVHD : public MP4Box {
+    class MP4BoxMVHD : public MP4FullBox {
     public:
         MP4BoxMVHD();
         ~MP4BoxMVHD();

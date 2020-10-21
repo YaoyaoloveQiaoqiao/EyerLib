@@ -22,15 +22,17 @@ TEST(EyerMP4, EyerMP4Test)
     buffer.Append(data, len);
 
     Eyer::MP4BoxFTYP box;
-    // box.Parse(buffer);
-    box.ParseSubBox(buffer, 0);
+    box.ParseSubBox(buffer);
 
     free(data);
 
     fclose(fp);
 }
 
-
+TEST(EyerMP4, EyerMP4_FTYP)
+{
+    Eyer::MP4BoxFTYP ftyp;
+}
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);

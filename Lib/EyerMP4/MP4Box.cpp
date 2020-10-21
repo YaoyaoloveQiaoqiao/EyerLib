@@ -1,5 +1,6 @@
 #include "MP4Box.hpp"
 #include "MP4BoxFTYP.hpp"
+#include "MP4BoxMVHD.hpp"
 
 namespace Eyer
 {
@@ -40,7 +41,10 @@ namespace Eyer
 
         // type.PrintInfo();
         if(type.HasSub()){
-            ParseSubBox(buffer, 8);
+            EyerBuffer b = buffer;
+            EyerBuffer tb;
+            b.CutOff(tb, 8);
+            ParseSubBox(b, 0);
         }
         else{
             ParseParam(buffer, 8);
@@ -71,12 +75,14 @@ namespace Eyer
             uint32_t net_size = 0;
             memcpy(&net_size, data + alreadRead, 4);
             int boxSize = ntohl(net_size);
-
+            if(boxSize == 1){
+                // TODO boxSize == 1
+            }
 
             uint32_t net_type;
             memcpy(&net_type, data + alreadRead + 4, 4);
             BoxType boxtype = BoxType::GetType(net_type);
-            boxtype.PrintInfo();
+            // boxtype.PrintInfo();
 
 
             alreadRead += boxSize;
@@ -84,17 +90,10 @@ namespace Eyer
             EyerBuffer boxBuffer;
             tempBuffer.CutOff(boxBuffer, boxSize);
 
-            if(boxtype.HasSub()){
-                MP4Box * box = new MP4Box();
+            MP4Box * box = CreatBox(boxtype);
+            if(box != nullptr){
                 box->Parse(boxBuffer);
                 subBoxList.push_back(box);
-            }
-            else{
-                if(boxtype == BoxType::FTYP){
-                    MP4BoxFTYP * ftyp = new MP4BoxFTYP();
-                    ftyp->Parse(boxBuffer);
-                    subBoxList.push_back(ftyp);
-                }
             }
         }
 
@@ -104,8 +103,7 @@ namespace Eyer
 
     int MP4Box::ParseParam(EyerBuffer & buffer, int offset)
     {
-        printf("ParseParam\n");
-        return 0;
+        return offset;
     }
 
     uint64_t MP4Box::GetSize()
@@ -114,5 +112,40 @@ namespace Eyer
             return largesize;
         }
         return size;
+    }
+
+    MP4Box * MP4Box::GetSubBoxPtr(BoxType type)
+    {
+        MP4Box * subBox = nullptr;
+        for(int i=0;i<subBoxList.size();i++){
+            if(subBoxList[i]->type == type){
+                subBox = CopyBox(subBoxList[i]);
+            }
+        }
+        return subBox;
+    }
+
+    MP4Box * MP4Box::CreatBox(BoxType type)
+    {
+        MP4Box * box = nullptr;
+        if(type.HasSub()){
+            box = new MP4Box();
+        }
+        else{
+            if(type == BoxType::FTYP){
+                box = new MP4BoxFTYP();
+            }
+            else if(type == BoxType::MVHD){
+                box = new MP4BoxMVHD();
+            }
+        }
+
+        return box;
+    }
+    MP4Box * MP4Box::CopyBox(MP4Box * box)
+    {
+        MP4Box * dest = CreatBox(box->type);
+        *dest = *box;
+        return dest;
     }
 }

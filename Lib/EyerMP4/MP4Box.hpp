@@ -15,12 +15,19 @@ namespace Eyer
 
         int Parse(EyerBuffer & buffer);
 
-        int ParseSubBox(EyerBuffer & buffer, int offset);
+        int ParseSubBox(EyerBuffer & buffer, int offset = 0);
         virtual int ParseParam(EyerBuffer & buffer, int offset);
 
         uint64_t GetSize();
 
-    private:
+        MP4Box * GetSubBoxPtr(BoxType type);
+
+
+
+        static MP4Box * CreatBox(BoxType type);
+        static MP4Box * CopyBox(MP4Box * box);
+
+    protected:
         uint32_t size = 0;
         BoxType type;
 

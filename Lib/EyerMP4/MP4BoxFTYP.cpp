@@ -14,7 +14,6 @@ namespace Eyer
 
     int MP4BoxFTYP::ParseParam(EyerBuffer & buffer, int offset)
     {
-        printf("MP4BoxFTYP::ParseParam() %d\n", offset);
         unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
         buffer.GetBuffer(data);
 
@@ -27,6 +26,15 @@ namespace Eyer
         minor_version = ntohl(net_minor_version);
 
         printf("MP4BoxFTYP minor_version: %d\n", minor_version);
+
+
+        compatible_brands_len = (buffer.GetLen() - offset - 4 - 4) / 4;
+
+        printf("MP4BoxFTYP compatible_brands_len: %d\n", compatible_brands_len);
+        for(int i=0;i<compatible_brands_len;i++){
+            memcpy(compatible_brands[i], data + offset + 4 + 4 + i * 4, 4);
+            printf("MP4BoxFTYP %c%c%c%c\n", compatible_brands[i][0], compatible_brands[i][1], compatible_brands[i][2],compatible_brands[i][3]);
+        }
 
         free(data);
 
