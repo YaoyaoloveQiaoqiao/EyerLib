@@ -5,38 +5,6 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerMP4/EyerMP4.hpp"
 
-int GetSubBox(Eyer::EyerMP4Box & box, int depth){
-    for(int i=0;i<depth;i++){
-        printf("\t");
-    }
-    box.PrintInfo();
-
-    if(!box.HasSub()){
-        return 0;
-    }
-
-    while(1) {
-        Eyer::EyerMP4Box *subBox = nullptr;
-        int ret = box.Get(&subBox);
-        if (ret) {
-            break;
-        }
-        if(subBox == nullptr){
-            continue;
-        }
-        int d = depth + 1;
-
-        GetSubBox(*subBox, d);
-
-        if(subBox != nullptr){
-            delete subBox;
-            subBox = nullptr;
-        }
-    }
-
-    return 0;
-}
-
 TEST(EyerMP4, EyerMP4Test)
 {
     FILE * fp = fopen("./demo.mp4", "rb");
@@ -53,8 +21,8 @@ TEST(EyerMP4, EyerMP4Test)
     Eyer::EyerBuffer buffer;
     buffer.Append(data, len);
 
-    Eyer::EyerMP4Box box(buffer);
-    GetSubBox(box, 0);
+    Eyer::MP4Box box;
+    box.Parse(buffer);
 
     free(data);
 
