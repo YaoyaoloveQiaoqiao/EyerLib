@@ -44,8 +44,6 @@ namespace Eyer
         buffer = _box.buffer;
         totalBuffer = _box.totalBuffer;
 
-        printf("EyerMP4Box & EyerMP4Box::operator = (const EyerMP4Box & _box)\n");
-
         return *this;
     }
 
@@ -99,7 +97,7 @@ namespace Eyer
 
 
 
-        printf("boxType: %s\n", boxType);
+        // printf("boxType: %s\n", boxType);
         if (0 == strcmp((char *)boxType, BOX_TYPE_FTYPE)) {
             *box = new EyerMP4Box_ftyp(boxDataBuffer);
         }

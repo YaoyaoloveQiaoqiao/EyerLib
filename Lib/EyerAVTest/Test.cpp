@@ -14,15 +14,20 @@ TEST(A, ATest){
     printf("Stream Count: %d\n", streamCount);
 
     int videoStreamIndex = reader.GetVideoStreamIndex();
+    int audioStreamIndex = reader.GetAudioStreamIndex();
 
 
-    Eyer::EyerAVStream stream;
-    reader.GetStream(stream, videoStreamIndex);
+    Eyer::EyerAVStream videoStream;
+    reader.GetStream(videoStream, videoStreamIndex);
+    Eyer::EyerAVDecoder videoDecoder;
+    videoDecoder.Init(&videoStream);
 
-    Eyer::EyerAVDecoder decoder;
-    decoder.Init(&stream);
+    Eyer::EyerAVStream audioStream;
+    reader.GetStream(audioStream, audioStreamIndex);
+    Eyer::EyerAVDecoder audioDecoder;
+    audioDecoder.Init(&audioStream);
 
-    Eyer::EyerAVBitstreamFilter::QueryAllBitstreamFilter();
+    // Eyer::EyerAVBitstreamFilter::QueryAllBitstreamFilter();
 
     while (1){
         Eyer::EyerAVPacket packet;
@@ -31,18 +36,34 @@ TEST(A, ATest){
             break;
         }
 
+        if(packet.GetStreamId() == videoStreamIndex){
+            videoDecoder.SendPacket(&packet);
+            while(1){
+                Eyer::EyerAVFrame avFrame;
+                ret = videoDecoder.RecvFrame(&avFrame);
+                if(ret){
+                    break;
+                }
+
+                printf("video w:%d, h:%d\n", avFrame.GetWidth(), avFrame.GetHeight());
+            }
+        }
+        if(packet.GetStreamId() == audioStreamIndex){
+            audioDecoder.SendPacket(&packet);
+            while(1){
+                Eyer::EyerAVFrame avFrame;
+                ret = audioDecoder.RecvFrame(&avFrame);
+                if(ret){
+                    break;
+                }
+
+                printf("audio sec: %lld\n", avFrame.GetPTS());
+            }
+        }
+
         // EyerLog("Packet: %lld\n", packet.GetPTS());
 
-        decoder.SendPacket(&packet);
-        while(1){
-            Eyer::EyerAVFrame avFrame;
-            ret = decoder.RecvFrame(&avFrame);
-            if(ret){
-                break;
-            }
 
-            printf("w:%d, h:%d\n", avFrame.GetWidth(), avFrame.GetHeight());
-        }
     }
 
     reader.Close();

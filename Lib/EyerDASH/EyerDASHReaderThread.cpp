@@ -138,36 +138,58 @@ namespace Eyer
                 continue;
             }
 
-            EyerString m4vUrl;
-            mpd.GetVideoURL(m4vUrl, index, representationIndex);
+            {
+                EyerString m4vUrl;
+                mpd.GetVideoURL(m4vUrl, index, representationIndex);
 
-            Eyer::EyerURLUtil urlUtil(mpdUrl);
-            m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
+                Eyer::EyerURLUtil urlUtil(mpdUrl);
+                m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
 
-            // EyerLog("m4v url: %s\n", m4vUrl.str);
-            // m4vUrl = EyerString("https:/redknot.cn/DASH/./audio/xiaomai_dash") + EyerString::Number(index) + ".m4s";
+                // EyerLog("m4v url: %s\n", m4vUrl.str);
+                // m4vUrl = EyerString("https:/redknot.cn/DASH/./audio/xiaomai_dash") + EyerString::Number(index) + ".m4s";
 
-            Eyer::EyerSimplestHttp http;
-            Eyer::EyerBuffer m4vBuffer;
-            ret = http.Get(m4vBuffer, m4vUrl);
-            if(ret){
-                continue;
+                Eyer::EyerSimplestHttp http;
+                Eyer::EyerBuffer m4vBuffer;
+                ret = http.Get(m4vBuffer, m4vUrl);
+                if(ret){
+                    continue;
+                }
+
+                dataBuffer->Append(m4vBuffer);
             }
 
-            dataBuffer->Append(m4vBuffer);
+            {
+                EyerString m4vUrl;
+                mpd.GetVideoURL(m4vUrl, index, representationIndex);
+
+                Eyer::EyerURLUtil urlUtil(mpdUrl);
+                m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
+
+                EyerLog("m4v url: %s\n", m4vUrl.str);
+                m4vUrl = EyerString("https:/redknot.cn/DASH/./audio/xiaomai_dash") + EyerString::Number(index) + ".m4s";
+
+                Eyer::EyerSimplestHttp http;
+                Eyer::EyerBuffer m4vBuffer;
+                ret = http.Get(m4vBuffer, m4vUrl);
+                if(ret){
+                    continue;
+                }
+
+                dataBuffer->Append(m4vBuffer);
+            }
+
 
             index++;
         }
-
     }
 
 
     int EyerDASHReaderThread::ParseMP4(
-            EyerMP4Box_ftyp _outftyp,
-            EyerMP4Box_mvhd _outmvhd,
-            EyerMP4Box_mehd _outmehd,
-            EyerMP4Box_trex _outtrex,
-            EyerMP4Box_trak _outtrak,
+            EyerMP4Box_ftyp & _outftyp,
+            EyerMP4Box_mvhd & _outmvhd,
+            EyerMP4Box_mehd & _outmehd,
+            EyerMP4Box_trex & _outtrex,
+            EyerMP4Box_trak & _outtrak,
             EyerMP4Box & box)
     {
         int ret;
