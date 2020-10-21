@@ -2,6 +2,11 @@
 
 namespace Eyer
 {
+    EyerMP4Box_trak::EyerMP4Box_trak() : EyerMP4Box()
+    {
+
+    }
+
     EyerMP4Box_trak::EyerMP4Box_trak(const EyerBuffer & _buffer) : EyerMP4Box(_buffer)
     {
         //// <==========================================>

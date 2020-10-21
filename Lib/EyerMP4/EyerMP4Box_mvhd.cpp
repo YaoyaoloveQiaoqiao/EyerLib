@@ -2,6 +2,11 @@
 
 namespace Eyer
 {
+    EyerMP4Box_mvhd::EyerMP4Box_mvhd() : EyerMP4Box()
+    {
+
+    }
+
     EyerMP4Box_mvhd::EyerMP4Box_mvhd(const EyerBuffer &_buffer) : EyerMP4Box(_buffer)
     {
         //// <==========================================>

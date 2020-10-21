@@ -10,6 +10,7 @@ namespace Eyer
 {
     class EyerMP4Box_moov : public EyerMP4Box {
     public:
+        EyerMP4Box_moov();
         EyerMP4Box_moov(const EyerBuffer & _buffer);
         ~EyerMP4Box_moov();
 

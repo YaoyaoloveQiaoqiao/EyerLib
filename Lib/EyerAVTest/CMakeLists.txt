@@ -13,6 +13,7 @@ add_executable(
 
 include_directories (../)
 
+target_link_libraries (EyerAVTest EyerMP4)
 target_link_libraries (EyerAVTest EyerCore)
 target_link_libraries (EyerAVTest EyerAV)
 target_link_libraries (EyerAVTest EyerGL)

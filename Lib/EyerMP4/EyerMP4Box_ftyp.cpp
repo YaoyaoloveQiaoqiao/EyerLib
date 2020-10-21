@@ -3,6 +3,11 @@
 
 namespace Eyer
 {
+    EyerMP4Box_ftyp::EyerMP4Box_ftyp() : EyerMP4Box()
+    {
+
+    }
+
     EyerMP4Box_ftyp::EyerMP4Box_ftyp(const EyerBuffer & _buffer) : EyerMP4Box(_buffer)
     {
         int bufferDataLen = buffer.GetBuffer();
@@ -39,6 +44,7 @@ namespace Eyer
     int EyerMP4Box_ftyp::PrintInfo()
     {
         printf("========FTYP========\n");
+        printf("Buffer Len: %d, %d\n", buffer.GetLen(), totalBuffer.GetLen());
         printf("major_brand: %s, minor_version: %d, compatible_brands: ", major_brand, minor_version);
 
         for (int i=0; i<brandsNum; i++) {
