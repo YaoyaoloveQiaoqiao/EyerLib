@@ -8,8 +8,11 @@ add_library(
         MP4Box.hpp
         BoxType.cpp
         BoxType.hpp
-        BoxFTYP.cpp
-        BoxFTYP.hpp)
+        MP4BoxFTYP.cpp
+        MP4BoxFTYP.hpp
+        MP4File.cpp
+        MP4File.hpp
+        MP4BoxMVHD.cpp MP4BoxMVHD.hpp)
 
 target_link_libraries (
         EyerCore
@@ -19,7 +22,7 @@ set(head_files
         EyerMP4.hpp
         MP4Box.hpp
         BoxType.hpp
-        BoxFTYP.hpp
+        MP4BoxFTYP.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerMP4)

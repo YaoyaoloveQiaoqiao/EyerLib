@@ -8,7 +8,7 @@ namespace Eyer
     class BoxType {
     public:
         BoxType();
-        BoxType(int id, char a, char b, char c, char d);
+        BoxType(int id, char a, char b, char c, char d, bool _hasSub);
         ~BoxType();
 
         bool operator == (const BoxType boxType);
@@ -20,6 +20,10 @@ namespace Eyer
 
         uint32_t GetABCD();
 
+        bool HasSub();
+
+        int PrintInfo();
+
     private:
         int id = 0;
         char a;
@@ -27,11 +31,17 @@ namespace Eyer
         char c;
         char d;
 
+        bool hasSub = false;
+
     public:
         static BoxType GetType(uint32_t net_type);
 
         static BoxType UNKNOW;
         static BoxType FTYP;
+        static BoxType FREE;
+        static BoxType MOOV;
+        static BoxType MDAT;
+        static BoxType MVHD;
     };
 }
 

@@ -1,7 +1,8 @@
 #ifndef EYERLIB_MP4BOX_HPP
 #define EYERLIB_MP4BOX_HPP
 
-#include "stdint.h"
+#include <stdint.h>
+#include <vector>
 #include "BoxType.hpp"
 #include "EyerCore/EyerCore.hpp"
 
@@ -14,6 +15,9 @@ namespace Eyer
 
         int Parse(EyerBuffer & buffer);
 
+        int ParseSubBox(EyerBuffer & buffer, int offset);
+        virtual int ParseParam(EyerBuffer & buffer, int offset);
+
         uint64_t GetSize();
 
     private:
@@ -21,6 +25,9 @@ namespace Eyer
         BoxType type;
 
         uint64_t largesize = 0;
+
+
+        std::vector<MP4Box *> subBoxList;
     };
 }
 

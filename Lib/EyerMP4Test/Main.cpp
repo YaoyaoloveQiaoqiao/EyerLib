@@ -21,8 +21,9 @@ TEST(EyerMP4, EyerMP4Test)
     Eyer::EyerBuffer buffer;
     buffer.Append(data, len);
 
-    Eyer::MP4Box box;
-    box.Parse(buffer);
+    Eyer::MP4BoxFTYP box;
+    // box.Parse(buffer);
+    box.ParseSubBox(buffer, 0);
 
     free(data);
 
