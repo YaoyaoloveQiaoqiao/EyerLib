@@ -3,5 +3,6 @@
 
 #include "MP4Box.hpp"
 #include "MP4BoxFTYP.hpp"
+#include "MP4BoxMVHD.hpp"
 
 #endif //EYERLIB_EYERMP4_HPP

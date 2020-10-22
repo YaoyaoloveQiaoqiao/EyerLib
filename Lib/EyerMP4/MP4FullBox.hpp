@@ -10,7 +10,12 @@ namespace Eyer
         MP4FullBox();
         ~MP4FullBox();
 
+        virtual EyerBuffer SerializeParam();
         virtual int ParseParam(EyerBuffer & buffer, int offset);
+
+        virtual int PrintInfo(int level = 0);
+
+        bool operator == (const MP4FullBox & fullbox) const;
 
     protected:
         uint8_t version = 0;

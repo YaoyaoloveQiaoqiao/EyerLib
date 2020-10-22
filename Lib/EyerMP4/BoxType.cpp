@@ -4,11 +4,14 @@
 namespace Eyer
 {
     BoxType BoxType::UNKNOW     (0, 'u', 'n', 'k', 'w', false);
-    BoxType BoxType::FTYP       (1, 'f', 't', 'y', 'p', false);
-    BoxType BoxType::FREE       (2, 'f', 'r', 'e', 'e', false);
-    BoxType BoxType::MOOV       (3, 'm', 'o', 'o', 'v', true);
-    BoxType BoxType::MDAT       (4, 'm', 'd', 'a', 't', false);
-    BoxType BoxType::MVHD       (5, 'm', 'v', 'h', 'd', false);;
+    BoxType BoxType::ROOT       (1, 'r', 'o', 'o', 't', true);
+    BoxType BoxType::FTYP       (2, 'f', 't', 'y', 'p', false);
+    BoxType BoxType::FREE       (3, 'f', 'r', 'e', 'e', false);
+    BoxType BoxType::MOOV       (4, 'm', 'o', 'o', 'v', true);
+    BoxType BoxType::MDAT       (5, 'm', 'd', 'a', 't', false);
+    BoxType BoxType::MVHD       (6, 'm', 'v', 'h', 'd', false);
+    BoxType BoxType::TRAK       (7, 't', 'r', 'a', 'k', true);
+    BoxType BoxType::TKHD       (8, 't', 'k', 'h', 'd', false);
 
     BoxType::BoxType()
     {
@@ -30,9 +33,14 @@ namespace Eyer
 
     }
 
-    bool BoxType::operator == (const BoxType boxType)
+    bool BoxType::operator == (const BoxType boxType) const
     {
         return id == boxType.id;
+    }
+
+    bool BoxType::operator != (const BoxType boxType) const
+    {
+        return !(*this == boxType);
     }
 
     char BoxType::GetA()
@@ -83,6 +91,12 @@ namespace Eyer
         }
         else if(net_type == MVHD.GetABCD()){
             return MVHD;
+        }
+        else if(net_type == TRAK.GetABCD()){
+            return TRAK;
+        }
+        else if(net_type == TKHD.GetABCD()){
+            return TKHD;
         }
 
         return UNKNOW;

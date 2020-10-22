@@ -1,17 +1,17 @@
-#ifndef EYERLIB_MP4BOXMVHD_HPP
-#define EYERLIB_MP4BOXMVHD_HPP
+#ifndef EYERLIB_MP4BOXTKHD_HPP
+#define EYERLIB_MP4BOXTKHD_HPP
 
 #include "MP4Box.hpp"
 #include "MP4FullBox.hpp"
 
 namespace Eyer
 {
-    class MP4BoxMVHD : public MP4FullBox {
+    class MP4BoxTKHD : public MP4FullBox {
     public:
-        MP4BoxMVHD();
-        ~MP4BoxMVHD();
+        MP4BoxTKHD();
+        ~MP4BoxTKHD();
 
-        bool operator == (const MP4BoxMVHD & mvhd) const;
+        bool operator == (const MP4BoxTKHD & tkhd) const;
 
         virtual EyerBuffer SerializeParam();
         virtual int ParseParam(EyerBuffer & buffer, int offset);
@@ -19,21 +19,23 @@ namespace Eyer
         virtual int PrintInfo(int level = 0);
 
         int SetDefaultData();
+
     private:
         uint64_t creation_time = 0;
         uint64_t modification_time = 0;
-        uint32_t timescale = 0;
+        uint32_t track_ID = 0;
         uint64_t duration = 0;
 
-        float rate;
-        float volume;
+        uint16_t layer = 0;
+        uint16_t alternate_group = 0;
+
+        float volume = 0.0f;
 
         uint32_t matrix[9] = {0};
 
-        uint32_t next_track_ID;
+        float width = 0.0f;
+        float height = 0.0f;
     };
 }
 
-
-
-#endif //EYERLIB_MP4BOXMVHD_HPP
+#endif //EYERLIB_MP4BOXTKHD_HPP

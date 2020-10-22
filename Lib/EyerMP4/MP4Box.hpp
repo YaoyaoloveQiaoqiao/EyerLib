@@ -13,15 +13,26 @@ namespace Eyer
         MP4Box();
         ~MP4Box();
 
-        int Parse(EyerBuffer & buffer);
+        bool operator == (const MP4Box & box) const;
 
+        // <===Serialize===>
+        EyerBuffer Serialize();
+        EyerBuffer SerializeSubBox();
+        virtual EyerBuffer SerializeParam();
+        // <===Serialize===>
+
+        // <===Parse===>
+        int Parse(EyerBuffer & buffer);
         int ParseSubBox(EyerBuffer & buffer, int offset = 0);
         virtual int ParseParam(EyerBuffer & buffer, int offset);
+        // <===Parse===>
 
         uint64_t GetSize();
 
         MP4Box * GetSubBoxPtr(BoxType type);
 
+
+        virtual int PrintInfo(int level = 0);
 
 
         static MP4Box * CreatBox(BoxType type);

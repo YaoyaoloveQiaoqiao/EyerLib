@@ -11,7 +11,8 @@ namespace Eyer
         BoxType(int id, char a, char b, char c, char d, bool _hasSub);
         ~BoxType();
 
-        bool operator == (const BoxType boxType);
+        bool operator == (const BoxType boxType) const;
+        bool operator != (const BoxType boxType) const;
 
         char GetA();
         char GetB();
@@ -37,11 +38,15 @@ namespace Eyer
         static BoxType GetType(uint32_t net_type);
 
         static BoxType UNKNOW;
+        static BoxType ROOT;
         static BoxType FTYP;
         static BoxType FREE;
         static BoxType MOOV;
         static BoxType MDAT;
         static BoxType MVHD;
+
+        static BoxType TRAK;
+        static BoxType TKHD;
     };
 }
 

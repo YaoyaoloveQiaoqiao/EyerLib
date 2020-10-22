@@ -12,6 +12,26 @@ namespace Eyer
 
     }
 
+    bool MP4FullBox::operator == (const MP4FullBox & fullbox) const
+    {
+        if(version != fullbox.version){
+            return false;
+        }
+
+        return true;
+    }
+
+    EyerBuffer MP4FullBox::SerializeParam()
+    {
+        EyerBuffer buffer;
+
+        uint8_t h[4] = {0, 0, 0, 0};
+
+        buffer.Append(h, 4);
+
+        return buffer;
+    }
+
     int MP4FullBox::ParseParam(EyerBuffer & buffer, int offset)
     {
         offset = MP4Box::ParseParam(buffer, offset);
@@ -26,5 +46,11 @@ namespace Eyer
 
         free(data);
         return offset + 4;
+    }
+
+    int MP4FullBox::PrintInfo(int level)
+    {
+        MP4Box::PrintInfo(level);
+        return 0;
     }
 }

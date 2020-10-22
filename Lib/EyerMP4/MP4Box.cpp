@@ -1,12 +1,13 @@
 #include "MP4Box.hpp"
 #include "MP4BoxFTYP.hpp"
 #include "MP4BoxMVHD.hpp"
+#include "MP4BoxTKHD.hpp"
 
 namespace Eyer
 {
     MP4Box::MP4Box()
     {
-
+        type = BoxType::ROOT;
     }
 
     MP4Box::~MP4Box()
@@ -15,6 +16,63 @@ namespace Eyer
             delete subBoxList[i];
         }
         subBoxList.clear();
+    }
+
+    bool MP4Box::operator == (const MP4Box & box) const
+    {
+        if(size != box.size) {
+            return false;
+        }
+        if(type != box.type) {
+            return false;
+        }
+        if(largesize != box.largesize) {
+            return false;
+        }
+
+        return true;
+    }
+
+    EyerBuffer MP4Box::Serialize()
+    {
+        EyerBuffer buffer;
+
+        EyerBuffer contentBuffer;
+        if(type.HasSub()){
+            contentBuffer = SerializeSubBox();
+        }
+        else{
+            contentBuffer = SerializeParam();
+        }
+
+        uint8_t head[8];
+        int len = contentBuffer.GetLen() + 8;
+        head[0] = *((uint8_t *)(&len) + 3);
+        head[1] = *((uint8_t *)(&len) + 2);
+        head[2] = *((uint8_t *)(&len) + 1);
+        head[3] = *((uint8_t *)(&len) + 0);
+
+        head[4] = type.GetA();
+        head[5] = type.GetB();
+        head[6] = type.GetC();
+        head[7] = type.GetD();
+
+        buffer.Append(head, 8);
+        buffer.Append(contentBuffer);
+
+        return buffer;
+    }
+
+    EyerBuffer MP4Box::SerializeSubBox()
+    {
+        EyerBuffer buffer;
+        return buffer;
+    }
+
+    EyerBuffer MP4Box::SerializeParam()
+    {
+        EyerBuffer buffer;
+        return buffer;
     }
 
     int MP4Box::Parse(EyerBuffer & buffer)
@@ -82,7 +140,6 @@ namespace Eyer
             uint32_t net_type;
             memcpy(&net_type, data + alreadRead + 4, 4);
             BoxType boxtype = BoxType::GetType(net_type);
-            // boxtype.PrintInfo();
 
 
             alreadRead += boxSize;
@@ -93,6 +150,7 @@ namespace Eyer
             MP4Box * box = CreatBox(boxtype);
             if(box != nullptr){
                 box->Parse(boxBuffer);
+                // box->PrintInfo();
                 subBoxList.push_back(box);
             }
         }
@@ -125,6 +183,23 @@ namespace Eyer
         return subBox;
     }
 
+    int MP4Box::PrintInfo(int level)
+    {
+        EyerString levelStr = "";
+        for(int i=0;i<level;i++){
+            levelStr = levelStr + "\t";
+        }
+
+        printf("%s[%c%c%c%c]\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD());
+        if(type.HasSub()){
+            for(int i=0;i<subBoxList.size();i++){
+                MP4Box * box = subBoxList[i];
+                box->PrintInfo(level + 1);
+            }
+        }
+        return 0;
+    }
+
     MP4Box * MP4Box::CreatBox(BoxType type)
     {
         MP4Box * box = nullptr;
@@ -137,6 +212,9 @@ namespace Eyer
             }
             else if(type == BoxType::MVHD){
                 box = new MP4BoxMVHD();
+            }
+            else if(type == BoxType::TKHD){
+                box = new MP4BoxTKHD();
             }
         }
 
