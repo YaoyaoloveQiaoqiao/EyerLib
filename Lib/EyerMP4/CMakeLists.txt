@@ -3,41 +3,16 @@ include_directories (./)
 
 add_library(
         EyerMP4
-        EyerMP4Constant.hpp
         EyerMP4.hpp
-        EyerMP4.cpp
-        EyerMP4Box.cpp
-        EyerMP4Box.hpp
-        EyerMP4Box_ftyp.cpp
-        EyerMP4Box_ftyp.hpp
-        EyerMP4Box_moov.cpp
-        EyerMP4Box_moov.hpp
-        EyerMP4Box_mvhd.cpp
-        EyerMP4Box_mvhd.hpp
-        EyerMP4Box_trak.cpp
-        EyerMP4Box_trak.hpp
-        EyerMP4Box_tkhd.cpp
-        EyerMP4Box_tkhd.hpp
-        EyerMP4Box_edts.cpp
-        EyerMP4Box_edts.hpp
-        EyerMP4Box_mdia.cpp
-        EyerMP4Box_mdia.hpp
-        EyerMP4Box_mdhd.cpp
-        EyerMP4Box_mdhd.hpp
-        EyerMP4Box_hdlr.cpp
-        EyerMP4Box_hdlr.hpp
-        EyerMP4Box_minf.cpp
-        EyerMP4Box_minf.hpp
-        EyerMP4Box_stbl.cpp
-        EyerMP4Box_stbl.hpp
-        EyerMP4Box_mvex.cpp
-        EyerMP4Box_mvex.hpp
-        EyerMP4Box_trex.cpp
-        EyerMP4Box_trex.hpp
-        EyerMP4Box_mehd.cpp
-        EyerMP4Box_mehd.hpp
+        MP4Box.cpp
+        MP4Box.hpp
         BoxType.cpp
-)
+        BoxType.hpp
+        MP4BoxFTYP.cpp
+        MP4BoxFTYP.hpp
+        MP4File.cpp
+        MP4File.hpp
+        MP4BoxMVHD.cpp MP4BoxMVHD.hpp MP4FullBox.cpp MP4FullBox.hpp MP4BoxTKHD.cpp MP4BoxTKHD.hpp)
 
 target_link_libraries (
         EyerCore
@@ -45,20 +20,9 @@ target_link_libraries (
 
 set(head_files
         EyerMP4.hpp
-        EyerMP4Box_ftyp.hpp
-        EyerMP4Box_moov.hpp
-        EyerMP4Box_mvhd.hpp
-        EyerMP4Box_trak.hpp
-        EyerMP4Box_tkhd.hpp
-        EyerMP4Box_edts.hpp
-        EyerMP4Box_mdia.hpp
-        EyerMP4Box_mdhd.hpp
-        EyerMP4Box_hdlr.hpp
-        EyerMP4Box_minf.hpp
-        EyerMP4Box_stbl.hpp
-        EyerMP4Box_mvex.hpp
-        EyerMP4Box_trex.hpp
-        EyerMP4Box_mehd.hpp
+        MP4Box.hpp
+        BoxType.hpp
+        MP4BoxFTYP.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerMP4)
