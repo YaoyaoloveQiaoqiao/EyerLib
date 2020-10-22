@@ -1,5 +1,23 @@
 #include "MP4BoxMVHD.hpp"
 
+
+#define fractional_bits 30
+#define fixed_type_bits 32
+
+typedef int32_t fixed_type;
+typedef int64_t expand_type;
+
+fixed_type float_to_fixed(float inp)
+{
+    return (fixed_type)(inp * (1 << fractional_bits));
+}
+
+float fixed_to_float(fixed_type inp)
+{
+    return ((float)inp) / (1 << fractional_bits);
+}
+
+
 namespace Eyer
 {
     MP4BoxMVHD::MP4BoxMVHD() : MP4FullBox()
@@ -30,6 +48,13 @@ namespace Eyer
         if(duration != mvhd.duration){
             return false;
         }
+        if(rate != mvhd.rate){
+            return false;
+        }
+        if(volume != mvhd.volume){
+            return false;
+        }
+
 
         return true;
     }
@@ -62,7 +87,10 @@ namespace Eyer
         }
 
         uint16_t rate_net[2] = {0};
-        buffer.Append((unsigned char *)rate_net, 2 * sizeof(uint16_t));
+        rate_net[0] = htons((uint16_t)rate);
+        rate_net[1] = htons(0.4);
+        buffer.Append((unsigned char *)&rate_net, 2 * sizeof(uint16_t));
+
         uint8_t volume_net[2] = {0};
         buffer.Append((unsigned char *)volume_net, 2 * sizeof(uint8_t));
 
@@ -123,6 +151,10 @@ namespace Eyer
             duration            = ntohl(duration_net);
         }
 
+        uint16_t  a = (data[offset + 0] << 8 | data[offset + 1]);
+        uint16_t  b = (data[offset + 2] << 8 | data[offset + 3]);
+        printf("a: %d, b: %d\n", a, b);
+
         rate        =  (data[offset + 0] << 8 | data[offset + 1]) + (data[offset + 2] << 8 | data[offset + 3]); offset += 4;
         volume      =  data[offset + 0] + data[offset + 1]; offset += 2;
 
@@ -164,6 +196,10 @@ namespace Eyer
         printf("%sduration: %lld\n", levelStr.str, duration);
         printf("%snext_track_ID: %d\n", levelStr.str, next_track_ID);
 
+        printf("%srate: %f\n", levelStr.str, rate);
+        printf("%svolume: %f\n", levelStr.str, volume);
+
+
         return 0;
     }
 
@@ -177,7 +213,7 @@ namespace Eyer
         duration = 6666;
 
         rate = 1.4f;
-        volume = 1.0f;
+        volume = 1.24f;
 
         next_track_ID = 5;
 
