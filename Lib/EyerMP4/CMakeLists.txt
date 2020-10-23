@@ -12,7 +12,7 @@ add_library(
         MP4BoxFTYP.hpp
         MP4File.cpp
         MP4File.hpp
-        MP4BoxMVHD.cpp MP4BoxMVHD.hpp MP4FullBox.cpp MP4FullBox.hpp MP4BoxTKHD.cpp MP4BoxTKHD.hpp)
+        MP4BoxMVHD.cpp MP4BoxMVHD.hpp MP4FullBox.cpp MP4FullBox.hpp MP4BoxTKHD.cpp MP4BoxTKHD.hpp EyerISOTypeReader.cpp EyerISOTypeReader.hpp)
 
 target_link_libraries (
         EyerCore

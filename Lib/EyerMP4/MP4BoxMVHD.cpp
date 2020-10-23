@@ -1,4 +1,5 @@
 #include "MP4BoxMVHD.hpp"
+#include "EyerISOTypeReader.hpp"
 
 namespace Eyer
 {
@@ -123,7 +124,8 @@ namespace Eyer
             duration            = ntohl(duration_net);
         }
 
-        rate        =  (data[offset + 0] << 8 | data[offset + 1]) + (data[offset + 2] << 8 | data[offset + 3]); offset += 4;
+        rate = EyerISOTypeReader::ReadFixedPoint1616(data); offset += 4;
+        // rate        =  (data[offset + 0] << 8 | data[offset + 1]) + (data[offset + 2] << 8 | data[offset + 3]); offset += 4;
         volume      =  data[offset + 0] + data[offset + 1]; offset += 2;
 
         int MAX_MVHD_RESERVED_LEN = 2 * 4 + 2;

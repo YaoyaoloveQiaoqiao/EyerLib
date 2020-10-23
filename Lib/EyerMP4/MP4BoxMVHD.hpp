@@ -25,7 +25,7 @@ namespace Eyer
         uint32_t timescale = 0;
         uint64_t duration = 0;
 
-        float rate;
+        double rate;
         float volume;
 
         uint32_t matrix[9] = {0};
