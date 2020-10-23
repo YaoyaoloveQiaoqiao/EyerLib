@@ -31,10 +31,10 @@ namespace Eyer
 
         float volume = 0.0f;
 
-        uint32_t matrix[9] = {0};
+        float matrix[9] = {0};
 
-        float width = 0.0f;
-        float height = 0.0f;
+        uint32_t width = 0.0f;
+        uint32_t height = 0.0f;
     };
 }
 
