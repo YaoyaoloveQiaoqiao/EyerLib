@@ -45,8 +45,17 @@ namespace Eyer
         static BoxType MDAT;
         static BoxType MVHD;
 
+        static BoxType EDTS;
+
         static BoxType TRAK;
         static BoxType TKHD;
+
+        static BoxType MDIA;
+        static BoxType MDHD;
+        static BoxType MINF;
+        static BoxType STBL;
+
+        static BoxType MVEX;
     };
 }
 

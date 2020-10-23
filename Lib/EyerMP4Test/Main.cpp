@@ -8,6 +8,7 @@
 TEST(EyerMP4, EyerMP4Test)
 {
     printf("=======================Read File=======================\n");
+    // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
     FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
@@ -62,6 +63,23 @@ TEST(EyerMP4, MP4BoxMVHD)
     mvhd2.PrintInfo();
 
     ASSERT_EQ(mvhd, mvhd2) << "MVHD Error";
+}
+
+TEST(EyerMP4, MP4BoxTKHD)
+{
+    printf("=======================TKHD=======================\n");
+    Eyer::MP4BoxTKHD tkhd;
+    tkhd.SetDefaultData();
+    tkhd.PrintInfo();
+
+    Eyer::EyerBuffer buffer = tkhd.Serialize();
+
+    Eyer::MP4BoxTKHD tkhd2;
+    tkhd2.Parse(buffer);
+
+    tkhd2.PrintInfo();
+
+    ASSERT_EQ(tkhd, tkhd2) << "TKHD Error";
 }
 
 

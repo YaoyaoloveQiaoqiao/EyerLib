@@ -17,6 +17,28 @@ namespace Eyer {
             return false;
         }
 
+        if(creation_time != tkhd.creation_time){
+            return false;
+        }
+        if(modification_time != tkhd.modification_time){
+            return false;
+        }
+        if(track_ID != tkhd.track_ID){
+            return false;
+        }
+        if(duration != tkhd.duration){
+            return false;
+        }
+        if(layer != tkhd.layer){
+            return false;
+        }
+        if(alternate_group != tkhd.alternate_group){
+            return false;
+        }
+        if(volume != tkhd.volume){
+            return false;
+        }
+
         return true;
     }
 
@@ -171,6 +193,19 @@ namespace Eyer {
 
     int MP4BoxTKHD::SetDefaultData()
     {
+        type = BoxType::TKHD;
+
+        if(version == 1){
+            size = 8 + 4;
+            size += 8 + 8 + 4 + 4 + 8;
+            size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
+        }
+        else{
+            size = 8 + 4;
+            size += 4 + 4 + 4 + 4 + 4;
+            size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
+        }
+
         version = 0;
 
         creation_time = 0;
@@ -181,6 +216,9 @@ namespace Eyer {
         layer = 10;
         alternate_group = 11;
         volume = 1.0f;
+
+        width = 1920.0f;
+        height = 1080.0f;
 
         return 0;
     }
