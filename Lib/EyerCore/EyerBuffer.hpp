@@ -1,6 +1,8 @@
 #ifndef EYE_LIB_EYERBUFFER_HPP
 #define EYE_LIB_EYERBUFFER_HPP
 
+#include <stdint.h>
+
 namespace Eyer{
     class EyerBuffer {
     public:
@@ -14,6 +16,7 @@ namespace Eyer{
         int Append(const EyerBuffer & buffer);
 
         int CutOff(EyerBuffer & buffer, int len);
+        int CutOff(uint8_t * buffer, int len);
 
         int GetBuffer(unsigned char * _buf = nullptr);
 

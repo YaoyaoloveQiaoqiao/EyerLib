@@ -1,22 +1,7 @@
 #include "MP4BoxMVHD.hpp"
 #include "EyerISOTypeReader.hpp"
 
-
-#define fractional_bits 30
-#define fixed_type_bits 32
-
-typedef int32_t fixed_type;
-typedef int64_t expand_type;
-
-fixed_type float_to_fixed(float inp)
-{
-    return (fixed_type)(inp * (1 << fractional_bits));
-}
-
-float fixed_to_float(fixed_type inp)
-{
-    return ((float)inp) / (1 << fractional_bits);
-}
+#include "MP4Stream.hpp"
 
 
 namespace Eyer
@@ -64,116 +49,70 @@ namespace Eyer
     {
         EyerBuffer buffer = MP4FullBox::SerializeParam();
 
-        if(version == 1){
-            uint64_t creation_time_net          = htonll(creation_time);
-            uint64_t modification_time_net      = htonll(modification_time);
-            uint32_t timescale_net              = htonl (timescale);
-            uint64_t duration_net               = htonll(duration);
+        MP4Stream stream(buffer);
 
-            buffer.Append((unsigned char *)&creation_time_net,          sizeof(uint64_t));
-            buffer.Append((unsigned char *)&modification_time_net,      sizeof(uint64_t));
-            buffer.Append((unsigned char *)&timescale_net,              sizeof(uint32_t));
-            buffer.Append((unsigned char *)&duration_net,               sizeof(uint64_t));
+        if(version == 1){
+            stream.WriteBigEndian(creation_time);
+            stream.WriteBigEndian(modification_time);
+            stream.WriteBigEndian(timescale);
+            stream.WriteBigEndian(duration);
         }
         else{
-            uint32_t creation_time_net          = htonl ((uint32_t)creation_time);
-            uint32_t modification_time_net      = htonl ((uint32_t)modification_time);
-            uint32_t timescale_net              = htonl ((uint32_t)timescale);
-            uint32_t duration_net               = htonl ((uint32_t)duration);
-
-            buffer.Append((unsigned char *)&creation_time_net,          sizeof(uint32_t));
-            buffer.Append((unsigned char *)&modification_time_net,      sizeof(uint32_t));
-            buffer.Append((unsigned char *)&timescale_net,              sizeof(uint32_t));
-            buffer.Append((unsigned char *)&duration_net,               sizeof(uint32_t));
+            stream.WriteBigEndian((uint32_t)creation_time);
+            stream.WriteBigEndian((uint32_t)modification_time);
+            stream.WriteBigEndian((uint32_t)timescale);
+            stream.WriteBigEndian((uint32_t)duration);
         }
 
-        uint16_t rate_net[2] = {0};
-        rate_net[0] = htons((uint16_t)rate);
-        rate_net[1] = htons(0.4);
-        buffer.Append((unsigned char *)&rate_net, 2 * sizeof(uint16_t));
+        stream.WriteBigEndianFixedPoint(rate,       16, 16);
+        stream.WriteBigEndianFixedPoint(volume,     8,   8);
 
-        uint8_t volume_net[2] = {0};
-        buffer.Append((unsigned char *)volume_net, 2 * sizeof(uint8_t));
+        stream.WriteZero(2);
+        stream.WriteZero(sizeof(uint32_t) * 2);
 
-        uint8_t reserved_net[10] = {0};
-        buffer.Append(reserved_net, 10 * sizeof(uint8_t));
-
-        for(int i=0;i<9;i++){
-            uint32_t m = htonl(matrix[i]);
-            buffer.Append((unsigned char *)&m, sizeof(uint32_t));
+        for(int i=0;i<9;i++) {
+            stream.WriteBigEndianFixedPoint(matrix[i], 16, 16);
         }
 
-        uint32_t pre_defined[6] = {0};
-        buffer.Append((unsigned char *)pre_defined, 6 * sizeof(uint32_t));
+        stream.WriteZero(sizeof(uint32_t) * 6);
+        stream.WriteBigEndian(next_track_ID);
 
-        uint32_t next_track_ID_net = htonl(next_track_ID);
-        buffer.Append((unsigned char *)&next_track_ID_net, sizeof(uint32_t));
-
-        return buffer;
+        return stream.GetBuffer();
     }
 
     int MP4BoxMVHD::ParseParam(EyerBuffer & buffer, int offset)
     {
         offset = MP4FullBox::ParseParam(buffer, offset);
 
-        unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
-        buffer.GetBuffer(data);
+        MP4Stream stream(buffer);
+        stream.Skip(offset);
 
         if(version == 1){
-            uint64_t creation_time_net;
-            uint64_t modification_time_net;
-            uint32_t timescale_net;
-            uint64_t duration_net;
-
-            memcpy(&creation_time_net,          data + offset, 8); offset += 8;
-            memcpy(&modification_time_net,      data + offset, 8); offset += 8;
-            memcpy(&timescale_net,              data + offset, 4); offset += 4;
-            memcpy(&duration_net,               data + offset, 8); offset += 8;
-
-            creation_time       = ntohll(creation_time_net);
-            modification_time   = ntohll(modification_time_net);
-            timescale           = ntohl (timescale_net);
-            duration            = ntohll(duration_net);
+            creation_time       = stream.ReadBigEndian_uint64(offset);
+            modification_time   = stream.ReadBigEndian_uint64(offset);
+            timescale           = stream.ReadBigEndian_uint32(offset);
+            duration            = stream.ReadBigEndian_uint64(offset);
         }
         else{
-            uint32_t creation_time_net;
-            uint32_t modification_time_net;
-            uint32_t timescale_net;
-            uint32_t duration_net;
-
-            memcpy(&creation_time_net,                   data + offset, 4); offset += 4;
-            memcpy(&modification_time_net,               data + offset, 4); offset += 4;
-            memcpy(&timescale_net,                       data + offset, 4); offset += 4;
-            memcpy(&duration_net,                        data + offset, 4); offset += 4;
-
-            creation_time       = ntohl(creation_time_net);
-            modification_time   = ntohl(modification_time_net);
-            timescale           = ntohl(timescale_net);
-            duration            = ntohl(duration_net);
+            creation_time       = stream.ReadBigEndian_uint32(offset);
+            modification_time   = stream.ReadBigEndian_uint32(offset);
+            timescale           = stream.ReadBigEndian_uint32(offset);
+            duration            = stream.ReadBigEndian_uint32(offset);
         }
 
-        rate = EyerISOTypeReader::ReadFixedPoint1616(data); offset += 4;
-        // rate        =  (data[offset + 0] << 8 | data[offset + 1]) + (data[offset + 2] << 8 | data[offset + 3]); offset += 4;
-        volume      =  data[offset + 0] + data[offset + 1]; offset += 2;
+        rate    = stream.ReadBigEndianFixedPoint(16, 16, offset);
+        volume  = stream.ReadBigEndianFixedPoint(8,  8,  offset);
 
-        int MAX_MVHD_RESERVED_LEN = 2 * 4 + 2;
-        offset += MAX_MVHD_RESERVED_LEN;
+        stream.Skip(2, offset);
+        stream.Skip(sizeof(uint32_t) * 2, offset);
 
         for(int i=0;i<9;i++){
-            uint32_t m;
-            memcpy(&m, data + offset + i * 4, 4);
-            matrix[i] = ntohl(m);
+            matrix[i] = stream.ReadBigEndianFixedPoint(16, 16, offset);
         }
 
-        int MAX_MATRIX_LEN = 9 * 4;
-        int MAX_PRE_DEFINE_LEN = 6 * 4;
-        offset += MAX_PRE_DEFINE_LEN + MAX_MATRIX_LEN;
+        stream.Skip(sizeof(uint32_t) * 6, offset);
 
-        uint32_t next_track_ID_net;
-        memcpy(&next_track_ID_net,                   data + offset, 4); offset += 4;
-        next_track_ID = ntohl(next_track_ID_net);
-
-        free(data);
+        next_track_ID = stream.ReadBigEndian_uint32(offset);
 
         return offset;
     }
@@ -192,10 +131,15 @@ namespace Eyer
         printf("%smodification_time: %lld\n", levelStr.str, modification_time);
         printf("%stimescale: %d\n", levelStr.str, timescale);
         printf("%sduration: %lld\n", levelStr.str, duration);
-        printf("%snext_track_ID: %d\n", levelStr.str, next_track_ID);
 
         printf("%srate: %f\n", levelStr.str, rate);
         printf("%svolume: %f\n", levelStr.str, volume);
+
+        printf("%s[ %f, %f, %f\n", levelStr.str,  matrix[0], matrix[1], matrix[2]);
+        printf("%s  %f, %f, %f\n", levelStr.str,  matrix[3], matrix[4], matrix[5]);
+        printf("%s  %f, %f, %f ]\n",levelStr.str, matrix[6], matrix[7], matrix[8]);
+
+        printf("%snext_track_ID: %d\n", levelStr.str, next_track_ID);
 
 
         return 0;
@@ -210,8 +154,12 @@ namespace Eyer
         timescale = 1000;
         duration = 6666;
 
-        rate = 1.4f;
-        volume = 1.24f;
+        rate = 2.0f;
+        volume = 5.0f;
+
+        matrix[0] = 0.0f; matrix[1] = 1.0f; matrix[2] = 2.0f;
+        matrix[3] = 3.0f; matrix[4] = 4.0f; matrix[5] = 5.0f;
+        matrix[6] = 6.0f; matrix[7] = 7.0f; matrix[8] = 8.0f;
 
         next_track_ID = 5;
 

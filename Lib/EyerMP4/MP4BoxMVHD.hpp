@@ -25,10 +25,10 @@ namespace Eyer
         uint32_t timescale = 0;
         uint64_t duration = 0;
 
-        double rate;
+        float rate;
         float volume;
 
-        uint32_t matrix[9] = {0};
+        float matrix[9] = {0};
 
         uint32_t next_track_ID;
     };

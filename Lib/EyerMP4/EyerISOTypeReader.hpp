@@ -7,7 +7,8 @@ namespace Eyer
 {
     class EyerISOTypeReader {
     public:
-        static double ReadFixedPoint1616(const uint8_t * data);
+        static double ReadFixedPoint1616        (const uint8_t * data);
+        static float  ReadFixedPoint88          (const uint8_t * data);
     };
 }
 
