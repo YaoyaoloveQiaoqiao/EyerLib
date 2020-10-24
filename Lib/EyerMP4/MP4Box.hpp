@@ -32,6 +32,8 @@ namespace Eyer
 
         uint64_t GetSize();
 
+        BoxType GetType();
+
         MP4Box * GetSubBoxPtr(BoxType type);
 
 

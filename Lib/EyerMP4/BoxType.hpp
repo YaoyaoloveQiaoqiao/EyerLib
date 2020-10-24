@@ -57,6 +57,16 @@ namespace Eyer
         static BoxType STBL;
 
         static BoxType MVEX;
+
+        static BoxType HDLR;
+        static BoxType DINF;
+
+        static BoxType DREF;
+
+        static BoxType URL;
+        static BoxType URN;
+
+        static BoxType TREX;
     };
 }
 

@@ -1,9 +1,6 @@
 #include "MP4Stream.hpp"
 #include <math.h>
 
-
-#define FP_SCALE 65536 // scaling factor
-
 namespace Eyer {
     MP4Stream::MP4Stream(EyerBuffer &_buffer) {
         buffer = _buffer;
@@ -70,6 +67,16 @@ namespace Eyer {
         return ntohs(val_net);
     }
 
+    uint8_t  MP4Stream::ReadBigEndian_uint8 (int & offset)
+    {
+        uint8_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(uint8_t));
+
+        offset += sizeof(uint8_t);
+
+        return val_net;
+    }
+
     float MP4Stream::ReadBigEndianFixedPoint(unsigned int integerLength, unsigned int fractionalLength, int &offset) {
         uint32_t n;
         if (integerLength + fractionalLength == 16) {
@@ -84,6 +91,17 @@ namespace Eyer {
 
 
         return integer + fractional;
+    }
+
+    int MP4Stream::ReadStr(EyerString & str, int len)
+    {
+        char * strBuffer = (char *)malloc(len + 1);
+        buffer.CutOff((uint8_t *) strBuffer, len);
+        strBuffer[len] = '\0';
+        str = strBuffer;
+
+        free(strBuffer);
+        return 0;
     }
 
     int MP4Stream::Skip(int len)
@@ -173,8 +191,14 @@ namespace Eyer {
         return len;
     }
 
+    int MP4Stream::WriteString(EyerString & str)
+    {
+        int len = strlen(str.str) + 1;
 
+        buffer.Append((unsigned char *)str.str, len);
 
+        return len;
+    }
 
 
 
