@@ -6,7 +6,7 @@ namespace Eyer
 {
     MP4BoxELST::MP4BoxELST() : MP4FullBox()
     {
-
+        type = BoxType::ELST;
     }
 
     MP4BoxELST::~MP4BoxELST()
