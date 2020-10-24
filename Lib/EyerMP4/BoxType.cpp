@@ -12,6 +12,14 @@ namespace Eyer
     BoxType BoxType::MVHD       (6, 'm', 'v', 'h', 'd', false);
     BoxType BoxType::TRAK       (7, 't', 'r', 'a', 'k', true);
     BoxType BoxType::TKHD       (8, 't', 'k', 'h', 'd', false);
+    BoxType BoxType::MDIA       (9, 'm', 'd', 'i', 'a', true);
+    BoxType BoxType::MINF       (10, 'm', 'i', 'n', 'f', true);
+    BoxType BoxType::STBL       (11, 's', 't', 'b', 'l', true);
+    BoxType BoxType::EDTS       (12, 'e', 'd', 't', 's', true);
+    BoxType BoxType::MDHD       (13, 'm', 'd', 'h', 'd', false);
+    BoxType BoxType::MVEX       (14, 'm', 'v', 'e', 'x', true);
+    BoxType BoxType::ELST       (15, 'e', 'l', 's', 't', false);
+
 
     BoxType::BoxType()
     {
@@ -97,6 +105,27 @@ namespace Eyer
         }
         else if(net_type == TKHD.GetABCD()){
             return TKHD;
+        }
+        else if(net_type == MDIA.GetABCD()){
+            return MDIA;
+        }
+        else if(net_type == MINF.GetABCD()){
+            return MINF;
+        }
+        else if(net_type == STBL.GetABCD()){
+            return STBL;
+        }
+        else if(net_type == EDTS.GetABCD()) {
+            return EDTS;
+        }
+        else if(net_type == MDHD.GetABCD()) {
+            return MDHD;
+        }
+        else if(net_type == MVEX.GetABCD()) {
+            return MVEX;
+        }
+        else if(net_type == ELST.GetABCD()) {
+            return ELST;
         }
 
         return UNKNOW;

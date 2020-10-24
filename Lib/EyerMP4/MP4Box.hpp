@@ -3,8 +3,11 @@
 
 #include <stdint.h>
 #include <vector>
+#include <string.h>
 #include "BoxType.hpp"
 #include "EyerCore/EyerCore.hpp"
+
+#include <arpa/inet.h>
 
 namespace Eyer
 {

@@ -28,7 +28,7 @@ namespace Eyer
         float rate;
         float volume;
 
-        uint32_t matrix[9] = {0};
+        float matrix[9] = {0};
 
         uint32_t next_track_ID;
     };

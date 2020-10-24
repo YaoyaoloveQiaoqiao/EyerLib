@@ -5,9 +5,11 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerMP4/EyerMP4.hpp"
 
+
 TEST(EyerMP4, EyerMP4Test)
 {
     printf("=======================Read File=======================\n");
+    // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
     FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
@@ -63,6 +65,42 @@ TEST(EyerMP4, MP4BoxMVHD)
 
     ASSERT_EQ(mvhd, mvhd2) << "MVHD Error";
 }
+
+TEST(EyerMP4, MP4BoxTKHD)
+{
+    printf("=======================TKHD=======================\n");
+    Eyer::MP4BoxTKHD tkhd;
+    tkhd.SetDefaultData();
+    tkhd.PrintInfo();
+
+    Eyer::EyerBuffer buffer = tkhd.Serialize();
+
+    Eyer::MP4BoxTKHD tkhd2;
+    tkhd2.Parse(buffer);
+
+    tkhd2.PrintInfo();
+
+    ASSERT_EQ(tkhd, tkhd2) << "TKHD Error";
+}
+
+TEST(EyerMP4, MP4BoxELST)
+{
+    printf("=======================ELST=======================\n");
+    Eyer::MP4BoxELST elst;
+    elst.SetDefaultData();
+    elst.PrintInfo();
+
+    Eyer::EyerBuffer buffer = elst.Serialize();
+
+    Eyer::MP4BoxELST elst2;
+    elst2.Parse(buffer);
+
+    elst2.PrintInfo();
+
+    ASSERT_EQ(elst, elst2) << "ELST Error";
+}
+
+
 
 
 int main(int argc,char **argv){

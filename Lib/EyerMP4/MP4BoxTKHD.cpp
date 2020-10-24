@@ -1,7 +1,8 @@
 #include "MP4BoxTKHD.hpp"
+#include "MP4Stream.hpp"
 
 namespace Eyer {
-    MP4BoxTKHD::MP4BoxTKHD()
+    MP4BoxTKHD::MP4BoxTKHD() : MP4FullBox()
     {
 
     }
@@ -17,6 +18,34 @@ namespace Eyer {
             return false;
         }
 
+        if(creation_time != tkhd.creation_time){
+            return false;
+        }
+        if(modification_time != tkhd.modification_time){
+            return false;
+        }
+        if(track_ID != tkhd.track_ID){
+            return false;
+        }
+        if(duration != tkhd.duration){
+            return false;
+        }
+        if(layer != tkhd.layer){
+            return false;
+        }
+        if(alternate_group != tkhd.alternate_group){
+            return false;
+        }
+        if(volume != tkhd.volume){
+            return false;
+        }
+        if(width != tkhd.width){
+            return false;
+        }
+        if(height != tkhd.height){
+            return false;
+        }
+
         return true;
     }
 
@@ -24,121 +53,71 @@ namespace Eyer {
     {
         EyerBuffer buffer = MP4FullBox::SerializeParam();
 
+        MP4Stream stream(buffer);
+
         if(version == 1){
-            uint64_t creation_time_net          = htonll(creation_time);
-            uint64_t modification_time_net      = htonll(modification_time);
-            uint32_t track_ID_net               = htonl (track_ID);
-            uint64_t duration_net               = htonll(duration);
-
-            uint32_t reserved = 0;
-
-            buffer.Append((unsigned char *)&creation_time_net,          sizeof(uint64_t));
-            buffer.Append((unsigned char *)&modification_time_net,      sizeof(uint64_t));
-            buffer.Append((unsigned char *)&track_ID_net,               sizeof(uint32_t));
-            buffer.Append((unsigned char *)&reserved,                   sizeof(uint32_t));
-            buffer.Append((unsigned char *)&duration_net,               sizeof(uint64_t));
+            stream.WriteBigEndian(creation_time);
+            stream.WriteBigEndian(modification_time);
+            stream.WriteBigEndian(track_ID);
+            stream.WriteZero(4);
+            stream.WriteBigEndian(duration);
         }
         else{
-            uint32_t creation_time_net          = htonl ((uint32_t)creation_time);
-            uint32_t modification_time_net      = htonl ((uint32_t)modification_time);
-            uint32_t track_ID_net               = htonl ((uint32_t)track_ID);
-            uint32_t duration_net               = htonl ((uint32_t)duration);
+            stream.WriteBigEndian((uint32_t)creation_time);
+            stream.WriteBigEndian((uint32_t)modification_time);
+            stream.WriteBigEndian((uint32_t)track_ID);
+            stream.WriteZero(4);
+            stream.WriteBigEndian((uint32_t)duration);
+        }
+        stream.WriteZero(4);
+        stream.WriteBigEndian(layer);
+        stream.WriteBigEndian(alternate_group);
+        stream.WriteBigEndianFixedPoint(volume, 8, 8);
 
-            uint32_t reserved = 0;
-
-            buffer.Append((unsigned char *)&creation_time_net,          sizeof(uint32_t));
-            buffer.Append((unsigned char *)&modification_time_net,      sizeof(uint32_t));
-            buffer.Append((unsigned char *)&track_ID_net,               sizeof(uint32_t));
-            buffer.Append((unsigned char *)&reserved,                   sizeof(uint32_t));
-            buffer.Append((unsigned char *)&duration_net,               sizeof(uint32_t));
+        for(int i=0;i<9;i++) {
+            stream.WriteBigEndianFixedPoint(matrix[i], 16, 16);
         }
 
-        uint32_t reserved[2] = {0};
-        buffer.Append((unsigned char *)&reserved, 2 * sizeof(uint32_t));
+        stream.WriteBigEndian(width);
+        stream.WriteBigEndian(height);
 
-        uint16_t layer_net = htons ((uint16_t)layer);
-        buffer.Append((unsigned char *)&layer_net, sizeof(uint16_t));
-
-        uint16_t alternate_group_net = htons ((uint16_t)alternate_group);
-        buffer.Append((unsigned char *)&alternate_group_net, sizeof(uint16_t));
-
-
-
-        return buffer;
+        return stream.GetBuffer();
     }
 
     int MP4BoxTKHD::ParseParam(EyerBuffer & buffer, int offset)
     {
         offset = MP4FullBox::ParseParam(buffer, offset);
 
-        unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
-        buffer.GetBuffer(data);
+        MP4Stream stream(buffer);
+        stream.Skip(offset);
 
         if(version == 1){
-            uint64_t creation_time_net;
-            uint64_t modification_time_net;
-            uint32_t timescale_net;
-            uint64_t duration_net;
-
-            memcpy(&creation_time_net,          data + offset, 8); offset += 8;
-            memcpy(&modification_time_net,      data + offset, 8); offset += 8;
-            memcpy(&timescale_net,              data + offset, 4); offset += 4;
-            offset += 4;
-            memcpy(&duration_net,               data + offset, 8); offset += 8;
-
-            creation_time       = ntohll(creation_time_net);
-            modification_time   = ntohll(modification_time_net);
-            track_ID            = ntohl (timescale_net);
-            duration            = ntohll(duration_net);
+            creation_time       = stream.ReadBigEndian_uint64(offset);
+            modification_time   = stream.ReadBigEndian_uint64(offset);
+            track_ID            = stream.ReadBigEndian_uint32(offset);
+            stream.Skip(4);
+            duration            = stream.ReadBigEndian_uint64(offset);
         }
         else{
-            uint32_t creation_time_net;
-            uint32_t modification_time_net;
-            uint32_t timescale_net;
-            uint32_t duration_net;
-
-            memcpy(&creation_time_net,                   data + offset, 4); offset += 4;
-            memcpy(&modification_time_net,               data + offset, 4); offset += 4;
-            memcpy(&timescale_net,                       data + offset, 4); offset += 4;
-            offset += 4;
-            memcpy(&duration_net,                        data + offset, 4); offset += 4;
-
-            creation_time       = ntohl(creation_time_net);
-            modification_time   = ntohl(modification_time_net);
-            track_ID            = ntohl(timescale_net);
-            duration            = ntohl(duration_net);
+            creation_time       = stream.ReadBigEndian_uint32(offset);
+            modification_time   = stream.ReadBigEndian_uint32(offset);
+            track_ID            = stream.ReadBigEndian_uint32(offset);
+            stream.Skip(4);
+            duration            = stream.ReadBigEndian_uint32(offset);
         }
 
-        offset += 2 * sizeof(uint32_t);
+        stream.Skip(4);
 
-        uint16_t layer_net;
-        memcpy(&layer_net, data + offset, sizeof(uint16_t)); offset += sizeof(uint16_t);
-        layer = ntohs(layer_net);
+        layer           = stream.ReadBigEndian_uint16(offset);
+        alternate_group = stream.ReadBigEndian_uint16(offset);
+        volume          = stream.ReadBigEndianFixedPoint(8, 8, offset);
 
-
-
-
-        uint16_t alternate_group_net;
-        memcpy(&alternate_group_net, data + offset, sizeof(uint16_t)); offset += sizeof(uint16_t);
-        alternate_group = ntohs(alternate_group_net);
-
-
-
-        volume = data[offset + 0] + data[offset + 1]; offset += 2;
-        offset += sizeof(uint16_t);
-
-
-        for(int i=0;i<9;i++){
-            uint32_t m;
-            memcpy(&m, data + offset + i * 4, 4);
-            matrix[i] = ntohl(m);
+        for(int i=0;i<9;i++) {
+            matrix[i] = stream.ReadBigEndianFixedPoint(16, 16, offset);
         }
-        offset += sizeof(uint32_t) * 9;
 
-
-        width = (data[offset] << 8 | data[offset + 1]) + (data[offset + 2] << 8 | data[offset + 3]);
-        offset += sizeof(uint32_t);
-        height = (data[offset] << 8 | data[offset + 1]) + (data[offset + 2] << 8 | data[offset + 3]);
+        width = stream.ReadBigEndian_uint32(offset);
+        height = stream.ReadBigEndian_uint32(offset);
 
         return offset;
     }
@@ -163,15 +142,32 @@ namespace Eyer {
 
         printf("%svolume: %f\n", levelStr.str, volume);
 
-        printf("%swidth: %f\n", levelStr.str, width);
-        printf("%sheight: %f\n", levelStr.str, height);
+        printf("%s[ %f, %f, %f\n", levelStr.str,  matrix[0], matrix[1], matrix[2]);
+        printf("%s  %f, %f, %f\n", levelStr.str,  matrix[3], matrix[4], matrix[5]);
+        printf("%s  %f, %f, %f ]\n",levelStr.str, matrix[6], matrix[7], matrix[8]);
+
+        printf("%swidth: %d\n", levelStr.str, width);
+        printf("%sheight: %d\n", levelStr.str, height);
 
         return 0;
     }
 
     int MP4BoxTKHD::SetDefaultData()
     {
+        type = BoxType::TKHD;
+
         version = 0;
+
+        if(version == 1){
+            size = 8 + 4;
+            size += 8 + 8 + 4 + 4 + 8;
+            size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
+        }
+        else{
+            size = 8 + 4;
+            size += 4 + 4 + 4 + 4 + 4;
+            size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
+        }
 
         creation_time = 0;
         modification_time = 0;
@@ -181,6 +177,13 @@ namespace Eyer {
         layer = 10;
         alternate_group = 11;
         volume = 1.0f;
+
+        matrix[0] = 0.0f; matrix[1] = 1.0f; matrix[2] = 2.0f;
+        matrix[3] = 3.0f; matrix[4] = 4.0f; matrix[5] = 5.0f;
+        matrix[6] = 6.0f; matrix[7] = 7.0f; matrix[8] = 8.0f;
+
+        width = 1920.0f;
+        height = 1080.0f;
 
         return 0;
     }

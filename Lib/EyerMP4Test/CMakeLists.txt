@@ -15,6 +15,13 @@ file(COPY
         ${CMAKE_CURRENT_BINARY_DIR}/
         )
 
+file(COPY
+        ${CMAKE_CURRENT_SOURCE_DIR}/xiaomai_dashinit.mp4
+        DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}/
+        )
+
+
 INSTALL(
         TARGETS EyerMP4Test
         RUNTIME DESTINATION bin

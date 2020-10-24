@@ -2,6 +2,7 @@
 #include "MP4BoxFTYP.hpp"
 #include "MP4BoxMVHD.hpp"
 #include "MP4BoxTKHD.hpp"
+#include "MP4BoxELST.hpp"
 
 namespace Eyer
 {
@@ -190,7 +191,7 @@ namespace Eyer
             levelStr = levelStr + "\t";
         }
 
-        printf("%s[%c%c%c%c]\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD());
+        printf("%s[%c%c%c%c](%d bytes)\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD(), size);
         if(type.HasSub()){
             for(int i=0;i<subBoxList.size();i++){
                 MP4Box * box = subBoxList[i];
@@ -215,6 +216,9 @@ namespace Eyer
             }
             else if(type == BoxType::TKHD){
                 box = new MP4BoxTKHD();
+            }
+            else if(type == BoxType::ELST){
+                box = new MP4BoxELST();
             }
         }
 
