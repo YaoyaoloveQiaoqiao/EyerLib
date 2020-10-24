@@ -9,5 +9,6 @@
 #include "MP4BoxHDLR.hpp"
 #include "MP4BoxDREF.hpp"
 #include "MP4BoxTREX.hpp"
+#include "MP4BoxMEHD.hpp"
 
 #endif //EYERLIB_EYERMP4_HPP

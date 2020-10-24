@@ -8,6 +8,8 @@
 #include "MP4BoxURL.hpp"
 #include "MP4BoxURN.hpp"
 #include "MP4BoxTREX.hpp"
+#include "MP4BoxMEHD.hpp"
+#include "MP4BoxSTSD.hpp"
 #include "MP4Stream.hpp"
 
 namespace Eyer
@@ -174,7 +176,7 @@ namespace Eyer
             levelStr = levelStr + "\t";
         }
 
-        printf("%s[%c%c%c%c](%d bytes)\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD(), size);
+        printf("%s[%c%c%c%c] (%d bytes)\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD(), size);
         if(type.HasSub()){
             for(int i=0;i<subBoxList.size();i++){
                 MP4Box * box = subBoxList[i];
@@ -217,6 +219,12 @@ namespace Eyer
             }
             else if(type == BoxType::TREX){
                 box = new MP4BoxTREX();
+            }
+            else if(type == BoxType::MEHD){
+                box = new MP4BoxMEHD();
+            }
+            else if(type == BoxType::STSD){
+                box = new MP4BoxSTSD();
             }
         }
 

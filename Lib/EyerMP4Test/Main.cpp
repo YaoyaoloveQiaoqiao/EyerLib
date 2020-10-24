@@ -38,8 +38,8 @@ TEST(EyerMP4, Endian)
 TEST(EyerMP4, EyerMP4Test)
 {
     printf("=======================Read File=======================\n");
-    FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
-    // FILE * fp = fopen("./demo.mp4", "rb");
+    // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
+    FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
     long len = ftell(fp);
@@ -162,6 +162,26 @@ TEST(EyerMP4, MP4BoxTREX)
 
     ASSERT_EQ(trex, trex2) << "HDLR Error";
 }
+
+TEST(EyerMP4, MP4BoxMEHD)
+{
+    printf("=======================MEHD=======================\n");
+    Eyer::MP4BoxMEHD mehd;
+    mehd.SetDefaultData();
+    mehd.PrintInfo();
+
+    Eyer::EyerBuffer buffer = mehd.Serialize();
+
+    Eyer::MP4BoxMEHD mehd2;
+    mehd2.Parse(buffer);
+
+    mehd2.PrintInfo();
+
+    ASSERT_EQ(mehd, mehd2) << "MEHD Error";
+}
+
+
+
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);

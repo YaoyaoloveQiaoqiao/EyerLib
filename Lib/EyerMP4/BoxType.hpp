@@ -66,7 +66,9 @@ namespace Eyer
         static BoxType URL;
         static BoxType URN;
 
+        static BoxType MEHD;
         static BoxType TREX;
+        static BoxType STSD;
     };
 }
 

@@ -27,6 +27,8 @@ namespace Eyer
     BoxType BoxType::URN        (20, 'u', 'r', 'n', ' ', false);
 
     BoxType BoxType::TREX       (21, 't', 'r', 'e', 'x', false);
+    BoxType BoxType::MEHD       (22, 'm', 'e', 'h', 'd', false);
+    BoxType BoxType::STSD       (23, 's', 't', 's', 'd', false);
 
     BoxType::BoxType()
     {
@@ -151,6 +153,12 @@ namespace Eyer
         }
         else if(net_type == TREX.GetABCD()) {
             return TREX;
+        }
+        else if(net_type == MEHD.GetABCD()) {
+            return MEHD;
+        }
+        else if(net_type == STSD.GetABCD()) {
+            return STSD;
         }
 
         return UNKNOW;

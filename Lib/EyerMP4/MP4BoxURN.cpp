@@ -14,7 +14,7 @@ namespace Eyer
 
     bool MP4BoxURN::operator == (const MP4BoxURN & urn) const
     {
-
+        return true;
     }
 
     EyerBuffer MP4BoxURN::SerializeParam()

@@ -3,6 +3,8 @@
 
 #include "EyerCore/EyerCore.hpp"
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 namespace Eyer
 {
