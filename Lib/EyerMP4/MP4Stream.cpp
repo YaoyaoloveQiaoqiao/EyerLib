@@ -147,7 +147,7 @@ namespace Eyer {
 
     int MP4Stream::WriteBigEndian(uint16_t val)
     {
-        uint16_t net_val = htons(val);
+        uint16_t net_val = EyerUtil::EndianHtons(val);
         buffer.Append((uint8_t *)&net_val, sizeof(uint16_t));
         return sizeof(uint16_t);
     }
