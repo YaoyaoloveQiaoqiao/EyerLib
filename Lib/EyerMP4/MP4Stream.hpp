@@ -4,8 +4,6 @@
 #include "EyerCore/EyerCore.hpp"
 #include <stdint.h>
 
-#include <Winsock2.h>
-
 namespace Eyer
 {
     class MP4Stream {
@@ -21,6 +19,8 @@ namespace Eyer
         int64_t ReadBigEndian_int64(int & offset);
         int32_t ReadBigEndian_int32(int & offset);
         int16_t ReadBigEndian_int16(int & offset);
+
+        uint32_t Read_uint32(int & offset);
 
         int ReadStr(EyerString & str, int len);
 
@@ -45,6 +45,7 @@ namespace Eyer
         int WriteBigEndianFixedPoint(float val, unsigned int integerLength, unsigned int fractionalLength);
 
         EyerBuffer & GetBuffer();
+        int CutOff(EyerBuffer & buffer, int len);
     private:
         EyerBuffer buffer;
     };

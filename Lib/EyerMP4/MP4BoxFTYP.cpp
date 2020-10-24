@@ -54,17 +54,23 @@ namespace Eyer
     EyerBuffer MP4BoxFTYP::SerializeParam()
     {
         EyerBuffer buffer;
+        MP4Stream stream(buffer);
 
-        buffer.Append(major_brand, 4);
+        stream.WriteBigEndian(major_brand[0]);
+        stream.WriteBigEndian(major_brand[1]);
+        stream.WriteBigEndian(major_brand[2]);
+        stream.WriteBigEndian(major_brand[3]);
 
-        uint32_t net_minor_version = htonl(minor_version);
-        buffer.Append((unsigned char *)(&net_minor_version), 4);
+        stream.WriteBigEndian(minor_version);
 
         for(int i=0;i<compatible_brands_len;i++){
-            buffer.Append(compatible_brands[i], 4);
+            stream.WriteBigEndian(compatible_brands[i][0]);
+            stream.WriteBigEndian(compatible_brands[i][1]);
+            stream.WriteBigEndian(compatible_brands[i][2]);
+            stream.WriteBigEndian(compatible_brands[i][3]);
         }
 
-        return buffer;
+        return stream.GetBuffer();
     }
 
     int MP4BoxFTYP::ParseParam(EyerBuffer & buffer, int offset)
@@ -81,7 +87,7 @@ namespace Eyer
 
         minor_version = stream.ReadBigEndian_int32(offset);
 
-        compatible_brands_len = stream.GetBuffer().GetLen();
+        compatible_brands_len = stream.GetBuffer().GetLen() / 4;
 
         for(int i=0;i<compatible_brands_len;i++){
             compatible_brands[i][0] = stream.ReadBigEndian_uint8(offset);
@@ -127,7 +133,7 @@ namespace Eyer
         memcpy(compatible_brands[3], "mp41", 4);
 
         type = BoxType::FTYP;
-        size = 8 + 4 + 4 + 4 * 4;
+        size = Serialize().GetLen();
         largesize = 0;
 
         return 0;

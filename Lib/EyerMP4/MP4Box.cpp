@@ -88,8 +88,8 @@ namespace Eyer
 
         MP4Stream stream(buffer);
         size = stream.ReadBigEndian_int32(offset);
-        type = BoxType::GetType(stream.ReadBigEndian_int32(offset));
 
+        type = BoxType::GetType(stream.Read_uint32(offset));
 
         if(size == 1){
             largesize = stream.ReadBigEndian_int64(offset);
@@ -113,43 +113,29 @@ namespace Eyer
     {
         EyerBuffer tempBuffer = buffer;
 
-        int bufferLen = buffer.GetLen();
-        unsigned char * data = (unsigned char *)malloc(bufferLen);
-        buffer.GetBuffer(data);
+        MP4Stream stream(buffer);
+        stream.Skip(_offset);
 
-        int alreadRead = 0;
-        alreadRead += _offset;
-        while(1){
-            if(alreadRead >= bufferLen){
-                break;
-            }
-            uint32_t net_size = 0;
-            memcpy(&net_size, data + alreadRead, 4);
-            int boxSize = ntohl(net_size);
+        while (tempBuffer.GetLen() > 0) {
+            int offset = 0;
+            uint64_t boxSize = stream.ReadBigEndian_uint32(offset);
+            BoxType boxtype = BoxType::GetType(stream.Read_uint32(offset));
             if(boxSize == 1){
-                // TODO boxSize == 1
+                boxSize = stream.ReadBigEndian_uint64(offset);
             }
-
-            uint32_t net_type;
-            memcpy(&net_type, data + alreadRead + 4, 4);
-            BoxType boxtype = BoxType::GetType(net_type);
-
-
-            alreadRead += boxSize;
 
             EyerBuffer boxBuffer;
-            tempBuffer.CutOff(boxBuffer, boxSize);
+            tempBuffer.CutOff(boxBuffer, (int)boxSize);
+
+            stream.Skip(boxSize - offset);
 
             MP4Box * box = CreatBox(boxtype);
             if(box != nullptr){
                 box->Parse(boxBuffer);
-                // box->PrintInfo();
                 subBoxList.push_back(box);
             }
         }
-
-        free(data);
-        return 0;
+        return _offset;
     }
 
     int MP4Box::ParseParam(EyerBuffer & buffer, int offset)

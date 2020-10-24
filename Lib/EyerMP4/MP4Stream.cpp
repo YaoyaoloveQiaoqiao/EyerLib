@@ -49,12 +49,18 @@ namespace Eyer {
 
     int32_t MP4Stream::ReadBigEndian_int32(int & offset)
     {
+        int32_t val_net = Read_uint32(offset);
+        return ntohl(val_net);
+    }
+
+    uint32_t MP4Stream::Read_uint32(int & offset)
+    {
         int32_t val_net;
         buffer.CutOff((uint8_t *) &val_net, sizeof(int32_t));
 
         offset += sizeof(int32_t);
 
-        return ntohl(val_net);
+        return val_net;
     }
 
     int16_t MP4Stream::ReadBigEndian_int16(int & offset)
@@ -232,5 +238,10 @@ namespace Eyer {
     EyerBuffer & MP4Stream::GetBuffer()
     {
         return buffer;
+    }
+
+    int MP4Stream::CutOff(EyerBuffer & buf, int len)
+    {
+        return buffer.CutOff(buf, len);
     }
 }
