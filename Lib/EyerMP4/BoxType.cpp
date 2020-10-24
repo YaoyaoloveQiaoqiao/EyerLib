@@ -18,6 +18,7 @@ namespace Eyer
     BoxType BoxType::EDTS       (12, 'e', 'd', 't', 's', true);
     BoxType BoxType::MDHD       (13, 'm', 'd', 'h', 'd', false);
     BoxType BoxType::MVEX       (14, 'm', 'v', 'e', 'x', true);
+    BoxType BoxType::ELST       (15, 'e', 'l', 's', 't', false);
 
 
     BoxType::BoxType()
@@ -122,6 +123,9 @@ namespace Eyer
         }
         else if(net_type == MVEX.GetABCD()) {
             return MVEX;
+        }
+        else if(net_type == ELST.GetABCD()) {
+            return ELST;
         }
 
         return UNKNOW;

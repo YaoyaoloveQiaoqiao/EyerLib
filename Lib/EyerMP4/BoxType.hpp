@@ -46,6 +46,7 @@ namespace Eyer
         static BoxType MVHD;
 
         static BoxType EDTS;
+        static BoxType ELST;
 
         static BoxType TRAK;
         static BoxType TKHD;

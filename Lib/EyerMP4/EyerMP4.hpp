@@ -5,5 +5,6 @@
 #include "MP4BoxFTYP.hpp"
 #include "MP4BoxMVHD.hpp"
 #include "MP4BoxTKHD.hpp"
+#include "MP4BoxELST.hpp"
 
 #endif //EYERLIB_EYERMP4_HPP

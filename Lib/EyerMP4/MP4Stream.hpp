@@ -14,6 +14,11 @@ namespace Eyer
         uint64_t ReadBigEndian_uint64(int & offset);
         uint32_t ReadBigEndian_uint32(int & offset);
         uint16_t ReadBigEndian_uint16(int & offset);
+
+        int64_t ReadBigEndian_int64(int & offset);
+        int32_t ReadBigEndian_int32(int & offset);
+        int16_t ReadBigEndian_int16(int & offset);
+
         float ReadBigEndianFixedPoint(unsigned int integerLength, unsigned int fractionalLength, int & offset);
         int Skip(int len, int & offset);
         int Skip(int len);
@@ -22,6 +27,12 @@ namespace Eyer
         int WriteBigEndian(uint32_t val);
         int WriteBigEndian(uint16_t val);
         int WriteBigEndian(uint8_t  val);
+
+        int WriteBigEndian(int64_t val);
+        int WriteBigEndian(int32_t val);
+        int WriteBigEndian(int16_t val);
+        int WriteBigEndian(int8_t  val);
+
         int WriteZero(int len);
 
         int WriteBigEndianFixedPoint(float val, unsigned int integerLength, unsigned int fractionalLength);

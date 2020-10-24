@@ -2,7 +2,7 @@
 #include "MP4Stream.hpp"
 
 namespace Eyer {
-    MP4BoxTKHD::MP4BoxTKHD()
+    MP4BoxTKHD::MP4BoxTKHD() : MP4FullBox()
     {
 
     }
@@ -156,6 +156,8 @@ namespace Eyer {
     {
         type = BoxType::TKHD;
 
+        version = 0;
+
         if(version == 1){
             size = 8 + 4;
             size += 8 + 8 + 4 + 4 + 8;
@@ -166,8 +168,6 @@ namespace Eyer {
             size += 4 + 4 + 4 + 4 + 4;
             size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
         }
-
-        version = 0;
 
         creation_time = 0;
         modification_time = 0;

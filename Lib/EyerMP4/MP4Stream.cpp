@@ -40,6 +40,36 @@ namespace Eyer {
         return ntohs(val_net);
     }
 
+    int64_t MP4Stream::ReadBigEndian_int64(int & offset)
+    {
+        int64_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(int64_t));
+
+        offset += sizeof(int64_t);
+
+        return ntohll(val_net);
+    }
+
+    int32_t MP4Stream::ReadBigEndian_int32(int & offset)
+    {
+        int32_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(int32_t));
+
+        offset += sizeof(int32_t);
+
+        return ntohl(val_net);
+    }
+
+    int16_t MP4Stream::ReadBigEndian_int16(int & offset)
+    {
+        int16_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(int16_t));
+
+        offset += sizeof(int16_t);
+
+        return ntohs(val_net);
+    }
+
     float MP4Stream::ReadBigEndianFixedPoint(unsigned int integerLength, unsigned int fractionalLength, int &offset) {
         uint32_t n;
         if (integerLength + fractionalLength == 16) {
@@ -103,6 +133,37 @@ namespace Eyer {
         return sizeof(uint8_t);
     }
 
+
+
+    int MP4Stream::WriteBigEndian(int64_t val)
+    {
+        int64_t net_val = htonll(val);
+        buffer.Append((uint8_t *)&net_val, sizeof(int64_t));
+        return sizeof(int64_t);
+    }
+
+    int MP4Stream::WriteBigEndian(int32_t val)
+    {
+        int32_t net_val = htonl(val);
+        buffer.Append((uint8_t *)&net_val, sizeof(int32_t));
+        return sizeof(int32_t);
+    }
+
+    int MP4Stream::WriteBigEndian(int16_t val)
+    {
+        int16_t net_val = htons(val);
+        buffer.Append((uint8_t *)&net_val, sizeof(int16_t));
+        return sizeof(int16_t);
+    }
+
+    int MP4Stream::WriteBigEndian(int8_t  val)
+    {
+        buffer.Append((uint8_t *)&val, sizeof(int8_t));
+        return sizeof(int8_t);
+    }
+
+
+
     int MP4Stream::WriteZero(int len)
     {
         unsigned char * a = (unsigned char *)malloc(len);
@@ -111,6 +172,11 @@ namespace Eyer {
         free(a);
         return len;
     }
+
+
+
+
+
 
     int MP4Stream::WriteBigEndianFixedPoint(float val, unsigned int integerLength, unsigned int fractionalLength)
     {

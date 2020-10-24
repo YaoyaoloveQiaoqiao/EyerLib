@@ -2,6 +2,7 @@
 #include "MP4BoxFTYP.hpp"
 #include "MP4BoxMVHD.hpp"
 #include "MP4BoxTKHD.hpp"
+#include "MP4BoxELST.hpp"
 
 namespace Eyer
 {
@@ -215,6 +216,9 @@ namespace Eyer
             }
             else if(type == BoxType::TKHD){
                 box = new MP4BoxTKHD();
+            }
+            else if(type == BoxType::ELST){
+                box = new MP4BoxELST();
             }
         }
 

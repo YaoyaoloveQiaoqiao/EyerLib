@@ -83,6 +83,25 @@ TEST(EyerMP4, MP4BoxTKHD)
     ASSERT_EQ(tkhd, tkhd2) << "TKHD Error";
 }
 
+TEST(EyerMP4, MP4BoxELST)
+{
+    printf("=======================ELST=======================\n");
+    Eyer::MP4BoxELST elst;
+    elst.SetDefaultData();
+    elst.PrintInfo();
+
+    Eyer::EyerBuffer buffer = elst.Serialize();
+
+    Eyer::MP4BoxELST elst2;
+    elst2.Parse(buffer);
+
+    elst2.PrintInfo();
+
+    ASSERT_EQ(elst, elst2) << "ELST Error";
+}
+
+
+
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
