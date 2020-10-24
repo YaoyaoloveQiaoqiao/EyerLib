@@ -7,8 +7,6 @@
 #include "BoxType.hpp"
 #include "EyerCore/EyerCore.hpp"
 
-#include <arpa/inet.h>
-
 namespace Eyer
 {
     class MP4Box {

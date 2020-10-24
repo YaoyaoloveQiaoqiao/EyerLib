@@ -4,6 +4,8 @@
 #include "EyerCore/EyerCore.hpp"
 #include <stdint.h>
 
+#include <Winsock2.h>
+
 namespace Eyer
 {
     class MP4Stream {
