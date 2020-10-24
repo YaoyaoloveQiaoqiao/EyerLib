@@ -149,8 +149,8 @@ namespace Eyer
     {
         version = 0;
 
-        creation_time = 0;
-        modification_time = 0;
+        creation_time = 123456;
+        modification_time = 654321;
         timescale = 1000;
         duration = 6666;
 

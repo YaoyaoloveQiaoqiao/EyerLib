@@ -1,5 +1,6 @@
 #include "MP4Stream.hpp"
 #include <math.h>
+#include <EyerCore/EyerCore.hpp>
 
 namespace Eyer {
     MP4Stream::MP4Stream(EyerBuffer &_buffer) {
@@ -16,7 +17,7 @@ namespace Eyer {
 
         offset += sizeof(uint64_t);
 
-        return ntohll(val_net);
+        return EyerUtil::EndianNtohll(val_net);
     }
 
     uint32_t MP4Stream::ReadBigEndian_uint32(int &offset) {
@@ -25,7 +26,7 @@ namespace Eyer {
 
         offset += sizeof(uint32_t);
 
-        return ntohl(val_net);
+        return EyerUtil::EndianNtohl(val_net);
     }
 
     uint16_t MP4Stream::ReadBigEndian_uint16(int &offset) {
@@ -34,7 +35,7 @@ namespace Eyer {
 
         offset += sizeof(uint16_t);
 
-        return ntohs(val_net);
+        return EyerUtil::EndianNtohs(val_net);
     }
 
     int64_t MP4Stream::ReadBigEndian_int64(int & offset)
@@ -44,13 +45,13 @@ namespace Eyer {
 
         offset += sizeof(int64_t);
 
-        return ntohll(val_net);
+        return EyerUtil::EndianNtohll(val_net);
     }
 
     int32_t MP4Stream::ReadBigEndian_int32(int & offset)
     {
         int32_t val_net = Read_uint32(offset);
-        return ntohl(val_net);
+        return EyerUtil::EndianNtohl(val_net);
     }
 
     uint32_t MP4Stream::Read_uint32(int & offset)
@@ -70,7 +71,7 @@ namespace Eyer {
 
         offset += sizeof(int16_t);
 
-        return ntohs(val_net);
+        return EyerUtil::EndianNtohs(val_net);
     }
 
     uint8_t  MP4Stream::ReadBigEndian_uint8 (int & offset)
@@ -132,14 +133,14 @@ namespace Eyer {
 
     int MP4Stream::WriteBigEndian(uint64_t val)
     {
-        uint64_t net_val = htonll(val);
+        uint64_t net_val = EyerUtil::EndianHtonll(val);
         buffer.Append((uint8_t *)&net_val, sizeof(uint64_t));
         return sizeof(uint64_t);
     }
 
     int MP4Stream::WriteBigEndian(uint32_t val)
     {
-        uint32_t net_val = htonl(val);
+        uint32_t net_val = EyerUtil::EndianHtonl(val);
         buffer.Append((uint8_t *)&net_val, sizeof(uint32_t));
         return sizeof(uint32_t);
     }
@@ -161,21 +162,21 @@ namespace Eyer {
 
     int MP4Stream::WriteBigEndian(int64_t val)
     {
-        int64_t net_val = htonll(val);
+        int64_t net_val = EyerUtil::EndianHtonll(val);
         buffer.Append((uint8_t *)&net_val, sizeof(int64_t));
         return sizeof(int64_t);
     }
 
     int MP4Stream::WriteBigEndian(int32_t val)
     {
-        int32_t net_val = htonl(val);
+        int32_t net_val = EyerUtil::EndianHtonl(val);
         buffer.Append((uint8_t *)&net_val, sizeof(int32_t));
         return sizeof(int32_t);
     }
 
     int MP4Stream::WriteBigEndian(int16_t val)
     {
-        int16_t net_val = htons(val);
+        int16_t net_val = EyerUtil::EndianHtons(val);
         buffer.Append((uint8_t *)&net_val, sizeof(int16_t));
         return sizeof(int16_t);
     }

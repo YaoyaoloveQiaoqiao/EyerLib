@@ -169,8 +169,8 @@ namespace Eyer {
             size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
         }
 
-        creation_time = 0;
-        modification_time = 0;
+        creation_time = 123456;
+        modification_time = 654321;
         track_ID = 2;
         duration = 6666;
 

@@ -12,5 +12,6 @@
 #include "EyerLRUMap.hpp"
 #include "EyerBuffer.hpp"
 #include "EyerURLUtil.hpp"
+#include "EyerUtil.hpp"
 
 #endif
