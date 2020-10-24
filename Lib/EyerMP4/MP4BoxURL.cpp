@@ -5,7 +5,7 @@ namespace Eyer
 {
     MP4BoxURL::MP4BoxURL() : MP4FullBox()
     {
-
+        type = BoxType::URL;
     }
 
     MP4BoxURL::~MP4BoxURL()

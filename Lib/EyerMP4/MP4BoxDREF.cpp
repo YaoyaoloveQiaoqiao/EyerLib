@@ -7,7 +7,7 @@ namespace Eyer
 {
     MP4BoxDREF::MP4BoxDREF() : MP4FullBox()
     {
-
+        type = BoxType::DREF;
     }
 
     MP4BoxDREF::~MP4BoxDREF()

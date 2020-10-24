@@ -4,7 +4,7 @@
 namespace Eyer {
     MP4BoxTKHD::MP4BoxTKHD() : MP4FullBox()
     {
-
+        type = BoxType::TKHD;
     }
 
     MP4BoxTKHD::~MP4BoxTKHD()
