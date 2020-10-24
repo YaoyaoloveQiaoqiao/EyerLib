@@ -8,7 +8,7 @@ namespace Eyer
         if(CheckCPU()){
             // 小端
             uint8_t * a = (uint8_t *)&val;
-            res = a[0] << 56 | a[1] << 48 | a[2] << 40 | a[3] << 32 | a[4] << 24 | a[5] << 16 | a[6] << 8 | a[7];
+            res = (uint64_t)a[0] << 56 | (uint64_t)a[1] << 48 | (uint64_t)a[2] << 40 | (uint64_t)a[3] << 32 | (uint64_t)a[4] << 24 | (uint64_t)a[5] << 16 | (uint64_t)a[6] << 8 | a[7];
         }
         else{
             res = val;
@@ -22,7 +22,7 @@ namespace Eyer
         if(CheckCPU()){
             // 小端
             uint8_t * a = (uint8_t *)&val;
-            res = a[0] << 24 | a[1] << 16 | a[2] << 8 | a[3];
+            res = (uint32_t)a[0] << 24 | (uint32_t)a[1] << 16 | (uint32_t)a[2] << 8 | a[3];
         }
         else{
             res = val;
@@ -36,7 +36,7 @@ namespace Eyer
         if(CheckCPU()){
             // 小端
             uint8_t * a = (uint8_t *)&val;
-            res = a[0] << 8 | a[1];
+            res = (uint16_t)a[0] << 8 | (uint16_t)a[1];
         }
         else{
             res = val;
@@ -53,7 +53,7 @@ namespace Eyer
         if(CheckCPU()){
             // 小端
             uint8_t * a = (uint8_t *)&val;
-            res = a[0] << 56 | a[1] << 48 | a[2] << 40 | a[3] << 32 | a[4] << 24 | a[5] << 16 | a[6] << 8 | a[7];
+            res = (uint64_t)a[0] << 56 | (uint64_t)a[1] << 48 | (uint64_t)a[2] << 40 | (uint64_t)a[3] << 32 | (uint64_t)a[4] << 24 | (uint64_t)a[5] << 16 | (uint64_t)a[6] << 8 | (uint64_t)a[7];
         }
         else{
             res = val;
@@ -67,7 +67,7 @@ namespace Eyer
         if(CheckCPU()){
             // 小端
             uint8_t * a = (uint8_t *)&val;
-            res = a[0] << 24 | a[1] << 16 | a[2] << 8 | a[3];
+            res = (uint32_t)a[0] << 24 | (uint32_t)a[1] << 16 | (uint32_t)a[2] << 8 | (uint32_t)a[3];
         }
         else{
             res = val;
@@ -81,7 +81,7 @@ namespace Eyer
         if(CheckCPU()){
             // 小端
             uint8_t * a = (uint8_t *)&val;
-            res = a[0] << 8 | a[1];
+            res = (uint16_t)a[0] << 8 | (uint16_t)a[1];
         }
         else{
             res = val;
