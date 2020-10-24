@@ -19,7 +19,14 @@ namespace Eyer
     BoxType BoxType::MDHD       (13, 'm', 'd', 'h', 'd', false);
     BoxType BoxType::MVEX       (14, 'm', 'v', 'e', 'x', true);
     BoxType BoxType::ELST       (15, 'e', 'l', 's', 't', false);
+    BoxType BoxType::HDLR       (16, 'h', 'd', 'l', 'r', false);
+    BoxType BoxType::DINF       (17, 'd', 'i', 'n', 'f', true);
+    BoxType BoxType::DREF       (18, 'd', 'r', 'e', 'f', false);
 
+    BoxType BoxType::URL        (19, 'u', 'r', 'l', ' ', false);
+    BoxType BoxType::URN        (20, 'u', 'r', 'n', ' ', false);
+
+    BoxType BoxType::TREX       (21, 't', 'r', 'e', 'x', false);
 
     BoxType::BoxType()
     {
@@ -126,6 +133,24 @@ namespace Eyer
         }
         else if(net_type == ELST.GetABCD()) {
             return ELST;
+        }
+        else if(net_type == HDLR.GetABCD()) {
+            return HDLR;
+        }
+        else if(net_type == DINF.GetABCD()) {
+            return DINF;
+        }
+        else if(net_type == DREF.GetABCD()) {
+            return DREF;
+        }
+        else if(net_type == URL.GetABCD()) {
+            return URL;
+        }
+        else if(net_type == URN.GetABCD()) {
+            return URN;
+        }
+        else if(net_type == TREX.GetABCD()) {
+            return TREX;
         }
 
         return UNKNOW;

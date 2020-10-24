@@ -3,6 +3,11 @@
 #include "MP4BoxMVHD.hpp"
 #include "MP4BoxTKHD.hpp"
 #include "MP4BoxELST.hpp"
+#include "MP4BoxHDLR.hpp"
+#include "MP4BoxDREF.hpp"
+#include "MP4BoxURL.hpp"
+#include "MP4BoxURN.hpp"
+#include "MP4BoxTREX.hpp"
 
 namespace Eyer
 {
@@ -173,6 +178,11 @@ namespace Eyer
         return size;
     }
 
+    BoxType MP4Box::GetType()
+    {
+        return type;
+    }
+
     MP4Box * MP4Box::GetSubBoxPtr(BoxType type)
     {
         MP4Box * subBox = nullptr;
@@ -219,6 +229,21 @@ namespace Eyer
             }
             else if(type == BoxType::ELST){
                 box = new MP4BoxELST();
+            }
+            else if(type == BoxType::HDLR){
+                box = new MP4BoxHDLR();
+            }
+            else if(type == BoxType::DREF){
+                box = new MP4BoxDREF();
+            }
+            else if(type == BoxType::URL){
+                box = new MP4BoxURL();
+            }
+            else if(type == BoxType::URN){
+                box = new MP4BoxURN();
+            }
+            else if(type == BoxType::TREX){
+                box = new MP4BoxTREX();
             }
         }
 

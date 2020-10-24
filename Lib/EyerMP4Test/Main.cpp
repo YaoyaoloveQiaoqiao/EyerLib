@@ -9,8 +9,8 @@
 TEST(EyerMP4, EyerMP4Test)
 {
     printf("=======================Read File=======================\n");
-    // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
-    FILE * fp = fopen("./demo.mp4", "rb");
+    FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
+    // FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
     long len = ftell(fp);
@@ -100,8 +100,39 @@ TEST(EyerMP4, MP4BoxELST)
     ASSERT_EQ(elst, elst2) << "ELST Error";
 }
 
+TEST(EyerMP4, MP4BoxHDLR)
+{
+    printf("=======================HDLR=======================\n");
+    Eyer::MP4BoxHDLR hdlr;
+    hdlr.SetDefaultData();
+    hdlr.PrintInfo();
 
+    Eyer::EyerBuffer buffer = hdlr.Serialize();
 
+    Eyer::MP4BoxHDLR hdlr2;
+    hdlr2.Parse(buffer);
+
+    hdlr2.PrintInfo();
+
+    ASSERT_EQ(hdlr, hdlr2) << "HDLR Error";
+}
+
+TEST(EyerMP4, MP4BoxTREX)
+{
+    printf("=======================TREX=======================\n");
+    Eyer::MP4BoxTREX trex;
+    trex.SetDefaultData();
+    trex.PrintInfo();
+
+    Eyer::EyerBuffer buffer = trex.Serialize();
+
+    Eyer::MP4BoxTREX trex2;
+    trex2.Parse(buffer);
+
+    trex2.PrintInfo();
+
+    ASSERT_EQ(trex, trex2) << "HDLR Error";
+}
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
