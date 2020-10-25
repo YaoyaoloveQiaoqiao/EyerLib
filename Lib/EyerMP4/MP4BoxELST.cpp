@@ -118,7 +118,7 @@ namespace Eyer
 
         for(int i=0;i<entryList.size();i++){
             MP4BoxELSTEntry * entry = entryList[i];
-            printf("%s================\n", levelStr.str);
+            // printf("%s================\n", levelStr.str);
             printf("%ssegment_duration: %lld\n", levelStr.str, entry->segment_duration);
             printf("%smedia_time: %lld\n", levelStr.str, entry->media_time);
             printf("%smedia_rate: %f\n", levelStr.str, entry->media_rate);

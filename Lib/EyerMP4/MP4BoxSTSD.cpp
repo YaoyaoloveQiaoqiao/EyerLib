@@ -1,16 +1,22 @@
 #include "MP4BoxSTSD.hpp"
 #include "MP4Stream.hpp"
 
+#include "MP4BoxAVC1.hpp"
+#include "MP4BoxSampleEntry.hpp"
+
 namespace Eyer
 {
     MP4BoxSTSD::MP4BoxSTSD() : MP4FullBox()
     {
-
+        type = BoxType::STSD;
     }
 
     MP4BoxSTSD::~MP4BoxSTSD()
     {
-
+        for(int i=0;i<sampleList.size();i++){
+            delete sampleList[i];
+        }
+        sampleList.clear();
     }
 
     bool MP4BoxSTSD::operator == (const MP4BoxSTSD & stsd) const
@@ -39,21 +45,21 @@ namespace Eyer
 
         uint32_t entry_count = stream.ReadBigEndian_uint32(offset);
         for(int i=0;i<entry_count;i++){
-            uint32_t size = stream.ReadBigEndian_uint32(offset);
-            uint8_t a = stream.ReadBigEndian_uint8(offset);
-            uint8_t b = stream.ReadBigEndian_uint8(offset);
-            uint8_t c = stream.ReadBigEndian_uint8(offset);
-            uint8_t d = stream.ReadBigEndian_uint8(offset);
+            int size = 0;
+            BoxType type;
+            stream.GetSizeType(size, type);
 
-            printf("%d  %c%c%c%c\n", size, a, b, c, d);
+            EyerBuffer buf;
+            stream.CutOff(buf, size);
 
-            for(int w=0;w<8 + 4 + 4 + 4;w++){
-                uint8_t a = stream.ReadBigEndian_uint8(offset);
-                printf("a:%d\n", a);
+            if(type == BoxType::AVC1){
+                MP4BoxSampleEntry * avc1 = new MP4BoxAVC1();
+                avc1->Parse(buf);
+
+                sampleList.push_back(avc1);
             }
 
-
-
+            offset += size;
         }
 
         return offset;
@@ -68,6 +74,10 @@ namespace Eyer
             levelStr = levelStr + "\t";
         }
         levelStr = levelStr + "\t";
+
+        for(int i=0;i<sampleList.size();i++){
+            sampleList[i]->PrintInfo(level);
+        }
 
         return 0;
     }

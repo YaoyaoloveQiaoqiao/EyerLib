@@ -30,6 +30,10 @@ namespace Eyer
     BoxType BoxType::MEHD       (22, 'm', 'e', 'h', 'd', false);
     BoxType BoxType::STSD       (23, 's', 't', 's', 'd', false);
 
+    BoxType BoxType::AVC1       (24, 'a', 'v', 'c', '1', false);
+    BoxType BoxType::AVCC       (25, 'a', 'v', 'c', 'C', false);
+
+
     BoxType::BoxType()
     {
         *this = BoxType::UNKNOW;
@@ -159,6 +163,12 @@ namespace Eyer
         }
         else if(net_type == STSD.GetABCD()) {
             return STSD;
+        }
+        else if(net_type == AVC1.GetABCD()) {
+            return AVC1;
+        }
+        else if(net_type == AVCC.GetABCD()) {
+            return AVCC;
         }
 
         return UNKNOW;

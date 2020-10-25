@@ -3,6 +3,7 @@
 
 #include "MP4Box.hpp"
 #include "MP4FullBox.hpp"
+#include "MP4BoxSampleEntry.hpp"
 
 namespace Eyer
 {
@@ -19,6 +20,9 @@ namespace Eyer
         virtual int PrintInfo(int level = 0);
 
         int SetDefaultData();
+
+    private:
+        std::vector<MP4BoxSampleEntry *> sampleList;
     };
 }
 

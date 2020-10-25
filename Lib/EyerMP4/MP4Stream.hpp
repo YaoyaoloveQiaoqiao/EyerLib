@@ -2,6 +2,7 @@
 #define EYERLIB_MP4STREAM_HPP
 
 #include "EyerCore/EyerCore.hpp"
+#include "BoxType.hpp"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +22,8 @@ namespace Eyer
         int64_t ReadBigEndian_int64(int & offset);
         int32_t ReadBigEndian_int32(int & offset);
         int16_t ReadBigEndian_int16(int & offset);
+
+        int GetSizeType(int & size, BoxType & type);
 
         uint32_t Read_uint32(int & offset);
 

@@ -69,6 +69,9 @@ namespace Eyer
         static BoxType MEHD;
         static BoxType TREX;
         static BoxType STSD;
+
+        static BoxType AVC1;
+        static BoxType AVCC;
     };
 }
 

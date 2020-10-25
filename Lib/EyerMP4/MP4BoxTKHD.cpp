@@ -59,17 +59,17 @@ namespace Eyer {
             stream.WriteBigEndian(creation_time);
             stream.WriteBigEndian(modification_time);
             stream.WriteBigEndian(track_ID);
-            stream.WriteZero(4);
+            stream.WriteZero(sizeof(uint32_t));
             stream.WriteBigEndian(duration);
         }
         else{
             stream.WriteBigEndian((uint32_t)creation_time);
             stream.WriteBigEndian((uint32_t)modification_time);
             stream.WriteBigEndian((uint32_t)track_ID);
-            stream.WriteZero(4);
+            stream.WriteZero(sizeof(uint32_t));
             stream.WriteBigEndian((uint32_t)duration);
         }
-        stream.WriteZero(4);
+        stream.WriteZero(sizeof(uint32_t) * 2);
         stream.WriteBigEndian(layer);
         stream.WriteBigEndian(alternate_group);
         stream.WriteBigEndianFixedPoint(volume, 8, 8);
@@ -106,7 +106,7 @@ namespace Eyer {
             duration            = stream.ReadBigEndian_uint32(offset);
         }
 
-        stream.Skip(4);
+        stream.Skip(sizeof(uint32_t) * 2);
 
         layer           = stream.ReadBigEndian_uint16(offset);
         alternate_group = stream.ReadBigEndian_uint16(offset);
@@ -158,17 +158,6 @@ namespace Eyer {
 
         version = 0;
 
-        if(version == 1){
-            size = 8 + 4;
-            size += 8 + 8 + 4 + 4 + 8;
-            size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
-        }
-        else{
-            size = 8 + 4;
-            size += 4 + 4 + 4 + 4 + 4;
-            size += 4 * 2 + 2 * 4 + 4 * 9 + 4 + 4;
-        }
-
         creation_time = 123456;
         modification_time = 654321;
         track_ID = 2;
@@ -184,6 +173,8 @@ namespace Eyer {
 
         width = 1920.0f;
         height = 1080.0f;
+
+        size = Serialize().GetLen();
 
         return 0;
     }

@@ -54,6 +54,23 @@ namespace Eyer {
         return EyerUtil::EndianNtohl(val_net);
     }
 
+    int MP4Stream::GetSizeType(int & size, BoxType & type)
+    {
+        unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
+        buffer.GetBuffer(data);
+
+        uint32_t net_size;
+        memcpy(&net_size, data, sizeof(uint32_t));
+        size = EyerUtil::EndianNtohl(net_size);
+
+        uint32_t net_type;
+        memcpy(&net_type, data + sizeof(uint32_t), 4);
+        type = BoxType::GetType(net_type);
+
+        free(data);
+        return 0;
+    }
+
     uint32_t MP4Stream::Read_uint32(int & offset)
     {
         int32_t val_net;
