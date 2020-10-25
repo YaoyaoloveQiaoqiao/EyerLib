@@ -39,6 +39,20 @@ namespace Eyer
 
         uint32_t entry_count = stream.ReadBigEndian_uint32(offset);
         for(int i=0;i<entry_count;i++){
+            uint32_t size = stream.ReadBigEndian_uint32(offset);
+            uint8_t a = stream.ReadBigEndian_uint8(offset);
+            uint8_t b = stream.ReadBigEndian_uint8(offset);
+            uint8_t c = stream.ReadBigEndian_uint8(offset);
+            uint8_t d = stream.ReadBigEndian_uint8(offset);
+
+            printf("%d  %c%c%c%c\n", size, a, b, c, d);
+
+            for(int w=0;w<8 + 4 + 4 + 4;w++){
+                uint8_t a = stream.ReadBigEndian_uint8(offset);
+                printf("a:%d\n", a);
+            }
+
+
 
         }
 
