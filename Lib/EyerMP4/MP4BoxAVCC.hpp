@@ -25,6 +25,7 @@ namespace Eyer
         uint8_t AVCProfileIndication = 0;
         uint8_t profile_compatibility = 0;
         uint8_t AVCLevelIndication = 0;
+        uint8_t lengthSizeMinusOne = 0;
     };
 }
 

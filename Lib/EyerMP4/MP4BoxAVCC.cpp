@@ -41,6 +41,18 @@ namespace Eyer
         AVCProfileIndication    = stream.ReadBigEndian_uint8(offset);
         profile_compatibility   = stream.ReadBigEndian_uint8(offset);
         AVCLevelIndication      = stream.ReadBigEndian_uint8(offset);
+        lengthSizeMinusOne      = stream.ReadBigEndian_uint8(offset);
+        /*
+        FF : bit(6) reserved = ‘111111’b; unsigned int(2) lengthSizeMinusOne;//读出的每个packet的前几字节代表数据大小，3+1字节
+        E1 : sps个数为1 =1,bit(3) reserved = ‘111’b ;unsigned int(5) numOfSequenceParameterSets;
+        00 28 ：sps长度为40字节 。unsigned int(16) sequenceParameterSetLength ;
+        */
+
+        stream.Skip(1, offset);
+        // stream.Skip(1, offset);
+        uint16_t sps_len = stream.ReadBigEndian_uint16(offset);
+
+        int len = stream.GetBuffer().GetLen();
 
         return offset;
     }
@@ -59,7 +71,8 @@ namespace Eyer
         printf("%sAVCProfileIndication: %d\n", levelStr.str, AVCProfileIndication);
         printf("%sprofile_compatibility: %d\n", levelStr.str, profile_compatibility);
         printf("%sAVCLevelIndication: %d\n", levelStr.str, AVCLevelIndication);
-        
+        printf("%slengthSizeMinusOne: %d\n", levelStr.str, lengthSizeMinusOne);
+
         return 0;
     }
 
