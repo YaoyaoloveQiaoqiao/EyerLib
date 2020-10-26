@@ -1,4 +1,4 @@
-#include "EyerAV.hpp"
+#include "EyerAVAV.hpp"
 
 extern "C"{
 #include <libavformat/avformat.h>
@@ -171,6 +171,11 @@ namespace Eyer {
         return piml->frame->pts;
     }
 
+    double EyerAVFrame::GetSecPTS()
+    {
+        return 0.0;
+    }
+
     int EyerAVFrame::SetNULLData(int w, int h, EyerAVPixelFormat format)
     {
         av_frame_unref(piml->frame);
@@ -300,5 +305,16 @@ namespace Eyer {
     int EyerAVFrame::GetInfo()
     {
         return 0;
+    }
+
+    int EyerAVFrame::SetLast()
+    {
+        piml->isLastPacket = 1;
+        return 0;
+    }
+
+    int EyerAVFrame::IsLast()
+    {
+        return piml->isLastPacket;
     }
 }

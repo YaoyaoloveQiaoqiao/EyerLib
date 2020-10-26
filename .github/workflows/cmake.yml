@@ -1,0 +1,25 @@
+name: CMake
+
+on: [push]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: 3rdpart
+      run: cd ../ && ls && git clone https://gitee.com/redknot/Eyer3rdpart
+    - name: configure
+      run: cd Lib && mkdir build && cd build && cmake ../ -DEyerCore=ON -DEyerMP4=ON -DEyerNet=OFF -DEyerDASH=OFF -DEyerAV=OFF -DEyerCrop=OFF -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerYUV=OFF -DEyerGLWindow=OFF -DEyerType=OFF -DEyerGPUDomino=OFF -DEyerGLShader=OFF -DEyerThread=OFF -DEyerImg=OFF -DEyerGLContext=OFF -DEyerVideoTweenAnimation=OFF -DEyerAVC=OFF -DAL_TEST=OFF
+    - name: build
+      run: cd Lib/build && make clean && make
+    
+    - name: test-core
+      run: cd Lib/build && cd EyerCoreTest && ./EyerCoreTest
+    - name: test-mp4
+      run: cd Lib/build && cd EyerMP4Test && ./EyerMP4Test

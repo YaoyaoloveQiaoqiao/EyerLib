@@ -37,16 +37,30 @@ TEST(EyerString, string){
 
         EXPECT_TRUE(strAB == "strAstrB");
     }
-}
 
-TEST(RedString_Test,string){
-    
-}
+    for(int i=0;i<100;i++){
+        Eyer::EyerString strSrc = "My name is {$name}. I am {$age} years old.";
+        strSrc.Replace("{$name}", "Redknot");
+        strSrc.Replace("{$age}", Eyer::EyerString::Number(20));
 
-TEST(RedArgs_Test, args){
-}
+        EXPECT_TRUE(strSrc == "My name is Redknot. I am 20 years old.") << "Replace Error";
+    }
 
-TEST(RedBtte_Test, byte){
+    Eyer::EyerString url = "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd";
+    int size = url.Split(nullptr, "/");
+    Eyer::EyerString * strList = new Eyer::EyerString[size];
+
+    size = url.Split(strList, "/");
+
+    for(int i=0;i<size;i++){
+        // printf("str: %s\n", strList[i].str);
+    }
+
+    delete [] strList;
+
+    Eyer::EyerURLUtil urlUtil("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd");
+    Eyer::EyerString m4vPath = urlUtil.GetAbsolutePath("./bbb_30fps_1920x1080_8000k/bbb_30fps_1920x1080_8000k_0.m4v");
+    printf("%s\n", m4vPath.str);
 }
 
 TEST(EyerTime, time){
@@ -95,24 +109,6 @@ TEST(EyerLinkedList_Test, insert_delete){
     EXPECT_EQ(data1, 0);
     EyerLog("2. data1:%d\n", data1);	
 }
-
-/*
-TEST(EyerLinkedList_Test, mem){
-    Eyer::EyerGLWindow windows("aaa", 100, 100);
-    windows.Open();
-
-    while(!windows.ShouldClose()){
-
-        Eyer::EyerLinkedList<Eyer::EyerGLComponent *> aList;
-        aList.clear();
-
-        windows.Loop();
-    }
-
-
-    windows.Clear();
-}
-*/
 
 TEST(EyerLinkedList_Test, insertBack){
     Eyer::EyerLinkedList<int> list;
@@ -192,11 +188,11 @@ TEST(EyerQueue_Test, enQueue_deQueue){
     EXPECT_EQ(queue.getSize(), 0);
 
 }
-
+/*
 TEST(EyerMap_Test, insert_clear){
     Eyer::EyerMap<int, int> map;
     for(int i=0; i<10; i++){
-        map.insert(i, i);
+        map.Insert(i, i);
     }
     EXPECT_EQ(map.getSize(), 10);
     int value = 0;
@@ -222,6 +218,7 @@ TEST(EyerMap_Test, insert_clear){
     }
 
 }
+ */
 
 TEST(EyerLinkedList_Test, sort){
     Eyer::EyerLinkedList<int> list;
@@ -244,7 +241,6 @@ TEST(EyerMath, mat){
 
 
 TEST(LRUCache, LRUCache){
-    // Eyer::EyerVec4;
     Eyer::EyerLRUMap<int, Eyer::EyerVec4> lruMap(10);
 
     for(int i=0;i<100;i++){
@@ -252,9 +248,154 @@ TEST(LRUCache, LRUCache){
         lruMap.Put(i, vec4);
 
         int size = lruMap.Size();
-        // printf("Size:%d \n", size);
 
         EXPECT_LE(size, 10);
+    }
+}
+
+
+TEST(Map, MapTest){
+    std::map<Eyer::EyerString, Eyer::EyerString> m;
+
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("a", "miaowu_a"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("b", "miaowu_b"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("c", "miaowu_c"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("d", "miaowu_d"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("e", "miaowu_e"));
+    m.insert(std::pair<Eyer::EyerString, Eyer::EyerString>("f", "miaowu_f"));
+
+    int size = m.size();
+
+    EyerLog("Map Size: %d\n", size);
+
+    std::map<Eyer::EyerString, Eyer::EyerString>::iterator iter;
+    for(iter = m.begin(); iter != m.end(); iter++){
+        EyerLog("key: %s   value: %s\n", iter->first.str, iter->second.str);
+    }
+
+    {
+        std::map<Eyer::EyerString, Eyer::EyerString>::iterator it;
+        it = m.find(Eyer::EyerString("a"));
+        if (it != m.end()){
+            EyerLog("key: %s   value: %s\n", it->first.str, it->second.str);
+        }
+    }
+
+    {
+        std::map<Eyer::EyerString, Eyer::EyerString>::iterator it;
+        it = m.find(Eyer::EyerString("b"));
+        if (it != m.end()){
+            EyerLog("key: %s   value: %s\n", it->first.str, it->second.str);
+        }
+    }
+    {
+        std::map<Eyer::EyerString, Eyer::EyerString>::iterator it;
+        it = m.find(Eyer::EyerString("c"));
+        if (it != m.end()){
+            EyerLog("key: %s   value: %s\n", it->first.str, it->second.str);
+        }
+    }
+
+}
+
+TEST(EyerBuffer, EyerBufferTest){
+    int bALen = 10;
+    int bBLen = 20;
+    char * bA = (char *)malloc(bALen);
+    char * bB = (char *)malloc(bBLen);
+
+    memset(bA, 'A', bALen);
+    memset(bB, 'B', bBLen);
+
+    Eyer::EyerBuffer buffer;
+
+    buffer.Append((unsigned char *)bA, bALen);
+    buffer.Append((unsigned char *)bB, bBLen);
+
+    int bufferLen = buffer.GetBuffer(nullptr);
+    EyerLog("Buffer Len: %d\n", bufferLen);
+
+    ASSERT_EQ(bufferLen, bALen + bBLen) << "Buffer Append Error";
+
+    char * buf = (char *)malloc(bufferLen);
+    buffer.GetBuffer((unsigned char *)buf);
+
+    for(int i=0;i<bALen;i++){
+        printf(" %c ", bA[i]);
+        ASSERT_EQ(bA[i], 'A') << "Buffer A Error";
+    }
+    printf("\n");
+
+    for(int i=0;i<bBLen;i++){
+        printf(" %c ", bB[i]);
+        ASSERT_EQ(bB[i], 'B') << "Buffer B Error";
+    }
+    printf("\n");
+
+    for(int i=0;i<bufferLen;i++){
+        // printf(" %c ", buf[i]);
+        if(i < 10){
+            ASSERT_EQ(buf[i], 'A') << "Buffer Error";
+        }
+        if(i >= 10){
+            ASSERT_EQ(buf[i], 'B') << "Buffer Error";
+        }
+    }
+    printf("\n");
+
+    free(buf);
+    free(bA);
+    free(bB);
+}
+
+TEST(EyerBuffer, EyerBufferCutOffTest){
+
+
+    for(int index=0;index<100;index++) {
+        int bALen = 50;
+        unsigned char *bA = (unsigned char *) malloc(bALen);
+        memset(bA, 'A', bALen);
+        Eyer::EyerBuffer bufferA;
+        bufferA.Clear();
+        bufferA.Append(bA, bALen);
+
+        {
+            int bufferALen = bufferA.GetBuffer(nullptr);
+            unsigned char *bufferAData = (unsigned char *) malloc(bufferALen);
+
+            bufferA.GetBuffer(bufferAData);
+
+            /*
+            for (int i = 0; i < bufferALen; i++) {
+                printf(" %c ", bufferAData[i]);
+            }
+            printf("\n");
+            */
+
+            free(bufferAData);
+        }
+
+        {
+            Eyer::EyerBuffer bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen + 20);
+            ASSERT_LT(ret, bALen + 20) << "Length Test Error";
+        }
+        {
+            Eyer::EyerBuffer bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen);
+            ASSERT_EQ(ret, bALen) << "Length Test Error";
+
+            ASSERT_EQ(bufferA.GetBuffer(), 0) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), bALen) << "Cut Fail\n";
+
+            Eyer::EyerBuffer bufferC;
+            bufferB.CutOff(bufferC, 15);
+
+            ASSERT_EQ(bufferC.GetBuffer(), 15) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), 35) << "Cut Fail\n";
+        }
+
+        free(bA);
     }
 }
 

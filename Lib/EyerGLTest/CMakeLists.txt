@@ -9,7 +9,9 @@ target_link_libraries (EyerGLTest EyerCore)
 target_link_libraries (EyerGLTest EyerGL)
 target_link_libraries (EyerGLTest EyerType)
 target_link_libraries (EyerGLTest EyerGLWindow)
+target_link_libraries (EyerGLTest EyerGLContext)
 target_link_libraries (EyerGLTest EyerGLAD)
+target_link_libraries (EyerGLTest EyerThread)
 
 file(COPY
         ${CMAKE_CURRENT_SOURCE_DIR}/Manjari-Bold.otf

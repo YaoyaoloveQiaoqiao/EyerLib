@@ -6,8 +6,6 @@ add_library(
         EyerThread.cpp
 )
 
-target_link_libraries (EyerThread pthread)
-
 set(head_files
         EyerThread.hpp
         )

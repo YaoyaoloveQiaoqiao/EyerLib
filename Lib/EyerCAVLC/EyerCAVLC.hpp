@@ -1,0 +1,6 @@
+#ifndef EYERLIB_EYERCAVLC_HPP
+#define EYERLIB_EYERCAVLC_HPP
+
+#include "CAVLC.hpp"
+
+#endif //EYERLIB_EYERCAVLC_HPP

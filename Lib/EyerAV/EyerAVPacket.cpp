@@ -1,4 +1,4 @@
-#include "EyerAV.hpp"
+#include "EyerAVAV.hpp"
 
 extern "C"{
 #include <libavformat/avformat.h>
@@ -53,6 +53,11 @@ namespace Eyer
         return piml->packet->pts;
     }
 
+    double EyerAVPacket::GetSecPTS()
+    {
+        return piml->ptsSec;
+    }
+
     uint64_t EyerAVPacket::GetDTS()
     {
         return piml->packet->dts;
@@ -74,5 +79,26 @@ namespace Eyer
     {
         piml->packet->stream_index = id;
         return 0;
+    }
+
+    int EyerAVPacket::IsLast()
+    {
+        return piml->isLastPacket;
+    }
+
+    int EyerAVPacket::SetLast()
+    {
+        piml->isLastPacket = 1;
+        return 0;
+    }
+
+    int EyerAVPacket::GetSize()
+    {
+        return piml->packet->size;
+    }
+
+    unsigned char * EyerAVPacket::GetDataPtr()
+    {
+        return piml->packet->data;
     }
 }

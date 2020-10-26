@@ -1,6 +1,16 @@
-PROJECT(EYE_Lib)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(EyerLib
+        VERSION 1.0.0.0
+        )
+
+message( STATUS "CMAKE_PROJECT_NAME    = ${CMAKE_PROJECT_NAME}" )
+message( STATUS "PROJECT_VERSION_MAJOR = ${PROJECT_VERSION_MAJOR}" )
+message( STATUS "PROJECT_VERSION_MINOR = ${PROJECT_VERSION_MINOR}" )
+message( STATUS "PROJECT_VERSION_PATCH = ${PROJECT_VERSION_PATCH}" )
+message( STATUS "PROJECT_VERSION_TWEAK = ${PROJECT_VERSION_TWEAK}" )
+message( STATUS "PROJECT_HOMEPAGE_URL = ${PROJECT_HOMEPAGE_URL}")
+message( STATUS "CMAKE_PROJECT_DESCRIPTION = ${CMAKE_PROJECT_DESCRIPTION}" )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -9,6 +19,15 @@ MESSAGE(STATUS "operation system is ${CMAKE_SYSTEM}")
 SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/install/)
 
 include_directories (googletest/googletest/include)
+
+include_directories (EyerGLAD/glad/include/)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/include)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/curl_install/include)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include/libxml2)
+
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/curl_install/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/lib)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -38,8 +57,32 @@ FUNCTION(ModuleOption moduleName moduleOption)
     ENDIF(${moduleOption})
 ENDFUNCTION(ModuleOption)
 
+FUNCTION(ModuleTestOption moduleName moduleTestName moduleOption)
+    IF (${moduleOption})
+        ADD_SUBDIRECTORY(${moduleName})
+        ADD_SUBDIRECTORY(${moduleTestName})
+    ENDIF(${moduleOption})
+ENDFUNCTION(ModuleTestOption)
+
+ADD_SUBDIRECTORY(googletest)
+
 OPTION(EyerCore         "option for EyerCore"           ON)
-ModuleOption("EyerCore" EyerCore)
+ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
+
+OPTION(EyerNet           "option for EyerNet"           ON)
+ModuleTestOption("EyerNet" "EyerNetTest" EyerNet)
+
+OPTION(EyerDASH           "option for EyerDASH"         ON)
+ModuleTestOption("EyerDASH" "EyerDASHTest" EyerDASH)
+
+OPTION(EyerAVC           "option for EyerAVC"           ON)
+ModuleTestOption("EyerAVC" "EyerAVCTest" EyerAVC)
+
+OPTION(EyerCAVLC           "option for EyerCAVLC"           ON)
+ModuleTestOption("EyerCAVLC" "EyerCAVLCTest" EyerCAVLC)
+
+OPTION(EyerMP4           "option for EyerMP4"           ON)
+ModuleTestOption("EyerMP4" "EyerMP4Test" EyerMP4)
 
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
@@ -52,6 +95,12 @@ ModuleOption("EyerGLAD" EyerGLAD)
 
 OPTION(EyerGL           "option for EyerGL"             ON)
 ModuleOption("EyerGL" EyerGL)
+
+OPTION(EyerGLCustomComponent        "option for EyerGLCustomComponent"             ON)
+ModuleOption("EyerGLCustomComponent" EyerGLCustomComponent)
+
+OPTION(EyerGLRenderTask             "option for EyerGLRenderTask"                   ON)
+ModuleOption("EyerGLRenderTask" EyerGLRenderTask)
 
 OPTION(EyerYUV           "option for EyerYUV"           ON)
 ModuleOption("EyerYUV" EyerYUV)
@@ -83,7 +132,6 @@ ModuleOption("EyerVideoTweenAnimation" EyerVideoTweenAnimation)
 OPTION(AL_TEST           "option for AL_TEST"           ON)
 IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerVideoTweenAnimationTest)
-    ADD_SUBDIRECTORY(EyerCoreTest)
     ADD_SUBDIRECTORY(EyerAVTest)
     ADD_SUBDIRECTORY(EyerGLTest)
     ADD_SUBDIRECTORY(EyerRender)
@@ -94,5 +142,5 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerEventQueue)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerYUVTest)
-    ADD_SUBDIRECTORY(googletest)
+    ADD_SUBDIRECTORY(EyerCppTest)
 ENDIF(AL_TEST)

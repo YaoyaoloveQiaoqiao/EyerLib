@@ -5,6 +5,19 @@
 #include "EyerGL/EyerGL.hpp"
 #include "EyerGLShader/Shader.hpp"
 #include "EyerType/EyerType.hpp"
+#include "EyerGLContext/EyerGLContext.hpp"
+
+TEST(GLContext, GLContextTest){
+    Eyer::EyerGLContextThread glCtx;
+    // glCtx.Run();
+    glCtx.Start();
+
+    for(int i=0;i<5;i++){
+        Eyer::EyerTime::EyerSleepMilliseconds(1000);
+    }
+
+    glCtx.Stop();
+}
 
 /*
 TEST(GLWindows, GLWindows){
