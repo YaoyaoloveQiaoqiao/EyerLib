@@ -72,6 +72,7 @@ namespace Eyer
 
         static BoxType AVC1;
         static BoxType AVCC;
+        static BoxType STTS;
     };
 }
 

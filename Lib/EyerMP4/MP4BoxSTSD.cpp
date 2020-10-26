@@ -31,9 +31,12 @@ namespace Eyer
     EyerBuffer MP4BoxSTSD::SerializeParam()
     {
         EyerBuffer buffer = MP4FullBox::SerializeParam();
+        /*
         MP4Stream stream(buffer);
-
         return stream.GetBuffer();
+        */
+        buffer.Append(stsdBuffer);
+        return buffer;
     }
 
     int MP4BoxSTSD::ParseParam(EyerBuffer & buffer, int offset)
@@ -42,6 +45,9 @@ namespace Eyer
 
         MP4Stream stream(buffer);
         stream.Skip(offset);
+
+        // TODO Cache STSD
+        stsdBuffer = stream.GetBuffer();
 
         uint32_t entry_count = stream.ReadBigEndian_uint32(offset);
         for(int i=0;i<entry_count;i++){
