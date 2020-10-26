@@ -30,6 +30,8 @@ add_library(
         string_ext.h
         EyerURLUtil.cpp
         EyerURLUtil.hpp
+        EyerUtil.cpp
+        EyerUtil.hpp
 )
 
 set(head_files 
@@ -47,6 +49,7 @@ set(head_files
         EyerLRUMap.hpp
         EyerBuffer.hpp
         EyerURLUtil.hpp
+        EyerUtil.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCore)

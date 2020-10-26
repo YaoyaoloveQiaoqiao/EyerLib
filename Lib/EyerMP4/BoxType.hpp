@@ -46,6 +46,7 @@ namespace Eyer
         static BoxType MVHD;
 
         static BoxType EDTS;
+        static BoxType ELST;
 
         static BoxType TRAK;
         static BoxType TKHD;
@@ -56,6 +57,21 @@ namespace Eyer
         static BoxType STBL;
 
         static BoxType MVEX;
+
+        static BoxType HDLR;
+        static BoxType DINF;
+
+        static BoxType DREF;
+
+        static BoxType URL;
+        static BoxType URN;
+
+        static BoxType MEHD;
+        static BoxType TREX;
+        static BoxType STSD;
+
+        static BoxType AVC1;
+        static BoxType AVCC;
     };
 }
 

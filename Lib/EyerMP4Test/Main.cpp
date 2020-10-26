@@ -5,6 +5,36 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerMP4/EyerMP4.hpp"
 
+TEST(EyerMP4, Endian)
+{
+    {
+        uint64_t a = 123;
+        uint64_t b = Eyer::EyerUtil::EndianHtonll(a);
+        uint64_t c = Eyer::EyerUtil::EndianNtohll(b);
+        printf("a: %lld\n", a);
+        printf("b: %lld\n", b);
+        printf("c: %lld\n", c);
+    }
+    {
+        uint32_t a = 123;
+        uint32_t b = Eyer::EyerUtil::EndianHtonl(a);
+        uint32_t c = Eyer::EyerUtil::EndianNtohl(b);
+        printf("a: %d\n", a);
+        printf("b: %d\n", b);
+        printf("c: %d\n", c);
+    }
+
+    {
+        uint16_t a = 123;
+        uint16_t b = Eyer::EyerUtil::EndianHtons(a);
+        uint16_t c = Eyer::EyerUtil::EndianNtohs(b);
+        printf("a: %d\n", a);
+        printf("b: %d\n", b);
+        printf("c: %d\n", c);
+    }
+
+}
+
 TEST(EyerMP4, EyerMP4Test)
 {
     printf("=======================Read File=======================\n");
@@ -81,6 +111,76 @@ TEST(EyerMP4, MP4BoxTKHD)
 
     ASSERT_EQ(tkhd, tkhd2) << "TKHD Error";
 }
+
+TEST(EyerMP4, MP4BoxELST)
+{
+    printf("=======================ELST=======================\n");
+    Eyer::MP4BoxELST elst;
+    elst.SetDefaultData();
+    elst.PrintInfo();
+
+    Eyer::EyerBuffer buffer = elst.Serialize();
+
+    Eyer::MP4BoxELST elst2;
+    elst2.Parse(buffer);
+
+    elst2.PrintInfo();
+
+    ASSERT_EQ(elst, elst2) << "ELST Error";
+}
+
+TEST(EyerMP4, MP4BoxHDLR)
+{
+    printf("=======================HDLR=======================\n");
+    Eyer::MP4BoxHDLR hdlr;
+    hdlr.SetDefaultData();
+    hdlr.PrintInfo();
+
+    Eyer::EyerBuffer buffer = hdlr.Serialize();
+
+    Eyer::MP4BoxHDLR hdlr2;
+    hdlr2.Parse(buffer);
+
+    hdlr2.PrintInfo();
+
+    ASSERT_EQ(hdlr, hdlr2) << "HDLR Error";
+}
+
+TEST(EyerMP4, MP4BoxTREX)
+{
+    printf("=======================TREX=======================\n");
+    Eyer::MP4BoxTREX trex;
+    trex.SetDefaultData();
+    trex.PrintInfo();
+
+    Eyer::EyerBuffer buffer = trex.Serialize();
+
+    Eyer::MP4BoxTREX trex2;
+    trex2.Parse(buffer);
+
+    trex2.PrintInfo();
+
+    ASSERT_EQ(trex, trex2) << "HDLR Error";
+}
+
+TEST(EyerMP4, MP4BoxMEHD)
+{
+    printf("=======================MEHD=======================\n");
+    Eyer::MP4BoxMEHD mehd;
+    mehd.SetDefaultData();
+    mehd.PrintInfo();
+
+    Eyer::EyerBuffer buffer = mehd.Serialize();
+
+    Eyer::MP4BoxMEHD mehd2;
+    mehd2.Parse(buffer);
+
+    mehd2.PrintInfo();
+
+    ASSERT_EQ(mehd, mehd2) << "MEHD Error";
+}
+
+
 
 
 int main(int argc,char **argv){

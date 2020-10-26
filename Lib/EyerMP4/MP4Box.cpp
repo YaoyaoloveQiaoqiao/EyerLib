@@ -2,6 +2,15 @@
 #include "MP4BoxFTYP.hpp"
 #include "MP4BoxMVHD.hpp"
 #include "MP4BoxTKHD.hpp"
+#include "MP4BoxELST.hpp"
+#include "MP4BoxHDLR.hpp"
+#include "MP4BoxDREF.hpp"
+#include "MP4BoxURL.hpp"
+#include "MP4BoxURN.hpp"
+#include "MP4BoxTREX.hpp"
+#include "MP4BoxMEHD.hpp"
+#include "MP4BoxSTSD.hpp"
+#include "MP4Stream.hpp"
 
 namespace Eyer
 {
@@ -77,24 +86,15 @@ namespace Eyer
 
     int MP4Box::Parse(EyerBuffer & buffer)
     {
-        // TODO Len
-        unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
-        buffer.GetBuffer(data);
+        int offset = 0;
 
-        uint32_t net_size = 0;
-        memcpy(&net_size, data, 4);
-        size = ntohl(net_size);
+        MP4Stream stream(buffer);
+        size = stream.ReadBigEndian_int32(offset);
 
-
-        uint32_t net_type;
-        memcpy(&net_type, data + 4, 4);
-        type = BoxType::GetType(net_type);
-
+        type = BoxType::GetType(stream.Read_uint32(offset));
 
         if(size == 1){
-            uint64_t net_largesize = 0;
-            memcpy(&net_largesize, data + 4 + 4, 8);
-            largesize = ntohl(net_size);
+            largesize = stream.ReadBigEndian_int64(offset);
         }
 
         // type.PrintInfo();
@@ -108,11 +108,6 @@ namespace Eyer
             ParseParam(buffer, 8);
         }
 
-        if(data != nullptr){
-            free(data);
-            data = nullptr;
-        }
-
         return 0;
     }
 
@@ -120,43 +115,29 @@ namespace Eyer
     {
         EyerBuffer tempBuffer = buffer;
 
-        int bufferLen = buffer.GetLen();
-        unsigned char * data = (unsigned char *)malloc(bufferLen);
-        buffer.GetBuffer(data);
+        MP4Stream stream(buffer);
+        stream.Skip(_offset);
 
-        int alreadRead = 0;
-        alreadRead += _offset;
-        while(1){
-            if(alreadRead >= bufferLen){
-                break;
-            }
-            uint32_t net_size = 0;
-            memcpy(&net_size, data + alreadRead, 4);
-            int boxSize = ntohl(net_size);
+        while (tempBuffer.GetLen() > 0) {
+            int offset = 0;
+            uint64_t boxSize = stream.ReadBigEndian_uint32(offset);
+            BoxType boxtype = BoxType::GetType(stream.Read_uint32(offset));
             if(boxSize == 1){
-                // TODO boxSize == 1
+                boxSize = stream.ReadBigEndian_uint64(offset);
             }
-
-            uint32_t net_type;
-            memcpy(&net_type, data + alreadRead + 4, 4);
-            BoxType boxtype = BoxType::GetType(net_type);
-
-
-            alreadRead += boxSize;
 
             EyerBuffer boxBuffer;
-            tempBuffer.CutOff(boxBuffer, boxSize);
+            tempBuffer.CutOff(boxBuffer, (int)boxSize);
+
+            stream.Skip(boxSize - offset);
 
             MP4Box * box = CreatBox(boxtype);
             if(box != nullptr){
                 box->Parse(boxBuffer);
-                // box->PrintInfo();
                 subBoxList.push_back(box);
             }
         }
-
-        free(data);
-        return 0;
+        return _offset;
     }
 
     int MP4Box::ParseParam(EyerBuffer & buffer, int offset)
@@ -170,6 +151,11 @@ namespace Eyer
             return largesize;
         }
         return size;
+    }
+
+    BoxType MP4Box::GetType()
+    {
+        return type;
     }
 
     MP4Box * MP4Box::GetSubBoxPtr(BoxType type)
@@ -190,7 +176,7 @@ namespace Eyer
             levelStr = levelStr + "\t";
         }
 
-        printf("%s[%c%c%c%c](%d bytes)\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD(), size);
+        printf("%s[%c%c%c%c] (%d bytes)\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD(), size);
         if(type.HasSub()){
             for(int i=0;i<subBoxList.size();i++){
                 MP4Box * box = subBoxList[i];
@@ -215,6 +201,30 @@ namespace Eyer
             }
             else if(type == BoxType::TKHD){
                 box = new MP4BoxTKHD();
+            }
+            else if(type == BoxType::ELST){
+                box = new MP4BoxELST();
+            }
+            else if(type == BoxType::HDLR){
+                box = new MP4BoxHDLR();
+            }
+            else if(type == BoxType::DREF){
+                box = new MP4BoxDREF();
+            }
+            else if(type == BoxType::URL){
+                box = new MP4BoxURL();
+            }
+            else if(type == BoxType::URN){
+                box = new MP4BoxURN();
+            }
+            else if(type == BoxType::TREX){
+                box = new MP4BoxTREX();
+            }
+            else if(type == BoxType::MEHD){
+                box = new MP4BoxMEHD();
+            }
+            else if(type == BoxType::STSD){
+                box = new MP4BoxSTSD();
             }
         }
 

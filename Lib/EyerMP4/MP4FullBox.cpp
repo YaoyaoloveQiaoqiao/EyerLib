@@ -1,8 +1,9 @@
 #include "MP4FullBox.hpp"
+#include "MP4Stream.hpp"
 
 namespace Eyer
 {
-    MP4FullBox::MP4FullBox()
+    MP4FullBox::MP4FullBox() : MP4Box()
     {
 
     }

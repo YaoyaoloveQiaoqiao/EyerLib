@@ -1,8 +1,6 @@
 #include "MP4Stream.hpp"
 #include <math.h>
-
-
-#define FP_SCALE 65536 // scaling factor
+#include <EyerCore/EyerCore.hpp>
 
 namespace Eyer {
     MP4Stream::MP4Stream(EyerBuffer &_buffer) {
@@ -19,7 +17,7 @@ namespace Eyer {
 
         offset += sizeof(uint64_t);
 
-        return ntohll(val_net);
+        return EyerUtil::EndianNtohll(val_net);
     }
 
     uint32_t MP4Stream::ReadBigEndian_uint32(int &offset) {
@@ -28,7 +26,7 @@ namespace Eyer {
 
         offset += sizeof(uint32_t);
 
-        return ntohl(val_net);
+        return EyerUtil::EndianNtohl(val_net);
     }
 
     uint16_t MP4Stream::ReadBigEndian_uint16(int &offset) {
@@ -37,7 +35,70 @@ namespace Eyer {
 
         offset += sizeof(uint16_t);
 
-        return ntohs(val_net);
+        return EyerUtil::EndianNtohs(val_net);
+    }
+
+    int64_t MP4Stream::ReadBigEndian_int64(int & offset)
+    {
+        int64_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(int64_t));
+
+        offset += sizeof(int64_t);
+
+        return EyerUtil::EndianNtohll(val_net);
+    }
+
+    int32_t MP4Stream::ReadBigEndian_int32(int & offset)
+    {
+        int32_t val_net = Read_uint32(offset);
+        return EyerUtil::EndianNtohl(val_net);
+    }
+
+    int MP4Stream::GetSizeType(int & size, BoxType & type)
+    {
+        unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
+        buffer.GetBuffer(data);
+
+        uint32_t net_size;
+        memcpy(&net_size, data, sizeof(uint32_t));
+        size = EyerUtil::EndianNtohl(net_size);
+
+        uint32_t net_type;
+        memcpy(&net_type, data + sizeof(uint32_t), 4);
+        type = BoxType::GetType(net_type);
+
+        free(data);
+        return 0;
+    }
+
+    uint32_t MP4Stream::Read_uint32(int & offset)
+    {
+        int32_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(int32_t));
+
+        offset += sizeof(int32_t);
+
+        return val_net;
+    }
+
+    int16_t MP4Stream::ReadBigEndian_int16(int & offset)
+    {
+        int16_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(int16_t));
+
+        offset += sizeof(int16_t);
+
+        return EyerUtil::EndianNtohs(val_net);
+    }
+
+    uint8_t  MP4Stream::ReadBigEndian_uint8 (int & offset)
+    {
+        uint8_t val_net;
+        buffer.CutOff((uint8_t *) &val_net, sizeof(uint8_t));
+
+        offset += sizeof(uint8_t);
+
+        return val_net;
     }
 
     float MP4Stream::ReadBigEndianFixedPoint(unsigned int integerLength, unsigned int fractionalLength, int &offset) {
@@ -54,6 +115,17 @@ namespace Eyer {
 
 
         return integer + fractional;
+    }
+
+    int MP4Stream::ReadStr(EyerString & str, int len)
+    {
+        char * strBuffer = (char *)malloc(len + 1);
+        buffer.CutOff((uint8_t *) strBuffer, len);
+        strBuffer[len] = '\0';
+        str = strBuffer;
+
+        free(strBuffer);
+        return 0;
     }
 
     int MP4Stream::Skip(int len)
@@ -78,21 +150,21 @@ namespace Eyer {
 
     int MP4Stream::WriteBigEndian(uint64_t val)
     {
-        uint64_t net_val = htonll(val);
+        uint64_t net_val = EyerUtil::EndianHtonll(val);
         buffer.Append((uint8_t *)&net_val, sizeof(uint64_t));
         return sizeof(uint64_t);
     }
 
     int MP4Stream::WriteBigEndian(uint32_t val)
     {
-        uint32_t net_val = htonl(val);
+        uint32_t net_val = EyerUtil::EndianHtonl(val);
         buffer.Append((uint8_t *)&net_val, sizeof(uint32_t));
         return sizeof(uint32_t);
     }
 
     int MP4Stream::WriteBigEndian(uint16_t val)
     {
-        uint16_t net_val = htons(val);
+        uint16_t net_val = EyerUtil::EndianHtons(val);
         buffer.Append((uint8_t *)&net_val, sizeof(uint16_t));
         return sizeof(uint16_t);
     }
@@ -103,6 +175,37 @@ namespace Eyer {
         return sizeof(uint8_t);
     }
 
+
+
+    int MP4Stream::WriteBigEndian(int64_t val)
+    {
+        int64_t net_val = EyerUtil::EndianHtonll(val);
+        buffer.Append((uint8_t *)&net_val, sizeof(int64_t));
+        return sizeof(int64_t);
+    }
+
+    int MP4Stream::WriteBigEndian(int32_t val)
+    {
+        int32_t net_val = EyerUtil::EndianHtonl(val);
+        buffer.Append((uint8_t *)&net_val, sizeof(int32_t));
+        return sizeof(int32_t);
+    }
+
+    int MP4Stream::WriteBigEndian(int16_t val)
+    {
+        int16_t net_val = EyerUtil::EndianHtons(val);
+        buffer.Append((uint8_t *)&net_val, sizeof(int16_t));
+        return sizeof(int16_t);
+    }
+
+    int MP4Stream::WriteBigEndian(int8_t  val)
+    {
+        buffer.Append((uint8_t *)&val, sizeof(int8_t));
+        return sizeof(int8_t);
+    }
+
+
+
     int MP4Stream::WriteZero(int len)
     {
         unsigned char * a = (unsigned char *)malloc(len);
@@ -111,6 +214,17 @@ namespace Eyer {
         free(a);
         return len;
     }
+
+    int MP4Stream::WriteString(EyerString & str)
+    {
+        int len = strlen(str.str) + 1;
+
+        buffer.Append((unsigned char *)str.str, len);
+
+        return len;
+    }
+
+
 
     int MP4Stream::WriteBigEndianFixedPoint(float val, unsigned int integerLength, unsigned int fractionalLength)
     {
@@ -142,5 +256,10 @@ namespace Eyer {
     EyerBuffer & MP4Stream::GetBuffer()
     {
         return buffer;
+    }
+
+    int MP4Stream::CutOff(EyerBuffer & buf, int len)
+    {
+        return buffer.CutOff(buf, len);
     }
 }
