@@ -35,11 +35,38 @@ TEST(EyerMP4, Endian)
 
 }
 
-TEST(EyerMP4, EyerMP4Test)
+TEST(EyerMP4, EyerReadMP4)
 {
     printf("=======================Read File=======================\n");
     // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
     FILE * fp = fopen("./demo.mp4", "rb");
+
+    fseek(fp, 0, SEEK_END);
+    long len = ftell(fp);
+
+    fseek(fp, 0, 0);
+
+    unsigned char * data = (unsigned char *)malloc(len);
+    int ret = fread(data, len, 1, fp);
+
+    Eyer::EyerBuffer buffer;
+    buffer.Append(data, len);
+
+    Eyer::MP4Box box;
+    box.ParseSubBox(buffer);
+    box.PrintInfo();
+
+    free(data);
+
+    fclose(fp);
+}
+
+
+TEST(EyerMP4, EyerReadfMP4)
+{
+    printf("=======================Read File=======================\n");
+    FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
+    // FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
     long len = ftell(fp);

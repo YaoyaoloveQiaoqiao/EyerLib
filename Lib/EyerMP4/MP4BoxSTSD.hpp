@@ -23,6 +23,7 @@ namespace Eyer
 
     private:
         std::vector<MP4BoxSampleEntry *> sampleList;
+        EyerBuffer stsdBuffer;
     };
 }
 
