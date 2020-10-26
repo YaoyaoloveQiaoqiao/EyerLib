@@ -26,6 +26,14 @@ namespace Eyer
         uint8_t profile_compatibility = 0;
         uint8_t AVCLevelIndication = 0;
         uint8_t lengthSizeMinusOne = 0;
+
+        std::vector<EyerBuffer *> spsList;
+        std::vector<EyerBuffer *> ppsList;
+
+        uint8_t chroma_format = 0;
+        uint8_t bit_depth_luma_minus8 = 0;
+        uint8_t bit_depth_chroma_minus8 = 0;
+        std::vector<EyerBuffer *> spsExtList;
     };
 }
 
