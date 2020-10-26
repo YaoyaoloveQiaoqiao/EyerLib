@@ -82,7 +82,7 @@ namespace Eyer
         levelStr = levelStr + "\t";
 
         for(int i=0;i<sampleList.size();i++){
-            sampleList[i]->PrintInfo(level);
+            sampleList[i]->PrintInfo(level + 1);
         }
 
         return 0;

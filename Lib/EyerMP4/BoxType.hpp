@@ -44,35 +44,28 @@ namespace Eyer
         static BoxType MOOV;
         static BoxType MDAT;
         static BoxType MVHD;
-
         static BoxType EDTS;
         static BoxType ELST;
-
         static BoxType TRAK;
         static BoxType TKHD;
-
         static BoxType MDIA;
         static BoxType MDHD;
         static BoxType MINF;
         static BoxType STBL;
-
         static BoxType MVEX;
-
         static BoxType HDLR;
         static BoxType DINF;
-
         static BoxType DREF;
-
         static BoxType URL;
         static BoxType URN;
-
         static BoxType MEHD;
         static BoxType TREX;
         static BoxType STSD;
-
         static BoxType AVC1;
         static BoxType AVCC;
         static BoxType STTS;
+        static BoxType STSC;
+        static BoxType STCO;
     };
 }
 

@@ -6,6 +6,13 @@
 
 namespace Eyer
 {
+    class MP4BoxSTTSSample
+    {
+    public:
+        uint32_t sample_count = 0;
+        uint32_t sample_delta = 0;
+    };
+
     class MP4BoxSTTS : public MP4FullBox{
     public:
         MP4BoxSTTS();
@@ -19,6 +26,9 @@ namespace Eyer
         virtual int PrintInfo(int level = 0);
 
         int SetDefaultData();
+
+    private:
+        std::vector<MP4BoxSTTSSample *> sampleList;
     };
 }
 

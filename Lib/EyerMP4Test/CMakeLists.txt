@@ -1,6 +1,8 @@
 add_executable(
         EyerMP4Test
         Main.cpp
+        STTSTest.hpp
+        STSCTest.hpp
 )
 
 include_directories (../)

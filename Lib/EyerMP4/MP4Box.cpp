@@ -11,6 +11,7 @@
 #include "MP4BoxMEHD.hpp"
 #include "MP4BoxSTSD.hpp"
 #include "MP4BoxSTTS.hpp"
+#include "MP4BoxSTSC.hpp"
 #include "MP4Stream.hpp"
 
 namespace Eyer
@@ -229,6 +230,9 @@ namespace Eyer
             }
             else if(type == BoxType::STTS){
                 box = new MP4BoxSTTS();
+            }
+            else if(type == BoxType::STSC){
+                box = new MP4BoxSTSC();
             }
         }
 

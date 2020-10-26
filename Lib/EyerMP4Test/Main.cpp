@@ -37,7 +37,7 @@ TEST(EyerMP4, Endian)
 
 TEST(EyerMP4, EyerReadMP4)
 {
-    printf("=======================Read File=======================\n");
+    printf("=======================Read MP4=======================\n");
     // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
     FILE * fp = fopen("./demo.mp4", "rb");
 
@@ -64,8 +64,10 @@ TEST(EyerMP4, EyerReadMP4)
 
 TEST(EyerMP4, EyerReadfMP4)
 {
-    printf("=======================Read File=======================\n");
+    printf("=======================Read fMP4=======================\n");
+    // FILE * fp = fopen("/Users/lichi/annie/xiaomai.mp4", "rb");
     FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
+
     // FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
@@ -207,8 +209,8 @@ TEST(EyerMP4, MP4BoxMEHD)
     ASSERT_EQ(mehd, mehd2) << "MEHD Error";
 }
 
-
-
+#include "STTSTest.hpp"
+#include "STSCTest.hpp"
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
