@@ -5,12 +5,41 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerMP4/EyerMP4.hpp"
 
+TEST(EyerMP4, Endian)
+{
+    {
+        uint64_t a = 123;
+        uint64_t b = Eyer::EyerUtil::EndianHtonll(a);
+        uint64_t c = Eyer::EyerUtil::EndianNtohll(b);
+        printf("a: %lld\n", a);
+        printf("b: %lld\n", b);
+        printf("c: %lld\n", c);
+    }
+    {
+        uint32_t a = 123;
+        uint32_t b = Eyer::EyerUtil::EndianHtonl(a);
+        uint32_t c = Eyer::EyerUtil::EndianNtohl(b);
+        printf("a: %d\n", a);
+        printf("b: %d\n", b);
+        printf("c: %d\n", c);
+    }
+
+    {
+        uint16_t a = 123;
+        uint16_t b = Eyer::EyerUtil::EndianHtons(a);
+        uint16_t c = Eyer::EyerUtil::EndianNtohs(b);
+        printf("a: %d\n", a);
+        printf("b: %d\n", b);
+        printf("c: %d\n", c);
+    }
+
+}
 
 TEST(EyerMP4, EyerMP4Test)
 {
     printf("=======================Read File=======================\n");
-    FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
-    // FILE * fp = fopen("./demo.mp4", "rb");
+    // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
+    FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
     long len = ftell(fp);
@@ -133,6 +162,26 @@ TEST(EyerMP4, MP4BoxTREX)
 
     ASSERT_EQ(trex, trex2) << "HDLR Error";
 }
+
+TEST(EyerMP4, MP4BoxMEHD)
+{
+    printf("=======================MEHD=======================\n");
+    Eyer::MP4BoxMEHD mehd;
+    mehd.SetDefaultData();
+    mehd.PrintInfo();
+
+    Eyer::EyerBuffer buffer = mehd.Serialize();
+
+    Eyer::MP4BoxMEHD mehd2;
+    mehd2.Parse(buffer);
+
+    mehd2.PrintInfo();
+
+    ASSERT_EQ(mehd, mehd2) << "MEHD Error";
+}
+
+
+
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);

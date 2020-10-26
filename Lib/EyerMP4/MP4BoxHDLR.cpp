@@ -6,7 +6,7 @@ namespace Eyer
 {
     MP4BoxHDLR::MP4BoxHDLR() : MP4FullBox()
     {
-
+        type = BoxType::HDLR;
     }
 
     MP4BoxHDLR::~MP4BoxHDLR()

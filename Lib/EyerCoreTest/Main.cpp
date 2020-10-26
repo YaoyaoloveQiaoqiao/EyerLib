@@ -378,12 +378,12 @@ TEST(EyerBuffer, EyerBufferCutOffTest){
         {
             Eyer::EyerBuffer bufferB;
             int ret = bufferA.CutOff(bufferB, bALen + 20);
-            ASSERT_LT(ret, 0) << "Length Test Error";
+            ASSERT_LT(ret, bALen + 20) << "Length Test Error";
         }
         {
             Eyer::EyerBuffer bufferB;
             int ret = bufferA.CutOff(bufferB, bALen);
-            ASSERT_EQ(ret, 0) << "Length Test Error";
+            ASSERT_EQ(ret, bALen) << "Length Test Error";
 
             ASSERT_EQ(bufferA.GetBuffer(), 0) << "Cut Fail\n";
             ASSERT_EQ(bufferB.GetBuffer(), bALen) << "Cut Fail\n";
