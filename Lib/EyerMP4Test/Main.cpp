@@ -5,7 +5,6 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerMP4/EyerMP4.hpp"
 
-/*
 TEST(EyerMP4, EyerMP4Test)
 {
     printf("=======================Read File=======================\n");
@@ -48,7 +47,6 @@ TEST(EyerMP4, EyerMP4_FTYP)
 
     ASSERT_EQ(ftyp, ftyp2) << "FTYP Error";
 }
- */
 
 TEST(EyerMP4, MP4BoxMVHD)
 {
@@ -67,7 +65,6 @@ TEST(EyerMP4, MP4BoxMVHD)
     ASSERT_EQ(mvhd, mvhd2) << "MVHD Error";
 }
 
-/*
 TEST(EyerMP4, MP4BoxTKHD)
 {
     printf("=======================TKHD=======================\n");
@@ -84,7 +81,6 @@ TEST(EyerMP4, MP4BoxTKHD)
 
     ASSERT_EQ(tkhd, tkhd2) << "TKHD Error";
 }
- */
 
 
 int main(int argc,char **argv){
