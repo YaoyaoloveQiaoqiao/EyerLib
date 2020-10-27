@@ -192,25 +192,11 @@ TEST(EyerMP4, MP4BoxTREX)
     ASSERT_EQ(trex, trex2) << "HDLR Error";
 }
 
-TEST(EyerMP4, MP4BoxMEHD)
-{
-    printf("=======================MEHD=======================\n");
-    Eyer::MP4BoxMEHD mehd;
-    mehd.SetDefaultData();
-    mehd.PrintInfo();
 
-    Eyer::EyerBuffer buffer = mehd.Serialize();
-
-    Eyer::MP4BoxMEHD mehd2;
-    mehd2.Parse(buffer);
-
-    mehd2.PrintInfo();
-
-    ASSERT_EQ(mehd, mehd2) << "MEHD Error";
-}
-
+#include "MEHDTest.hpp"
 #include "STTSTest.hpp"
 #include "STSCTest.hpp"
+#include "STCOTest.hpp"
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);

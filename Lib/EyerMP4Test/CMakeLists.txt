@@ -3,7 +3,7 @@ add_executable(
         Main.cpp
         STTSTest.hpp
         STSCTest.hpp
-)
+        STCOTest.hpp MEHDTest.hpp)
 
 include_directories (../)
 

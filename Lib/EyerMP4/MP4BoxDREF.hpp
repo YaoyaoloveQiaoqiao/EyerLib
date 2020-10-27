@@ -19,6 +19,9 @@ namespace Eyer
         virtual int PrintInfo(int level = 0);
 
         int SetDefaultData();
+
+    private:
+        EyerBuffer drefBuffer;
     };
 }
 

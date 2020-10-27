@@ -19,6 +19,9 @@ namespace Eyer
         virtual int PrintInfo(int level = 0);
 
         int SetDefaultData();
+
+    private:
+        std::vector<uint32_t> chunk_offset_list;
     };
 }
 
