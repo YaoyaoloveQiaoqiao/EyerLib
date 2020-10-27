@@ -11,8 +11,8 @@
 TEST(EyerMP4, EyerReadMP4)
 {
     printf("=======================Read MP4=======================\n");
-    FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
-    // FILE * fp = fopen("./demo.mp4", "rb");
+    // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
+    FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
     long len = ftell(fp);

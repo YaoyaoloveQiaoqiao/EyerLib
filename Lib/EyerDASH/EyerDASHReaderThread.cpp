@@ -242,7 +242,7 @@ namespace Eyer
                     mvex.AddSubBox(audioTrexPtr);
                 }
             }
-            
+
             moov.AddSubBox(videoTrakPtr);
             moov.AddSubBox(audioTrakPtr);
 
