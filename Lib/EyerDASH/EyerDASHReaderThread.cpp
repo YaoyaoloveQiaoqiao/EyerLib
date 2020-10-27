@@ -40,20 +40,9 @@ namespace Eyer
 
 
         // get video init buffer
+        MP4Box videoBox;
+        MP4Box audioBox;
 
-        EyerMP4Box_ftyp videoftyp;
-        EyerMP4Box_mvhd videomvhd;
-        EyerMP4Box_mehd videomehd;
-        EyerMP4Box_trex videotrex;
-        EyerMP4Box_trak videotrak;
-
-        EyerMP4Box_ftyp audioftyp;
-        EyerMP4Box_mvhd audiomvhd;
-        EyerMP4Box_mehd audiomehd;
-        EyerMP4Box_trex audiotrex;
-        EyerMP4Box_trak audiotrak;
-
-        Eyer::EyerBuffer m4vBuffer;
         {
             EyerString m4vUrl;
             mpd.GetInitURL(m4vUrl, representationIndex);
@@ -63,20 +52,18 @@ namespace Eyer
 
             EyerLog("m4v url: %s\n", m4vUrl.str);
 
-            Eyer::EyerSimplestHttp http;
-
-
+            Eyer::EyerSimplestHttp http
+            ;
+            Eyer::EyerBuffer m4vBuffer;
             ret = http.Get(m4vBuffer, m4vUrl);
             if(ret){
                 // Http fail
                 return;
             }
 
-            EyerMP4Box videoBox(m4vBuffer);
-            videoBox.PrintAll();
-
             printf("==========Parse==========\n");
-            ParseMP4(videoftyp, videomvhd, videomehd, videotrex, videotrak, videoBox);
+            videoBox.ParseSubBox(m4vBuffer);
+            videoBox.PrintInfo();
         }
 
         {
@@ -92,44 +79,18 @@ namespace Eyer
                 return;
             }
 
-            EyerMP4Box videoBox(m4vBuffer);
-            videoBox.PrintAll();
-
             printf("==========Parse==========\n");
-            ParseMP4(audioftyp, audiomvhd, audiomehd, audiotrex, audiotrak, videoBox);
+            audioBox.ParseSubBox(m4vBuffer);
+            audioBox.PrintInfo();
         }
 
         printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+        EyerBuffer fmp4InitBuffer = MergeVideoAudio(videoBox, audioBox);
+        MP4Box fmp4InitBox;
+        fmp4InitBox.ParseSubBox(fmp4InitBuffer);
+        fmp4InitBox.PrintInfo();
 
-        EyerMP4Box_ftyp new_ftyp = videoftyp;
-        videoftyp.PrintInfo();
-        new_ftyp.PrintInfo();
-
-        EyerMP4Box_moov new_moov;
-
-        EyerMP4Box_mvhd new_mvhd = videomvhd;
-
-        EyerMP4Box_mvex new_mvex;
-        EyerMP4Box_mehd new_mehd = videomehd;
-        new_mvex.AddSubBox(new_mehd);
-        new_mvex.AddSubBox(videotrex);
-        new_mvex.AddSubBox(audiotrex);
-
-        new_moov.AddSubBox(new_mvhd);
-        new_moov.AddSubBox(new_mvex);
-        new_moov.AddSubBox(videotrak);
-        new_moov.AddSubBox(audiotrak);
-
-        EyerBuffer mp4Buffer;
-        mp4Buffer.Append(new_ftyp.GetTotalBufferWithHead());
-        mp4Buffer.Append(new_moov.GetTotalBufferWithHead());
-
-        dataBuffer->Append(mp4Buffer);
-
-        EyerMP4Box b(mp4Buffer);
-        // b.PrintAll();
-
-
+        dataBuffer->Append(fmp4InitBuffer);
 
         int index = 1;
         while(!stopFlag){
@@ -183,78 +144,114 @@ namespace Eyer
         }
     }
 
-
-    int EyerDASHReaderThread::ParseMP4(
-            EyerMP4Box_ftyp & _outftyp,
-            EyerMP4Box_mvhd & _outmvhd,
-            EyerMP4Box_mehd & _outmehd,
-            EyerMP4Box_trex & _outtrex,
-            EyerMP4Box_trak & _outtrak,
-            EyerMP4Box & box)
+    EyerBuffer EyerDASHReaderThread::MergeVideoAudio(MP4Box & videoBox, MP4Box & audioBox)
     {
-        int ret;
+        EyerBuffer buffer;
 
-        ret = box.GetFTYP(_outftyp);
-        if(ret){
-            printf("GetFTYP Fail\n");
-            return -1;
+        // AV Moov
+        MP4Box * audioMoovPtr = audioBox.GetSubBoxPtr(BoxType::MOOV);
+        if(audioMoovPtr == nullptr){
+            return buffer;
+        }
+        MP4Box * videoMoovPtr = videoBox.GetSubBoxPtr(BoxType::MOOV);
+        if(videoMoovPtr == nullptr){
+            return buffer;
+        }
+
+        // AV Mvhd
+        MP4BoxMVHD * audioMvhdPtr = (MP4BoxMVHD *)audioMoovPtr->GetSubBoxPtr(BoxType::MVHD);
+        if(audioMvhdPtr == nullptr){
+            return buffer;
+        }
+        MP4BoxMVHD * videoMvhdPtr = (MP4BoxMVHD *)videoMoovPtr->GetSubBoxPtr(BoxType::MVHD);
+        if(videoMvhdPtr == nullptr){
+            return buffer;
+        }
+
+        // AV Trak
+        MP4Box * audioTrakPtr = audioMoovPtr->GetSubBoxPtr(BoxType::TRAK);
+        if(audioTrakPtr == nullptr){
+            return buffer;
+        }
+        MP4Box * videoTrakPtr = videoMoovPtr->GetSubBoxPtr(BoxType::TRAK);
+        if(videoTrakPtr == nullptr){
+            return buffer;
+        }
+
+        // AV Mvex
+        MP4Box * audioMvexPtr = audioMoovPtr->GetSubBoxPtr(BoxType::MVEX);
+        if(audioMvexPtr == nullptr){
+            return buffer;
+        }
+        MP4Box * videoMvexPtr = videoMoovPtr->GetSubBoxPtr(BoxType::MVEX);
+        if(videoMvexPtr == nullptr){
+            return buffer;
+        }
+
+        // AV Mehd
+        MP4BoxMEHD * audioMehdPtr = (MP4BoxMEHD *)audioMvexPtr->GetSubBoxPtr(BoxType::MEHD);
+        if(audioMehdPtr == nullptr){
+            return buffer;
+        }
+        MP4BoxMEHD * videoMehdPtr = (MP4BoxMEHD *)videoMvexPtr->GetSubBoxPtr(BoxType::MEHD);
+        if(videoMehdPtr == nullptr){
+            return buffer;
+        }
+
+        // AV Trex
+        MP4BoxTREX * audioTrexPtr = (MP4BoxTREX *)audioMvexPtr->GetSubBoxPtr(BoxType::TREX);
+        if(audioTrexPtr == nullptr){
+            return buffer;
+        }
+        MP4BoxTREX * videoTrexPtr = (MP4BoxTREX *)videoMvexPtr->GetSubBoxPtr(BoxType::TREX);
+        if(videoTrexPtr == nullptr){
+            return buffer;
         }
 
 
+        // FTYP
+        MP4BoxFTYP ftyp;
+        MP4BoxFTYP * ftypPtr = (MP4BoxFTYP *)videoBox.GetSubBoxPtr(BoxType::FTYP);
+        ftyp = *ftypPtr;
 
-        EyerMP4Box_moov moov;
-        ret = box.GetMOOV(moov);
-        if(ret){
-            printf("GetMOOV Fail\n");
-            return -1;
+        // Moov
+        MP4Box moov(BoxType::MOOV);
+        {
+            // Mvhd
+            MP4BoxMVHD mvhd = *audioMvhdPtr;
+            moov.AddSubBox(mvhd);
+
+            MP4Box mvex(BoxType::MVEX);
+            {
+                {
+                    MP4BoxMEHD mehd;
+                    if(videoMehdPtr->Get_fragment_duration() > audioMehdPtr->Get_fragment_duration()){
+                        mehd = *videoMehdPtr;
+                    }
+                    else{
+                        mehd = *audioMehdPtr;
+                    }
+                    mvex.AddSubBox(mehd);
+                }
+                {
+                    // Video Trex
+                    mvex.AddSubBox(videoTrexPtr);
+                }
+                {
+                    // Audio Trex
+                    mvex.AddSubBox(audioTrexPtr);
+                }
+            }
+
+            moov.AddSubBox(videoTrakPtr);
+            moov.AddSubBox(audioTrakPtr);
+
+            moov.AddSubBox(mvex);
         }
 
+        buffer.Append(ftyp.Serialize());
+        buffer.Append(moov.Serialize());
 
-
-        ret = moov.GetMVHD(_outmvhd);
-        if(ret){
-            printf("GetMVHD Fail\n");
-            return -1;
-        }
-        // _outmvhd.PrintInfo();
-
-
-
-        EyerMP4Box_mvex mvex;
-        ret = moov.GetMVEX(mvex);
-        if(ret){
-            printf("GetMVEX Fail\n");
-            return -1;
-        }
-        // mvex.PrintInfo();
-
-
-
-        ret = mvex.GetMEHD(_outmehd);
-        if(ret){
-            printf("GetMEHD Fail\n");
-            return -1;
-        }
-        // _outmehd.PrintInfo();
-
-
-
-        ret = mvex.GetTREX(_outtrex);
-        if(ret){
-            printf("GetTREX Fail\n");
-            return -1;
-        }
-        // _outtrex.PrintInfo();
-
-
-
-        ret = moov.GetTRAK(_outtrak);
-        if(ret){
-            printf("GetTRAK Fail\n");
-            return -1;
-        }
-        // _outtrak.PrintInfo();
-
-        return 0;
+        return buffer;
     }
 }

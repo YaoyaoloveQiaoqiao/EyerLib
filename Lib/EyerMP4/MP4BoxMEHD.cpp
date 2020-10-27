@@ -58,6 +58,17 @@ namespace Eyer
         return offset;
     }
 
+    uint64_t MP4BoxMEHD::Get_fragment_duration()
+    {
+        return fragment_duration;
+    }
+
+    int MP4BoxMEHD::Set_fragment_duration(uint64_t _fragment_duration)
+    {
+        fragment_duration = _fragment_duration;
+        return 0;
+    }
+
     int MP4BoxMEHD::PrintInfo(int level)
     {
         MP4FullBox::PrintInfo(level);

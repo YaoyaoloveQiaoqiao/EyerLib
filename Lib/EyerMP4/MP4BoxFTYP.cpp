@@ -13,6 +13,33 @@ namespace Eyer
 
     }
 
+    /*
+    MP4Box & MP4BoxFTYP::operator = (const MP4Box & _box)
+    {
+        printf("MP4BoxFTYP & MP4BoxFTYP::operator = (const MP4BoxFTYP & box)\n");
+        MP4Box::operator=(_box);
+
+        MP4BoxFTYP & box = (MP4BoxFTYP &)_box;
+
+        for(int i=0;i<4;i++){
+            major_brand[i] = box.major_brand[i];
+        }
+
+        minor_version = box.minor_version;
+
+        compatible_brands_len = box.compatible_brands_len;
+
+        for(int i=0;i<4;i++){
+            compatible_brands[i][0] = box.compatible_brands[i][0];
+            compatible_brands[i][1] = box.compatible_brands[i][1];
+            compatible_brands[i][2] = box.compatible_brands[i][2];
+            compatible_brands[i][3] = box.compatible_brands[i][3];
+        }
+
+        return *this;
+    }
+    */
+
     bool MP4BoxFTYP::operator == (const MP4BoxFTYP & ftyp) const
     {
         if(!MP4Box::operator==(ftyp)){

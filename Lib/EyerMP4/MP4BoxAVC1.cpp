@@ -88,7 +88,7 @@ namespace Eyer
         printf("%scompressorname: %s\n", levelStr.str, compressorname.str);
         printf("%sdepth: %d\n", levelStr.str, depth);
 
-        avcc.PrintInfo(level);
+        avcc.PrintInfo(level + 1);
 
         return 0;
     }

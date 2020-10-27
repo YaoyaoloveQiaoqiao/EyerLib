@@ -20,6 +20,10 @@ namespace Eyer
 
         int SetDefaultData();
 
+
+        uint64_t Get_fragment_duration();
+        int Set_fragment_duration(uint64_t fragment_duration);
+
     private:
         uint64_t fragment_duration = 0;
     };

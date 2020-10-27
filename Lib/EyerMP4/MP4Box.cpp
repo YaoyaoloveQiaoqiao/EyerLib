@@ -11,6 +11,8 @@
 #include "MP4BoxMEHD.hpp"
 #include "MP4BoxSTSD.hpp"
 #include "MP4BoxSTTS.hpp"
+#include "MP4BoxSTSC.hpp"
+#include "MP4BoxSTCO.hpp"
 #include "MP4Stream.hpp"
 
 namespace Eyer
@@ -20,12 +22,29 @@ namespace Eyer
         type = BoxType::ROOT;
     }
 
+    MP4Box::MP4Box(BoxType _type)
+    {
+        type = _type;
+    }
+
     MP4Box::~MP4Box()
     {
         for(int i=0;i<subBoxList.size();i++){
             delete subBoxList[i];
         }
         subBoxList.clear();
+    }
+
+    MP4Box & MP4Box::operator = (const MP4Box & box)
+    {
+        type = box.type;
+        size = box.size;
+        largesize = box.largesize;
+        for(int i=0;i<box.subBoxList.size();i++){
+            MP4Box * b = CopyBox(box.subBoxList[i]);
+            subBoxList.push_back(b);
+        }
+        return *this;
     }
 
     bool MP4Box::operator == (const MP4Box & box) const
@@ -76,6 +95,10 @@ namespace Eyer
     EyerBuffer MP4Box::SerializeSubBox()
     {
         EyerBuffer buffer;
+        for(int i=0;i<subBoxList.size();i++){
+            EyerBuffer b = subBoxList[i]->Serialize();
+            buffer.Append(b);
+        }
         return buffer;
     }
 
@@ -164,10 +187,23 @@ namespace Eyer
         MP4Box * subBox = nullptr;
         for(int i=0;i<subBoxList.size();i++){
             if(subBoxList[i]->type == type){
-                subBox = CopyBox(subBoxList[i]);
+                // subBox = CopyBox(subBoxList[i]);
+                subBox = subBoxList[i];
             }
         }
         return subBox;
+    }
+
+    int MP4Box::AddSubBox(MP4Box * box)
+    {
+        MP4Box * subBox = CopyBox(box);
+        subBoxList.push_back(subBox);
+        return 0;
+    }
+
+    int MP4Box::AddSubBox(MP4Box & box)
+    {
+        return AddSubBox(&box);
     }
 
     int MP4Box::PrintInfo(int level)
@@ -230,6 +266,12 @@ namespace Eyer
             else if(type == BoxType::STTS){
                 box = new MP4BoxSTTS();
             }
+            else if(type == BoxType::STSC){
+                box = new MP4BoxSTSC();
+            }
+            else if(type == BoxType::STCO){
+                box = new MP4BoxSTCO();
+            }
         }
 
         return box;
@@ -237,7 +279,46 @@ namespace Eyer
     MP4Box * MP4Box::CopyBox(MP4Box * box)
     {
         MP4Box * dest = CreatBox(box->type);
-        *dest = *box;
+        if(box->type == BoxType::FTYP){
+            *(MP4BoxFTYP *)dest = *(MP4BoxFTYP *)box;
+        }
+        else if(box->type == BoxType::MVHD){
+            *(MP4BoxMVHD *)dest = *(MP4BoxMVHD *)box;
+        }
+        else if(box->type == BoxType::MEHD){
+            *(MP4BoxMEHD *)dest = *(MP4BoxMEHD *)box;
+        }
+        else if(box->type == BoxType::TREX){
+            *(MP4BoxTREX *)dest = *(MP4BoxTREX *)box;
+        }
+        else if(box->type == BoxType::HDLR){
+            *(MP4BoxHDLR *)dest = *(MP4BoxHDLR *)box;
+        }
+        else if(box->type == BoxType::TKHD){
+            *(MP4BoxTKHD *)dest = *(MP4BoxTKHD *)box;
+        }
+        else if(box->type == BoxType::ELST){
+            *(MP4BoxELST *)dest = *(MP4BoxELST *)box;
+        }
+        else if(box->type == BoxType::DREF){
+            *(MP4BoxDREF *)dest = *(MP4BoxDREF *)box;
+        }
+        else if(box->type == BoxType::STSD){
+            *(MP4BoxSTSD *)dest = *(MP4BoxSTSD *)box;
+        }
+        else if(box->type == BoxType::STTS){
+            *(MP4BoxSTTS *)dest = *(MP4BoxSTTS *)box;
+        }
+        else if(box->type == BoxType::STSC){
+            *(MP4BoxSTSC *)dest = *(MP4BoxSTSC *)box;
+        }
+        else if(box->type == BoxType::STCO){
+            *(MP4BoxSTCO *)dest = *(MP4BoxSTCO *)box;
+        }
+        else{
+            *dest = *box;
+        }
+
         return dest;
     }
 }
