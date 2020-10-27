@@ -14,6 +14,20 @@ namespace Eyer
 
     }
 
+    /*
+    MP4BoxHDLR & MP4BoxHDLR::operator = (const MP4BoxHDLR & hdlr)
+    {
+        handle_type_a = hdlr.handle_type_a;
+        handle_type_b = hdlr.handle_type_b;
+        handle_type_c = hdlr.handle_type_c;
+        handle_type_d = hdlr.handle_type_d;
+
+        str = hdlr.str;
+
+        return *this;
+    }
+     */
+
     bool MP4BoxHDLR::operator == (const MP4BoxHDLR & hdlr) const
     {
         if(!MP4FullBox::operator==(hdlr)){
@@ -39,6 +53,7 @@ namespace Eyer
         return true;
     }
 
+
     EyerBuffer MP4BoxHDLR::SerializeParam()
     {
         EyerBuffer buffer = MP4FullBox::SerializeParam();
@@ -56,6 +71,7 @@ namespace Eyer
 
         return stream.GetBuffer();
     }
+
     int MP4BoxHDLR::ParseParam(EyerBuffer & buffer, int offset)
     {
         offset = MP4FullBox::ParseParam(buffer, offset);

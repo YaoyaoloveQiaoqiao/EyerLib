@@ -12,8 +12,11 @@ namespace Eyer
     class MP4Box {
     public:
         MP4Box();
+        MP4Box(BoxType type);
         ~MP4Box();
 
+
+        MP4Box & operator = (const MP4Box & box);
         bool operator == (const MP4Box & box) const;
 
         // <===Serialize===>
@@ -28,14 +31,19 @@ namespace Eyer
         virtual int ParseParam(EyerBuffer & buffer, int offset);
         // <===Parse===>
 
+        int AddSubBox(MP4Box * box);
+        int AddSubBox(MP4Box & box);
+
         uint64_t GetSize();
 
         BoxType GetType();
+
 
         MP4Box * GetSubBoxPtr(BoxType type);
 
 
         virtual int PrintInfo(int level = 0);
+
 
 
         static MP4Box * CreatBox(BoxType type);
