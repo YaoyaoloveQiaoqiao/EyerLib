@@ -11,6 +11,7 @@ namespace Eyer
         MP4BoxHDLR();
         ~MP4BoxHDLR();
 
+        // MP4BoxHDLR & operator = (const MP4BoxHDLR & hdlr);
         bool operator == (const MP4BoxHDLR & hdlr) const;
 
         virtual EyerBuffer SerializeParam();

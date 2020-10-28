@@ -28,7 +28,10 @@ namespace Eyer
         EyerBuffer buffer = MP4FullBox::SerializeParam();
         MP4Stream stream(buffer);
 
-        return stream.GetBuffer();
+        // return stream.GetBuffer();
+        buffer.Append(drefBuffer);
+
+        return buffer;
     }
 
     int MP4BoxDREF::ParseParam(EyerBuffer & buffer, int offset)
@@ -37,6 +40,8 @@ namespace Eyer
 
         MP4Stream stream(buffer);
         stream.Skip(offset);
+
+        drefBuffer = stream.GetBuffer();
 
         uint32_t entry_count = stream.ReadBigEndian_uint32(offset);
 
