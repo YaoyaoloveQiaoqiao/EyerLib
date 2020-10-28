@@ -31,7 +31,6 @@ namespace Eyer
     BoxType BoxType::AVCC       (25, 'a', 'v', 'c', 'C', false);
     BoxType BoxType::STTS       (26, 's', 't', 't', 's', false);
 
-
     BoxType::BoxType()
     {
         *this = BoxType::UNKNOW;
@@ -170,6 +169,9 @@ namespace Eyer
         }
         else if(net_type == STTS.GetABCD()) {
             return STTS;
+        }
+        else if(net_type == MOOF.GetABCD()) {
+            return MOOF;
         }
 
         return UNKNOW;
