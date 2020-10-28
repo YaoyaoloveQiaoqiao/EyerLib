@@ -74,29 +74,29 @@ namespace Eyer
             }
         }
 
-        num_ref_idx_l0_default_active_minus1    = EyerAVC_VLC::read_ue_v ("PPS: num_ref_idx_l0_default_active_minus1"   , &bitStream, &usedBits);
-        num_ref_idx_l1_default_active_minus1    = EyerAVC_VLC::read_ue_v ("PPS: num_ref_idx_l1_default_active_minus1"   , &bitStream, &usedBits);
-        weighted_pred_flag                      = EyerAVC_VLC::read_u_1  ("PPS: weighted_pred_flag"                     , &bitStream, &usedBits);
+        num_ref_idx_l0_default_active_minus1    = EyerAVC_VLC::read_ue_v ("PPS: num_ref_idx_l0_default_active_minus1"           , &bitStream, &usedBits);
+        num_ref_idx_l1_default_active_minus1    = EyerAVC_VLC::read_ue_v ("PPS: num_ref_idx_l1_default_active_minus1"           , &bitStream, &usedBits);
+        weighted_pred_flag                      = EyerAVC_VLC::read_u_1  ("PPS: weighted_pred_flag"                             , &bitStream, &usedBits);
         weighted_bipred_idc                     = EyerAVC_VLC::read_u_v  ( 2, "PPS: weighted_bipred_idc"                , &bitStream, &usedBits);
-        pic_init_qp_minus26                     = EyerAVC_VLC::read_se_v ("PPS: pic_init_qp_minus26"                    , &bitStream, &usedBits);
-        pic_init_qs_minus26                     = EyerAVC_VLC::read_se_v ("PPS: pic_init_qs_minus26"                    , &bitStream, &usedBits);
+        pic_init_qp_minus26                     = EyerAVC_VLC::read_se_v ("PPS: pic_init_qp_minus26"                            , &bitStream, &usedBits);
+        pic_init_qs_minus26                     = EyerAVC_VLC::read_se_v ("PPS: pic_init_qs_minus26"                            , &bitStream, &usedBits);
 
-        chroma_qp_index_offset                  = EyerAVC_VLC::read_se_v ("PPS: chroma_qp_index_offset"                 , &bitStream, &usedBits);
+        chroma_qp_index_offset                  = EyerAVC_VLC::read_se_v ("PPS: chroma_qp_index_offset"                         , &bitStream, &usedBits);
 
-        deblocking_filter_control_present_flag  = EyerAVC_VLC::read_u_1 ("PPS: deblocking_filter_control_present_flag"  , &bitStream, &usedBits);
-        constrained_intra_pred_flag             = EyerAVC_VLC::read_u_1  ("PPS: constrained_intra_pred_flag"            , &bitStream, &usedBits);
-        redundant_pic_cnt_present_flag          = EyerAVC_VLC::read_u_1  ("PPS: redundant_pic_cnt_present_flag"         , &bitStream, &usedBits);
+        deblocking_filter_control_present_flag  = EyerAVC_VLC::read_u_1  ("PPS: deblocking_filter_control_present_flag"         , &bitStream, &usedBits);
+        constrained_intra_pred_flag             = EyerAVC_VLC::read_u_1  ("PPS: constrained_intra_pred_flag"                    , &bitStream, &usedBits);
+        redundant_pic_cnt_present_flag          = EyerAVC_VLC::read_u_1  ("PPS: redundant_pic_cnt_present_flag"                 , &bitStream, &usedBits);
 
-        fieldList.push_back(new EyerField("num_ref_idx_l0_default_active_minus1", num_ref_idx_l0_default_active_minus1));
-        fieldList.push_back(new EyerField("num_ref_idx_l1_default_active_minus1", num_ref_idx_l1_default_active_minus1));
-        fieldList.push_back(new EyerField("weighted_pred_flag", weighted_pred_flag));
-        fieldList.push_back(new EyerField("weighted_bipred_idc", weighted_bipred_idc));
-        fieldList.push_back(new EyerField("pic_init_qp_minus26", pic_init_qp_minus26));
-        fieldList.push_back(new EyerField("pic_init_qs_minus26", pic_init_qs_minus26));
-        fieldList.push_back(new EyerField("chroma_qp_index_offset", chroma_qp_index_offset));
+        fieldList.push_back(new EyerField("num_ref_idx_l0_default_active_minus1",   num_ref_idx_l0_default_active_minus1));
+        fieldList.push_back(new EyerField("num_ref_idx_l1_default_active_minus1",   num_ref_idx_l1_default_active_minus1));
+        fieldList.push_back(new EyerField("weighted_pred_flag",                     weighted_pred_flag));
+        fieldList.push_back(new EyerField("weighted_bipred_idc",                    weighted_bipred_idc));
+        fieldList.push_back(new EyerField("pic_init_qp_minus26",                    pic_init_qp_minus26));
+        fieldList.push_back(new EyerField("pic_init_qs_minus26",                    pic_init_qs_minus26));
+        fieldList.push_back(new EyerField("chroma_qp_index_offset",                 chroma_qp_index_offset));
         fieldList.push_back(new EyerField("deblocking_filter_control_present_flag", deblocking_filter_control_present_flag));
-        fieldList.push_back(new EyerField("constrained_intra_pred_flag", constrained_intra_pred_flag));
-        fieldList.push_back(new EyerField("redundant_pic_cnt_present_flag", redundant_pic_cnt_present_flag));
+        fieldList.push_back(new EyerField("constrained_intra_pred_flag",            constrained_intra_pred_flag));
+        fieldList.push_back(new EyerField("redundant_pic_cnt_present_flag",         redundant_pic_cnt_present_flag));
 
         // TODO more_rbsp_data
         valid = Boolean::TRUE;
