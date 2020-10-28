@@ -6,7 +6,7 @@ add_library(
         EyerCAVLC.hpp
         CAVLC.cpp
         CAVLC.hpp
-)
+        CAVLC.cpp CAVLC.hpp)
 
 target_link_libraries (
         EyerCore

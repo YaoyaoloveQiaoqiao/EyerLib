@@ -1,7 +1,7 @@
 add_executable(
         EyerAVCTest
         Main.cpp
-)
+        Baseline.hpp)
 
 include_directories (../)
 

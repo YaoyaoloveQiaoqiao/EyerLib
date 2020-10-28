@@ -33,7 +33,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerSegmentTemplate::SetInitialization(char * str)
+    int EyerSegmentTemplate::SetInitialization(const char * str)
     {
         initialization = str;
         return 0;
