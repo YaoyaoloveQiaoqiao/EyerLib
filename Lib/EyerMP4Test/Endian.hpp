@@ -17,6 +17,8 @@ TEST(EyerMP4, Endian)
         printf("a: %lld\n", a);
         printf("b: %lld\n", b);
         printf("c: %lld\n", c);
+
+        ASSERT_EQ(a, c) << "Error Endian";
     }
     {
         uint32_t a = 123;
@@ -25,6 +27,8 @@ TEST(EyerMP4, Endian)
         printf("a: %d\n", a);
         printf("b: %d\n", b);
         printf("c: %d\n", c);
+
+        ASSERT_EQ(a, c) << "Error Endian";
     }
 
     {
@@ -34,6 +38,8 @@ TEST(EyerMP4, Endian)
         printf("a: %d\n", a);
         printf("b: %d\n", b);
         printf("c: %d\n", c);
+
+        ASSERT_EQ(a, c) << "Error Endian";
     }
 
 }

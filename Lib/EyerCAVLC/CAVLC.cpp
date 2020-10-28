@@ -29,9 +29,11 @@ namespace Eyer
 
         int trailingOnes = 0;
         for(int i=15; i>=0; i--){
+            /*
             if(abs(coeff[i]) == 1){
 
             }
+            */
         }
 
         return 0;
