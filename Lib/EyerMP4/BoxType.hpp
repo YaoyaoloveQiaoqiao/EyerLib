@@ -67,6 +67,9 @@ namespace Eyer
         static BoxType MOOF;
         static BoxType STSC;
         static BoxType STCO;
+        static BoxType MFHD;
+        static BoxType TRAF;
+        static BoxType TFHD;
     };
 }
 

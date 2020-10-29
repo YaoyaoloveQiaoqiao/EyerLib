@@ -50,7 +50,8 @@ add_library(
         MP4BoxSTSC.hpp
         MP4BoxSTCO.cpp
         MP4BoxSTCO.hpp
-)
+        MP4BoxMFHD.hpp
+        MP4BoxMFHD.cpp)
 
 target_link_libraries (
         EyerCore
@@ -83,6 +84,7 @@ set(head_files
         MP4BoxSTTS.hpp
         MP4BoxSTSC.hpp
         MP4BoxSTCO.hpp
+        MP4BoxMFHD.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerMP4)
