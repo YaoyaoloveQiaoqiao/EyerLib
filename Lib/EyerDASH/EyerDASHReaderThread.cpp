@@ -36,8 +36,8 @@ namespace Eyer
 
         mpd.PrintInfo();
 
-        int representationIndex = 3;
 
+        int representationIndex = 0;
 
         // get video init buffer
         MP4Box videoBox;
@@ -52,8 +52,8 @@ namespace Eyer
 
             EyerLog("m4v url: %s\n", m4vUrl.str);
 
-            Eyer::EyerSimplestHttp http
-            ;
+            Eyer::EyerSimplestHttp http;
+
             Eyer::EyerBuffer m4vBuffer;
             ret = http.Get(m4vBuffer, m4vUrl);
             if(ret){
@@ -92,7 +92,7 @@ namespace Eyer
 
         dataBuffer->Append(fmp4InitBuffer);
 
-        int index = 1;
+        int index = 20;
         while(!stopFlag){
             EyerTime::EyerSleepMilliseconds(1);
             if(dataBuffer->GetLen() >= 1024 * 1024 * 10){
@@ -138,7 +138,6 @@ namespace Eyer
 
                 dataBuffer->Append(m4vBuffer);
             }
-
 
             index++;
         }
