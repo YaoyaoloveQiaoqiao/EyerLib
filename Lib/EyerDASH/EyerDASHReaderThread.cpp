@@ -92,7 +92,8 @@ namespace Eyer
 
         dataBuffer->Append(fmp4InitBuffer);
 
-        int index = 20;
+
+        int index = 1;
         while(!stopFlag){
             EyerTime::EyerSleepMilliseconds(1);
             if(dataBuffer->GetLen() >= 1024 * 1024 * 10){
@@ -140,6 +141,9 @@ namespace Eyer
             }
 
             index++;
+            if(index >= 2){
+                break;
+            }
         }
     }
 
@@ -217,8 +221,11 @@ namespace Eyer
         MP4Box moov(BoxType::MOOV);
         {
             // Mvhd
-            MP4BoxMVHD mvhd = *audioMvhdPtr;
+            MP4BoxMVHD mvhd = *videoMvhdPtr;
             moov.AddSubBox(mvhd);
+
+            moov.AddSubBox(videoTrakPtr);
+            moov.AddSubBox(audioTrakPtr);
 
             MP4Box mvex(BoxType::MVEX);
             {
@@ -241,10 +248,6 @@ namespace Eyer
                     mvex.AddSubBox(audioTrexPtr);
                 }
             }
-
-            moov.AddSubBox(videoTrakPtr);
-            moov.AddSubBox(audioTrakPtr);
-
             moov.AddSubBox(mvex);
         }
 

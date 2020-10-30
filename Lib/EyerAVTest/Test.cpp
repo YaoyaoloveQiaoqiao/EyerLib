@@ -37,6 +37,10 @@ TEST(A, ATest){
         }
 
         if(packet.GetStreamId() == videoStreamIndex){
+            videoStream.ScalerPacketPTS(packet);
+
+            printf("packet: %f\n", packet.GetSecPTS());
+
             videoDecoder.SendPacket(&packet);
             while(1){
                 Eyer::EyerAVFrame avFrame;
