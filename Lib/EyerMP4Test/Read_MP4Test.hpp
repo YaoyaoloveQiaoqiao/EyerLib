@@ -12,6 +12,7 @@ TEST(EyerMP4, EyerReadMP4)
 {
     printf("=======================Read MP4=======================\n");
     // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
+    // FILE * fp = fopen("/Users/lichi/Desktop/size_merge.mp4", "rb");
     FILE * fp = fopen("./demo.mp4", "rb");
 
     fseek(fp, 0, SEEK_END);
@@ -27,7 +28,7 @@ TEST(EyerMP4, EyerReadMP4)
 
     Eyer::MP4Box box;
     box.ParseSubBox(buffer);
-    // box.PrintInfo();
+    box.PrintInfo();
 
 
     {
@@ -37,7 +38,7 @@ TEST(EyerMP4, EyerReadMP4)
         moov.AddSubBox(a);
         moov.AddSubBox(a);
 
-        moov.PrintInfo();
+        // moov.PrintInfo();
     }
 
     free(data);

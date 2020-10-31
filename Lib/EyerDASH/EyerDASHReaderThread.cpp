@@ -67,7 +67,7 @@ namespace Eyer
         }
 
         {
-            EyerString m4vUrl = "https:/redknot.cn/DASH/./audio/xiaomai_dashinit.mp4";
+            EyerString m4vUrl = "http://redknot.cn/DASH/./audio/xiaomai_dashinit.mp4";
             EyerLog("m4v url: %s\n", m4vUrl.str);
 
             Eyer::EyerSimplestHttp http;
@@ -92,11 +92,14 @@ namespace Eyer
 
         dataBuffer->Append(fmp4InitBuffer);
 
-        int index = 20;
+
+        int index = 1;
+
+        std::unique_lock <std::mutex> lck(mtx);
         while(!stopFlag){
-            EyerTime::EyerSleepMilliseconds(1);
-            if(dataBuffer->GetLen() >= 1024 * 1024 * 10){
-                continue;
+            while (dataBuffer->GetLen() >= 1024 * 1024 * 1){
+                EyerLog("Size: %d\n", dataBuffer->GetLen());
+                cv.wait(lck);
             }
 
             {
@@ -127,7 +130,7 @@ namespace Eyer
                 m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
 
                 EyerLog("m4v url: %s\n", m4vUrl.str);
-                m4vUrl = EyerString("https:/redknot.cn/DASH/./audio/xiaomai_dash") + EyerString::Number(index) + ".m4s";
+                m4vUrl = EyerString("http://redknot.cn/DASH/./audio/xiaomai_dash") + EyerString::Number(index) + ".m4s";
 
                 Eyer::EyerSimplestHttp http;
                 Eyer::EyerBuffer m4vBuffer;
@@ -217,8 +220,11 @@ namespace Eyer
         MP4Box moov(BoxType::MOOV);
         {
             // Mvhd
-            MP4BoxMVHD mvhd = *audioMvhdPtr;
+            MP4BoxMVHD mvhd = *videoMvhdPtr;
             moov.AddSubBox(mvhd);
+
+            moov.AddSubBox(videoTrakPtr);
+            moov.AddSubBox(audioTrakPtr);
 
             MP4Box mvex(BoxType::MVEX);
             {
@@ -241,10 +247,6 @@ namespace Eyer
                     mvex.AddSubBox(audioTrexPtr);
                 }
             }
-
-            moov.AddSubBox(videoTrakPtr);
-            moov.AddSubBox(audioTrakPtr);
-
             moov.AddSubBox(mvex);
         }
 
@@ -252,5 +254,12 @@ namespace Eyer
         buffer.Append(moov.Serialize());
 
         return buffer;
+    }
+
+
+    int EyerDASHReaderThread::DataBufferChange()
+    {
+        cv.notify_all();
+        return 0;
     }
 }

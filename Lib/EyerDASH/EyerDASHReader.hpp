@@ -24,7 +24,7 @@ namespace Eyer{
 
         EyerDASHReaderThread * readerThread = nullptr;
 
-        EyerBuffer dataBuffer;
+        EyerBufferMut dataBuffer;
     };
 }
 

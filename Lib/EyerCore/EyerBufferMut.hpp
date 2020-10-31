@@ -1,18 +1,18 @@
-#ifndef EYE_LIB_EYERBUFFER_HPP
-#define EYE_LIB_EYERBUFFER_HPP
+#ifndef EYERLIB_EYERBUFFERMUT_HPP
+#define EYERLIB_EYERBUFFERMUT_HPP
 
-#include <stdint.h>
+#include "EyerBuffer.hpp"
 #include <mutex>
-#include "EyerString.hpp"
 
-namespace Eyer{
-    class EyerBuffer {
+namespace Eyer
+{
+    class EyerBufferMut : public EyerBuffer {
     public:
-        EyerBuffer();
-        ~EyerBuffer();
+        EyerBufferMut();
+        ~EyerBufferMut();
 
-        EyerBuffer(const EyerBuffer & buffer);
-        EyerBuffer & operator = (const EyerBuffer & buffer);
+        EyerBufferMut(const EyerBufferMut & buffer);
+        EyerBufferMut & operator = (const EyerBufferMut & buffer);
 
         int Append(unsigned char * _buf, int _bufLen);
         int Append(const EyerBuffer & buffer);
@@ -26,13 +26,13 @@ namespace Eyer{
 
         int Clear();
 
+
         int WriteDisk(EyerString & path);
         int ReadFromDisk(EyerString & path);
 
     private:
-        unsigned char * buf = nullptr;
-        int bufLen = 0;
+        std::mutex mut;
     };
 }
 
-#endif //EYE_LIB_EYERBUFFER_HPP
+#endif //EYERLIB_EYERBUFFERMUT_HPP
