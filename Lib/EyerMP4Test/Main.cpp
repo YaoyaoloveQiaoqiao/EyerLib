@@ -14,6 +14,7 @@
 #include "ELSTTest.hpp"
 #include "HDLRTest.hpp"
 #include "TREXTest.hpp"
+#include "MFHDTest.hpp"
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);

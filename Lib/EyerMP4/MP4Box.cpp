@@ -82,13 +82,18 @@ namespace Eyer
         head[3] = *((uint8_t *)(&len) + 0);
 
         head[4] = type.GetA();
+        //printf("~~~~~~~~~~~type.GetA():%c\n", type.GetA());
         head[5] = type.GetB();
         head[6] = type.GetC();
         head[7] = type.GetD();
 
         buffer.Append(head, 8);
         buffer.Append(contentBuffer);
-
+        unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
+        buffer.GetBuffer(data);
+        /*for(int i=0; i<buffer.GetLen(); i++){
+            printf("buffer: %d", data[i]);
+        }*/
         return buffer;
     }
 
@@ -116,6 +121,8 @@ namespace Eyer
         size = stream.ReadBigEndian_int32(offset);
 
         type = BoxType::GetType(stream.Read_uint32(offset));
+        //test
+        printf("-----Type only: %c%c%c%c\n", type.GetA(), type.GetB(), type.GetC(), type.GetD());
 
         if(size == 1){
             largesize = stream.ReadBigEndian_int64(offset);

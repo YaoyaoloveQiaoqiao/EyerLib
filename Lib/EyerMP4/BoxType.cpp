@@ -191,6 +191,9 @@ namespace Eyer
         else if(net_type == TFHD.GetABCD()) {
             return TFHD;
         }
+        else if(net_type == MFHD.GetABCD()) {
+            return MFHD;
+        }
         return UNKNOW;
     }
 

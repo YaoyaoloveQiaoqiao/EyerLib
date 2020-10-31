@@ -18,7 +18,11 @@ mfhd.SetDefaultData();
 mfhd.PrintInfo();
 
 Eyer::EyerBuffer buffer = mfhd.Serialize();
-
+/*unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
+buffer.GetBuffer(data);*/
+/*for(int i=0; i<buffer.GetLen(); i++){
+    printf("buffer: %c", data[i]);
+}*/
 Eyer::MP4BoxMFHD mfhd2;
 mfhd2.Parse(buffer);
 
