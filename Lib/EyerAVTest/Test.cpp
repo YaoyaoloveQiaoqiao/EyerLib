@@ -31,6 +31,7 @@ TEST(A, ATest){
 
     while (1){
         Eyer::EyerAVPacket packet;
+        // Eyer::EyerTime::EyerSleepMilliseconds(10);
         ret = reader.Read(&packet);
         if(ret){
             break;
@@ -49,7 +50,7 @@ TEST(A, ATest){
                     break;
                 }
 
-                printf("video w:%d, h:%d\n", avFrame.GetWidth(), avFrame.GetHeight());
+                // printf("video w:%d, h:%d\n", avFrame.GetWidth(), avFrame.GetHeight());
             }
         }
         if(packet.GetStreamId() == audioStreamIndex){
@@ -61,7 +62,7 @@ TEST(A, ATest){
                     break;
                 }
 
-                printf("audio sec: %lld\n", avFrame.GetPTS());
+                // printf("audio sec: %lld\n", avFrame.GetPTS());
             }
         }
 

@@ -28,8 +28,6 @@ namespace Eyer
 
     int EyerDASHReader::read_packet(void * opaque, uint8_t * buf, int buf_size)
     {
-        // EyerLog("Len: %d\n", dataBuffer.GetLen());
-
         while(1){
             EyerTime::EyerSleepMilliseconds(1);
             if(dataBuffer.GetLen() > 0){
@@ -38,6 +36,8 @@ namespace Eyer
         }
 
         if(dataBuffer.GetLen() > 0){
+
+            EyerLog("Len: %d\n", dataBuffer.GetLen());
             EyerBuffer buffer;
             int len = dataBuffer.GetLen();
             if(buf_size <= len){
@@ -46,6 +46,8 @@ namespace Eyer
             dataBuffer.CutOff(buffer, len);
 
             buffer.GetBuffer(buf);
+
+            readerThread->DataBufferChange();
 
             return len;
         }

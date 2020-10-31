@@ -2,6 +2,7 @@
 #define EYE_LIB_EYERBUFFER_HPP
 
 #include <stdint.h>
+#include <mutex>
 
 namespace Eyer{
     class EyerBuffer {
