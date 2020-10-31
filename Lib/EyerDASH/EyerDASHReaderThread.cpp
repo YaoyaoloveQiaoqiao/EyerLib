@@ -53,7 +53,6 @@ namespace Eyer
             EyerLog("m4v url: %s\n", m4vUrl.str);
 
             Eyer::EyerSimplestHttp http;
-
             Eyer::EyerBuffer m4vBuffer;
             ret = http.Get(m4vBuffer, m4vUrl);
             if(ret){

@@ -34,6 +34,7 @@ TEST(A, ATest){
         // Eyer::EyerTime::EyerSleepMilliseconds(10);
         ret = reader.Read(&packet);
         if(ret){
+            EyerLog("Ret: %d\n", ret);
             break;
         }
 
