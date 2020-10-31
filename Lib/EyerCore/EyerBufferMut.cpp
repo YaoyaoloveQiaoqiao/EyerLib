@@ -65,4 +65,16 @@ namespace Eyer
         std::lock_guard<std::mutex> lg(mut);
         return EyerBuffer::Clear();
     }
+
+    int EyerBufferMut::WriteDisk(EyerString & path)
+    {
+        std::lock_guard<std::mutex> lg(mut);
+        return EyerBuffer::WriteDisk(path);
+    }
+
+    int EyerBufferMut::ReadFromDisk(EyerString & path)
+    {
+        std::lock_guard<std::mutex> lg(mut);
+        return EyerBuffer::ReadFromDisk(path);
+    }
 }

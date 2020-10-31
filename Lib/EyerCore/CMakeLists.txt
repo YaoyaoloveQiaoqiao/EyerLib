@@ -34,6 +34,8 @@ add_library(
         EyerUtil.hpp
         EyerBufferMut.cpp
         EyerBufferMut.hpp
+        EyerMD5.cpp
+        EyerMD5.hpp
 )
 
 set(head_files 
@@ -53,6 +55,7 @@ set(head_files
         EyerBufferMut.hpp
         EyerURLUtil.hpp
         EyerUtil.hpp
+        EyerMD5.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCore)

@@ -26,6 +26,10 @@ namespace Eyer
 
         int Clear();
 
+
+        int WriteDisk(EyerString & path);
+        int ReadFromDisk(EyerString & path);
+
     private:
         std::mutex mut;
     };

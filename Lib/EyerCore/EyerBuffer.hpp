@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <mutex>
+#include "EyerString.hpp"
 
 namespace Eyer{
     class EyerBuffer {
@@ -24,6 +25,9 @@ namespace Eyer{
         int GetLen();
 
         int Clear();
+
+        int WriteDisk(EyerString & path);
+        int ReadFromDisk(EyerString & path);
 
     private:
         unsigned char * buf = nullptr;
