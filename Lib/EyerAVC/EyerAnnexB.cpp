@@ -36,7 +36,7 @@ namespace Eyer {
 
             // Find End Code
             int endPos = -1;
-            for(int i=3;i<buffer.GetLen();i++){
+            for(int i=2;i<buffer.GetLen();i++){
                 bool isStartCode = CheckStartCode(buf + i, buffer.GetLen() - i);
                 if(isStartCode){
                     endPos = i;
