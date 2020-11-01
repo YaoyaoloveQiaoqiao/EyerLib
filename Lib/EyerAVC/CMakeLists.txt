@@ -8,7 +8,7 @@ add_library(
         EyerAnnexB.hpp
         EyerAVCDecoder.cpp
         EyerAVCDecoder.hpp
-)
+        EyerNALU.cpp EyerNALU.hpp)
 
 target_link_libraries (
         EyerAVC

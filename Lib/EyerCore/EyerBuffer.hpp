@@ -29,6 +29,9 @@ namespace Eyer{
         int WriteDisk(EyerString & path);
         int ReadFromDisk(EyerString & path);
 
+
+        unsigned char * GetPtr();
+
     private:
         unsigned char * buf = nullptr;
         int bufLen = 0;
