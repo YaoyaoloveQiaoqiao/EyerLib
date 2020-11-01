@@ -177,4 +177,9 @@ namespace Eyer{
         fclose(f);
         return 0;
     }
+
+    unsigned char * EyerBuffer::GetPtr()
+    {
+        return buf;
+    }
 }

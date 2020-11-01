@@ -21,6 +21,8 @@ TEST(EyerMP4, MP4BoxTKHD)
     tkhd2.PrintInfo();
 
     ASSERT_EQ(tkhd, tkhd2) << "TKHD Error";
+    ASSERT_EQ(tkhd.Serialize().GetLen() , 92) << "TKHD Len Error";
+    ASSERT_EQ(tkhd2.Serialize().GetLen(), 92) << "TKHD Len Error";
 }
 
 #endif //EYERLIB_TKHDTEST_HPP

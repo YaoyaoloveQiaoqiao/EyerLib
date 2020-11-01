@@ -1,15 +1,7 @@
-#ifndef EYE_LIB_AVC_HPP
-#define EYE_LIB_AVC_HPP
+#ifndef EYERLIB_EYERAVC_HPP
+#define EYERLIB_EYERAVC_HPP
 
-#include "EyerAnnexB.hpp"
-#include "EyerSLICEBase.hpp"
-#include "EyerSLICE.hpp"
-#include "EyerIDR.hpp"
-#include "EyerNALU.hpp"
-#include "EyerPPS.hpp"
-#include "EyerSPS.hpp"
-#include "EyerSEI.hpp"
 #include "EyerAVCDecoder.hpp"
-#include "EyerSliceData.hpp"
+#include "EyerAnnexB.hpp"
 
-#endif //EYE_LIB_AVC_HPP
+#endif //EYERLIB_EYERAVC_HPP

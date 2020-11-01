@@ -26,7 +26,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerDASHReader::read_packet(void * opaque, uint8_t * buf, int buf_size)
+    int EyerDASHReader::read_packet(uint8_t * buf, int buf_size)
     {
         while(1){
             EyerTime::EyerSleepMilliseconds(1);
@@ -36,8 +36,6 @@ namespace Eyer
         }
 
         if(dataBuffer.GetLen() > 0){
-
-            EyerLog("Len: %d\n", dataBuffer.GetLen());
             EyerBuffer buffer;
             int len = dataBuffer.GetLen();
             if(buf_size <= len){
@@ -48,14 +46,13 @@ namespace Eyer
             buffer.GetBuffer(buf);
 
             readerThread->DataBufferChange();
-
             return len;
         }
 
         return -1;
     }
 
-    int EyerDASHReader::seek_packet(void * opaque, int64_t offset, int whence)
+    int EyerDASHReader::seek_packet(int64_t offset, int whence)
     {
         return 0;
     }

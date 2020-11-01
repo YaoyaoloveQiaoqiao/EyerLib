@@ -13,17 +13,14 @@ namespace Eyer{
 
         int SetCacheDir(const EyerString & _cacheUrl);
 
-        int read_packet(void * opaque, uint8_t *buf, int buf_size);
-        int seek_packet(void * opaque, int64_t offset, int whence);
+        int read_packet(uint8_t *buf, int buf_size);
+        int seek_packet(int64_t offset, int whence);
 
     private:
         EyerString mpdUrl;
         EyerString cacheUrl;
 
-        int index = 0;
-
         EyerDASHReaderThread * readerThread = nullptr;
-
         EyerBufferMut dataBuffer;
     };
 }

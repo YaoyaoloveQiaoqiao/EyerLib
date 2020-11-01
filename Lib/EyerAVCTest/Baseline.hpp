@@ -8,7 +8,7 @@
 TEST(EyerAVC, Demo_video_176x144_baseline)
 {
     Eyer::EyerAVCDecoder avcDeocder("./demo_video_176x144_baseline.h264");
-    avcDeocder.DecodeAll();
+    avcDeocder.Decode();
 }
 
 #endif //EYERLIB_BASELINE_HPP
