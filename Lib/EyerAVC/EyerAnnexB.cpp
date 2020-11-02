@@ -17,7 +17,7 @@ namespace Eyer {
         }
     }
 
-    int EyerAnnexB::ReadNALU(EyerNALU & nalu)
+    int EyerAnnexB::ReadNALU(EyerNALUData & nalu)
     {
         while(1){
             if(buffer.GetLen() <= 0){
@@ -28,8 +28,10 @@ namespace Eyer {
             }
 
             unsigned char * buf = buffer.GetPtr();
+
+            int startCodeLen = 0;
             // Find Start Code
-            bool isStartCode = CheckStartCode(buf, buffer.GetLen());
+            bool isStartCode = CheckStartCode(startCodeLen, buf, buffer.GetLen());
             if(!isStartCode){
                 break;
             }
@@ -37,7 +39,8 @@ namespace Eyer {
             // Find End Code
             int endPos = -1;
             for(int i=2;i<buffer.GetLen();i++){
-                bool isStartCode = CheckStartCode(buf + i, buffer.GetLen() - i);
+                int startCodeLen = 0;
+                bool isStartCode = CheckStartCode(startCodeLen, buf + i, buffer.GetLen() - i);
                 if(isStartCode){
                     endPos = i;
                     break;
@@ -47,14 +50,14 @@ namespace Eyer {
             if(endPos > 0){
                 EyerBuffer naluBuffer;
                 buffer.CutOff(naluBuffer, endPos);
-                nalu.SetData(naluBuffer);
+                nalu.SetData(naluBuffer, startCodeLen);
                 return 0;
             }
             else{
                 if(isEnd == true){
                     EyerBuffer naluBuffer;
                     buffer.CutOff(naluBuffer, buffer.GetLen());
-                    nalu.SetData(naluBuffer);
+                    nalu.SetData(naluBuffer, startCodeLen);
                     return 0;
                 }
                 int readedLen = ReadFromFile();
@@ -81,9 +84,10 @@ namespace Eyer {
         return readedLen;
     }
 
-    bool EyerAnnexB::CheckStartCode(uint8_t * bufPtr, int bufLen)
+    bool EyerAnnexB::CheckStartCode(int & startCodeLen, uint8_t * bufPtr, int bufLen)
     {
         if(bufLen <= 2){
+            startCodeLen = 0;
             return false;
         }
         if(bufLen >= 4){
@@ -91,10 +95,12 @@ namespace Eyer {
                 if (bufPtr[1] == 0) {
                     if (bufPtr[2] == 0) {
                         if (bufPtr[3] == 1) {
+                            startCodeLen = 4;
                             return true;
                         }
                     }
                     if(bufPtr[2] == 1){
+                        startCodeLen = 3;
                         return true;
                     }
                 }
@@ -104,11 +110,14 @@ namespace Eyer {
             if(bufPtr[0] == 0) {
                 if (bufPtr[1] == 0) {
                     if(bufPtr[2] == 1){
+                        startCodeLen = 4;
                         return true;
                     }
                 }
             }
         }
+
+        startCodeLen = 0;
         return false;
     }
 }

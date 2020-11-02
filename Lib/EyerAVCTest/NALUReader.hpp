@@ -8,12 +8,20 @@
 TEST(EyerAVC, NALUReader)
 {
     Eyer::EyerAnnexB annexB("./demo_video_176x144_baseline.h264");
+    // Eyer::EyerAnnexB annexB("./demo_video.h264");
 
     while(1){
-        Eyer::EyerNALU nalu;
+        Eyer::EyerNALUData nalu;
         int ret = annexB.ReadNALU(nalu);
         if(ret){
             break;
+        }
+
+        if(nalu.GetNALUType() == Eyer::NALUType::NALU_TYPE_SPS){
+            Eyer::EyerSPS sps;
+            sps.SetNALUData(nalu);
+            sps.Parse();
+            sps.PrintInfo();
         }
     }
 }

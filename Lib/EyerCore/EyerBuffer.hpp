@@ -23,6 +23,7 @@ namespace Eyer{
         int GetBuffer(unsigned char * _buf = nullptr);
 
         int GetLen();
+        int SetLen(int _len);
 
         int Clear();
 

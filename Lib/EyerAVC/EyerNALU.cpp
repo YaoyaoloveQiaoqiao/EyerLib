@@ -1,7 +1,5 @@
 #include "EyerNALU.hpp"
 
-#include <stdio.h>
-
 namespace Eyer
 {
     EyerNALU::EyerNALU()
@@ -11,16 +9,41 @@ namespace Eyer
 
     EyerNALU::~EyerNALU()
     {
-
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
+        }
+        fieldList.clear();
     }
 
-    int EyerNALU::SetData(EyerBuffer & _naluBuffer)
+    int EyerNALU::SetNALUData(EyerNALUData & _naluData)
     {
-        naluBuffer = _naluBuffer;
+        naluData = _naluData;
+        return 0;
+    }
 
-        unsigned char * bufPtr = naluBuffer.GetPtr();
-        printf("%d %d %d %d %d\n", bufPtr[0], bufPtr[1], bufPtr[2], bufPtr[3], bufPtr[4]);
+    int EyerNALU::PrintInfo()
+    {
+        EyerLog("==============================================================\n");
+        for(int i=0;i<fieldList.size();i++){
+            EyerField * field = fieldList[i];
+            EyerString key = field->GetKey();
+            EyerFieldType type = field->GetType();
 
+            EyerString levelStr = "";
+            for(int i=0;i<field->GetLevel();i++){
+                levelStr = levelStr + "\t";
+            }
+            if(type == EyerFieldType::UNSIGNED_INT){
+                EyerLog("%s%s = %u\n", levelStr.str, key.str, field->GetUnsignedIntVal());
+            }
+            else if(type == EyerFieldType::INT){
+                EyerLog("%s%s = %d\n", levelStr.str, key.str, field->GetIntVal());
+            }
+            else{
+
+            }
+        }
+        EyerLog("==============================================================\n");
         return 0;
     }
 }

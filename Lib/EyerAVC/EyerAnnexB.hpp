@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "EyerCore/EyerCore.hpp"
 
-#include "EyerNALU.hpp"
+#include "EyerNALUData.hpp"
 
 namespace Eyer
 {
@@ -14,7 +14,7 @@ namespace Eyer
         EyerAnnexB(const EyerString & _path);
         ~EyerAnnexB();
 
-        int ReadNALU(EyerNALU & nalu);
+        int ReadNALU(EyerNALUData & nalu);
     private:
         EyerString path;
 
@@ -25,7 +25,7 @@ namespace Eyer
 
         int ReadFromFile();
 
-        bool CheckStartCode(uint8_t * bufPtr, int bufLen);
+        bool CheckStartCode(int & startCodeLen, uint8_t * bufPtr, int bufLen);
     };
 }
 
