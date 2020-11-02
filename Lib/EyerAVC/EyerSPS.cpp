@@ -179,27 +179,37 @@ namespace Eyer
         }
 
         vui.timing_info_present_flag = bs.bs_read_u1();
+        fieldList.push_back(new EyerField("timing_info_present_flag", vui.timing_info_present_flag, nullptr, vuilevel));
         if(vui.timing_info_present_flag) {
             vui.num_units_in_tick                       = bs.bs_read_u(32);
             vui.time_scale                              = bs.bs_read_u(32);
             vui.fixed_frame_rate_flag                   = bs.bs_read_u1();
+            fieldList.push_back(new EyerField("num_units_in_tick",          vui.num_units_in_tick,      nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("time_scale",                 vui.time_scale,             nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("fixed_frame_rate_flag",      vui.fixed_frame_rate_flag,  nullptr, vuilevel + 1));
         }
 
         vui.nal_hrd_parameters_present_flag = bs.bs_read_u1();
+        fieldList.push_back(new EyerField("nal_hrd_parameters_present_flag", vui.nal_hrd_parameters_present_flag, nullptr, vuilevel));
         if(vui.nal_hrd_parameters_present_flag) {
             //TODO read_hrd_parameters(&sps->hrd_nal, b);
         }
+
         vui.vcl_hrd_parameters_present_flag = bs.bs_read_u1();
+        fieldList.push_back(new EyerField("vcl_hrd_parameters_present_flag", vui.vcl_hrd_parameters_present_flag, nullptr, vuilevel));
         if(vui.vcl_hrd_parameters_present_flag) {
             //TODO read_hrd_parameters(&sps->hrd_vcl, b);
         }
 
         if(vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag) {
             vui.low_delay_hrd_flag = bs.bs_read_u1();
+            fieldList.push_back(new EyerField("low_delay_hrd_flag", vui.low_delay_hrd_flag, nullptr, vuilevel + 1));
         }
 
         vui.pic_struct_present_flag         = bs.bs_read_u1();
         vui.bitstream_restriction_flag      = bs.bs_read_u1();
+        fieldList.push_back(new EyerField("pic_struct_present_flag",        vui.pic_struct_present_flag,    nullptr, vuilevel));
+        fieldList.push_back(new EyerField("bitstream_restriction_flag",     vui.bitstream_restriction_flag, nullptr, vuilevel));
 
         if(vui.bitstream_restriction_flag) {
             vui.motion_vectors_over_pic_boundaries_flag     = bs.bs_read_u1();
@@ -209,6 +219,14 @@ namespace Eyer
             vui.log2_max_mv_length_vertical                 = bs.bs_read_ue();
             vui.num_reorder_frames                          = bs.bs_read_ue();
             vui.max_dec_frame_buffering                     = bs.bs_read_ue();
+
+            fieldList.push_back(new EyerField("motion_vectors_over_pic_boundaries_flag",        vui.motion_vectors_over_pic_boundaries_flag,        nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("max_bytes_per_pic_denom",                        vui.max_bytes_per_pic_denom,                        nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("max_bits_per_mb_denom",                          vui.max_bits_per_mb_denom,                          nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("log2_max_mv_length_horizontal",                  vui.log2_max_mv_length_horizontal,                  nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("log2_max_mv_length_vertical",                    vui.log2_max_mv_length_vertical,                    nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("num_reorder_frames",                             vui.num_reorder_frames,                             nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("max_dec_frame_buffering",                        vui.max_dec_frame_buffering,                        nullptr, vuilevel + 1));
         }
 
         return 0;
