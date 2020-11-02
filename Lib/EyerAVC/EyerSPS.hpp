@@ -82,6 +82,18 @@ namespace Eyer
         int level_idc;
         int seq_parameter_set_id;
 
+        int chroma_format_idc;
+        int residual_colour_transform_flag;
+        int bit_depth_luma_minus8;
+        int bit_depth_chroma_minus8;
+        int qpprime_y_zero_transform_bypass_flag;
+        int seq_scaling_matrix_present_flag;
+            int seq_scaling_list_present_flag[12];
+            int ScalingList4x4[6][16];
+            int UseDefaultScalingMatrix4x4Flag[6];
+            int ScalingList8x8[6][64];
+            int UseDefaultScalingMatrix8x8Flag[6];
+
         int log2_max_frame_num_minus4;
         int pic_order_cnt_type;
         // if(pic_order_cnt_type == 0){
@@ -119,6 +131,7 @@ namespace Eyer
         // vui
         EyerSPSVUI vui;
 
+        int ReadScalingList(EyerBitStream & bs, int * scalingList, int sizeOfScalingList, int * useDefaultScalingMatrixFlag);
         int ReadVuiParameters(EyerBitStream & bs);
         int ReadHrdParameters(EyerHRD & hrd, EyerBitStream & bs);
     };

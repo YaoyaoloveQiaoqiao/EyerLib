@@ -49,6 +49,35 @@ namespace Eyer
            )
         {
             // TODO Heigh Profile
+            chroma_format_idc = bs.bs_read_ue();
+            fieldList.push_back(new EyerField("chroma_format_idc",                    chroma_format_idc));
+            if(chroma_format_idc == 3) {
+                residual_colour_transform_flag = bs.bs_read_u1();
+                fieldList.push_back(new EyerField("residual_colour_transform_flag",   residual_colour_transform_flag));
+            }
+            bit_depth_luma_minus8                   = bs.bs_read_ue();
+            bit_depth_chroma_minus8                 = bs.bs_read_ue();
+            qpprime_y_zero_transform_bypass_flag    = bs.bs_read_u1();
+            seq_scaling_matrix_present_flag         = bs.bs_read_u1();
+
+            fieldList.push_back(new EyerField("bit_depth_luma_minus8",                      bit_depth_luma_minus8));
+            fieldList.push_back(new EyerField("bit_depth_chroma_minus8",                    bit_depth_chroma_minus8));
+            fieldList.push_back(new EyerField("qpprime_y_zero_transform_bypass_flag",       qpprime_y_zero_transform_bypass_flag));
+            fieldList.push_back(new EyerField("seq_scaling_matrix_present_flag",            seq_scaling_matrix_present_flag));
+
+            if(seq_scaling_matrix_present_flag) {
+                for(int i=0; i<((chroma_format_idc != 3) ? 8 : 12); i++ ){
+                    seq_scaling_list_present_flag[i] = bs.bs_read_u1();
+                    if(seq_scaling_list_present_flag[i]){
+                        if(i<6) {
+                            ReadScalingList(bs, ScalingList4x4[i], 16, &(UseDefaultScalingMatrix4x4Flag[i]));
+                        }
+                        else {
+                            ReadScalingList(bs, ScalingList8x8[i-6], 64, &(UseDefaultScalingMatrix8x8Flag[i-6]));
+                        }
+                    }
+                }
+            }
         }
 
         log2_max_frame_num_minus4               = bs.bs_read_ue();
@@ -122,6 +151,34 @@ namespace Eyer
             ReadVuiParameters(bs);
         }
 
+        return 0;
+    }
+
+    int EyerSPS::ReadScalingList(EyerBitStream & bs, int * scalingList, int sizeOfScalingList, int * useDefaultScalingMatrixFlag)
+    {
+        int lastScale = 8;
+        int nextScale = 8;
+        int delta_scale;
+        for( int j = 0; j < sizeOfScalingList; j++ ) {
+            if( nextScale != 0 ) {
+                if(0) {
+                    nextScale = scalingList[ j ];
+                    if (useDefaultScalingMatrixFlag[0]) { nextScale = 0; }
+                    delta_scale = (nextScale - lastScale) % 256 ;
+                }
+
+                delta_scale = bs.bs_read_se();
+
+                if(1) {
+                    nextScale = ( lastScale + delta_scale + 256 ) % 256;
+                    useDefaultScalingMatrixFlag[0] = ( j == 0 && nextScale == 0 );
+                }
+            }
+            if(1) {
+                scalingList[j] = ( nextScale == 0 ) ? lastScale : nextScale;
+            }
+            lastScale = scalingList[j];
+        }
         return 0;
     }
 
