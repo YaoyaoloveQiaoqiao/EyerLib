@@ -192,13 +192,13 @@ namespace Eyer
         vui.nal_hrd_parameters_present_flag = bs.bs_read_u1();
         fieldList.push_back(new EyerField("nal_hrd_parameters_present_flag", vui.nal_hrd_parameters_present_flag, nullptr, vuilevel));
         if(vui.nal_hrd_parameters_present_flag) {
-            //TODO read_hrd_parameters(&sps->hrd_nal, b);
+            ReadHrdParameters(vui.hrd_nal, bs);
         }
 
         vui.vcl_hrd_parameters_present_flag = bs.bs_read_u1();
         fieldList.push_back(new EyerField("vcl_hrd_parameters_present_flag", vui.vcl_hrd_parameters_present_flag, nullptr, vuilevel));
         if(vui.vcl_hrd_parameters_present_flag) {
-            //TODO read_hrd_parameters(&sps->hrd_vcl, b);
+            ReadHrdParameters(vui.hrd_vcl, bs);
         }
 
         if(vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag) {
@@ -229,6 +229,39 @@ namespace Eyer
             fieldList.push_back(new EyerField("max_dec_frame_buffering",                        vui.max_dec_frame_buffering,                        nullptr, vuilevel + 1));
         }
 
+        return 0;
+    }
+
+    int EyerSPS::ReadHrdParameters(EyerHRD & hrd, EyerBitStream & bs)
+    {
+        int vuilevel = 2;
+
+        hrd.cpb_cnt_minus1 = bs.bs_read_ue();
+        hrd.bit_rate_scale = bs.bs_read_u(4);
+        hrd.cpb_size_scale = bs.bs_read_u(4);
+
+        fieldList.push_back(new EyerField("cpb_cnt_minus1",        hrd.cpb_cnt_minus1,        nullptr, vuilevel + 0));
+        fieldList.push_back(new EyerField("bit_rate_scale",        hrd.bit_rate_scale,        nullptr, vuilevel + 0));
+        fieldList.push_back(new EyerField("cpb_size_scale",        hrd.cpb_size_scale,        nullptr, vuilevel + 0));
+
+        for(int SchedSelIdx = 0; SchedSelIdx <= hrd.cpb_cnt_minus1; SchedSelIdx++) {
+            hrd.bit_rate_value_minus1[SchedSelIdx]        = bs.bs_read_ue();
+            hrd.cpb_size_value_minus1[SchedSelIdx]        = bs.bs_read_ue();
+            hrd.cbr_flag[SchedSelIdx]                     = bs.bs_read_u1();
+
+            fieldList.push_back(new EyerField("bit_rate_value_minus1[SchedSelIdx]",        hrd.bit_rate_value_minus1[SchedSelIdx],          nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("cpb_size_value_minus1[SchedSelIdx]",        hrd.cpb_size_value_minus1[SchedSelIdx],          nullptr, vuilevel + 1));
+            fieldList.push_back(new EyerField("cbr_flag[SchedSelIdx] ",                    hrd.cbr_flag[SchedSelIdx] ,                      nullptr, vuilevel + 1));
+        }
+        hrd.initial_cpb_removal_delay_length_minus1     = bs.bs_read_u(5);
+        hrd.cpb_removal_delay_length_minus1             = bs.bs_read_u(5);
+        hrd.dpb_output_delay_length_minus1              = bs.bs_read_u(5);
+        hrd.time_offset_length                          = bs.bs_read_u(5);
+
+        fieldList.push_back(new EyerField("initial_cpb_removal_delay_length_minus1",        hrd.initial_cpb_removal_delay_length_minus1,                nullptr, vuilevel + 0));
+        fieldList.push_back(new EyerField("cpb_removal_delay_length_minus1",                hrd.cpb_removal_delay_length_minus1,                        nullptr, vuilevel + 0));
+        fieldList.push_back(new EyerField("dpb_output_delay_length_minus1",                 hrd.dpb_output_delay_length_minus1 ,                        nullptr, vuilevel + 0));
+        fieldList.push_back(new EyerField("time_offset_length",                             hrd.time_offset_length ,                                    nullptr, vuilevel + 0));
         return 0;
     }
 }

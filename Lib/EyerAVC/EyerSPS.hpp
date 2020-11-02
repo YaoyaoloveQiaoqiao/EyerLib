@@ -7,6 +7,21 @@
 
 namespace Eyer
 {
+    class EyerHRD
+    {
+    public:
+        int cpb_cnt_minus1;
+        int bit_rate_scale;
+        int cpb_size_scale;
+        int bit_rate_value_minus1[32];
+        int cpb_size_value_minus1[32];
+        int cbr_flag[32];
+        int initial_cpb_removal_delay_length_minus1;
+        int cpb_removal_delay_length_minus1;
+        int dpb_output_delay_length_minus1;
+        int time_offset_length;
+    };
+
     class EyerSPSVUI
     {
     public:
@@ -42,6 +57,9 @@ namespace Eyer
         int log2_max_mv_length_vertical;
         int num_reorder_frames;
         int max_dec_frame_buffering;
+
+        EyerHRD hrd_nal;
+        EyerHRD hrd_vcl;
     };
 
 
@@ -98,11 +116,11 @@ namespace Eyer
 
         int vui_parameters_present_flag;
 
-
-        int ReadVuiParameters(EyerBitStream & bs);
-
         // vui
         EyerSPSVUI vui;
+
+        int ReadVuiParameters(EyerBitStream & bs);
+        int ReadHrdParameters(EyerHRD & hrd, EyerBitStream & bs);
     };
 }
 
