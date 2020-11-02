@@ -23,6 +23,12 @@ TEST(EyerAVC, NALUReader)
             sps.Parse();
             sps.PrintInfo();
         }
+        if(nalu.GetNALUType() == Eyer::NALUType::NALU_TYPE_PPS){
+            Eyer::EyerPPS pps;
+            pps.SetNALUData(nalu);
+            pps.Parse();
+            pps.PrintInfo();
+        }
     }
 }
 

@@ -24,6 +24,8 @@ add_library(
         EyerBitStream.hpp
         EyerField.hpp
         EyerField.cpp
+        EyerPPS.cpp
+        EyerPPS.hpp
 )
 
 target_link_libraries (
@@ -40,9 +42,10 @@ set(head_files
         NALUType.hpp
         EyerEnum.hpp
         EyerNALU.hpp
-        EyerSPS.hpp
         EyerBitStream.hpp
         EyerField.hpp
+        EyerSPS.hpp
+        EyerPPS.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
