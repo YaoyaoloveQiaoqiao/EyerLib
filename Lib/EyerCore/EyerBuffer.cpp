@@ -130,6 +130,12 @@ namespace Eyer{
         return GetBuffer();
     }
 
+    int EyerBuffer::SetLen(int _len)
+    {
+        bufLen = _len;
+        return 0;
+    }
+
     int EyerBuffer::Clear()
     {
         if(buf != nullptr){

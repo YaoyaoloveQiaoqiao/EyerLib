@@ -8,7 +8,25 @@ add_library(
         EyerAnnexB.hpp
         EyerAVCDecoder.cpp
         EyerAVCDecoder.hpp
-        EyerNALU.cpp EyerNALU.hpp)
+        EyerNALUData.cpp
+        EyerNALUData.hpp
+        NALRefIdc.cpp
+        NALRefIdc.hpp
+        NALUType.cpp
+        NALUType.hpp
+        EyerEnum.cpp
+        EyerEnum.hpp
+        EyerNALU.cpp
+        EyerNALU.hpp
+        EyerSPS.cpp
+        EyerSPS.hpp
+        EyerBitStream.cpp
+        EyerBitStream.hpp
+        EyerField.hpp
+        EyerField.cpp
+        EyerPPS.cpp
+        EyerPPS.hpp
+)
 
 target_link_libraries (
         EyerAVC
@@ -19,6 +37,15 @@ set(head_files
         EyerAVC.hpp
         EyerAnnexB.hpp
         EyerAVCDecoder.hpp
+        EyerNALUData.hpp
+        NALRefIdc.hpp
+        NALUType.hpp
+        EyerEnum.hpp
+        EyerNALU.hpp
+        EyerBitStream.hpp
+        EyerField.hpp
+        EyerSPS.hpp
+        EyerPPS.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
