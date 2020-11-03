@@ -51,7 +51,7 @@ add_library(
         MP4BoxSTCO.cpp
         MP4BoxSTCO.hpp
         MP4BoxMFHD.hpp
-        MP4BoxMFHD.cpp)
+        MP4BoxMFHD.cpp MP4BoxTFHD.hpp MP4BoxTFHD.cpp)
 
 target_link_libraries (
         EyerCore
