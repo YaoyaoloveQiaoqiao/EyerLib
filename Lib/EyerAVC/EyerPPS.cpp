@@ -14,6 +14,8 @@ namespace Eyer
 
     int EyerPPS::Parse()
     {
+        EyerNALU::Parse();
+
         EyerBitStream bs(naluData.GetSODBBuffer());
 
         pic_parameter_set_id        = bs.bs_read_ue();
@@ -87,6 +89,8 @@ namespace Eyer
         fieldList.push_back(new EyerField("redundant_pic_cnt_present_flag",                         redundant_pic_cnt_present_flag));
 
         // TODO more_rbsp_data
+
+        valid = true;
 
         return 0;
     }

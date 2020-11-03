@@ -7,5 +7,6 @@
 #include "NALUType.hpp"
 #include "EyerSPS.hpp"
 #include "EyerPPS.hpp"
+#include "EyerSLICE.hpp"
 
 #endif //EYERLIB_EYERAVC_HPP

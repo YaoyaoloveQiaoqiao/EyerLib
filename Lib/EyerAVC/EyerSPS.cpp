@@ -16,6 +16,8 @@ namespace Eyer
 
     int EyerSPS::Parse()
     {
+        EyerNALU::Parse();
+
         EyerBitStream bs(naluData.GetSODBBuffer());
 
         profile_idc = bs.bs_read_u8();
@@ -150,6 +152,8 @@ namespace Eyer
         if(vui_parameters_present_flag){
             ReadVuiParameters(bs);
         }
+
+        valid = true;
 
         return 0;
     }
