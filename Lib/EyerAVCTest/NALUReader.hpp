@@ -7,8 +7,8 @@
 
 TEST(EyerAVC, NALUReader)
 {
-    // Eyer::EyerAnnexB annexB("./demo_video_176x144_baseline.h264");
-    Eyer::EyerAnnexB annexB("./demo_video.h264");
+    Eyer::EyerAnnexB annexB("./demo_video_176x144_baseline.h264");
+    // Eyer::EyerAnnexB annexB("./demo_video.h264");
 
     Eyer::EyerSPS sps;
     Eyer::EyerPPS pps;

@@ -16,7 +16,7 @@ namespace Eyer
     {
         EyerNALU::Parse();
 
-        EyerBitStream bs(naluData.GetSODBBuffer());
+        EyerBitStream bs(naluData.GetRBSPBuffer());
 
         pic_parameter_set_id        = bs.bs_read_ue();
         seq_parameter_set_id        = bs.bs_read_ue();
@@ -84,6 +84,7 @@ namespace Eyer
         fieldList.push_back(new EyerField("weighted_bipred_idc",                                    weighted_bipred_idc));
         fieldList.push_back(new EyerField("pic_init_qp_minus26",                                    pic_init_qp_minus26));
         fieldList.push_back(new EyerField("pic_init_qs_minus26",                                    pic_init_qs_minus26));
+        fieldList.push_back(new EyerField("chroma_qp_index_offset",                                 chroma_qp_index_offset));
         fieldList.push_back(new EyerField("deblocking_filter_control_present_flag",                 deblocking_filter_control_present_flag));
         fieldList.push_back(new EyerField("constrained_intra_pred_flag",                            constrained_intra_pred_flag));
         fieldList.push_back(new EyerField("redundant_pic_cnt_present_flag",                         redundant_pic_cnt_present_flag));

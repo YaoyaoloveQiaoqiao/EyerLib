@@ -106,6 +106,9 @@ namespace Eyer
 
         int ReadRefPicListReordering(EyerBitStream & bs);
 
+        int ReadPredWeightTable(EyerBitStream & bs);
+        int ReadDecRefPicMarking(EyerBitStream & bs);
+
         SliceHeader sh;
     };
 }
