@@ -2,3 +2,6 @@
 .vscode/
 build/
 .vs
+.idea/
+Lib/EyerMP4Test/cmake-build-debug-mingw/
+Lib/cmake-build-debug-mingw/

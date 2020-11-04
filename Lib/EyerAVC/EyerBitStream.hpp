@@ -24,7 +24,7 @@ namespace Eyer
         int32_t bs_read_se();
         int bs_eof();
 
-    private:
+    public:
         uint8_t * start;
         uint8_t * p;
         uint8_t * end;

@@ -16,7 +16,9 @@ namespace Eyer
 
     int EyerSPS::Parse()
     {
-        EyerBitStream bs(naluData.GetSODBBuffer());
+        EyerNALU::Parse();
+
+        EyerBitStream bs(naluData.GetRBSPBuffer());
 
         profile_idc = bs.bs_read_u8();
         constraint_set0_flag = bs.bs_read_u1();
@@ -118,7 +120,7 @@ namespace Eyer
         fieldList.push_back(new EyerField("gaps_in_frame_num_value_allowed_flag",       gaps_in_frame_num_value_allowed_flag));
         fieldList.push_back(new EyerField("pic_width_in_mbs_minus1",                    pic_width_in_mbs_minus1));
         fieldList.push_back(new EyerField("pic_height_in_map_units_minus1",             pic_height_in_map_units_minus1));
-        fieldList.push_back(new EyerField("frame_mbs_only_flag",                        log2_max_frame_num_minus4));
+        fieldList.push_back(new EyerField("frame_mbs_only_flag",                        frame_mbs_only_flag));
 
         if(!frame_mbs_only_flag) {
             mb_adaptive_frame_field_flag = bs.bs_read_u1();
@@ -150,6 +152,8 @@ namespace Eyer
         if(vui_parameters_present_flag){
             ReadVuiParameters(bs);
         }
+
+        valid = true;
 
         return 0;
     }

@@ -9,16 +9,23 @@ namespace Eyer
     class EyerNALU {
     public:
         EyerNALU();
+        EyerNALU(const EyerNALU & nalu);
         ~EyerNALU();
 
-        virtual int Parse() = 0;
+        EyerNALU & operator = (const EyerNALU & nalu);
+
+        virtual int Parse();
 
         int SetNALUData(EyerNALUData & _naluData);
 
         int PrintInfo();
+
+        bool isValid();
     protected:
         EyerNALUData naluData;
         std::vector<EyerField *> fieldList;
+
+        bool valid = false;
     };
 }
 

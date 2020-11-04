@@ -7,6 +7,11 @@ namespace Eyer
 
     }
 
+    EyerNALU::EyerNALU(const EyerNALU & nalu)
+    {
+        *this = nalu;
+    }
+
     EyerNALU::~EyerNALU()
     {
         for(int i=0;i<fieldList.size();i++){
@@ -15,10 +20,43 @@ namespace Eyer
         fieldList.clear();
     }
 
+    EyerNALU & EyerNALU::operator = (const EyerNALU & nalu)
+    {
+        naluData    = nalu.naluData;
+        valid       = nalu.valid;
+
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
+        }
+        fieldList.clear();
+
+        for( int i = 0; i < nalu.fieldList.size(); i++ ){
+            EyerField * f = nalu.fieldList[i];
+            EyerField * tempF = new EyerField(*f);
+            fieldList.push_back(tempF);
+        }
+
+        return *this;
+    }
+
     int EyerNALU::SetNALUData(EyerNALUData & _naluData)
     {
         naluData = _naluData;
         return 0;
+    }
+
+    int EyerNALU::Parse()
+    {
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
+        }
+        fieldList.clear();
+        return 0;
+    }
+
+    bool EyerNALU::isValid()
+    {
+        return valid;
     }
 
     int EyerNALU::PrintInfo()
@@ -39,8 +77,8 @@ namespace Eyer
             else if(type == EyerFieldType::INT){
                 EyerLog("%s%s = %d\n", levelStr.str, key.str, field->GetIntVal());
             }
-            else{
-
+            else if(type == EyerFieldType::VOID){
+                EyerLog("%s%s\n", levelStr.str, key.str);
             }
         }
         EyerLog("==============================================================\n");

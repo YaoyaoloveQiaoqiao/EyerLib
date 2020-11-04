@@ -19,7 +19,8 @@ namespace Eyer
         EyerBuffer & GetNaluBuffer();
         EyerBuffer & GetRBSPBuffer();
         EyerBuffer & GetSODBBuffer();
-    private:
+
+    public:
         EyerBuffer naluBuffer;
         EyerBuffer rbspBuffer;
         EyerBuffer sodbBuffer;

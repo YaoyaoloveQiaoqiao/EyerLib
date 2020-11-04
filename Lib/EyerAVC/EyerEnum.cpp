@@ -30,6 +30,11 @@ namespace Eyer
         return val == eyerEnum.val;
     }
 
+    bool EyerEnum::operator != (const EyerEnum & eyerEnum)
+    {
+        return val != eyerEnum.val;
+    }
+
     EyerString & EyerEnum::GetName()
     {
         return name;

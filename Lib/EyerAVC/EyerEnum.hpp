@@ -13,6 +13,7 @@ namespace Eyer
 
         EyerEnum & operator = (const EyerEnum & eyerEnum);
         bool operator == (const EyerEnum & eyerEnum);
+        bool operator != (const EyerEnum & eyerEnum);
 
         EyerString & GetName();
     protected:

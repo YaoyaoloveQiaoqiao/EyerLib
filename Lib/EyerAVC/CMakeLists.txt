@@ -26,7 +26,9 @@ add_library(
         EyerField.cpp
         EyerPPS.cpp
         EyerPPS.hpp
-)
+        EyerSLICE.cpp
+        EyerSLICE.hpp
+        SLICEType.cpp SLICEType.hpp)
 
 target_link_libraries (
         EyerAVC
@@ -46,6 +48,7 @@ set(head_files
         EyerField.hpp
         EyerSPS.hpp
         EyerPPS.hpp
+        EyerSLICE.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
