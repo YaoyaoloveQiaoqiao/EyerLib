@@ -29,7 +29,7 @@ ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Darwin")
     target_link_libraries (EyerTypeTest bz2)
     target_link_libraries (EyerTypeTest z)
     target_link_libraries (EyerTypeTest EyerGLAD)
-    # target_link_libraries (EyerTypeTest harfbuzz)
+    target_link_libraries (EyerTypeTest harfbuzz)
 
     target_link_libraries (EyerTypeTest ${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/lib/libglfw3.a)
 ELSE ()
