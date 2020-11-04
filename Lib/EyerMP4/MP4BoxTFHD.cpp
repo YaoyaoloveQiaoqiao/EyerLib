@@ -65,39 +65,39 @@ namespace Eyer{
         default_sample_size                 = stream.ReadBigEndian_uint32(offset);
         default_sample_flags                = stream.ReadBigEndian_uint32(offset);
 
-        return offset;
-    }
-
-    int MP4BoxTFHD::PrintInfo(int level){
-        MP4FullBox::PrintInfo(level);
-
-        EyerString levelStr = "";
-        for(int i=0;i<level;i++){
-            levelStr = levelStr + "\t";
+            return offset;
         }
-        levelStr = levelStr + "\t";
 
-        printf("%strack_ID: %d\n", levelStr.str, track_ID);
-        printf("%sbase_data_offset: %d\n", levelStr.str, base_data_offset);
-        printf("%ssample_description_index: %d\n", levelStr.str, sample_description_index);
-        printf("%sdefault_sample_duration: %d\n", levelStr.str, default_sample_duration);
-        printf("%sdefault_sample_size: %d\n", levelStr.str, default_sample_size);
-        printf("%sdefault_sample_flags: %d\n", levelStr.str, default_sample_flags);
+        int MP4BoxTFHD::PrintInfo(int level){
+            MP4FullBox::PrintInfo(level);
 
-        return 0;
+            EyerString levelStr = "";
+            for(int i=0;i<level;i++){
+                levelStr = levelStr + "\t";
+            }
+            levelStr = levelStr + "\t";
+
+            printf("%strack_ID: %d\n", levelStr.str, track_ID);
+            printf("%sbase_data_offset: %d\n", levelStr.str, base_data_offset);
+            printf("%ssample_description_index: %d\n", levelStr.str, sample_description_index);
+            printf("%sdefault_sample_duration: %d\n", levelStr.str, default_sample_duration);
+            printf("%sdefault_sample_size: %d\n", levelStr.str, default_sample_size);
+            printf("%sdefault_sample_flags: %d\n", levelStr.str, default_sample_flags);
+
+            return 0;
+        }
+
+        int MP4BoxTFHD::SetDefaultData(){
+            track_ID = 10;
+            base_data_offset = 20;
+            sample_description_index = 200000;
+            default_sample_duration = 30;
+            default_sample_size = 40;
+            default_sample_flags = 50;
+            size = Serialize().GetLen();
+
+            return 0;
+        }
     }
-
-    int MP4BoxTFHD::SetDefaultData(){
-        track_ID = 10;
-        base_data_offset = 20;
-        sample_description_index = 200000;
-        default_sample_duration = 30;
-        default_sample_size = 40;
-        default_sample_flags = 50;
-        size = Serialize().GetLen();
-
-        return 0;
-    }
-}
 
 

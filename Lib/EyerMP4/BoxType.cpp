@@ -35,7 +35,7 @@ namespace Eyer
     BoxType BoxType::MOOF       (30, 'm', 'o', 'o', 'f', true);
     BoxType BoxType::MFHD       (32, 'm', 'f', 'h', 'd', false);
     BoxType BoxType::TRAF       (34, 't', 'r', 'a', 'f', true);
-    BoxType BoxType::TFHD       (36, 't', 'f', 'h', 'd', true);
+    BoxType BoxType::TFHD       (36, 't', 'f', 'h', 'd', false);
 
     BoxType::BoxType()
     {
