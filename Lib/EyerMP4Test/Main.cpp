@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 
 #include "Endian.hpp"
-#include "Read_fMP4Test.hpp"
 #include "Read_MP4Test.hpp"
+
+#include "Read_fMP4Test.hpp"
 
 #include "FTYPTest.hpp"
 #include "MEHDTest.hpp"

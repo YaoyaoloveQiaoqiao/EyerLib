@@ -16,6 +16,7 @@
 #include "MP4BoxSTCO.hpp"
 #include "MP4BoxMFHD.hpp"
 #include "MP4BoxTFHD.hpp"
+#include "MP4BoxMDHD.hpp"
 
 /*
  *

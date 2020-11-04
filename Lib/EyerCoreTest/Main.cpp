@@ -399,6 +399,111 @@ TEST(EyerBuffer, EyerBufferCutOffTest){
     }
 }
 
+
+
+TEST(EyerBufferMut, EyerBufferTest){
+    int bALen = 10;
+    int bBLen = 20;
+    char * bA = (char *)malloc(bALen);
+    char * bB = (char *)malloc(bBLen);
+
+    memset(bA, 'A', bALen);
+    memset(bB, 'B', bBLen);
+
+    Eyer::EyerBufferMut buffer;
+
+    buffer.Append((unsigned char *)bA, bALen);
+    buffer.Append((unsigned char *)bB, bBLen);
+
+    int bufferLen = buffer.GetBuffer(nullptr);
+    EyerLog("Buffer Len: %d\n", bufferLen);
+
+    ASSERT_EQ(bufferLen, bALen + bBLen) << "Buffer Append Error";
+
+    char * buf = (char *)malloc(bufferLen);
+    buffer.GetBuffer((unsigned char *)buf);
+
+    for(int i=0;i<bALen;i++){
+        printf(" %c ", bA[i]);
+        ASSERT_EQ(bA[i], 'A') << "Buffer A Error";
+    }
+    printf("\n");
+
+    for(int i=0;i<bBLen;i++){
+        printf(" %c ", bB[i]);
+        ASSERT_EQ(bB[i], 'B') << "Buffer B Error";
+    }
+    printf("\n");
+
+    for(int i=0;i<bufferLen;i++){
+        // printf(" %c ", buf[i]);
+        if(i < 10){
+            ASSERT_EQ(buf[i], 'A') << "Buffer Error";
+        }
+        if(i >= 10){
+            ASSERT_EQ(buf[i], 'B') << "Buffer Error";
+        }
+    }
+    printf("\n");
+
+    free(buf);
+    free(bA);
+    free(bB);
+}
+
+TEST(EyerBufferMut, EyerBufferCutOffTest){
+
+
+    for(int index=0;index<100;index++) {
+        int bALen = 50;
+        unsigned char *bA = (unsigned char *) malloc(bALen);
+        memset(bA, 'A', bALen);
+        Eyer::EyerBufferMut bufferA;
+        bufferA.Clear();
+        bufferA.Append(bA, bALen);
+
+        {
+            int bufferALen = bufferA.GetBuffer(nullptr);
+            unsigned char *bufferAData = (unsigned char *) malloc(bufferALen);
+
+            bufferA.GetBuffer(bufferAData);
+
+            /*
+            for (int i = 0; i < bufferALen; i++) {
+                printf(" %c ", bufferAData[i]);
+            }
+            printf("\n");
+            */
+
+            free(bufferAData);
+        }
+
+        {
+            Eyer::EyerBufferMut bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen + 20);
+            ASSERT_LT(ret, bALen + 20) << "Length Test Error";
+        }
+        {
+            Eyer::EyerBufferMut bufferB;
+            int ret = bufferA.CutOff(bufferB, bALen);
+            ASSERT_EQ(ret, bALen) << "Length Test Error";
+
+            ASSERT_EQ(bufferA.GetBuffer(), 0) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), bALen) << "Cut Fail\n";
+
+            Eyer::EyerBufferMut bufferC;
+            bufferB.CutOff(bufferC, 15);
+
+            ASSERT_EQ(bufferC.GetBuffer(), 15) << "Cut Fail\n";
+            ASSERT_EQ(bufferB.GetBuffer(), 35) << "Cut Fail\n";
+        }
+
+        free(bA);
+    }
+}
+
+#include "MD5Test.hpp"
+
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

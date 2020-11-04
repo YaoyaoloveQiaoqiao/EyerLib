@@ -2,24 +2,18 @@
 #define EYERLIB_EYERAVCDECODER_HPP
 
 #include "EyerCore/EyerCore.hpp"
-#include "EyerSPS.hpp"
-#include "EyerPPS.hpp"
 
-namespace Eyer{
+namespace Eyer
+{
     class EyerAVCDecoder {
     public:
         EyerAVCDecoder(const EyerString & _path);
         ~EyerAVCDecoder();
 
-        int DecodeAll();
+        int Decode();
 
     private:
         EyerString path;
-
-        EyerSPS sps;
-        EyerPPS pps;
-
-        std::vector<Eyer::EyerNAL *> nalList;
     };
 }
 

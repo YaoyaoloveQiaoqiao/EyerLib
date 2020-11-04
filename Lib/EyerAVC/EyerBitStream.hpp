@@ -1,23 +1,35 @@
 #ifndef EYERLIB_EYERBITSTREAM_HPP
 #define EYERLIB_EYERBITSTREAM_HPP
 
-#include "EyerAVCCommon.hpp"
+#include <stdint.h>
+#include <stdio.h>
+#include "EyerCore/EyerCore.hpp"
 
-namespace Eyer{
+namespace Eyer
+{
     class EyerBitStream {
     public:
-        int           read_len;           //!< actual position in the codebuffer, CABAC only
-        int           code_len;           //!< overall codebuffer length, CABAC only
+        EyerBitStream(EyerBuffer & buffer);
+        EyerBitStream(uint8_t * buf, size_t size);
+        ~EyerBitStream();
 
-        int           frame_bitoffset;    //!< actual position in the codebuffer, bit-oriented, CAVLC only
-        int           bitstream_length;   //!< over codebuffer lnegth, byte oriented, CAVLC only
+        uint32_t bs_read_u8();
+        uint32_t bs_read_u(int n);
+        uint32_t bs_read_u1();
 
-        byte *        streamBuffer = nullptr;      //!< actual codebuffer for read bytes
-        int           ei_flag;            //!< error indication, 0: no error, else unspecified error
+        void bs_skip_u(int n);
+        void bs_skip_u1();
+
+        uint32_t bs_read_ue();
+        int32_t bs_read_se();
+        int bs_eof();
 
     public:
-        EyerBitStream(byte * stream, int len);
-        ~EyerBitStream();
+        uint8_t * start;
+        uint8_t * p;
+        uint8_t * end;
+        int bits_left;
+
     };
 }
 

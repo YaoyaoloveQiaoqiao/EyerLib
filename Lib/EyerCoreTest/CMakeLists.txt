@@ -1,7 +1,7 @@
 add_executable(
     EyerCoreTest
     Main.cpp
-    )
+        MD5Test.hpp)
 
 include_directories (../)
 

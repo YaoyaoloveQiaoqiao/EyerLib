@@ -1,91 +1,139 @@
 #ifndef EYERLIB_EYERSPS_HPP
 #define EYERLIB_EYERSPS_HPP
 
+#include "EyerNALUData.hpp"
 #include "EyerNALU.hpp"
-#include "EyerAVCCommon.hpp"
 #include "EyerBitStream.hpp"
-#include "EyerVUI.hpp"
-#include "EyerField.hpp"
-#include "EyerNAL.hpp"
-#include <vector>
 
-namespace Eyer{
+namespace Eyer
+{
+    class EyerHRD
+    {
+    public:
+        int cpb_cnt_minus1;
+        int bit_rate_scale;
+        int cpb_size_scale;
+        int bit_rate_value_minus1[32];
+        int cpb_size_value_minus1[32];
+        int cbr_flag[32];
+        int initial_cpb_removal_delay_length_minus1;
+        int cpb_removal_delay_length_minus1;
+        int dpb_output_delay_length_minus1;
+        int time_offset_length;
+    };
 
-#define MAXnum_ref_frames_in_pic_order_cnt_cycle  256
+    class EyerSPSVUI
+    {
+    public:
+        int aspect_ratio_info_present_flag;
+        int aspect_ratio_idc;
+        int sar_width;
+        int sar_height;
+        int overscan_info_present_flag;
+        int overscan_appropriate_flag;
+        int video_signal_type_present_flag;
+        int video_format;
+        int video_full_range_flag;
+        int colour_description_present_flag;
+        int colour_primaries;
+        int transfer_characteristics;
+        int matrix_coefficients;
+        int chroma_loc_info_present_flag;
+        int chroma_sample_loc_type_top_field;
+        int chroma_sample_loc_type_bottom_field;
+        int timing_info_present_flag;
+        int num_units_in_tick;
+        int time_scale;
+        int fixed_frame_rate_flag;
+        int nal_hrd_parameters_present_flag;
+        int vcl_hrd_parameters_present_flag;
+        int low_delay_hrd_flag;
+        int pic_struct_present_flag;
+        int bitstream_restriction_flag;
+        int motion_vectors_over_pic_boundaries_flag;
+        int max_bytes_per_pic_denom;
+        int max_bits_per_mb_denom;
+        int log2_max_mv_length_horizontal;
+        int log2_max_mv_length_vertical;
+        int num_reorder_frames;
+        int max_dec_frame_buffering;
 
-    class EyerSPS : public EyerNAL{
+        EyerHRD hrd_nal;
+        EyerHRD hrd_vcl;
+    };
+
+
+    class EyerSPS : public EyerNALU {
     public:
         EyerSPS();
-        EyerSPS(EyerNALU & _nalu);
         ~EyerSPS();
 
-        virtual NaluType GetNalType();
-    private:
-        int LoadVUI(EyerBitStream * bitstream, int * used_bits);
-
-        int GetWH(EyerVec2 & wh);
+        virtual int Parse();
 
     public:
-        unsigned int profile_idc                                        = 0;// u(8)
-        Boolean   constrained_set0_flag                                 = Boolean::FALSE;// u(1)
-        Boolean   constrained_set1_flag                                 = Boolean::FALSE;// u(1)
-        Boolean   constrained_set2_flag                                 = Boolean::FALSE;// u(1)
-        Boolean   constrained_set3_flag                                 = Boolean::FALSE;// u(1)
-        Boolean   constrained_set4_flag                                 = Boolean::FALSE;// u(1)
-        Boolean   constrained_set5_flag                                 = Boolean::FALSE;// u(1)
-        unsigned  int level_idc                                         = 0;// u(8)
-        unsigned  int seq_parameter_set_id                              = 0;// ue(v)
+        int profile_idc = 0;
+        int constraint_set0_flag = 0;
+        int constraint_set1_flag = 0;
+        int constraint_set2_flag = 0;
+        int constraint_set3_flag = 0;
+        int constraint_set4_flag = 0;
+        int constraint_set5_flag = 0;
+        int reserved_zero_2bits = 0;
+        int level_idc = 0;
+        int seq_parameter_set_id = 0;
 
-        unsigned  int chroma_format_idc                                 = 0;// ue(v)
+        int chroma_format_idc = 0;
+        int residual_colour_transform_flag = 0;
+        int bit_depth_luma_minus8 = 0;
+        int bit_depth_chroma_minus8 = 0;
+        int qpprime_y_zero_transform_bypass_flag = 0;
+        int seq_scaling_matrix_present_flag = 0;
+            int seq_scaling_list_present_flag[12];
+            int ScalingList4x4[6][16];
+            int UseDefaultScalingMatrix4x4Flag[6];
+            int ScalingList8x8[6][64];
+            int UseDefaultScalingMatrix8x8Flag[6];
 
-        Boolean   seq_scaling_matrix_present_flag                       = Boolean::FALSE;// u(1)
-        int       seq_scaling_list_present_flag[12];                    // u(1)
+        int log2_max_frame_num_minus4 = 0;
+        int pic_order_cnt_type = 0;
+        // if(pic_order_cnt_type == 0){
+            int log2_max_pic_order_cnt_lsb_minus4 = 0;
+        // }
+        // else if(pic_order_cnt_type == 1){
+            int delta_pic_order_always_zero_flag = 0;
+            int offset_for_non_ref_pic = 0;
+            int offset_for_top_to_bottom_field = 0;
+            int num_ref_frames_in_pic_order_cnt_cycle = 0;
 
-        int       ScalingList4x4[6][16];                                // se(v)
-        int       ScalingList8x8[6][64];                                // se(v)
-        Boolean   UseDefaultScalingMatrix4x4Flag[6];
-        Boolean   UseDefaultScalingMatrix8x8Flag[6];
+            // for(int i=0;i<num_ref_frames_in_pic_order_cnt_cycle;i++){
+                int offset_for_ref_frame[256];
+            // }
+        // }
 
+        int num_ref_frames = 0;
+        int gaps_in_frame_num_value_allowed_flag = 0;
+        int pic_width_in_mbs_minus1 = 0;
+        int pic_height_in_map_units_minus1 = 0;
+        int frame_mbs_only_flag = 0;
+        // if(!frame_mbs_only_flag) {
+            int mb_adaptive_frame_field_flag = 0;
+        // }
 
-        unsigned int bit_depth_luma_minus8;                             // ue(v)
-        unsigned int bit_depth_chroma_minus8;                           // ue(v)
+        int direct_8x8_inference_flag = 0;
+        int frame_cropping_flag = 0;
+            int frame_crop_left_offset = 0;
+            int frame_crop_right_offset = 0;
+            int frame_crop_top_offset = 0;
+            int frame_crop_bottom_offset = 0;
 
-        unsigned int log2_max_frame_num_minus4;                         // ue(v)
-        unsigned int pic_order_cnt_type;
+        int vui_parameters_present_flag = 0;
 
-        unsigned int log2_max_pic_order_cnt_lsb_minus4;                 // ue(v)
+        // vui
+        EyerSPSVUI vui;
 
-
-        Boolean delta_pic_order_always_zero_flag;                       // u(1)
-        int     offset_for_non_ref_pic;                                 // se(v)
-        int     offset_for_top_to_bottom_field;                         // se(v)
-        unsigned int num_ref_frames_in_pic_order_cnt_cycle;             // ue(v)
-
-        int   offset_for_ref_frame[MAXnum_ref_frames_in_pic_order_cnt_cycle];   // se(v)
-
-        unsigned int num_ref_frames;                                    // ue(v)
-        Boolean   gaps_in_frame_num_value_allowed_flag;                 // u(1)
-        unsigned int pic_width_in_mbs_minus1                            = 0;// ue(v)
-        unsigned int pic_height_in_map_units_minus1                     = 0;// ue(v)
-        Boolean   frame_mbs_only_flag;                                  // u(1)
-
-        Boolean   mb_adaptive_frame_field_flag;                         // u(1)
-        Boolean   direct_8x8_inference_flag;                            // u(1)
-        Boolean   frame_cropping_flag                                   = Boolean::FALSE;// u(1)
-
-        unsigned int frame_crop_left_offset                             = 0;// ue(v)
-        unsigned int frame_crop_right_offset                            = 0;// ue(v)
-        unsigned int frame_crop_top_offset                              = 0;// ue(v)
-        unsigned int frame_crop_bottom_offset                           = 0;// ue(v)
-
-        Boolean   vui_parameters_present_flag;                          // u(1)
-
-        unsigned  int separate_colour_plane_flag                        = 0;// u(1)
-
-
-        int lossless_qpprime_flag;
-
-        EyerVUI vui;
+        int ReadScalingList(EyerBitStream & bs, int * scalingList, int sizeOfScalingList, int * useDefaultScalingMatrixFlag);
+        int ReadVuiParameters(EyerBitStream & bs);
+        int ReadHrdParameters(EyerHRD & hrd, EyerBitStream & bs);
     };
 }
 

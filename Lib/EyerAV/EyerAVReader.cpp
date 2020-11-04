@@ -15,7 +15,7 @@ extern "C"{
 int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
     Eyer::EyerDASHReader * dashReader = (Eyer::EyerDASHReader * )opaque;
-    return dashReader->read_packet(opaque, buf, buf_size);
+    return dashReader->read_packet(buf, buf_size);
 }
 
 int64_t seek_func(void *opaque, int64_t offset, int whence)
@@ -39,7 +39,7 @@ namespace Eyer
         unsigned char * pBuffer = new unsigned char[nBufferSize];
 
         // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd"));
-        EyerDASHReader * dashReader = new EyerDASHReader(EyerString("https://redknot.cn/DASH/xiaomai_dash.mpd"));
+        EyerDASHReader * dashReader = new EyerDASHReader(EyerString("http://redknot.cn/DASH/xiaomai_dash.mpd"));
 
         AVIOContext* pIOCtx = avio_alloc_context(pBuffer, nBufferSize,
                                                  0,
@@ -90,6 +90,26 @@ namespace Eyer
         int audioStream = av_find_best_stream(piml->formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
 
         return audioStream;
+    }
+
+    int EyerAVReader::Seek(double time)
+    {
+        /**
+        * Seek to the keyframe at timestamp.
+        * 'timestamp' in 'stream_index'.
+        *
+        * @param s media file handle
+        * @param stream_index If stream_index is (-1), a default
+        * stream is selected, and timestamp is automatically converted
+        * from AV_TIME_BASE units to the stream specific time_base.
+        * @param timestamp Timestamp in AVStream.time_base units
+        *        or, if no stream is specified, in AV_TIME_BASE units.
+        * @param flags flags which select direction and seeking mode
+        * @return >= 0 on success
+        */
+        int64_t t = time * AV_TIME_BASE;
+        int ret = av_seek_frame(piml->formatCtx, -1, t, AVSEEK_FLAG_BACKWARD);
+        return ret;
     }
 
     int EyerAVReader::SeekFrame(int streamIndex, double timestamp)

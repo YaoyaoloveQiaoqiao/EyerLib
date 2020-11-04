@@ -1,70 +1,87 @@
 #include "EyerNALU.hpp"
-#include "EyerAVCCommon.hpp"
-#include <stdlib.h>
-#include <string.h>
 
-namespace Eyer {
-
-    EyerNALU::EyerNALU(int buffersize)
+namespace Eyer
+{
+    EyerNALU::EyerNALU()
     {
-        if(buffersize <= 0){
-            max_size = 0;
-            buf = nullptr;
-        }
-        else {
-            max_size = buffersize;
-            buf = (unsigned char * )malloc(max_size);
-            memset(buf, 0, max_size);
-        }
+
+    }
+
+    EyerNALU::EyerNALU(const EyerNALU & nalu)
+    {
+        *this = nalu;
     }
 
     EyerNALU::~EyerNALU()
     {
-        if(buf != nullptr){
-            free(buf);
-            buf = nullptr;
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
         }
+        fieldList.clear();
     }
 
-    EyerNALU::EyerNALU(const EyerNALU & _nalu) : EyerNALU()
+    EyerNALU & EyerNALU::operator = (const EyerNALU & nalu)
     {
-        *this = _nalu;
-    }
+        naluData    = nalu.naluData;
+        valid       = nalu.valid;
 
-    EyerNALU & EyerNALU::operator = (const EyerNALU & _nalu)
-    {
-        if(buf != nullptr){
-            free(buf);
-            buf = nullptr;
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
         }
+        fieldList.clear();
 
-        max_size = _nalu.len;
-        len = _nalu.len;
-        buf = (unsigned char *)malloc(len);
-
-        memcpy(buf, _nalu.buf, len);
-
-
-        startcodeprefix_len = _nalu.startcodeprefix_len;
-        len = _nalu.len;
-        max_size = _nalu.max_size;
-        forbidden_bit = _nalu.forbidden_bit;
-        nal_unit_type = _nalu.nal_unit_type;
-        nal_reference_idc = _nalu.nal_reference_idc;
-        lost_packets = _nalu.lost_packets;
+        for( int i = 0; i < nalu.fieldList.size(); i++ ){
+            EyerField * f = nalu.fieldList[i];
+            EyerField * tempF = new EyerField(*f);
+            fieldList.push_back(tempF);
+        }
 
         return *this;
     }
 
-    int EyerNALU::ToRBSP()
+    int EyerNALU::SetNALUData(EyerNALUData & _naluData)
     {
-        len = EyerAVCCommon::EBSPtoRBSP(buf, len, 1);
+        naluData = _naluData;
         return 0;
     }
 
-    int EyerNALU::ToSODB()
+    int EyerNALU::Parse()
     {
-        len = EyerAVCCommon::RBSPtoSODB(buf, len - 1);
+        for(int i=0;i<fieldList.size();i++){
+            delete fieldList[i];
+        }
+        fieldList.clear();
+        return 0;
+    }
+
+    bool EyerNALU::isValid()
+    {
+        return valid;
+    }
+
+    int EyerNALU::PrintInfo()
+    {
+        EyerLog("==============================================================\n");
+        for(int i=0;i<fieldList.size();i++){
+            EyerField * field = fieldList[i];
+            EyerString key = field->GetKey();
+            EyerFieldType type = field->GetType();
+
+            EyerString levelStr = "";
+            for(int i=0;i<field->GetLevel();i++){
+                levelStr = levelStr + "\t";
+            }
+            if(type == EyerFieldType::UNSIGNED_INT){
+                EyerLog("%s%s = %u\n", levelStr.str, key.str, field->GetUnsignedIntVal());
+            }
+            else if(type == EyerFieldType::INT){
+                EyerLog("%s%s = %d\n", levelStr.str, key.str, field->GetIntVal());
+            }
+            else if(type == EyerFieldType::VOID){
+                EyerLog("%s%s\n", levelStr.str, key.str);
+            }
+        }
+        EyerLog("==============================================================\n");
         return 0;
     }
 }

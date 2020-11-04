@@ -5,7 +5,7 @@
 #include "EyerCore/EyerCore.hpp"
 
 TEST(Eyer, EyerImg){
-    Eyer::EyerImg img("1.jpg");
+    Eyer::EyerImg img((char *)"1.jpg");
     img.LoadImg();
     printf("width:%d height:%d\n",img.GetImgW(), img.GetImgH());
     unsigned char * _imgData = (unsigned char *)malloc(img.GetImgW() * img.GetImgH() * img.GetImgChannel());

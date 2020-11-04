@@ -6,7 +6,9 @@ add_executable(
 include_directories (../)
 
 target_link_libraries (EyerGLTest EyerCore)
+target_link_libraries (EyerGLTest EyerGLCustomComponent)
 target_link_libraries (EyerGLTest EyerGL)
+target_link_libraries (EyerGLTest EyerGLShader)
 target_link_libraries (EyerGLTest EyerType)
 target_link_libraries (EyerGLTest EyerGLWindow)
 target_link_libraries (EyerGLTest EyerGLContext)

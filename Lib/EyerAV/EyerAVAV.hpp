@@ -130,6 +130,7 @@ namespace Eyer
 
         EyerAVPixelFormat GetPixFormat() const;
 
+
         static int ToFFmpegPixelFormat(const EyerAVPixelFormat format);
         static EyerAVPixelFormat ToEyerPixelFormat(const int format);
 
@@ -199,6 +200,7 @@ namespace Eyer
 
         double GetDuration();
 
+        int Seek(double time);
         int SeekFrame(int streamIndex, int64_t timestamp);
         int SeekFrame(int streamIndex, double timestamp);
 

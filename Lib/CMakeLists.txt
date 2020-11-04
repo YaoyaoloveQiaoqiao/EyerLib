@@ -28,6 +28,7 @@ include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include/libxm
 
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/curl_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/harfbuzz_install/lib)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -83,6 +84,9 @@ ModuleTestOption("EyerCAVLC" "EyerCAVLCTest" EyerCAVLC)
 
 OPTION(EyerMP4           "option for EyerMP4"           ON)
 ModuleTestOption("EyerMP4" "EyerMP4Test" EyerMP4)
+
+OPTION(EyerLua           "option for EyerLua"           ON)
+ModuleTestOption("EyerLua" "EyerLuaTest" EyerLua)
 
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
