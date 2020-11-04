@@ -122,8 +122,6 @@ namespace Eyer
         size = stream.ReadBigEndian_int32(offset);
 
         type = BoxType::GetType(stream.Read_uint32(offset));
-        //test
-        printf("-----Type only: %c%c%c%c\n", type.GetA(), type.GetB(), type.GetC(), type.GetD());
 
         if(size == 1){
             largesize = stream.ReadBigEndian_int64(offset);

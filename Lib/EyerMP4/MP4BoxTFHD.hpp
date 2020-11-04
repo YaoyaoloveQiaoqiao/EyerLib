@@ -30,7 +30,6 @@ namespace Eyer
         uint32_t default_sample_duration = 0;
         uint32_t default_sample_size = 0;
         uint32_t default_sample_flags = 0;
-
     };
 }
 
