@@ -51,6 +51,8 @@ namespace Eyer
 
     int EyerSLICE::ParseHeadPartB(EyerBitStream & bs)
     {
+        SLICEType sliceType = sh.slice_type;
+
         if (sps.residual_colour_transform_flag) {
             sh.colour_plane_id = bs.bs_read_u(2);
             fieldList.push_back(new EyerField("colour_plane_id",                           sh.colour_plane_id));
@@ -96,16 +98,10 @@ namespace Eyer
             fieldList.push_back(new EyerField("redundant_pic_cnt", sh.redundant_pic_cnt));
         }
 
-
-
-        SLICEType sliceType = sh.slice_type;
-
-
         if(sliceType == SLICEType::SLICE_TYPE_B) {
             sh.direct_spatial_mv_pred_flag = bs.bs_read_u1();
             fieldList.push_back(new EyerField("direct_spatial_mv_pred_flag", sh.direct_spatial_mv_pred_flag));
         }
-
 
         if(sliceType == SLICEType::SLICE_TYPE_P || sliceType == SLICEType::SLICE_TYPE_SP || sliceType == SLICEType::SLICE_TYPE_B) {
             sh.num_ref_idx_active_override_flag = bs.bs_read_u1();
@@ -170,7 +166,6 @@ namespace Eyer
                 } while( sh.rplr.reorder_l0.reordering_of_pic_nums_idc[n] != 3 && ! bs.bs_eof() );
             }
         }
-
 
         if(sliceType == SLICEType::SLICE_TYPE_B)
         {
