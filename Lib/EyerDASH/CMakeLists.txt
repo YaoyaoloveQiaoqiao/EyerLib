@@ -15,7 +15,7 @@ add_library(
         EyerDASHReader.hpp
         EyerDASHReaderThread.cpp
         EyerDASHReaderThread.hpp
-)
+        EyerDASHStream.cpp EyerDASHStream.hpp EyerDASHStreamReaderThread.cpp EyerDASHStreamReaderThread.hpp)
 
 set(head_files
         EyerDASH.hpp

@@ -14,6 +14,8 @@
 #include "MP4BoxSTSC.hpp"
 #include "MP4BoxSTCO.hpp"
 #include "MP4BoxMDHD.hpp"
+#include "MP4BoxMFHD.hpp"
+#include "MP4BoxTFHD.hpp"
 #include "MP4Stream.hpp"
 
 namespace Eyer
@@ -281,6 +283,12 @@ namespace Eyer
             else if(type == BoxType::MDHD){
                 box = new MP4BoxMDHD();
             }
+            else if(type == BoxType::MFHD){
+                box = new MP4BoxMFHD();
+            }
+            else if(type == BoxType::TFHD){
+                box = new MP4BoxTFHD();
+            }
         }
 
         return box;
@@ -326,6 +334,12 @@ namespace Eyer
         }
         else if(box->type == BoxType::MDHD){
             *(MP4BoxMDHD *)dest = *(MP4BoxMDHD *)box;
+        }
+        else if(box->type == BoxType::MFHD){
+            *(MP4BoxMFHD *)dest = *(MP4BoxMFHD *)box;
+        }
+        else if(box->type == BoxType::TFHD){
+            *(MP4BoxTFHD *)dest = *(MP4BoxTFHD *)box;
         }
         else{
             *dest = *box;

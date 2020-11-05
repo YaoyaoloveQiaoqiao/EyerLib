@@ -4,48 +4,37 @@
 
 namespace Eyer
 {
-    EyerDASHReader::EyerDASHReader(const EyerString & _mpdUrl)
+    EyerDASHReader::EyerDASHReader(const EyerString & _mpdUrl) : stream(_mpdUrl, 1)
     {
         mpdUrl = _mpdUrl;
-        readerThread = new EyerDASHReaderThread(mpdUrl, &dataBuffer);
-        readerThread->Start();
+
+        stream.StartLoad();
     }
 
     EyerDASHReader::~EyerDASHReader()
     {
-        if(readerThread != nullptr){
-            readerThread->Stop();
-            delete readerThread;
-            readerThread = nullptr;
-        }
-    }
-
-    int EyerDASHReader::SetCacheDir(const EyerString & _cacheUrl)
-    {
-        cacheUrl = _cacheUrl;
-        return 0;
     }
 
     int EyerDASHReader::read_packet(uint8_t * buf, int buf_size)
     {
         while(1){
             EyerTime::EyerSleepMilliseconds(1);
-            if(dataBuffer.GetLen() > 0){
+            if(stream.GetBuffer()->GetLen() > 0){
                 break;
             }
         }
 
-        if(dataBuffer.GetLen() > 0){
+        if(stream.GetBuffer()->GetLen() > 0){
             EyerBuffer buffer;
-            int len = dataBuffer.GetLen();
+            int len = stream.GetBuffer()->GetLen();
             if(buf_size <= len){
                 len = buf_size;
             }
-            dataBuffer.CutOff(buffer, len);
+            stream.GetBuffer()->CutOff(buffer, len);
 
             buffer.GetBuffer(buf);
 
-            readerThread->DataBufferChange();
+            // readerThread->DataBufferChange();
             return len;
         }
 
