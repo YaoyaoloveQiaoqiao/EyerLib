@@ -50,6 +50,18 @@ namespace Eyer
         return naluData.GetNALUType();
     }
 
+    int EyerNALU::GetFieldSize()
+    {
+        return fieldList.size();
+    }
+
+    int EyerNALU::GetField(EyerField & field, int index)
+    {
+        EyerField * f = fieldList.at(index);
+        field = *f;
+        return 0;
+    }
+
     int EyerNALU::Parse()
     {
         for(int i=0;i<fieldList.size();i++){

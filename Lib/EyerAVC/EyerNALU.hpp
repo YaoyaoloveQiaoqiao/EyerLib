@@ -24,6 +24,10 @@ namespace Eyer
 
         NALUType & GetNALUType();
 
+
+        int GetFieldSize();
+        int GetField(EyerField & field, int index);
+
     protected:
         EyerNALUData naluData;
         std::vector<EyerField *> fieldList;
