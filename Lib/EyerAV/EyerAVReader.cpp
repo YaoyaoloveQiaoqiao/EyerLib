@@ -26,7 +26,7 @@ int64_t seek_func(void *opaque, int64_t offset, int whence)
 
 namespace Eyer
 {
-    EyerAVReader::EyerAVReader(EyerString _path)
+    EyerAVReader::EyerAVReader(EyerString _path, EyerDASHReader * dashReader)
     {
         piml = new EyerAVReaderPrivate();
         piml->path = _path;
@@ -39,7 +39,7 @@ namespace Eyer
         unsigned char * pBuffer = new unsigned char[nBufferSize];
 
         // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd"));
-        EyerDASHReader * dashReader = new EyerDASHReader(EyerString("http://redknot.cn/DASH/xiaomai_dash.mpd"));
+        // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("http://redknot.cn/DASH/xiaomai_dash.mpd"));
 
         AVIOContext* pIOCtx = avio_alloc_context(pBuffer, nBufferSize,
                                                  0,

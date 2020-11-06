@@ -7,17 +7,27 @@
 
 namespace Eyer
 {
-    EyerDASHStreamReaderThread::EyerDASHStreamReaderThread(EyerString & _mpdUrl, int _representationIndex, int _startFragmentIndex, EyerBuffer * _dataBuffer)
+    EyerDASHStreamReaderThread::EyerDASHStreamReaderThread(EyerString & _mpdUrl, int _videoStreamIndex, int _audioStreamIndex, int _startFragmentIndex, BufferQueue * _mp4BufferQueue)
     {
         mpdUrl                  = _mpdUrl;
-        representationIndex     = _representationIndex;
+        videoStreamIndex        = _videoStreamIndex;
+        audioStreamIndex        = _audioStreamIndex;
+
         startFragmentIndex      = _startFragmentIndex;
-        dataBuffer              = _dataBuffer;
+        endFragmentIndex        = -1;
+
+        mp4BufferQueue          = _mp4BufferQueue;
     }
 
     EyerDASHStreamReaderThread::~EyerDASHStreamReaderThread()
     {
 
+    }
+
+    int EyerDASHStreamReaderThread::SetEndIndex(int _endFragmentIndex)
+    {
+        endFragmentIndex = _endFragmentIndex;
+        return 0;
     }
 
     void EyerDASHStreamReaderThread::Run()
@@ -37,26 +47,31 @@ namespace Eyer
             return;
         }
 
-        EyerBuffer mp4HeadBuffer = MergeAllTrack(mpd);
+        EyerBuffer mp4HeadBuffer = ReadHeadBuffer(mpd);
         MP4Box mp4HeadBox;
         mp4HeadBox.ParseSubBox(mp4HeadBuffer);
         mp4HeadBox.PrintInfo();
 
-        dataBuffer->Append(mp4HeadBuffer);
+        MP4Buffer * mp4Head = new MP4Buffer(mp4HeadBuffer, MP4BufferType::HEAD);
+        mp4BufferQueue->Push(mp4Head);
 
-        int index = 1;
+        int index = startFragmentIndex;
 
-        while(!stopFlag){
-            while (dataBuffer->GetLen() >= 1024 * 1024 * 1){
+        while(!stopFlag) {
+            while (mp4BufferQueue->Size() >= 5) {
                 Eyer::EyerTime::EyerSleepMilliseconds(100);
                 continue;
             }
 
-            representationIndex = 0;
+            if(endFragmentIndex > 0){
+                if(index > endFragmentIndex){
+                    break;
+                }
+            }
 
             {
                 EyerString m4vUrl;
-                mpd.GetVideoURL(m4vUrl, index, representationIndex);
+                mpd.GetVideoURL(m4vUrl, index, videoStreamIndex);
 
                 Eyer::EyerURLUtil urlUtil(mpdUrl);
                 m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
@@ -64,20 +79,88 @@ namespace Eyer
                 Eyer::EyerSimplestHttp http;
                 Eyer::EyerBuffer m4vBuffer;
                 ret = http.Get(m4vBuffer, m4vUrl);
-                if(ret){
+                if (ret) {
                     continue;
                 }
 
-                MP4Box m4vBox;
-                m4vBox.ParseSubBox(m4vBuffer);
-                printf("==========Fragment==========\n");
-                m4vBox.PrintInfo();
+                MP4Buffer * mp4Video = new MP4Buffer(m4vBuffer, MP4BufferType::VIDEO);
+                mp4BufferQueue->Push(mp4Video);
+            }
 
-                dataBuffer->Append(m4vBuffer);
+            {
+                EyerString m4vUrl;
+                mpd.GetVideoURL(m4vUrl, index, audioStreamIndex);
+
+                Eyer::EyerURLUtil urlUtil(mpdUrl);
+                m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
+
+                EyerLog("m4v url: %s\n", m4vUrl.str);
+                m4vUrl = EyerString("http://redknot.cn/DASH/./audio/xiaomai_dash") + EyerString::Number(index) + ".m4s";
+
+                Eyer::EyerSimplestHttp http;
+                Eyer::EyerBuffer m4vBuffer;
+                ret = http.Get(m4vBuffer, m4vUrl);
+                if (ret) {
+                    continue;
+                }
+
+                MP4Buffer * mp4Audio = new MP4Buffer(m4vBuffer, MP4BufferType::AUDIO);
+                mp4BufferQueue->Push(mp4Audio);
             }
 
             index++;
         }
+    }
+
+    EyerBuffer EyerDASHStreamReaderThread::ReadHeadBuffer(Eyer::EyerMPD & mpd)
+    {
+        EyerBuffer headBuf;
+        int ret = 0;
+
+        MP4Box videoBox;
+        MP4Box audioBox;
+        {
+            EyerString m4vUrl;
+            mpd.GetInitURL(m4vUrl, videoStreamIndex);
+
+            Eyer::EyerURLUtil urlUtil(mpdUrl);
+            m4vUrl = urlUtil.GetAbsolutePath(m4vUrl);
+
+            EyerLog("m4v url: %s\n", m4vUrl.str);
+
+            Eyer::EyerSimplestHttp http;
+            Eyer::EyerBuffer m4vBuffer;
+            ret = http.Get(m4vBuffer, m4vUrl);
+            if(ret){
+                // Http fail
+                return headBuf;
+            }
+
+            printf("==========Parse==========\n");
+            videoBox.ParseSubBox(m4vBuffer);
+            // videoBox.PrintInfo();
+        }
+
+        {
+            EyerString m4vUrl = "http://redknot.cn/DASH/./audio/xiaomai_dashinit.mp4";
+            EyerLog("m4v url: %s\n", m4vUrl.str);
+
+            Eyer::EyerSimplestHttp http;
+
+            Eyer::EyerBuffer m4vBuffer;
+            ret = http.Get(m4vBuffer, m4vUrl);
+            if(ret){
+                // Http fail
+                return headBuf;
+            }
+            printf("==========Parse==========\n");
+            audioBox.ParseSubBox(m4vBuffer);
+            // audioBox.PrintInfo();
+        }
+
+        headBuf = MergeVideoAudio(videoBox, audioBox);
+
+        return headBuf;
     }
 
     EyerBuffer EyerDASHStreamReaderThread::MergeAllTrack(Eyer::EyerMPD & mpd)
