@@ -21,11 +21,14 @@ namespace Eyer
         int PrintInfo();
 
         bool isValid();
+
     protected:
         EyerNALUData naluData;
         std::vector<EyerField *> fieldList;
 
         bool valid = false;
+
+        int intlog2(int x);
     };
 }
 

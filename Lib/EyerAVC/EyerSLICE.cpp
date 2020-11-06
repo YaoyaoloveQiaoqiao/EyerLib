@@ -135,6 +135,31 @@ namespace Eyer
         sh.slice_qp_delta = bs.bs_read_se();
         fieldList.push_back(new EyerField("slice_qp_delta", sh.slice_qp_delta));
 
+        if(sliceType == SLICEType::SLICE_TYPE_SP || sliceType == SLICEType::SLICE_TYPE_SI){
+            if(sliceType == SLICEType::SLICE_TYPE_SP){
+                sh.sp_for_switch_flag = bs.bs_read_u1();
+                fieldList.push_back(new EyerField("sp_for_switch_flag", sh.sp_for_switch_flag));
+            }
+            sh.slice_qs_delta = bs.bs_read_se();
+            fieldList.push_back(new EyerField("slice_qs_delta", sh.slice_qs_delta));
+        }
+
+        if(pps.deblocking_filter_control_present_flag) {
+            sh.disable_deblocking_filter_idc = bs.bs_read_ue();
+            fieldList.push_back(new EyerField("disable_deblocking_filter_idc", sh.disable_deblocking_filter_idc));
+            if(sh.disable_deblocking_filter_idc != 1) {
+                sh.slice_alpha_c0_offset_div2 = bs.bs_read_se();
+                sh.slice_beta_offset_div2 = bs.bs_read_se();
+                fieldList.push_back(new EyerField("slice_alpha_c0_offset_div2", sh.slice_alpha_c0_offset_div2, nullptr, 1));
+                fieldList.push_back(new EyerField("slice_beta_offset_div2", sh.slice_beta_offset_div2, nullptr, 1));
+            }
+        }
+        if(pps.num_slice_groups_minus1 > 0 && pps.slice_group_map_type >= 3 && pps.slice_group_map_type <= 5) {
+            int v = intlog2( pps.pic_size_in_map_units_minus1 +  pps.slice_group_change_rate_minus1 + 1);
+            sh.slice_group_change_cycle = bs.bs_read_u(v); // FIXME add 2?
+            fieldList.push_back(new EyerField("slice_group_change_cycle", sh.slice_group_change_cycle));
+        }
+
         return 0;
     }
 

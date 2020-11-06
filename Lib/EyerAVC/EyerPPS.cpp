@@ -95,16 +95,4 @@ namespace Eyer
 
         return 0;
     }
-
-    int EyerPPS::intlog2(int x)
-    {
-        int log = 0;
-        if (x < 0) { x = 0; }
-        while ((x >> log) > 0)
-        {
-            log++;
-        }
-        if (log > 0 && x == 1<<(log-1)) { log--; }
-        return log;
-    }
 }
