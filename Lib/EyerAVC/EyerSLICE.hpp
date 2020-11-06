@@ -95,11 +95,15 @@ namespace Eyer
         EyerSLICE(EyerSPS & _sps, EyerPPS & _pps);
         ~EyerSLICE();
 
+        SLICEType GetSLICEType();
+
         virtual int Parse();
 
     private:
         EyerSPS sps;
         EyerPPS pps;
+
+        SLICEType sliceType;
 
         int ParseHeadPartA(EyerBitStream & bs);
         int ParseHeadPartB(EyerBitStream & bs);

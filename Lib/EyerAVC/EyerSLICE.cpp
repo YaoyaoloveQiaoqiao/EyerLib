@@ -13,6 +13,11 @@ namespace Eyer
 
     }
 
+    SLICEType EyerSLICE::GetSLICEType()
+    {
+        return sliceType;
+    }
+
     int EyerSLICE::Parse()
     {
         if(!sps.isValid()){
@@ -42,6 +47,8 @@ namespace Eyer
         sh.slice_type                  = bs.bs_read_ue();
         sh.pic_parameter_set_id        = bs.bs_read_ue();
 
+        sliceType = sh.slice_type;
+
         fieldList.push_back(new EyerField("first_mb_in_slice",                             sh.first_mb_in_slice));
         fieldList.push_back(new EyerField("slice_type",                                    sh.slice_type));
         fieldList.push_back(new EyerField("pic_parameter_set_id",                          sh.pic_parameter_set_id));
@@ -51,7 +58,7 @@ namespace Eyer
 
     int EyerSLICE::ParseHeadPartB(EyerBitStream & bs)
     {
-        SLICEType sliceType = sh.slice_type;
+        sliceType = sh.slice_type;
 
         if (sps.residual_colour_transform_flag) {
             sh.colour_plane_id = bs.bs_read_u(2);
