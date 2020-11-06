@@ -1,78 +1,42 @@
 #include <gtest/gtest.h>
 
 #include "EyerAV/EyerAV.hpp"
+#include "EyerDASH/EyerDASH.hpp"
 
 TEST(A, ATest){
-    Eyer::EyerAVReader reader("rtmp://redknot.cn:1935/demo/aaa");
-    int ret = reader.Open();
-    if(ret){
-        printf("Open Fail ret: %d\n", ret);
-        return;
-    }
+    Eyer::EyerDASHReader * dashReader = new  Eyer::EyerDASHReader(Eyer::EyerString("http://redknot.cn/DASH/xiaomai_dash.mpd"));
 
-    int streamCount = reader.GetStreamCount();
-    printf("Stream Count: %d\n", streamCount);
-
-    int videoStreamIndex = reader.GetVideoStreamIndex();
-    int audioStreamIndex = reader.GetAudioStreamIndex();
-
-
-    Eyer::EyerAVStream videoStream;
-    reader.GetStream(videoStream, videoStreamIndex);
-    Eyer::EyerAVDecoder videoDecoder;
-    videoDecoder.Init(&videoStream);
-
-    Eyer::EyerAVStream audioStream;
-    reader.GetStream(audioStream, audioStreamIndex);
-    Eyer::EyerAVDecoder audioDecoder;
-    audioDecoder.Init(&audioStream);
-
-    // Eyer::EyerAVBitstreamFilter::QueryAllBitstreamFilter();
-
-    while (1){
-        Eyer::EyerAVPacket packet;
-        // Eyer::EyerTime::EyerSleepMilliseconds(10);
-        ret = reader.Read(&packet);
+    for(int i=0;i<10;i++){
+        dashReader->CreateStream();
+        Eyer::EyerAVReader reader("rtmp://redknot.cn:1935/demo/aaa", dashReader);
+        int ret = reader.Open();
         if(ret){
-            EyerLog("Ret: %d\n", ret);
-            break;
+            printf("Open Fail ret: %d\n", ret);
+            return;
         }
 
-        if(packet.GetStreamId() == videoStreamIndex){
-            videoStream.ScalerPacketPTS(packet);
+        int streamCount = reader.GetStreamCount();
+        printf("Stream Count: %d\n", streamCount);
 
-            printf("packet: %f\n", packet.GetSecPTS());
-
-            videoDecoder.SendPacket(&packet);
-            while(1){
-                Eyer::EyerAVFrame avFrame;
-                ret = videoDecoder.RecvFrame(&avFrame);
-                if(ret){
-                    break;
-                }
-
-                // printf("video w:%d, h:%d\n", avFrame.GetWidth(), avFrame.GetHeight());
+        int packetIndex = 0;
+        while(1){
+            Eyer::EyerAVPacket packet;
+            ret = reader.Read(&packet);
+            if(ret){
+                break;
             }
-        }
-        if(packet.GetStreamId() == audioStreamIndex){
-            audioDecoder.SendPacket(&packet);
-            while(1){
-                Eyer::EyerAVFrame avFrame;
-                ret = audioDecoder.RecvFrame(&avFrame);
-                if(ret){
-                    break;
-                }
+            // printf("Packet: %lld, Stream Id: %d\n", packet.GetPTS(), packet.GetStreamId());
 
-                // printf("audio sec: %lld\n", avFrame.GetPTS());
+            packetIndex++;
+            if(packetIndex == 20){
+                dashReader->SwitchStream(3);
             }
         }
 
-        // EyerLog("Packet: %lld\n", packet.GetPTS());
+        printf("End\n");
 
-
+        reader.Close();
     }
-
-    reader.Close();
 }
 
 int main(int argc,char **argv){
