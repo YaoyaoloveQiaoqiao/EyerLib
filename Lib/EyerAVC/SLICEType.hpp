@@ -7,6 +7,7 @@ namespace Eyer
 {
     class SLICEType : public EyerEnum {
     public:
+        SLICEType();
         SLICEType(int _val, const EyerString & _name);
         SLICEType(const SLICEType & sliceType);
         SLICEType(const int & sliceType);
