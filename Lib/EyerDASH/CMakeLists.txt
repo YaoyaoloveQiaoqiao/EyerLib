@@ -15,7 +15,13 @@ add_library(
         EyerDASHReader.hpp
         EyerDASHReaderThread.cpp
         EyerDASHReaderThread.hpp
-        EyerDASHStream.cpp EyerDASHStream.hpp EyerDASHStreamReaderThread.cpp EyerDASHStreamReaderThread.hpp MP4Buffer.cpp MP4Buffer.hpp)
+        EyerDASHStream.cpp
+        EyerDASHStream.hpp
+        EyerDASHStreamReaderThread.cpp
+        EyerDASHStreamReaderThread.hpp
+        MP4Buffer.cpp
+        MP4Buffer.hpp
+)
 
 set(head_files
         EyerDASH.hpp
