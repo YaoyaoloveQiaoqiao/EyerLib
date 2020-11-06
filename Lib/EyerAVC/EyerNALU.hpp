@@ -22,6 +22,8 @@ namespace Eyer
 
         bool isValid();
 
+        NALUType & GetNALUType();
+
     protected:
         EyerNALUData naluData;
         std::vector<EyerField *> fieldList;

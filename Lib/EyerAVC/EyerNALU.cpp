@@ -45,6 +45,11 @@ namespace Eyer
         return 0;
     }
 
+    NALUType & EyerNALU::GetNALUType()
+    {
+        return naluData.GetNALUType();
+    }
+
     int EyerNALU::Parse()
     {
         for(int i=0;i<fieldList.size();i++){
