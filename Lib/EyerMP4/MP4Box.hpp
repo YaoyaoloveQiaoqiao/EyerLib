@@ -13,6 +13,7 @@ namespace Eyer
     public:
         MP4Box();
         MP4Box(BoxType type);
+        MP4Box(const MP4Box & box);
         ~MP4Box();
 
 

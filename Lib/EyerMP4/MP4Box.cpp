@@ -30,6 +30,11 @@ namespace Eyer
         type = _type;
     }
 
+    MP4Box::MP4Box(const MP4Box & box)
+    {
+        *this = box;
+    }
+
     MP4Box::~MP4Box()
     {
         for(int i=0;i<subBoxList.size();i++){

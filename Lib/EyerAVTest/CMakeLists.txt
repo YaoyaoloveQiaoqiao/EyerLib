@@ -21,6 +21,7 @@ target_link_libraries (EyerAVTest EyerYUV)
 target_link_libraries (EyerAVTest EyerDASH)
 target_link_libraries (EyerAVTest EyerNet)
 target_link_libraries (EyerAVTest EyerThread)
+target_link_libraries (EyerAVTest EyerMP4)
 target_link_libraries (EyerAVTest gtest)
 
 target_link_libraries (

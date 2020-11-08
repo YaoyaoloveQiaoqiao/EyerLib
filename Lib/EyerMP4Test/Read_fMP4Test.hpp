@@ -31,6 +31,10 @@ TEST(EyerMP4, EyerReadfMP4)
     box.ParseSubBox(buffer);
     box.PrintInfo();
 
+    Eyer::MP4Box * moovBox = box.GetSubBoxPtr(Eyer::BoxType::MOOV);
+
+    Eyer::MP4Box moovbox2 = *moovBox;
+
     free(data);
 
     fclose(fp);

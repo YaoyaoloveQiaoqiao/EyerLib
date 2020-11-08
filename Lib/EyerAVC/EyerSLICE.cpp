@@ -248,7 +248,6 @@ namespace Eyer
             }
         }
 
-        SLICEType sliceType = sh.slice_type;
         if(sliceType == SLICEType::SLICE_TYPE_B) {
             for(int i = 0; i <= pps.num_ref_idx_l1_active_minus1; i++)
             {

@@ -90,6 +90,8 @@ namespace Eyer
 
             return size;
         }
+
+        return 0;
     }
 
     int EyerDASHReader::seek_packet(int64_t offset, int whence)

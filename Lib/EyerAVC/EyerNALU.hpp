@@ -10,7 +10,7 @@ namespace Eyer
     public:
         EyerNALU();
         EyerNALU(const EyerNALU & nalu);
-        ~EyerNALU();
+        virtual ~EyerNALU();
 
         EyerNALU & operator = (const EyerNALU & nalu);
 
