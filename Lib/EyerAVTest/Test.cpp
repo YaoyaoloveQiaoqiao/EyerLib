@@ -4,7 +4,7 @@
 #include "EyerDASH/EyerDASH.hpp"
 
 TEST(A, ATest){
-    Eyer::EyerDASHReader * dashReader = new  Eyer::EyerDASHReader(Eyer::EyerString("http://redknot.cn/DASH/xiaomai_dash.mpd"));
+    Eyer::EyerDASHReader * dashReader = new Eyer::EyerDASHReader("http://redknot.cn/DASH/xiaomai_dash.mpd");
 
     for(int i=0;i<10;i++){
         dashReader->CreateStream();
