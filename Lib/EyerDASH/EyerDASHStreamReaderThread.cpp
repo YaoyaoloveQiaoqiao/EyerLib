@@ -160,7 +160,7 @@ namespace Eyer
 
         headBuf = MergeVideoAudio(videoBox, audioBox);
 
-        MergeAllTrack(mpd);
+        // MergeAllTrack(mpd);
 
         return headBuf;
     }
