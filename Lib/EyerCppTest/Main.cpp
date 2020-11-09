@@ -19,7 +19,7 @@ public:
         *this = base;
     }
 
-    Base & operator = (const Base & base)
+    virtual Base & operator = (const Base & base)
     {
         if(this == &base){
             return *this;
@@ -82,6 +82,30 @@ TEST(CppTest, Cpp_Extends){
     {
         Base * child = new Child();
         delete child;
+    }
+
+    printf("============================\n");
+    {
+        Base * child1 = new Child();
+        Base * child2 = new Child();
+
+        *child1 = *child2;
+
+        delete child1;
+        delete child2;
+    }
+
+    printf("============================\n");
+    {
+        std::vector<Child> childList;
+
+        // Child c;
+        // childList.push_back(c);
+
+        Child d;
+        childList.push_back(d);
+
+        childList.clear();
     }
 }
 

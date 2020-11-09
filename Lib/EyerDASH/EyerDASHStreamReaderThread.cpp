@@ -160,13 +160,14 @@ namespace Eyer
 
         headBuf = MergeVideoAudio(videoBox, audioBox);
 
+        // MergeAllTrack(mpd);
+
         return headBuf;
     }
 
     EyerBuffer EyerDASHStreamReaderThread::MergeAllTrack(Eyer::EyerMPD & mpd)
     {
         EyerBuffer resBuf;
-        // mpd.PrintInfo();
 
         // FTYP
 
@@ -220,11 +221,7 @@ namespace Eyer
             if(trakPtr == nullptr){
                 continue;
             }
-            {
-                MP4BoxTKHD * tkhd = (MP4BoxTKHD *)trakPtr->GetSubBoxPtr(BoxType::TKHD);
-                tkhd->track_ID = representationIndex + 1;
-            }
-            moov.AddSubBox(trakPtr);
+            trakList.push_back(*trakPtr);
 
             MP4Box * mvexPtr = moovPtr->GetSubBoxPtr(BoxType::MVEX);
             if(mvexPtr == nullptr){
@@ -248,7 +245,7 @@ namespace Eyer
         {
             mvhdList[0].next_track_ID = 5;
             moov.AddSubBox(mvhdList[0]);
-            for(int i=0;i<trakList.size();i++){
+            for(int i = 0; i < trakList.size(); i++){
                 // moov.AddSubBox(trakList[i]);
             }
             MP4Box mvex(BoxType::MVEX);
@@ -260,6 +257,10 @@ namespace Eyer
                 }
             }
             moov.AddSubBox(mvex);
+
+            for (int i = 0; i < trakList.size(); i++) {
+                moov.AddSubBox(trakList[i]);
+            }
         }
 
         resBuf.Append(ftypList[0].Serialize());

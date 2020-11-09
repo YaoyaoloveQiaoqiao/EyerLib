@@ -47,7 +47,6 @@ namespace Eyer
     {
         type = box.type;
         size = box.size;
-        largesize = box.largesize;
         for(int i=0;i<box.subBoxList.size();i++){
             MP4Box * b = CopyBox(box.subBoxList[i]);
             subBoxList.push_back(b);
@@ -61,9 +60,6 @@ namespace Eyer
             return false;
         }
         if(type != box.type) {
-            return false;
-        }
-        if(largesize != box.largesize) {
             return false;
         }
 
@@ -131,7 +127,7 @@ namespace Eyer
         type = BoxType::GetType(stream.Read_uint32(offset));
 
         if(size == 1){
-            largesize = stream.ReadBigEndian_int64(offset);
+            size = stream.ReadBigEndian_int64(offset);
         }
 
         // type.PrintInfo();
@@ -184,9 +180,6 @@ namespace Eyer
 
     uint64_t MP4Box::GetSize()
     {
-        if(size == 1){
-            return largesize;
-        }
         return size;
     }
 
@@ -200,7 +193,6 @@ namespace Eyer
         MP4Box * subBox = nullptr;
         for(int i=0;i<subBoxList.size();i++){
             if(subBoxList[i]->type == type){
-                // subBox = CopyBox(subBoxList[i]);
                 subBox = subBoxList[i];
             }
         }

@@ -20,7 +20,7 @@ public:
 
         while(!stopFlag){
             printf("this from: %s\n", tag.str);
-            Eyer::EyerTime::EyerSleep(1000 * 1000);
+            Eyer::EyerTime::EyerSleepMilliseconds(1000);
         }
 
         SetStoping();

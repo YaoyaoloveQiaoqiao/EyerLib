@@ -14,7 +14,7 @@ namespace Eyer
         MP4Box();
         MP4Box(BoxType type);
         MP4Box(const MP4Box & box);
-        ~MP4Box();
+        virtual ~MP4Box();
 
 
         MP4Box & operator = (const MP4Box & box);
@@ -51,11 +51,8 @@ namespace Eyer
         static MP4Box * CopyBox(MP4Box * box);
 
     protected:
-        uint32_t size = 0;
+        uint64_t size = 0;
         BoxType type;
-
-        uint64_t largesize = 0;
-
 
         std::vector<MP4Box *> subBoxList;
     };
