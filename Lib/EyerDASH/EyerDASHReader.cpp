@@ -23,10 +23,10 @@ namespace Eyer
         return 0;
     }
 
-    int EyerDASHReader::CreateStream()
+    int EyerDASHReader::CreateStream(int streamId)
     {
         printf("EyerDASHStream Start\n");
-        currentStream = new EyerDASHStream(mpdUrl, 1, 1, currentIndex);
+        currentStream = new EyerDASHStream(mpdUrl, streamId, 1, currentIndex);
         currentStream->StartLoad();
         streamList.push_back(currentStream);
 

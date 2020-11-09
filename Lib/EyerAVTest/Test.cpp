@@ -7,7 +7,7 @@ TEST(A, ATest){
     Eyer::EyerDASHReader * dashReader = new Eyer::EyerDASHReader("http://redknot.cn/DASH/xiaomai_dash.mpd");
 
     for(int i=0;i<10;i++){
-        dashReader->CreateStream();
+        dashReader->CreateStream(i % 3 + 1);
         Eyer::EyerAVReader reader("rtmp://redknot.cn:1935/demo/aaa", dashReader);
         int ret = reader.Open();
         if(ret){

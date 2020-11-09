@@ -13,7 +13,7 @@ namespace Eyer{
         ~EyerDASHReader();
 
         int SwitchStream(int streamId);
-        int CreateStream();
+        int CreateStream(int streamId);
 
         int read_packet(uint8_t *buf, int buf_size);
         int seek_packet(int64_t offset, int whence);
