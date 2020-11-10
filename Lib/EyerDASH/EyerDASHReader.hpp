@@ -13,7 +13,7 @@ namespace Eyer{
         ~EyerDASHReader();
 
         int SwitchStream(int streamId);
-        int CreateStream(int streamId);
+        int CreateStream();
 
         int read_packet(uint8_t *buf, int buf_size);
         int seek_packet(int64_t offset, int whence);
@@ -23,6 +23,7 @@ namespace Eyer{
 
         std::vector<EyerDASHStream *> streamList;
 
+        int currentStreamId = 1;
         int currentIndex = 1;
         EyerBuffer cacheBuf;
 

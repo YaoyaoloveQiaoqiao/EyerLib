@@ -201,6 +201,8 @@ namespace Eyer
 
         double GetDuration();
 
+        int SetDiscardStream(int streamId);
+
         int Seek(double time);
         int SeekFrame(int streamIndex, int64_t timestamp);
         int SeekFrame(int streamIndex, double timestamp);
