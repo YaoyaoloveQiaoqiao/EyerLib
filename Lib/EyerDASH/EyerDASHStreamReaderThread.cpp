@@ -58,7 +58,7 @@ namespace Eyer
         int index = startFragmentIndex;
 
         while(!stopFlag) {
-            while (mp4BufferQueue->Size() >= 5) {
+            while (mp4BufferQueue->Size() >= 3) {
                 Eyer::EyerTime::EyerSleepMilliseconds(100);
                 continue;
             }

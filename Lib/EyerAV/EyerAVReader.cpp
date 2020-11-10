@@ -34,26 +34,24 @@ namespace Eyer
         av_register_all();
         avformat_network_init();
 
-
-        int nBufferSize = 1024 * 1024 * 2;
-        unsigned char * pBuffer = new unsigned char[nBufferSize];
-
-        // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd"));
-        // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("http://redknot.cn/DASH/xiaomai_dash.mpd"));
-
-        AVIOContext* pIOCtx = avio_alloc_context(pBuffer, nBufferSize,
-                                                 0,
-                                                 dashReader,
-                                                 read_packet,
-                                                 0,
-                                                 0);
-
-
-
         piml->formatCtx = avformat_alloc_context();
 
-        piml->formatCtx->pb = pIOCtx;
 
+        if(dashReader != nullptr){
+            int nBufferSize = 1024 * 1024 * 2;
+            unsigned char * pBuffer = new unsigned char[nBufferSize];
+
+            // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd"));
+            // EyerDASHReader * dashReader = new EyerDASHReader(EyerString("http://redknot.cn/DASH/xiaomai_dash.mpd"));
+
+            AVIOContext* pIOCtx = avio_alloc_context(pBuffer, nBufferSize,
+                                                     0,
+                                                     dashReader,
+                                                     read_packet,
+                                                     0,
+                                                     0);
+            piml->formatCtx->pb = pIOCtx;
+        }
     }
 
     EyerAVReader::~EyerAVReader()
@@ -155,6 +153,17 @@ namespace Eyer
         av_dump_format(piml->formatCtx, 0, piml->path.str, 0);
 
         return 0;
+    }
+
+    int EyerAVReader::SetDiscardStream(int streamId)
+    {
+        if(streamId >= piml->formatCtx->nb_streams){
+            return -1;
+        }
+
+        piml->formatCtx->streams[streamId]->discard = AVDiscard::AVDISCARD_ALL;
+
+        return -1;
     }
 
     int EyerAVReader::Close()

@@ -23,6 +23,7 @@ namespace Eyer{
 
         std::vector<EyerDASHStream *> streamList;
 
+        int currentStreamId = 1;
         int currentIndex = 1;
         EyerBuffer cacheBuf;
 

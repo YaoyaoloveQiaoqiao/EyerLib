@@ -40,7 +40,7 @@ add_library(
     EyerAVBitstreamFilter.cpp
     EyerAVBitstreamFilter.hpp
     EyerAVBitstreamFilterPrivate.hpp
-        ../EyerLua/EyerLua.hpp ../EyerLuaTest/Main.cpp ../EyerLua/A.cpp ../EyerLua/A.hpp)
+)
 
 target_link_libraries (EyerAV EyerCore)
 

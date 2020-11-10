@@ -18,6 +18,7 @@ namespace Eyer
 
     int EyerDASHReader::SwitchStream(int streamId)
     {
+        currentStreamId = streamId;
         EyerDASHStream * stream = FindCurrentStream();
         stream->SetEndIndex(currentIndex + 3);
         return 0;
@@ -26,7 +27,7 @@ namespace Eyer
     int EyerDASHReader::CreateStream()
     {
         printf("EyerDASHStream Start\n");
-        currentStream = new EyerDASHStream(mpdUrl, 1, 1, currentIndex);
+        currentStream = new EyerDASHStream(mpdUrl, currentStreamId, 1, currentIndex);
         currentStream->StartLoad();
         streamList.push_back(currentStream);
 
