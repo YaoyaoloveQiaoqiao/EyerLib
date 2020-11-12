@@ -86,9 +86,7 @@ namespace Eyer
             int max_long_term_frame_idx_plus1[64];
         } drpm;
 
-    } SliceHeader;
-
-
+    } SliceHeaderData;
 
     class EyerSLICE : public EyerNALU {
     public:
@@ -113,7 +111,7 @@ namespace Eyer
         int ReadPredWeightTable(EyerBitStream & bs);
         int ReadDecRefPicMarking(EyerBitStream & bs);
 
-        SliceHeader sh;
+        SliceHeaderData sh;
     };
 }
 
