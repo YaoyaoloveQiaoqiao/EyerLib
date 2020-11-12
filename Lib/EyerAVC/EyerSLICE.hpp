@@ -107,9 +107,10 @@ namespace Eyer
         int ParseHeadPartB(EyerBitStream & bs);
 
         int ReadRefPicListReordering(EyerBitStream & bs);
-
         int ReadPredWeightTable(EyerBitStream & bs);
         int ReadDecRefPicMarking(EyerBitStream & bs);
+
+        int ParseBody(EyerBitStream & bs);
 
         SliceHeaderData sh;
     };
