@@ -155,6 +155,16 @@ namespace Eyer
         return 0;
     }
 
+    int EyerAVReader::SetUnDiscardStream(int streamId)
+    {
+        if(streamId >= piml->formatCtx->nb_streams){
+            return -1;
+        }
+
+        piml->formatCtx->streams[streamId]->discard = AVDiscard::AVDISCARD_DEFAULT;
+
+        return 0;
+    }
     int EyerAVReader::SetDiscardStream(int streamId)
     {
         if(streamId >= piml->formatCtx->nb_streams){
@@ -163,7 +173,7 @@ namespace Eyer
 
         piml->formatCtx->streams[streamId]->discard = AVDiscard::AVDISCARD_ALL;
 
-        return -1;
+        return 0;
     }
 
     int EyerAVReader::Close()
