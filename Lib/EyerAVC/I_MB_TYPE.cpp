@@ -2,8 +2,8 @@
 
 namespace Eyer
 {
-    I_MB_TYPE I_4x4(0,      "I_4x4");
-    I_MB_TYPE I_PCM(25,     "I_PCM");
+    I_MB_TYPE I_MB_TYPE::I_4x4(0,      "I_4x4");
+    I_MB_TYPE I_MB_TYPE::I_PCM(25,     "I_PCM");
 
     I_MB_TYPE::I_MB_TYPE(int _val, const EyerString & _name) : EyerEnum(_val, _name)
     {
