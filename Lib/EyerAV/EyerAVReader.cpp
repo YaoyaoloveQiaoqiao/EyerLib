@@ -8,7 +8,7 @@ extern "C"{
 #include "EyerAVPacketPrivate.hpp"
 #include "EyerAVStreamPrivate.hpp"
 
-#include "EyerNet/EyerNet.hpp"
+#include "EyerHttp/EyerHttp.hpp"
 #include "EyerDASH/EyerDASH.hpp"
 
 

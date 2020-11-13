@@ -89,6 +89,11 @@ namespace Eyer
         return r;
     }
 
+    uint32_t EyerBitStream::bs_read_ae()
+    {
+        return 0;
+    }
+
     int EyerBitStream::bs_eof()
     {
         if (p >= end) {
@@ -97,5 +102,10 @@ namespace Eyer
         else {
             return 0;
         }
+    }
+
+    bool EyerBitStream::bs_byte_aligned()
+    {
+        return bits_left == 8;
     }
 }

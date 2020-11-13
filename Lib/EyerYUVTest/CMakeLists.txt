@@ -9,7 +9,7 @@ include_directories (../)
 
 target_link_libraries (EyerYUVTest EyerYUV)
 target_link_libraries (EyerYUVTest EyerMP4)
-target_link_libraries (EyerYUVTest EyerNet)
+target_link_libraries (EyerYUVTest EyerHttp)
 target_link_libraries (EyerYUVTest EyerDASH)
 target_link_libraries (EyerYUVTest EyerAV)
 target_link_libraries (EyerYUVTest EyerThread)

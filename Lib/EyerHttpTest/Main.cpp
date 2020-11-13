@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 #include <curl/curl.h>
-#include "EyerNet/EyerNet.hpp"
+#include "EyerHttp/EyerHttp.hpp"
 #include "EyerCore/EyerCore.hpp"
 
 #define MAX_PARALLEL 10
 
-TEST(EyerNet, cURL_support){
+TEST(EyerHttp, cURL_support){
     curl_version_info_data *ver;
 
     curl_global_init(CURL_GLOBAL_ALL);
@@ -23,7 +23,7 @@ TEST(EyerNet, cURL_support){
     curl_global_cleanup();
 }
 
-TEST(EyerNet, EyerHttpPool){
+TEST(EyerHttp, EyerHttpPool){
     Eyer::EyerHttpPool httpPool;
 
     std::vector<Eyer::EyerHttpTask *> taskList;
@@ -58,15 +58,15 @@ TEST(EyerNet, EyerHttpPool){
     }
 }
 
-TEST(EyerNet, cURL_Http2_download){
+TEST(EyerHttp, cURL_Http2_download){
 
 }
 
-TEST(EyerNet, cURL){
+TEST(EyerHttp, cURL){
 
 }
 
-TEST(EyerNet, EyerSimplestHttp){
+TEST(EyerHttp, EyerSimplestHttp){
     Eyer::EyerSimplestHttp http;
 
     Eyer::EyerBuffer buffer;

@@ -1,5 +1,5 @@
 #include "EyerDASHReader.hpp"
-#include "EyerNet/EyerNet.hpp"
+#include "EyerHttp/EyerHttp.hpp"
 #include "EyerMPD.hpp"
 
 namespace Eyer

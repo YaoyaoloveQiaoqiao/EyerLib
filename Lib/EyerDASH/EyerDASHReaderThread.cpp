@@ -1,5 +1,5 @@
 #include "EyerDASHReaderThread.hpp"
-#include "EyerNet/EyerNet.hpp"
+#include "EyerHttp/EyerHttp.hpp"
 #include "EyerMPD.hpp"
 
 #include "EyerMP4/EyerMP4.hpp"

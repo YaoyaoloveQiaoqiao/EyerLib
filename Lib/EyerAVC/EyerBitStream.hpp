@@ -22,7 +22,12 @@ namespace Eyer
 
         uint32_t bs_read_ue();
         int32_t bs_read_se();
+
+        uint32_t bs_read_ae();
+
         int bs_eof();
+
+        bool bs_byte_aligned();
 
     public:
         uint8_t * start;

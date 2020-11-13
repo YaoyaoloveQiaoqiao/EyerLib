@@ -9,11 +9,11 @@
 
 namespace Eyer
 {
-    class EyerNet
+    class EyerHttp
     {
     public:
-        EyerNet();
-        ~EyerNet();
+        EyerHttp();
+        ~EyerHttp();
     };
 }
 
