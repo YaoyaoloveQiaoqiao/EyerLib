@@ -20,6 +20,10 @@ namespace Eyer
         EyerSPS sps;
         EyerPPS pps;
         EyerSLICEHeader sliceHeader;
+
+        int mb_field_decoding_flag;
+
+        int read_macroblock_layer(EyerBitStream & bs);
     };
 }
 

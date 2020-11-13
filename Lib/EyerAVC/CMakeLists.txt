@@ -30,7 +30,7 @@ add_library(
         EyerSLICE.hpp
         SLICEType.cpp
         SLICEType.hpp
-        EyerSLICEHeader.cpp EyerSLICEHeader.hpp EyerSLICEBody.cpp EyerSLICEBody.hpp)
+        EyerSLICEHeader.cpp EyerSLICEHeader.hpp EyerSLICEBody.cpp EyerSLICEBody.hpp I_MB_TYPE.cpp I_MB_TYPE.hpp)
 
 target_link_libraries (
         EyerAVC
