@@ -2,7 +2,7 @@
 
 namespace Eyer
 {
-    EyerSLICE::EyerSLICE(EyerSPS & _sps, EyerPPS & _pps) : sliceHeader(_sps, _pps, naluData)
+    EyerSLICE::EyerSLICE(EyerSPS & _sps, EyerPPS & _pps)
     {
         sps = _sps;
         pps = _pps;
@@ -30,24 +30,17 @@ namespace Eyer
         EyerNALU::Parse();
 
         EyerBitStream bs(naluData.GetRBSPBuffer());
-        int ret = sliceHeader.Parse(bs, fieldList);
+        int ret = sliceHeader.Parse(bs, fieldList, sps, pps, naluData);
         if(ret){
             return -1;
         }
 
-        ParseBody(bs);
-
-        valid = true;
-
-        return 0;
-    }
-
-    int EyerSLICE::ParseBody(EyerBitStream & bs)
-    {
-        if(pps.entropy_coding_mode_flag){
-            // 进行对齐操作
+        ret = sliceBody.Parse(bs, fieldList, sps, pps, sliceHeader);
+        if(ret){
+            return -1;
         }
 
+        valid = true;
 
         return 0;
     }

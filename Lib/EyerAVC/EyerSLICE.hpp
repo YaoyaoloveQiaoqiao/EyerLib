@@ -9,6 +9,7 @@
 #include "EyerPPS.hpp"
 #include "SLICEType.hpp"
 #include "EyerSLICEHeader.hpp"
+#include "EyerSLICEBody.hpp"
 
 namespace Eyer
 {
@@ -26,8 +27,7 @@ namespace Eyer
         EyerPPS pps;
 
         EyerSLICEHeader sliceHeader;
-
-        int ParseBody(EyerBitStream & bs);
+        EyerSLICEBody sliceBody;
     };
 }
 

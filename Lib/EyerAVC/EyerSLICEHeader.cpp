@@ -3,11 +3,9 @@
 
 namespace Eyer
 {
-    EyerSLICEHeader::EyerSLICEHeader(EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & _naluData)
+    EyerSLICEHeader::EyerSLICEHeader()
     {
-        sps = _sps;
-        pps = _pps;
-        naluData = _naluData;
+
     }
 
     EyerSLICEHeader::~EyerSLICEHeader()
@@ -15,8 +13,12 @@ namespace Eyer
 
     }
 
-    int EyerSLICEHeader::Parse(EyerBitStream & bs, std::vector<EyerField *> & fieldList)
+    int EyerSLICEHeader::Parse(EyerBitStream & bs, EyerFieldList & fieldList, EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & _naluData)
     {
+        sps = _sps;
+        pps = _pps;
+        naluData = _naluData;
+
         ParseHeadPartA(bs, fieldList);
 
         // Select SPS PPS
@@ -37,7 +39,7 @@ namespace Eyer
         return sliceType;
     }
 
-    int EyerSLICEHeader::ParseHeadPartA(EyerBitStream & bs, std::vector<EyerField *> & fieldList)
+    int EyerSLICEHeader::ParseHeadPartA(EyerBitStream & bs, EyerFieldList & fieldList)
     {
         sh.first_mb_in_slice           = bs.bs_read_ue();
         sh.slice_type                  = bs.bs_read_ue();
@@ -52,7 +54,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerSLICEHeader::ParseHeadPartB(EyerBitStream & bs, std::vector<EyerField *> & fieldList)
+    int EyerSLICEHeader::ParseHeadPartB(EyerBitStream & bs, EyerFieldList & fieldList)
     {
         sliceType = sh.slice_type;
 
@@ -166,7 +168,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerSLICEHeader::ReadRefPicListReordering(EyerBitStream & bs, std::vector<EyerField *> & fieldList)
+    int EyerSLICEHeader::ReadRefPicListReordering(EyerBitStream & bs, EyerFieldList & fieldList)
     {
         fieldList.push_back(new EyerField("ref_pic_list_reordering[]"));
         int level = 1;
@@ -220,7 +222,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerSLICEHeader::ReadPredWeightTable(EyerBitStream & bs, std::vector<EyerField *> & fieldList)
+    int EyerSLICEHeader::ReadPredWeightTable(EyerBitStream & bs, EyerFieldList & fieldList)
     {
         sh.pwt.luma_log2_weight_denom = bs.bs_read_ue();
         if(sps.chroma_format_idc != 0) {
@@ -267,7 +269,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerSLICEHeader::ReadDecRefPicMarking(EyerBitStream & bs, std::vector<EyerField *> & fieldList)
+    int EyerSLICEHeader::ReadDecRefPicMarking(EyerBitStream & bs, EyerFieldList & fieldList)
     {
         if(naluData.nal_unit_type == NALUType::NALU_TYPE_IDR) {
             sh.drpm.no_output_of_prior_pics_flag    = bs.bs_read_u1();

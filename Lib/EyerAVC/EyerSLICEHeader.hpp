@@ -88,26 +88,28 @@ namespace Eyer
 
     class EyerSLICEHeader {
     public:
-        EyerSLICEHeader(EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & naluData);
+        EyerSLICEHeader();
         ~EyerSLICEHeader();
 
         SLICEType GetSLICEType();
 
-        int Parse(EyerBitStream & bs, std::vector<EyerField *> & fieldList);
+        int Parse(EyerBitStream & bs, EyerFieldList & fieldList, EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & _naluData);
+
+    public:
+        SliceHeaderData sh;
     private:
         EyerSPS sps;
         EyerPPS pps;
         EyerNALUData naluData;
 
-        SliceHeaderData sh;
         SLICEType sliceType;
 
-        int ParseHeadPartA(EyerBitStream & bs, std::vector<EyerField *> & fieldList);
-        int ParseHeadPartB(EyerBitStream & bs, std::vector<EyerField *> & fieldList);
+        int ParseHeadPartA(EyerBitStream & bs, EyerFieldList & fieldList);
+        int ParseHeadPartB(EyerBitStream & bs, EyerFieldList & fieldList);
 
-        int ReadRefPicListReordering    (EyerBitStream & bs, std::vector<EyerField *> & fieldList);
-        int ReadPredWeightTable         (EyerBitStream & bs, std::vector<EyerField *> & fieldList);
-        int ReadDecRefPicMarking        (EyerBitStream & bs, std::vector<EyerField *> & fieldList);
+        int ReadRefPicListReordering    (EyerBitStream & bs, EyerFieldList & fieldList);
+        int ReadPredWeightTable         (EyerBitStream & bs, EyerFieldList & fieldList);
+        int ReadDecRefPicMarking        (EyerBitStream & bs, EyerFieldList & fieldList);
 
         int intlog2(int x);
     };

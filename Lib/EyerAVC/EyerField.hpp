@@ -43,6 +43,8 @@ namespace Eyer{
 
         EyerString remarks = "";
     };
+
+    typedef std::vector<EyerField *> EyerFieldList;
 }
 
 #endif //EYERLIB_EYERFIELD_HPP
