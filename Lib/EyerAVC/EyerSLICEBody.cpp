@@ -40,7 +40,7 @@ namespace Eyer
         int moreDataFlag = 1;
         int prevMbSkipped = 0;
 
-        do {
+        // do {
             int mb_skip_flag;
             int mb_skip_run;
 
@@ -84,8 +84,8 @@ namespace Eyer
                 }
             }
             // CurrMbAddr = NextMbAddress( CurrMbAddr );
-        }
-        while(moreDataFlag);
+        // }
+        // while(moreDataFlag);
 
         return 0;
     }
