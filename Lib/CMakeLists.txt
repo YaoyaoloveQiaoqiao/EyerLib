@@ -70,8 +70,8 @@ ADD_SUBDIRECTORY(googletest)
 OPTION(EyerCore         "option for EyerCore"           ON)
 ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
 
-OPTION(EyerNet           "option for EyerNet"           ON)
-ModuleTestOption("EyerNet" "EyerNetTest" EyerNet)
+OPTION(EyerHttp           "option for EyerHttp"           ON)
+ModuleTestOption("EyerHttp" "EyerHttpTest" EyerHttp)
 
 OPTION(EyerDASH           "option for EyerDASH"         ON)
 ModuleTestOption("EyerDASH" "EyerDASHTest" EyerDASH)

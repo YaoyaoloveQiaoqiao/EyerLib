@@ -1,5 +1,5 @@
 add_executable(
-        EyerNetTest
+        EyerHttpTest
         Main.cpp
 )
 
@@ -7,17 +7,17 @@ include_directories (../)
 
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/curl_install/lib)
 
-target_link_libraries (EyerNetTest EyerNet)
-target_link_libraries (EyerNetTest EyerCore)
-target_link_libraries (EyerNetTest gtest)
+target_link_libraries (EyerHttpTest EyerHttp)
+target_link_libraries (EyerHttpTest EyerCore)
+target_link_libraries (EyerHttpTest gtest)
 
 target_link_libraries (
-        EyerNetTest
+        EyerHttpTest
         curl
         )
 
 INSTALL(
-        TARGETS EyerNetTest
+        TARGETS EyerHttpTest
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib

@@ -2,14 +2,16 @@ include_directories (../)
 include_directories (./)
 
 add_library(
-        EyerNet
-        EyerNet.cpp
+        EyerHttp
+        EyerHttp.cpp
         EyerSimplestHttp.cpp
         EyerHttpTask.cpp
-        EyerHttpPool.cpp EyerHttpPool.hpp)
+        EyerHttpPool.cpp
+        EyerHttpPool.hpp
+)
 
 target_link_libraries (
-        EyerNet
+        EyerHttp
         EyerCore
         )
 
@@ -27,12 +29,12 @@ ELSE ()
 ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 set(head_files
-        EyerNet.hpp
+        EyerHttp.hpp
         )
 
-INSTALL(FILES ${head_files} DESTINATION include/EyerNet)
+INSTALL(FILES ${head_files} DESTINATION include/EyerHttp)
 INSTALL(
-        TARGETS EyerNet
+        TARGETS EyerHttp
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
