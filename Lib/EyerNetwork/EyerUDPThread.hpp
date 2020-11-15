@@ -12,7 +12,6 @@
 #include <sys/socket.h>
 #include <string.h>
 #include <arpa/inet.h>
-
 #endif // _WIN32
 
 namespace Eyer
