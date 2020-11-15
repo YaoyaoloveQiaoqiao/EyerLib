@@ -25,10 +25,12 @@ include_directories (${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/curl_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include/libxml2)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libosip2_install/include)
 
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/curl_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/harfbuzz_install/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libosip2_install/lib)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -67,26 +69,32 @@ ENDFUNCTION(ModuleTestOption)
 
 ADD_SUBDIRECTORY(googletest)
 
-OPTION(EyerCore         "option for EyerCore"           ON)
-ModuleTestOption("EyerCore" "EyerCoreTest" EyerCore)
+OPTION(EyerCore                     "option for EyerCore"               ON)
+ModuleTestOption("EyerCore"         "EyerCoreTest"          EyerCore)
 
-OPTION(EyerHttp           "option for EyerHttp"           ON)
-ModuleTestOption("EyerHttp" "EyerHttpTest" EyerHttp)
+OPTION(EyerHttp                     "option for EyerHttp"               ON)
+ModuleTestOption("EyerHttp"         "EyerHttpTest"          EyerHttp)
 
-OPTION(EyerDASH           "option for EyerDASH"         ON)
-ModuleTestOption("EyerDASH" "EyerDASHTest" EyerDASH)
+OPTION(EyerDASH                     "option for EyerDASH"               ON)
+ModuleTestOption("EyerDASH"         "EyerDASHTest"          EyerDASH)
 
-OPTION(EyerAVC           "option for EyerAVC"           ON)
-ModuleTestOption("EyerAVC" "EyerAVCTest" EyerAVC)
+OPTION(EyerAVC                      "option for EyerAVC"                ON)
+ModuleTestOption("EyerAVC"          "EyerAVCTest"           EyerAVC)
 
-OPTION(EyerCAVLC           "option for EyerCAVLC"           ON)
-ModuleTestOption("EyerCAVLC" "EyerCAVLCTest" EyerCAVLC)
+OPTION(EyerCAVLC                    "option for EyerCAVLC"              ON)
+ModuleTestOption("EyerCAVLC"        "EyerCAVLCTest"         EyerCAVLC)
 
-OPTION(EyerMP4           "option for EyerMP4"           ON)
-ModuleTestOption("EyerMP4" "EyerMP4Test" EyerMP4)
+OPTION(EyerNetwork                  "option for EyerNetwork"            ON)
+ModuleTestOption("EyerNetwork"      "EyerNetworkTest"       EyerNetwork)
 
-OPTION(EyerLua           "option for EyerLua"           ON)
-ModuleTestOption("EyerLua" "EyerLuaTest" EyerLua)
+OPTION(EyerMP4                      "option for EyerMP4"                ON)
+ModuleTestOption("EyerMP4"          "EyerMP4Test"           EyerMP4)
+
+OPTION(EyerLua                      "option for EyerLua"                ON)
+ModuleTestOption("EyerLua"          "EyerLuaTest"           EyerLua)
+
+
+
 
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
