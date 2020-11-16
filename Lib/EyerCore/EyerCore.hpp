@@ -14,5 +14,6 @@
 #include "EyerURLUtil.hpp"
 #include "EyerUtil.hpp"
 #include "EyerBufferMut.hpp"
+#include "EyerSockaddr.hpp"
 
 #endif
