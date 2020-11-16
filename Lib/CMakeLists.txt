@@ -93,6 +93,10 @@ ModuleTestOption("EyerMP4"          "EyerMP4Test"           EyerMP4)
 OPTION(EyerLua                      "option for EyerLua"                ON)
 ModuleTestOption("EyerLua"          "EyerLuaTest"           EyerLua)
 
+OPTION(EyerSIP                      "option for EyerSIP"                ON)
+ModuleTestOption("EyerSIP"          "EyerSIPTest"           EyerSIP)
+
+
 
 
 

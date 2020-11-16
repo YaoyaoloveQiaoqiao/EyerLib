@@ -5,7 +5,19 @@ add_executable(
         Read_MP4Test.hpp
         STTSTest.hpp
         STSCTest.hpp
-        STCOTest.hpp MEHDTest.hpp Endian.hpp FTYPTest.hpp Read_fMP4Test.hpp MVHDTest.hpp TKHDTest.hpp Read_MP4Test.hpp ELSTTest.hpp HDLRTest.hpp TREXTest.hpp MFHDTest.hpp TFHDTest.hpp
+        STCOTest.hpp
+        MEHDTest.hpp
+        Endian.hpp
+        FTYPTest.hpp
+        Read_fMP4Test.hpp
+        MVHDTest.hpp
+        TKHDTest.hpp
+        Read_MP4Test.hpp
+        ELSTTest.hpp
+        HDLRTest.hpp
+        TREXTest.hpp
+        MFHDTest.hpp
+        TFHDTest.hpp
 )
 
 include_directories (../)
