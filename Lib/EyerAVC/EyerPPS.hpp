@@ -39,6 +39,11 @@ namespace Eyer
         int deblocking_filter_control_present_flag = 0;
         int constrained_intra_pred_flag = 0;
         int redundant_pic_cnt_present_flag = 0;
+
+
+        //Fidelity Range Extensions Stuff
+        int transform_8x8_mode_flag = 0;
+        int pic_scaling_matrix_present_flag = 0;
     };
 }
 

@@ -108,4 +108,10 @@ namespace Eyer
     {
         return bits_left == 8;
     }
+
+    bool EyerBitStream::more_data()
+    {
+        //TODO SODB
+        return true;
+    }
 }
