@@ -1,5 +1,6 @@
 #include "EyerSIPMessgae.hpp"
 #include "EyerSIPMessgaePrivate.hpp"
+#include "EyerSIPFromPrivate.hpp"
 
 namespace Eyer
 {
@@ -40,5 +41,19 @@ namespace Eyer
     EyerString & EyerSIPMessgae::GetMethod()
     {
         return impl->method;
+    }
+
+    int EyerSIPMessgae::GetFrom(EyerSIPFrom & from)
+    {
+        osip_from_t * from_t = osip_message_get_from(impl->sip);
+        osip_from_clone(from_t, &from.impl->from);
+        return 0;
+    }
+
+    int EyerSIPMessgae::GetTo(EyerSIPFrom & to)
+    {
+        osip_from_t * from_t = osip_message_get_to(impl->sip);
+        osip_from_clone(from_t, &to.impl->from);
+        return 0;
     }
 }

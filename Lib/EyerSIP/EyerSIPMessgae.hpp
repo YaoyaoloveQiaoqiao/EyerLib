@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "EyerCore/EyerCore.hpp"
+#include "EyerSIPFrom.hpp"
 
 namespace Eyer
 {
@@ -18,6 +19,9 @@ namespace Eyer
         int Parse(const uint8_t * buf, size_t length);
 
         EyerString & GetMethod();
+
+        int GetFrom(EyerSIPFrom & from);
+        int GetTo(EyerSIPFrom & to);
     private:
         EyerSIPMessgaePrivate * impl = nullptr;
     };

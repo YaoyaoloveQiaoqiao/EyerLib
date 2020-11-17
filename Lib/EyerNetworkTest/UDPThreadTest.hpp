@@ -27,6 +27,14 @@ class MyEyerUDPCallback : public Eyer::EyerUDPCallback
         Eyer::EyerString method = sipMessgae.GetMethod();
         printf("method: %s\n", method.str);
 
+        Eyer::EyerSIPFrom from;
+        sipMessgae.GetFrom(from);
+        from.PrintfInfo();
+
+        Eyer::EyerSIPFrom to;
+        sipMessgae.GetTo(to);
+        to.PrintfInfo();
+
         printf("=====================================\n");
 
         return 0;
