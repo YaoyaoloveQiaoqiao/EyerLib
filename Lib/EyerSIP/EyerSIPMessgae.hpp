@@ -2,6 +2,9 @@
 #define EYERLIB_EYERSIPMESSGAE_HPP
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include "EyerCore/EyerCore.hpp"
 
 namespace Eyer
 {
@@ -12,8 +15,9 @@ namespace Eyer
         EyerSIPMessgae();
         ~EyerSIPMessgae();
 
-        int Parse(const char *buf, size_t length);
+        int Parse(const uint8_t * buf, size_t length);
 
+        EyerString & GetMethod();
     private:
         EyerSIPMessgaePrivate * impl = nullptr;
     };

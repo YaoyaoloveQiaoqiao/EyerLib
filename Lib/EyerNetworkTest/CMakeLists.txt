@@ -8,6 +8,7 @@ include_directories (../)
 target_link_libraries (EyerNetworkTest EyerNetwork)
 target_link_libraries (EyerNetworkTest EyerThread)
 target_link_libraries (EyerNetworkTest EyerCore)
+target_link_libraries (EyerNetworkTest EyerSIP)
 
 # target_link_libraries (EyerNetworkTest ws2_32)
 target_link_libraries (EyerNetworkTest osipparser2)

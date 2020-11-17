@@ -22,16 +22,23 @@ namespace Eyer
         }
     }
 
-    int EyerSIPMessgae::Parse(const char *buf, size_t length)
+    int EyerSIPMessgae::Parse(const uint8_t * buf, size_t length)
     {
-        int ret = osip_message_parse(impl->sip, buf, length);
+        int ret = osip_message_parse(impl->sip, (const char *)buf, length);
         if(ret){
             return ret;
         }
+
+        impl->method = osip_message_get_method(impl->sip);
 
         osip_from_t * from = osip_message_get_from(impl->sip);
         osip_to_t * to = osip_message_get_to(impl->sip);
 
         return ret;
+    }
+
+    EyerString & EyerSIPMessgae::GetMethod()
+    {
+        return impl->method;
     }
 }

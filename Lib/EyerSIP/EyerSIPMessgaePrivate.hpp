@@ -2,6 +2,7 @@
 #define EYERLIB_EYERSIPMESSGAEPRIVATE_HPP
 
 #include <osipparser2/osip_parser.h>
+#include "EyerCore/EyerString.hpp"
 
 namespace Eyer
 {
@@ -9,6 +10,8 @@ namespace Eyer
     {
     public:
         osip_message_t * sip = nullptr;
+
+        EyerString method;
     };
 }
 
