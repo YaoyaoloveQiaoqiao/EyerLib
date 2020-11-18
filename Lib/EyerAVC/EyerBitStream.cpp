@@ -112,6 +112,6 @@ namespace Eyer
     bool EyerBitStream::more_data()
     {
         //TODO SODB
-        return true;
+        return false;
     }
 }
