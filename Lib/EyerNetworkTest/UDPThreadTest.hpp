@@ -25,6 +25,8 @@ public:
             return -1;
         }
 
+        printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+
         Eyer::EyerString method = sipMessgae.GetMethod();
         printf("method: %s\n", method.str);
 
@@ -36,13 +38,19 @@ public:
         sipMessgae.GetTo(to);
         to.PrintfInfo();
 
+        Eyer::EyerSIPCallID callId;
+        sipMessgae.GetCallID(callId);
 
+
+        printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         Eyer::EyerSIPMessgae response;
         response.SetInfo();
         response.SetFrom(from);
         response.SetTo(to);
+        response.SetCallID(callId);
         Eyer::EyerBuffer responseBuffer = response.ToBuffer();
 
+        udpMessage->sockaddr.PrintInfo();
         udpThread->Send(responseBuffer, udpMessage->sockaddr);
 
         printf("=====================================\n");

@@ -1,6 +1,7 @@
 #include "EyerSIPMessgae.hpp"
 #include "EyerSIPMessgaePrivate.hpp"
 #include "EyerSIPFromPrivate.hpp"
+#include "EyerSIPCallIDPrivate.hpp"
 
 namespace Eyer
 {
@@ -57,6 +58,14 @@ namespace Eyer
         return 0;
     }
 
+    int EyerSIPMessgae::GetCallID(EyerSIPCallID & callId)
+    {
+        osip_call_id_clone(impl->sip->call_id, &callId.impl->call_id);
+        return 0;
+    }
+
+
+
     int EyerSIPMessgae::SetFrom(EyerSIPFrom & from)
     {
         osip_to_clone(from.impl->from, &impl->sip->from);
@@ -77,7 +86,13 @@ namespace Eyer
         return 0;
     }
 
-    EyerBuffer & EyerSIPMessgae::ToBuffer()
+    int EyerSIPMessgae::SetCallID(EyerSIPCallID & callId)
+    {
+        osip_call_id_clone(callId.impl->call_id, &impl->sip->call_id);
+        return 0;
+    }
+
+    EyerBuffer EyerSIPMessgae::ToBuffer()
     {
         char * dest = nullptr;
         size_t message_length = 0;
