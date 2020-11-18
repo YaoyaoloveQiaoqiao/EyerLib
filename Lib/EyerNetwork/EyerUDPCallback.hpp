@@ -2,12 +2,13 @@
 #define EYERLIB_EYERUDPCALLBACK_HPP
 
 #include <stdint.h>
+#include "UDPMessage.hpp"
 
 namespace Eyer
 {
     class EyerUDPCallback {
     public:
-        virtual int OnMessageRecv(uint8_t * buffer, int bufferSize) = 0;
+        virtual int OnMessageRecv(UDPMessage * udpMessage) = 0;
     };
 }
 

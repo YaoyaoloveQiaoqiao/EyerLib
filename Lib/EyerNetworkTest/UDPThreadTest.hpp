@@ -13,13 +13,14 @@ Eyer::EyerUDPThread * udpThread = nullptr;
 
 class MyEyerUDPCallback : public Eyer::EyerUDPCallback
 {
-    virtual int OnMessageRecv(uint8_t * buffer, int bufferSize)
+public:
+    virtual int OnMessageRecv(Eyer::UDPMessage * udpMessage)
     {
         printf("=====================================\n");
-        printf("buffer:\n %s\n", buffer);
+        printf("buffer:\n %s\n", udpMessage->buffer.GetPtr());
 
         Eyer::EyerSIPMessgae sipMessgae;
-        int ret = sipMessgae.Parse(buffer, bufferSize + 1);
+        int ret = sipMessgae.Parse(udpMessage->buffer);
         if(ret){
             return -1;
         }
@@ -34,6 +35,15 @@ class MyEyerUDPCallback : public Eyer::EyerUDPCallback
         Eyer::EyerSIPFrom to;
         sipMessgae.GetTo(to);
         to.PrintfInfo();
+
+
+        Eyer::EyerSIPMessgae response;
+        response.SetInfo();
+        response.SetFrom(from);
+        response.SetTo(to);
+        Eyer::EyerBuffer responseBuffer = response.ToBuffer();
+
+        udpThread->Send(responseBuffer, udpMessage->sockaddr);
 
         printf("=====================================\n");
 

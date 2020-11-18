@@ -3,6 +3,8 @@
 
 #include "EyerThread/EyerThread.hpp"
 #include "EyerUDPCallback.hpp"
+#include "EyerCore/EyerCore.hpp"
+#include "UDPMessage.hpp"
 
 #ifdef _WIN32
 #include <WinSock2.h>
@@ -24,11 +26,15 @@ namespace Eyer
 
         virtual void Run();
 
+        int Send(EyerBuffer & buffer, EyerSockaddr & sockaddr);
+
     private:
         int port = 5060;
         int sockfd;
 
         EyerUDPCallback * udpCallback = nullptr;
+
+        EyerLockQueue<UDPMessage> sendQueue;
     };
 }
 

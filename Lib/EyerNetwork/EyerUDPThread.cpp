@@ -46,8 +46,7 @@ namespace Eyer
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
 
-        struct sockaddr_in src_addr;
-        socklen_t addrlen = sizeof(struct sockaddr_in);
+        UDPMessage * sendingUdpMessage = nullptr;
 
         while (!stopFlag)
         {
@@ -71,32 +70,50 @@ namespace Eyer
                     char * buffer = (char *)malloc(bufferSize);
                     memset(buffer, 0, bufferSize);
 
-                    int retLen = recvfrom(sockfd, buffer, bufferSize, 0, (struct sockaddr *)&src_addr, &addrlen);
+                    EyerSockaddr sockaddr;
+                    socklen_t addrlen = sizeof(struct sockaddr);
+                    EyerBuffer bufferS;
 
-                    udpCallback->OnMessageRecv((uint8_t *)buffer, retLen);
+                    int retLen = recvfrom(sockfd, buffer, bufferSize, 0, (struct sockaddr *)sockaddr.GetPtr(), &addrlen);
+
+                    bufferS.Append((uint8_t *)buffer, retLen);
+
+                    UDPMessage * udpMessage = new UDPMessage(bufferS, sockaddr);
+
+                    udpCallback->OnMessageRecv(udpMessage);
+
+                    delete udpMessage;
+
 
                     free(buffer);
                 }
                 if (FD_ISSET(sockfd, &wfd)) {
                     // able write
-                    /*
-                    EyerUDPMsg * msg = NULL;
-                    sendMsgQueue->Get(msg);
-                    if(msg != NULL){
-                        RedIPAddr * addr = msg->addr;
-                        int sendedLen = 0;
-                        while(sendedLen < msg->msg->dataLength){
-                            int ret = sendto(sockfd, (char *)msg->msg->data + sendedLen, msg->msg->dataLength - sendedLen, 0, (struct sockaddr *)addr->addr, addr->addrLen);
-                            if(ret <= 0){
-                                break;
-                            }
-                            sendedLen += ret;
+                    if(sendingUdpMessage != nullptr){
+                        if(sendingUdpMessage->buffer.GetLen() <= 0){
+                            delete sendingUdpMessage;
+                            sendingUdpMessage = nullptr;
                         }
-                        delete msg;
                     }
-                     */
+                    if(sendingUdpMessage == nullptr){
+                        sendQueue.FrontPop(&sendingUdpMessage);
+                    }
+                    if(sendingUdpMessage != nullptr){
+                        int ret = sendto(sockfd, sendingUdpMessage->buffer.GetPtr(), sendingUdpMessage->buffer.GetLen(), 0, (struct sockaddr *)sendingUdpMessage->sockaddr.GetPtr(), sendingUdpMessage->sockaddr.GetLen());
+                        if(ret > 0){
+                            EyerBuffer tempBuffer;
+                            sendingUdpMessage->buffer.CutOff(tempBuffer, ret);
+                        }
+                    }
                 }
             }
         }
+    }
+
+    int EyerUDPThread::Send(EyerBuffer & buffer, EyerSockaddr & sockaddr)
+    {
+        UDPMessage * udpMessage = new UDPMessage(buffer, sockaddr);
+        sendQueue.Push(udpMessage);
+        return 0;
     }
 }
