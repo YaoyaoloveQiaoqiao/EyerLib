@@ -29,6 +29,26 @@ namespace Eyer
         }
     }
 
+    EyerAVPacket::EyerAVPacket(const EyerAVPacket & avpacket)
+    {
+        *this = avpacket;
+    }
+
+    EyerAVPacket & EyerAVPacket::operator = (const EyerAVPacket & avpacket)
+    {
+        piml->isLastPacket = avpacket.piml->isLastPacket;
+        piml->ptsSec = avpacket.piml->ptsSec;
+
+        if (piml->packet != nullptr) {
+            av_packet_free(&piml->packet);
+            piml->packet = nullptr;
+        }
+
+        piml->packet = av_packet_clone(avpacket.piml->packet);
+
+        return *this;
+    }
+
     int EyerAVPacket::RescaleTs( Eyer::EyerAVRational & _codecTimebase, Eyer::EyerAVRational & _streamTimebase)
     {
         AVRational codecTimebase;

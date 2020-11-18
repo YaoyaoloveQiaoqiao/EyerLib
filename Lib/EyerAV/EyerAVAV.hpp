@@ -80,6 +80,8 @@ namespace Eyer
     public:
         EyerAVPacket();
         ~EyerAVPacket();
+        EyerAVPacket(const EyerAVPacket & avpacket);
+        EyerAVPacket & operator = (const EyerAVPacket & avpacket);
 
         int GetStreamId();
 
