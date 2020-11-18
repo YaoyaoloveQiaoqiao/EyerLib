@@ -22,7 +22,7 @@ TEST(SIP, SIPMessage)
             "Content-Length: 0\r\n";
 
     Eyer::EyerSIPMessgae sipMessgae;
-    int ret = sipMessgae.Parse(sipStr, strlen(sipStr));
+    int ret = sipMessgae.Parse((uint8_t *)sipStr, strlen(sipStr));
 }
 
 #endif //EYERLIB_SIPMESSGAE_HPP

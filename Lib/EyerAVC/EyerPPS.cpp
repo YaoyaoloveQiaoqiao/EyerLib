@@ -90,6 +90,13 @@ namespace Eyer
         fieldList.push_back(new EyerField("redundant_pic_cnt_present_flag",                         redundant_pic_cnt_present_flag));
 
         // TODO more_rbsp_data
+        if(bs.more_data()) {
+            transform_8x8_mode_flag             = bs.bs_read_u1();
+            pic_scaling_matrix_present_flag     = bs.bs_read_u1();
+            if(pic_scaling_matrix_present_flag) {
+                // TODO
+            }
+        }
 
         valid = true;
 

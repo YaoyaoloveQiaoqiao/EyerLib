@@ -3,54 +3,28 @@
 #include "EyerAV/EyerAV.hpp"
 #include "EyerDASH/EyerDASH.hpp"
 
-
-TEST(DASH, DAHSTest){
-
-
-    Eyer::EyerAVReader reader("http://redknot.cn/DASH2/stream.mpd");
+TEST(AVDecoder, AVDecoderTest)
+{
+    Eyer::EyerAVReader reader("/Users/lichi/annie/xiaomai_h264_ts.ts");
     int ret = reader.Open();
     if(ret){
         printf("Open Fail ret: %d\n", ret);
         return;
     }
 
+    Eyer::EyerAVBitstreamFilter::QueryAllBitstreamFilter();
 
 
-    std::vector<Eyer::EyerAVBitstreamFilter *> filterList;
-    std::vector<FILE *> fileList;
-    for(int i=0;i<reader.GetStreamCount();i++){
-        Eyer::EyerAVStream stream;
-        reader.GetStream(stream, i);
-
-        Eyer::EyerAVBitstreamFilter * bitstreamFilter = new Eyer::EyerAVBitstreamFilter(Eyer::EyerAVBitstreamFilterType::h264_mp4toannexb, stream);
-        filterList.push_back(bitstreamFilter);
-
-        FILE * f = fopen((Eyer::EyerString("/Users/lichi/a_") + Eyer::EyerString::Number(i) + ".h264").str, "wb");
-        fileList.push_back(f);
-    }
-
+    Eyer::EyerAVStream videoStream;
     int videoStreamIndex = reader.GetVideoStreamIndex();
-    int audioStreamIndex = reader.GetAudioStreamIndex();
 
-    videoStreamIndex = 0;
-    audioStreamIndex = 4;
+    reader.GetStream(videoStream, videoStreamIndex);
 
-    int streamCount = reader.GetStreamCount();
-    printf("Stream Count: %d\n", streamCount);
+    Eyer::EyerAVDecoder videoDecoder;
+    videoDecoder.Init(&videoStream);
 
-    for(int i = 0; i < streamCount; i++){
-        if(videoStreamIndex == i){
-            reader.SetUnDiscardStream(i);
-            continue;
-        }
-        if(audioStreamIndex == i){
-            reader.SetUnDiscardStream(i);
-            continue;
-        }
-        reader.SetDiscardStream(i);
-    }
+    Eyer::EyerAVBitstreamFilter filter(Eyer::EyerAVBitstreamFilterType::hevc_mp4toannexb, videoStream);
 
-    int index = 1;
     while(1){
         Eyer::EyerAVPacket packet;
         ret = reader.Read(&packet);
@@ -58,66 +32,34 @@ TEST(DASH, DAHSTest){
             break;
         }
 
-        int streamId = packet.GetStreamId();
-
-        // Eyer::EyerTime::EyerSleepMilliseconds(50);
-        printf("Packet: %lld, Stream Id: %d\n", packet.GetPTS(), streamId);
-
-
-        Eyer::EyerAVBitstreamFilter * bitstreamFilter = filterList[streamId];
-        bitstreamFilter->SendPacket(&packet);
-        while(1){
-            Eyer::EyerAVPacket outPacket;
-            ret = bitstreamFilter->ReceivePacket(&outPacket);
-            if(ret){
-                break;
-            }
-
-            FILE * f = fileList[streamId];
-            fwrite(outPacket.GetDataPtr(), outPacket.GetSize(), 1, f);
-
-            for(int i=0;i<5;i++){
-                printf(" %d ", outPacket.GetDataPtr()[i]);
-            }
-            printf("\n\n");
-        }
-
-        index++;
-        printf("index: %d\n", index);
-        if(index >=1000){
-            break;
+        if(packet.GetStreamId() != videoStreamIndex){
+            continue;
         }
 
         /*
-        printf("index: %d\n", index);
-        if(index % 500 == 0){
-            printf("================================================\n");
+        filter.SendPacket(&packetA);
 
-            videoStreamIndex = 3;
-            audioStreamIndex = 4;
-
-            for(int i = 0; i < streamCount; i++){
-                if(videoStreamIndex == i){
-                    reader.SetUnDiscardStream(i);
-                    continue;
-                }
-                if(audioStreamIndex == i){
-                    reader.SetUnDiscardStream(i);
-                    continue;
-                }
-                reader.SetDiscardStream(i);
-            }
-        }
+        Eyer::EyerAVPacket packet;
+        filter.ReceivePacket(&packet);
          */
+
+        // packet = packetA;
+
+        printf("%d %d %d %d %d\n", packet.GetDataPtr()[0], packet.GetDataPtr()[1], packet.GetDataPtr()[2], packet.GetDataPtr()[3], packet.GetDataPtr()[4]);
+
+        videoDecoder.SendPacket(&packet);
+        while(1){
+            Eyer::EyerAVFrame frame;
+            ret = videoDecoder.RecvFrame(&frame);
+            if(ret){
+                break;
+            }
+            printf("frame: %lld\n", frame.GetPTS());
+        }
     }
 
-    printf("End\n");
 
     reader.Close();
-
-    for(int i=0;i<fileList.size();i++){
-        fclose(fileList[i]);
-    }
 }
 
 /*

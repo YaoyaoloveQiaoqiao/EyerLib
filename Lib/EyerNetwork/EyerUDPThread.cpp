@@ -4,9 +4,10 @@
 
 namespace Eyer
 {
-    EyerUDPThread::EyerUDPThread(int _port)
+    EyerUDPThread::EyerUDPThread(int _port, EyerUDPCallback * _udpCallback)
     {
         port = _port;
+        udpCallback = _udpCallback;
 #ifdef _WIN32
         WSADATA wsaData;
         if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
@@ -72,26 +73,7 @@ namespace Eyer
 
                     int retLen = recvfrom(sockfd, buffer, bufferSize, 0, (struct sockaddr *)&src_addr, &addrlen);
 
-                    printf("retLen: %d\n", retLen);
-                    printf("%s\n", buffer);
-                    fflush(stdout);
-
-                    parser_init();
-
-                    osip_message_t *sip;
-                    int osip_ret;
-                    osip_ret = osip_message_init(&sip);
-                    osip_ret = osip_message_parse(sip, buffer, retLen);
-
-                    if(!osip_ret){
-                        printf("sip_version: %s\n", sip->sip_version);
-                        printf("sip_method: %s\n", sip->sip_method);
-                        printf("status_code: %d\n", sip->status_code);
-                        printf("reason_phrase: %s\n", sip->reason_phrase);
-                        printf("message_length: %d\n", sip->message_length);
-                    }
-
-                    osip_message_free(sip);
+                    udpCallback->OnMessageRecv((uint8_t *)buffer, retLen);
 
                     free(buffer);
                 }

@@ -8,7 +8,7 @@ add_library(
         EyerNetwork.hpp
         EyerUDP.hpp
         EyerUDP.cpp
-        EyerUDPThread.cpp EyerUDPThread.hpp)
+        EyerUDPThread.cpp EyerUDPThread.hpp EyerUDPCallback.cpp EyerUDPCallback.hpp)
 
 target_link_libraries (
         EyerCore

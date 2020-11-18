@@ -103,9 +103,15 @@ namespace Eyer
         I_MB_TYPE mbType = mb_type;
         if(mbType == I_MB_TYPE::I_PCM){
             // I_PCM
+
         }
         else{
+            if(pps.transform_8x8_mode_flag){
 
+            }
+            else{
+
+            }
         }
 
         return 0;

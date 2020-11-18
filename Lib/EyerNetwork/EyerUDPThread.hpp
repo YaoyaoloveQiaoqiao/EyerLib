@@ -2,6 +2,7 @@
 #define EYERLIB_EYERUDPTHREAD_HPP
 
 #include "EyerThread/EyerThread.hpp"
+#include "EyerUDPCallback.hpp"
 
 #ifdef _WIN32
 #include <WinSock2.h>
@@ -18,7 +19,7 @@ namespace Eyer
 {
     class EyerUDPThread : public EyerThread{
     public:
-        EyerUDPThread(int _port);
+        EyerUDPThread(int _port, EyerUDPCallback * _udpCallback);
         ~EyerUDPThread();
 
         virtual void Run();
@@ -26,6 +27,8 @@ namespace Eyer
     private:
         int port = 5060;
         int sockfd;
+
+        EyerUDPCallback * udpCallback = nullptr;
     };
 }
 

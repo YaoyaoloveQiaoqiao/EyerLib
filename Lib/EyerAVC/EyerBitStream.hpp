@@ -29,12 +29,13 @@ namespace Eyer
 
         bool bs_byte_aligned();
 
+        bool more_data();
+
     public:
         uint8_t * start;
         uint8_t * p;
         uint8_t * end;
         int bits_left;
-
     };
 }
 
