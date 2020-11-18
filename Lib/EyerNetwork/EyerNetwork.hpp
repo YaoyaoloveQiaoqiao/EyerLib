@@ -4,5 +4,6 @@
 #include "EyerUDP.hpp"
 #include "EyerUDPThread.hpp"
 #include "EyerUDPCallback.hpp"
+#include "UDPMessage.hpp"
 
 #endif //EYERLIB_EYERNETWORK_H

@@ -16,12 +16,25 @@ namespace Eyer
         EyerSIPMessgae();
         ~EyerSIPMessgae();
 
-        int Parse(const uint8_t * buf, size_t length);
+        int Parse(EyerBuffer & buffer);
+
+
+
 
         EyerString & GetMethod();
 
         int GetFrom(EyerSIPFrom & from);
         int GetTo(EyerSIPFrom & to);
+
+
+
+
+        int SetInfo();
+
+        int SetFrom(EyerSIPFrom & from);
+        int SetTo(EyerSIPFrom & to);
+
+        EyerBuffer & ToBuffer();
     private:
         EyerSIPMessgaePrivate * impl = nullptr;
     };
