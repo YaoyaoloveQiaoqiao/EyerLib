@@ -102,6 +102,8 @@ namespace Eyer
 
         int GetSize();
         unsigned char * GetDataPtr();
+
+        int SetDataPtr(uint8_t * data);
     };
 
     enum EyerAVAudioDateType

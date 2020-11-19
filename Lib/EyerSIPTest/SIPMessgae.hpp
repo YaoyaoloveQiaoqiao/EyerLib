@@ -21,8 +21,12 @@ TEST(SIP, SIPMessage)
             "Expires: 3600\r\n"
             "Content-Length: 0\r\n";
 
+    Eyer::EyerBuffer buffer;
+    buffer.Append((uint8_t *)sipStr, strlen(sipStr));
+
     Eyer::EyerSIPMessgae sipMessgae;
-    int ret = sipMessgae.Parse((uint8_t *)sipStr, strlen(sipStr));
+
+    int ret = sipMessgae.Parse(buffer);
 }
 
 #endif //EYERLIB_SIPMESSGAE_HPP
