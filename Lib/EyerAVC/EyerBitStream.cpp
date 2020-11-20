@@ -111,7 +111,27 @@ namespace Eyer
 
     bool EyerBitStream::more_data()
     {
-        //TODO SODB
+        EyerBitStream tempBitstream(end - 1, 1);
+
+        int index_rbsp_stop_one_bit = 8;
+        for(int i=0;i<8;i++){
+            int a = tempBitstream.bs_read_u1();
+            if(a == 1){
+                index_rbsp_stop_one_bit -= i;
+            }
+        }
+
+        if (p < end - 1) {
+            return true;
+        }
+        else if(p == end - 1){
+            if(bits_left <= index_rbsp_stop_one_bit){
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
         return false;
     }
 }

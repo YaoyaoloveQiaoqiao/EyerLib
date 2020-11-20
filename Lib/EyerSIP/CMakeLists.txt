@@ -10,7 +10,7 @@ add_library(
         EyerSIPMessgaePrivate.hpp
         EyerSIPFrom.cpp
         EyerSIPFrom.hpp
-        EyerSIPFromPrivate.hpp)
+        EyerSIPFromPrivate.hpp EyerSIPCallID.cpp EyerSIPCallID.hpp EyerSIPCallIDPrivate.hpp)
 
 set(head_files
         EyerSIP.hpp

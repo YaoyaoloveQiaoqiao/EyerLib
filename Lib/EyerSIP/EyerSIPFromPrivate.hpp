@@ -2,7 +2,6 @@
 #define EYERLIB_EYERSIPFROMPRIVATE_HPP
 
 #include <osipparser2/osip_parser.h>
-#include "EyerCore/EyerString.hpp"
 
 namespace Eyer
 {

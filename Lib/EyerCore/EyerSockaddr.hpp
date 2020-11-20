@@ -26,6 +26,8 @@ namespace Eyer
         int GetLen();
         void * GetPtr();
 
+        int PrintInfo();
+
     private:
         struct sockaddr_in addr;
     };

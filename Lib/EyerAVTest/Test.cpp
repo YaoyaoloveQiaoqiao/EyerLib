@@ -5,7 +5,8 @@
 
 TEST(AVDecoder, AVDecoderTest)
 {
-    Eyer::EyerAVReader reader("/Users/lichi/annie/xiaomai_h264_ts.ts");
+    // Eyer::EyerAVReader reader("/Users/lichi/annie/xiaomai.mp4");
+    Eyer::EyerAVReader reader("/Users/lichi/Downloads/scene_03.mp4");
     int ret = reader.Open();
     if(ret){
         printf("Open Fail ret: %d\n", ret);
@@ -23,39 +24,63 @@ TEST(AVDecoder, AVDecoderTest)
     Eyer::EyerAVDecoder videoDecoder;
     videoDecoder.Init(&videoStream);
 
-    Eyer::EyerAVBitstreamFilter filter(Eyer::EyerAVBitstreamFilterType::hevc_mp4toannexb, videoStream);
+    Eyer::EyerAVBitstreamFilter filter(Eyer::EyerAVBitstreamFilterType::h264_mp4toannexb, videoStream);
 
+    Eyer::AnnexB_to_avcC annexBToAvcC;
+
+    double maxVideoPts = 0.0;
     while(1){
-        Eyer::EyerAVPacket packet;
-        ret = reader.Read(&packet);
+        Eyer::EyerAVPacket packetA;
+        ret = reader.Read(&packetA);
         if(ret){
             break;
         }
 
-        if(packet.GetStreamId() != videoStreamIndex){
+        if(packetA.GetStreamId() != videoStreamIndex){
             continue;
         }
 
-        /*
+        videoStream.ScalerPacketPTS(packetA);
+        if(maxVideoPts <= packetA.GetSecPTS()){
+            maxVideoPts = packetA.GetSecPTS();
+        }
+        // printf("packet: %f\n", maxVideoPts);
+
+
+        // 转成 AnnexB
         filter.SendPacket(&packetA);
 
         Eyer::EyerAVPacket packet;
         filter.ReceivePacket(&packet);
-         */
 
-        // packet = packetA;
 
-        printf("%d %d %d %d %d\n", packet.GetDataPtr()[0], packet.GetDataPtr()[1], packet.GetDataPtr()[2], packet.GetDataPtr()[3], packet.GetDataPtr()[4]);
-
-        videoDecoder.SendPacket(&packet);
+        // 转成 avcC
+        annexBToAvcC.SendAnnexB(packet.GetDataPtr(), packet.GetSize());
         while(1){
-            Eyer::EyerAVFrame frame;
-            ret = videoDecoder.RecvFrame(&frame);
+            Eyer::EyerBuffer avccBuffer;
+            bool isExtradata;
+            ret = annexBToAvcC.RecvAvcC(avccBuffer, isExtradata);
             if(ret){
                 break;
             }
-            printf("frame: %lld\n", frame.GetPTS());
+
+            printf("%x %x %x %x %x\n", avccBuffer.GetPtr()[0], avccBuffer.GetPtr()[1], avccBuffer.GetPtr()[2], avccBuffer.GetPtr()[3], avccBuffer.GetPtr()[4]);
+
+            Eyer::EyerAVPacket packetAvcC;
+            packetAvcC.SetDataPtr(avccBuffer.GetPtr());
+            videoDecoder.SendPacket(&packetAvcC);
+            while(1){
+                Eyer::EyerAVFrame frame;
+                ret = videoDecoder.RecvFrame(&frame);
+                if(ret){
+                    break;
+                }
+
+                printf("PTS: %lld\n", frame.GetPTS());
+            }
         }
+
+        // printf("%d %d %d %d %d\n", packet.GetDataPtr()[0], packet.GetDataPtr()[1], packet.GetDataPtr()[2], packet.GetDataPtr()[3], packet.GetDataPtr()[4]);
     }
 
 

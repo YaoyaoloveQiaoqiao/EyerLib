@@ -1,4 +1,5 @@
 #include "EyerSockaddr.hpp"
+#include <stdio.h>
 
 namespace Eyer
 {
@@ -32,5 +33,12 @@ namespace Eyer
     void * EyerSockaddr::GetPtr()
     {
         return &addr;
+    }
+
+    int EyerSockaddr::PrintInfo()
+    {
+        printf("ip: %s\n", inet_ntoa(addr.sin_addr));
+        printf("port: %d\n", ntohs(addr.sin_port));
+        return 0;
     }
 }

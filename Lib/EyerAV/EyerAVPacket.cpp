@@ -121,4 +121,10 @@ namespace Eyer
     {
         return piml->packet->data;
     }
+
+    int EyerAVPacket::SetDataPtr(uint8_t * data)
+    {
+        piml->packet->data = data;
+        return 0;
+    }
 }

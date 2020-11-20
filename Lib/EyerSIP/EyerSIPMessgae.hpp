@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "EyerCore/EyerCore.hpp"
 #include "EyerSIPFrom.hpp"
+#include "EyerSIPCallID.hpp"
 
 namespace Eyer
 {
@@ -25,7 +26,7 @@ namespace Eyer
 
         int GetFrom(EyerSIPFrom & from);
         int GetTo(EyerSIPFrom & to);
-
+        int GetCallID(EyerSIPCallID & callId);
 
 
 
@@ -33,8 +34,9 @@ namespace Eyer
 
         int SetFrom(EyerSIPFrom & from);
         int SetTo(EyerSIPFrom & to);
+        int SetCallID(EyerSIPCallID & callId);
 
-        EyerBuffer & ToBuffer();
+        EyerBuffer ToBuffer();
     private:
         EyerSIPMessgaePrivate * impl = nullptr;
     };
