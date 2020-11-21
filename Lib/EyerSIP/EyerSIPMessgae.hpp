@@ -7,6 +7,8 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerSIPFrom.hpp"
 #include "EyerSIPCallID.hpp"
+#include "EyerSIPCseq.hpp"
+#include "EyerSIPContact.hpp"
 
 namespace Eyer
 {
@@ -27,7 +29,8 @@ namespace Eyer
         int GetFrom(EyerSIPFrom & from);
         int GetTo(EyerSIPFrom & to);
         int GetCallID(EyerSIPCallID & callId);
-
+        int GetCseq(EyerSIPCseq & cseq);
+        int GetContact(EyerSIPContact & contact, int pos);
 
 
         int SetInfo();
@@ -35,6 +38,8 @@ namespace Eyer
         int SetFrom(EyerSIPFrom & from);
         int SetTo(EyerSIPFrom & to);
         int SetCallID(EyerSIPCallID & callId);
+        int SetCseq(EyerSIPCseq & cseq);
+        int SetUri(EyerSIPUri & uri);
 
         EyerBuffer ToBuffer();
     private:

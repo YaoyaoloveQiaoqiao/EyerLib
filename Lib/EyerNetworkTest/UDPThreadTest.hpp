@@ -41,6 +41,18 @@ public:
         Eyer::EyerSIPCallID callId;
         sipMessgae.GetCallID(callId);
 
+        Eyer::EyerSIPCseq cseq;
+        sipMessgae.GetCseq(cseq);
+
+
+        Eyer::EyerSIPContact contact;
+        sipMessgae.GetContact(contact, 0);
+
+
+        Eyer::EyerSIPUri contactUri;
+        contact.GetUri(contactUri);
+
+
 
         printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
         Eyer::EyerSIPMessgae response;
@@ -48,6 +60,8 @@ public:
         response.SetFrom(from);
         response.SetTo(to);
         response.SetCallID(callId);
+        response.SetCseq(cseq);
+        response.SetUri(contactUri);
         Eyer::EyerBuffer responseBuffer = response.ToBuffer();
 
         udpMessage->sockaddr.PrintInfo();

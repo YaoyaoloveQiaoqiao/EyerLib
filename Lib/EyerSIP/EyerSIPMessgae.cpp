@@ -2,6 +2,9 @@
 #include "EyerSIPMessgaePrivate.hpp"
 #include "EyerSIPFromPrivate.hpp"
 #include "EyerSIPCallIDPrivate.hpp"
+#include "EyerSIPCseqPrivate.hpp"
+#include "EyerSIPContactPrivate.hpp"
+#include "EyerSIPUriPrivate.hpp"
 
 namespace Eyer
 {
@@ -64,6 +67,24 @@ namespace Eyer
         return 0;
     }
 
+    int EyerSIPMessgae::GetCseq(EyerSIPCseq & cseq)
+    {
+        osip_cseq_clone(impl->sip->cseq, &cseq.impl->cseq);
+        return 0;
+    }
+
+    int EyerSIPMessgae::GetContact(EyerSIPContact & contact, int pos)
+    {
+        // osip_message_get_contact(impl->sip, pos, &contact.impl->contact);
+        // osip_message_get_contact();
+        return 0;
+    }
+
+
+
+
+
+
 
 
     int EyerSIPMessgae::SetFrom(EyerSIPFrom & from)
@@ -91,6 +112,21 @@ namespace Eyer
         osip_call_id_clone(callId.impl->call_id, &impl->sip->call_id);
         return 0;
     }
+
+    int EyerSIPMessgae::SetCseq(EyerSIPCseq & cseq)
+    {
+        osip_cseq_clone(cseq.impl->cseq, &impl->sip->cseq);
+        return 0;
+    }
+
+    int EyerSIPMessgae::SetUri(EyerSIPUri & uri)
+    {
+        osip_uri_clone(uri.impl->uri, &impl->sip->req_uri);
+        return 0;
+    }
+
+
+
 
     EyerBuffer EyerSIPMessgae::ToBuffer()
     {
