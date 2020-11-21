@@ -98,6 +98,7 @@ namespace Eyer
         osip_message_set_version(impl->sip, osip_strdup("SIP/2.0"));
         osip_message_set_status_code(impl->sip, 401);
         osip_message_set_reason_phrase (impl->sip, osip_strdup("Unauthorized"));
+        osip_message_set_contact(impl->sip, "<sip:34020000001320000001@192.168.2.101:5060>");
         return 0;
     }
 
