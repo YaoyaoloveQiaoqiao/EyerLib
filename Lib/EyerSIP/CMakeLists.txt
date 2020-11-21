@@ -27,6 +27,11 @@ add_library(
 
 set(head_files
         EyerSIP.hpp
+        EyerSIPMessgae.hpp
+        EyerSIPFrom.hpp
+        EyerSIPCallID.hpp
+        EyerSIPCseq.hpp
+        EyerSIPContact.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerSIP)
