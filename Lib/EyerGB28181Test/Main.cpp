@@ -11,6 +11,25 @@
 #include <eXosip2/eX_message.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <iostream>
+
+#include "EyerGB28181/EyerGB28181.hpp"
+#include "EyerCore/EyerCore.hpp"
+
+TEST(GB28181, GB28181SipServer) {
+    Eyer::SIPServer sipServer(5060);
+    sipServer.Start();
+
+    for(int i=0;i<60 * 2;i++){
+        Eyer::EyerTime::EyerSleepMilliseconds(1000);
+    }
+
+    sipServer.Stop();
+}
+
+/*
+#define NONCE "9bd055"
+#define ALGORITHTHM "MD5"
 
 TEST(GB28181, GB28181SipServer) {
     struct eXosip_t *excontext;
@@ -32,6 +51,7 @@ TEST(GB28181, GB28181SipServer) {
 
     eXosip_event_t * je = NULL;
     for (;;) {
+
         je = eXosip_event_wait(excontext, 0, 50);
 
         eXosip_lock(excontext);
@@ -44,21 +64,66 @@ TEST(GB28181, GB28181SipServer) {
         }
 
         if(je->type == EXOSIP_MESSAGE_NEW) {
+            printf("============================================\n");
             printf("EXOSIP_MESSAGE_NEW\n");
+            if(je->request != NULL){
+                char * str = NULL;
+                size_t len = 0;
+                osip_message_to_str(je->request, &str, &len);
+                printf("request msg: \n%s\n", str);
+                osip_free(str);
+            }
+            if(je->response != NULL){
+                char * str = NULL;
+                size_t len = 0;
+                osip_message_to_str(je->response, &str, &len);
+                printf("response msg: \n%s\n", str);
+                osip_free(str);
+            }
+            printf("============================================\n");
             if (MSG_IS_REGISTER(je->request)){
                 printf("REGISTER\n");
                 osip_authorization_t * auth = NULL;
                 osip_message_get_authorization(je->request, 0, &auth);
                 if (NULL == auth) {
                     printf("auth is NULL\n");
+
+                    eXosip_lock(excontext);
+
+                    osip_message_t * answer = NULL;
+                    int result = eXosip_message_build_answer(excontext, je->tid, 401, &answer);
+
+                    std::stringstream stream;
+                    std::string nonce = NONCE;
+                    std::string algorithm = ALGORITHTHM;
+                    stream << "Digest realm=\"" << "abc"
+                    << "\",nonce=\"" << nonce
+                    << "\",algorithm=" << algorithm;
+                    osip_message_set_header(answer, "WWW-Authenticate", stream.str().c_str());
+
+                    char * str = NULL;
+                    size_t len = 0;
+                    osip_message_to_str(answer, &str, &len);
+                    printf("msg: \n%s\n", str);
+
+                    eXosip_message_send_answer(excontext, je->tid, 401, answer);
+
+                    // osip_message_free(answer);
+
+                    eXosip_unlock(excontext);
                 }
                 else{
                     printf("auth is not NULL\n");
+
+                    osip_message_t * answer = NULL;
+                    eXosip_message_build_answer (excontext, je->tid, 200, &answer);
+                    eXosip_message_send_answer (excontext, je->tid, 200, answer);
                 }
             }
         }
     }
 }
+*/
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
