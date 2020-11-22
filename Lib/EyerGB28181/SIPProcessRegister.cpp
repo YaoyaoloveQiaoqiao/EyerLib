@@ -37,6 +37,12 @@ namespace Eyer
             osip_message_t * answer = NULL;
             eXosip_message_build_answer (excontext, je->tid, 200, &answer);
             eXosip_message_send_answer (excontext, je->tid, 200, answer);
+
+            char * str = NULL;
+            size_t strlen = 0;
+            osip_message_to_str(answer, &str, &strlen);
+
+            printf("12345: %s\n", str);
         }
         return 0;
     }
