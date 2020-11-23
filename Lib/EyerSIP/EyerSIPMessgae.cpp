@@ -95,9 +95,13 @@ namespace Eyer
 
     int EyerSIPMessgae::SetInfo()
     {
-        osip_message_set_version(impl->sip, osip_strdup("SIP/2.0"));
-        osip_message_set_status_code(impl->sip, 401);
-        osip_message_set_reason_phrase (impl->sip, osip_strdup("Unauthorized"));
+        // osip_message_set_version(impl->sip, osip_strdup("SIP/2.0"));
+        // osip_message_set_status_code(impl->sip, 401);
+        // osip_message_set_reason_phrase (impl->sip, osip_strdup("Unauthorized"));
+
+        osip_message_set_header(impl->sip, "WWW-Authenticate", "Digest realm=\"3402000000\",nonce=\"1677f194104d46aea6c9f8aebe507017\"");
+        osip_message_set_header(impl->sip, "Via", "Digest realm=\"3402000000\",nonce=\"1677f194104d46aea6c9f8aebe507017\"");
+
         return 0;
     }
 

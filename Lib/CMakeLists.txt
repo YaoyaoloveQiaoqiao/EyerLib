@@ -26,11 +26,13 @@ include_directories (${CMAKE_SOURCE_DIR}/../../Lib/curl_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include/libxml2)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libosip2_install/include)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libexosip2_install/include)
 
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/curl_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/harfbuzz_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libosip2_install/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libexosip2_install/lib)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -96,6 +98,8 @@ ModuleTestOption("EyerLua"          "EyerLuaTest"           EyerLua)
 OPTION(EyerSIP                      "option for EyerSIP"                ON)
 ModuleTestOption("EyerSIP"          "EyerSIPTest"           EyerSIP)
 
+OPTION(EyerGB28181                  "option for EyerGB28181"            ON)
+ModuleTestOption("EyerGB28181"      "EyerGB28181Test"       EyerGB28181)
 
 
 
