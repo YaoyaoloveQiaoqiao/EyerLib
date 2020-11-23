@@ -54,27 +54,26 @@ namespace Eyer
                 continue;
             }
 
+            if(je->request != NULL){
+                printf("=================Request Start=================\n");
+                char * str = NULL;
+                size_t len = 0;
+                osip_message_to_str(je->request, &str, &len);
+                printf("request msg: \n%s\n", str);
+                osip_free(str);
+                printf("=================Request End=================\n");
+            }
+            if(je->response != NULL){
+                printf("=================Response Start=================\n");
+                char * str = NULL;
+                size_t len = 0;
+                osip_message_to_str(je->response, &str, &len);
+                printf("response msg: \n%s\n", str);
+                osip_free(str);
+                printf("=================Response End=================\n");
+            }
 
             if(je->type == EXOSIP_MESSAGE_NEW) {
-                if(je->request != NULL){
-                    printf("=================Request Start=================\n");
-                    char * str = NULL;
-                    size_t len = 0;
-                    osip_message_to_str(je->request, &str, &len);
-                    printf("request msg: \n%s\n", str);
-                    osip_free(str);
-                    printf("=================Request End=================\n");
-                }
-                if(je->response != NULL){
-                    printf("=================Response Start=================\n");
-                    char * str = NULL;
-                    size_t len = 0;
-                    osip_message_to_str(je->response, &str, &len);
-                    printf("response msg: \n%s\n", str);
-                    osip_free(str);
-                    printf("=================Response End=================\n");
-                }
-
                 if (MSG_IS_REGISTER(je->request)){
                     SIPProcessRegister sipProcessRegister;
                     sipProcessRegister.Process(excontext, je);
