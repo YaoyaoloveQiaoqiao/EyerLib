@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <iostream>
+#include <string.h>
 
 #include "SIPProcessRegister.hpp"
 #include "SIPProcessMessage.hpp"
