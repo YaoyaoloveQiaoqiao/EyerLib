@@ -54,6 +54,7 @@ namespace Eyer
                 continue;
             }
 
+            /*
             if(je->request != NULL){
                 printf("=================Request Start=================\n");
                 char * str = NULL;
@@ -72,6 +73,7 @@ namespace Eyer
                 osip_free(str);
                 printf("=================Response End=================\n");
             }
+            */
 
             if(je->type == EXOSIP_MESSAGE_NEW) {
                 if (MSG_IS_REGISTER(je->request)){
