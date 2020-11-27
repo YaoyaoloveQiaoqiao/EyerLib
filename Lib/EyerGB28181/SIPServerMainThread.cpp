@@ -46,36 +46,63 @@ namespace Eyer
             je = eXosip_event_wait(excontext, 0, 50);
 
             eXosip_lock(excontext);
-            eXosip_default_action(excontext, je);
-            eXosip_automatic_action(excontext);
+            // eXosip_default_action(excontext, je);
+            // eXosip_automatic_action(excontext);
             eXosip_unlock(excontext);
 
             if (je == NULL) {
                 continue;
             }
 
-            /*
-            if(je->request != NULL){
-                printf("=================Request Start=================\n");
-                char * str = NULL;
-                size_t len = 0;
-                osip_message_to_str(je->request, &str, &len);
-                printf("request msg: \n%s\n", str);
-                osip_free(str);
-                printf("=================Request End=================\n");
+
+            if(je->type == EXOSIP_REGISTRATION_SUCCESS) {
+                printf("============EXOSIP_REGISTRATION_SUCCESS============\n");
             }
-            if(je->response != NULL){
-                printf("=================Response Start=================\n");
-                char * str = NULL;
-                size_t len = 0;
-                osip_message_to_str(je->response, &str, &len);
-                printf("response msg: \n%s\n", str);
-                osip_free(str);
-                printf("=================Response End=================\n");
+            if(je->type == EXOSIP_REGISTRATION_FAILURE) {
+                printf("============EXOSIP_REGISTRATION_FAILURE============\n");
             }
-            */
+
+
+            if(je->type == EXOSIP_CALL_INVITE) {
+                printf("============EXOSIP_CALL_INVITE============\n");
+            }
+            if(je->type == EXOSIP_CALL_REINVITE) {
+                printf("============EXOSIP_CALL_REINVITE============\n");
+            }
+            if(je->type == EXOSIP_CALL_NOANSWER) {
+                printf("============EXOSIP_CALL_NOANSWER============\n");
+            }
+            if(je->type == EXOSIP_CALL_PROCEEDING) {
+                printf("============EXOSIP_CALL_PROCEEDING============\n");
+            }
+            if(je->type == EXOSIP_CALL_RINGING) {
+                printf("============EXOSIP_CALL_RINGING============\n");
+            }
+            if(je->type == EXOSIP_CALL_ANSWERED) {
+                printf("============EXOSIP_CALL_ANSWERED============\n");
+            }
+
 
             if(je->type == EXOSIP_MESSAGE_NEW) {
+                if(je->request != NULL){
+                    printf("=================Request Start=================\n");
+                    char * str = NULL;
+                    size_t len = 0;
+                    osip_message_to_str(je->request, &str, &len);
+                    printf("request msg: \n%s\n", str);
+                    osip_free(str);
+                    printf("=================Request End=================\n");
+                }
+                if(je->response != NULL){
+                    printf("=================Response Start=================\n");
+                    char * str = NULL;
+                    size_t len = 0;
+                    osip_message_to_str(je->response, &str, &len);
+                    printf("response msg: \n%s\n", str);
+                    osip_free(str);
+                    printf("=================Response End=================\n");
+                }
+
                 if (MSG_IS_REGISTER(je->request)){
                     SIPProcessRegister sipProcessRegister;
                     sipProcessRegister.Process(excontext, je);

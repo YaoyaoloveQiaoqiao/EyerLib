@@ -65,7 +65,7 @@ namespace Eyer
                 read_macroblock_layer(bs);
             }
             if(!pps.entropy_coding_mode_flag) {
-                // moreDataFlag = more_rbsp_data( );
+                // TODO moreDataFlag = bs.more_data();
             }
             else {
                 if(sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_I && sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_SI) {
