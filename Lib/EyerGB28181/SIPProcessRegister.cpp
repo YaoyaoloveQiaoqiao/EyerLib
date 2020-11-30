@@ -40,6 +40,36 @@ namespace Eyer
             eXosip_message_build_answer (excontext, je->tid, 200, &answer);
             eXosip_message_send_answer (excontext, je->tid, 200, answer);
 
+
+            // Query Device Info
+            char * to = (char *)"sip:34020000001320000001@192.168.2.101";
+            char * from = (char *)"sip:Server@192.168.2.106";
+
+            osip_message_t * msg = NULL;
+            eXosip_message_build_request(excontext, &msg, "MESSAGE", to, from, NULL);
+            char * queryContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+                                "<Query>\r\n"
+                                "<CmdType>DeviceInfo</CmdType>\r\n"
+                                "<SN>1234567</SN>\r\n"
+                                "<DeviceID>34020000001320000001</DeviceID>\r\n"
+                                "</Query>\r\n";
+
+            osip_message_set_contact(msg, "sip:Server@192.168.2.106:5060");
+            osip_message_set_body (msg, queryContent, strlen(queryContent));
+            osip_message_set_content_type (msg, "Application/MANSCDP+xml");
+            eXosip_message_send_request(excontext, msg);
+
+            char * str = NULL;
+            size_t _strlen = 0;
+            osip_message_to_str(msg, &str, &_strlen);
+
+            printf("12345 miaomiao: %s\n", str);
+
+            osip_free(str);
+
+
+            /*
+
             char * str = NULL;
             size_t _strlen = 0;
             osip_message_to_str(answer, &str, &_strlen);
@@ -49,12 +79,6 @@ namespace Eyer
 
 
 
-
-
-
-
-            char * to = (char *)"sip:34020000001320000001@192.168.2.101";
-            char * from = (char *)"sip:Server@192.168.2.102";
             osip_message_t * invite = NULL;
             int ret = eXosip_call_build_initial_invite(excontext, &invite, to, from, NULL, "This si a call for a conversation");
 
@@ -77,6 +101,7 @@ namespace Eyer
             osip_message_set_content_type (invite, "application/sdp");
 
             ret = eXosip_call_send_initial_invite (excontext, invite);
+            */
         }
         return 0;
     }

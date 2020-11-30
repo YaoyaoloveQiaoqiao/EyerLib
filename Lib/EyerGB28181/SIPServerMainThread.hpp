@@ -2,6 +2,7 @@
 #define EYERLIB_SIPSERVERMAINTHREAD_HPP
 
 #include "EyerThread/EyerThread.hpp"
+#include "eXosipHeader.hpp"
 
 namespace Eyer
 {
@@ -14,6 +15,8 @@ namespace Eyer
 
     private:
         int port = 5060;
+
+        int PrintJe(eXosip_event_t * je);
     };
 }
 
