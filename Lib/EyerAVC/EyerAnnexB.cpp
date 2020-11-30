@@ -110,7 +110,7 @@ namespace Eyer {
             if(bufPtr[0] == 0) {
                 if (bufPtr[1] == 0) {
                     if(bufPtr[2] == 1){
-                        startCodeLen = 4;
+                        startCodeLen = 3;
                         return true;
                     }
                 }
