@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 #include <string>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 class AnnexBReader
 {
