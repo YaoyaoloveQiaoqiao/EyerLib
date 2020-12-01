@@ -54,7 +54,7 @@ namespace Eyer
                 continue;
             }
 
-
+            /* REGISTER related events */
             if(je->type == EXOSIP_REGISTRATION_SUCCESS) {
                 printf("============EXOSIP_REGISTRATION_SUCCESS============\n");
             }
@@ -62,13 +62,14 @@ namespace Eyer
                 printf("============EXOSIP_REGISTRATION_FAILURE============\n");
             }
 
-
+            /* INVITE related events within calls */
             if(je->type == EXOSIP_CALL_INVITE) {
                 printf("============EXOSIP_CALL_INVITE============\n");
             }
             if(je->type == EXOSIP_CALL_REINVITE) {
                 printf("============EXOSIP_CALL_REINVITE============\n");
             }
+
             if(je->type == EXOSIP_CALL_NOANSWER) {
                 printf("============EXOSIP_CALL_NOANSWER============\n");
             }
@@ -81,28 +82,62 @@ namespace Eyer
             if(je->type == EXOSIP_CALL_ANSWERED) {
                 printf("============EXOSIP_CALL_ANSWERED============\n");
             }
+            if(je->type == EXOSIP_CALL_REDIRECTED) {
+                printf("============EXOSIP_CALL_REDIRECTED============\n");
+            }
+            if(je->type == EXOSIP_CALL_REQUESTFAILURE) {
+                printf("============EXOSIP_CALL_REQUESTFAILURE============\n");
+            }
+            if(je->type == EXOSIP_CALL_SERVERFAILURE) {
+                printf("============EXOSIP_CALL_SERVERFAILURE============\n");
+            }
+            if(je->type == EXOSIP_CALL_GLOBALFAILURE) {
+                printf("============EXOSIP_CALL_GLOBALFAILURE============\n");
+            }
+            if(je->type == EXOSIP_CALL_ACK) {
+                printf("============EXOSIP_CALL_ACK============\n");
+            }
+
+            if(je->type == EXOSIP_CALL_CANCELLED) {
+                printf("============EXOSIP_CALL_CANCELLED============\n");
+            }
+
+            if(je->type == EXOSIP_CALL_MESSAGE_NEW) {
+                printf("============EXOSIP_CALL_MESSAGE_NEW============\n");
+            }
+            if(je->type == EXOSIP_CALL_MESSAGE_PROCEEDING) {
+                printf("============EXOSIP_CALL_MESSAGE_PROCEEDING============\n");
+            }
+            if(je->type == EXOSIP_CALL_MESSAGE_ANSWERED) {
+                printf("============EXOSIP_CALL_MESSAGE_ANSWERED============\n");
+            }
+            if(je->type == EXOSIP_CALL_MESSAGE_REDIRECTED) {
+                printf("============EXOSIP_CALL_MESSAGE_REDIRECTED============\n");
+            }
+            if(je->type == EXOSIP_CALL_MESSAGE_REQUESTFAILURE) {
+                printf("============EXOSIP_CALL_MESSAGE_REQUESTFAILURE============\n");
+            }
+            if(je->type == EXOSIP_CALL_MESSAGE_SERVERFAILURE) {
+                printf("============EXOSIP_CALL_MESSAGE_SERVERFAILURE============\n");
+            }
+            if(je->type == EXOSIP_CALL_MESSAGE_GLOBALFAILURE) {
+                printf("============EXOSIP_CALL_MESSAGE_GLOBALFAILURE============\n");
+            }
+
+
+            if(je->type == EXOSIP_CALL_CLOSED) {
+                printf("============EXOSIP_CALL_CLOSED============\n");
+            }
+
+
+            if(je->type == EXOSIP_CALL_RELEASED) {
+                printf("============EXOSIP_CALL_RELEASED============\n");
+            }
 
 
             if(je->type == EXOSIP_MESSAGE_NEW) {
-                if(je->request != NULL){
-                    printf("=================Request Start=================\n");
-                    char * str = NULL;
-                    size_t len = 0;
-                    osip_message_to_str(je->request, &str, &len);
-                    printf("request msg: \n%s\n", str);
-                    osip_free(str);
-                    printf("=================Request End=================\n");
-                }
-                if(je->response != NULL){
-                    printf("=================Response Start=================\n");
-                    char * str = NULL;
-                    size_t len = 0;
-                    osip_message_to_str(je->response, &str, &len);
-                    printf("response msg: \n%s\n", str);
-                    osip_free(str);
-                    printf("=================Response End=================\n");
-                }
-
+                printf("============EXOSIP_MESSAGE_NEW============\n");
+                PrintJe(je);
                 if (MSG_IS_REGISTER(je->request)){
                     SIPProcessRegister sipProcessRegister;
                     sipProcessRegister.Process(excontext, je);
@@ -112,6 +147,107 @@ namespace Eyer
                     sipProcessMessage.Process(excontext, je);
                 }
             }
+            if(je->type == EXOSIP_MESSAGE_PROCEEDING) {
+                printf("============EXOSIP_MESSAGE_PROCEEDING============\n");
+            }
+            if(je->type == EXOSIP_MESSAGE_ANSWERED) {
+                printf("============EXOSIP_MESSAGE_ANSWERED============\n");
+                PrintJe(je);
+            }
+            if(je->type == EXOSIP_MESSAGE_REDIRECTED) {
+                printf("============EXOSIP_MESSAGE_REDIRECTED============\n");
+            }
+            if(je->type == EXOSIP_MESSAGE_REQUESTFAILURE) {
+                printf("============EXOSIP_MESSAGE_REQUESTFAILURE============\n");
+            }
+            if(je->type == EXOSIP_MESSAGE_SERVERFAILURE) {
+                printf("============EXOSIP_MESSAGE_SERVERFAILURE============\n");
+            }
+            if(je->type == EXOSIP_MESSAGE_GLOBALFAILURE) {
+                printf("============EXOSIP_MESSAGE_GLOBALFAILURE============\n");
+            }
+
+            /* Presence and Instant Messaging */
+            if(je->type == EXOSIP_SUBSCRIPTION_NOANSWER) {
+                printf("============EXOSIP_SUBSCRIPTION_NOANSWER============\n");
+            }
+            if(je->type == EXOSIP_SUBSCRIPTION_PROCEEDING) {
+                printf("============EXOSIP_SUBSCRIPTION_PROCEEDING============\n");
+            }
+            if(je->type == EXOSIP_SUBSCRIPTION_ANSWERED) {
+                printf("============EXOSIP_SUBSCRIPTION_ANSWERED============\n");
+            }
+            if(je->type == EXOSIP_SUBSCRIPTION_REDIRECTED) {
+                printf("============EXOSIP_SUBSCRIPTION_REDIRECTED============\n");
+            }
+            if(je->type == EXOSIP_SUBSCRIPTION_REQUESTFAILURE) {
+                printf("============EXOSIP_SUBSCRIPTION_REQUESTFAILURE============\n");
+            }
+            if(je->type == EXOSIP_SUBSCRIPTION_SERVERFAILURE) {
+                printf("============EXOSIP_SUBSCRIPTION_SERVERFAILURE============\n");
+            }
+            if(je->type == EXOSIP_SUBSCRIPTION_GLOBALFAILURE) {
+                printf("============EXOSIP_SUBSCRIPTION_GLOBALFAILURE============\n");
+            }
+            if(je->type == EXOSIP_SUBSCRIPTION_NOTIFY) {
+                printf("============EXOSIP_SUBSCRIPTION_NOTIFY============\n");
+            }
+
+
+            if(je->type == EXOSIP_IN_SUBSCRIPTION_NEW) {
+                printf("============EXOSIP_IN_SUBSCRIPTION_NEW============\n");
+            }
+
+
+            if(je->type == EXOSIP_NOTIFICATION_NOANSWER) {
+                printf("============EXOSIP_NOTIFICATION_NOANSWER============\n");
+            }
+            if(je->type == EXOSIP_NOTIFICATION_PROCEEDING) {
+                printf("============EXOSIP_NOTIFICATION_PROCEEDING============\n");
+            }
+            if(je->type == EXOSIP_NOTIFICATION_ANSWERED) {
+                printf("============EXOSIP_NOTIFICATION_ANSWERED============\n");
+            }
+            if(je->type == EXOSIP_NOTIFICATION_REDIRECTED) {
+                printf("============EXOSIP_NOTIFICATION_REDIRECTED============\n");
+            }
+            if(je->type == EXOSIP_NOTIFICATION_REQUESTFAILURE) {
+                printf("============EXOSIP_NOTIFICATION_REQUESTFAILURE============\n");
+            }
+            if(je->type == EXOSIP_NOTIFICATION_SERVERFAILURE) {
+                printf("============EXOSIP_NOTIFICATION_SERVERFAILURE============\n");
+            }
+            if(je->type == EXOSIP_NOTIFICATION_GLOBALFAILURE) {
+                printf("============EXOSIP_NOTIFICATION_GLOBALFAILURE============\n");
+            }
+
+
+            if(je->type == EXOSIP_EVENT_COUNT) {
+                printf("============EXOSIP_EVENT_COUNT============\n");
+            }
         }
+    }
+
+    int SIPServerMainThread::PrintJe(eXosip_event_t * je)
+    {
+        if(je->request != NULL){
+            printf("=================Request Start=================\n");
+            char * str = NULL;
+            size_t len = 0;
+            osip_message_to_str(je->request, &str, &len);
+            printf("request msg: \n%s\n", str);
+            osip_free(str);
+            printf("=================Request End=================\n");
+        }
+        if(je->response != NULL){
+            printf("=================Response Start=================\n");
+            char * str = NULL;
+            size_t len = 0;
+            osip_message_to_str(je->response, &str, &len);
+            printf("response msg: \n%s\n", str);
+            osip_free(str);
+            printf("=================Response End=================\n");
+        }
+        return 0;
     }
 }

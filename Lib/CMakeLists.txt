@@ -27,12 +27,14 @@ include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/include/libxml2)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libosip2_install/include)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/libexosip2_install/include)
+include_directories (${CMAKE_SOURCE_DIR}/../../Lib/pjproject_install/include)
 
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/curl_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libxml2_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/harfbuzz_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libosip2_install/lib)
 link_directories(${CMAKE_SOURCE_DIR}/../../Lib/libexosip2_install/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../../Lib/pjproject_install/lib)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -104,7 +106,8 @@ ModuleTestOption("EyerGB28181"      "EyerGB28181Test"       EyerGB28181)
 OPTION(EyerAVCBlog                  "option for EyerAVCBlog"            ON)
 ModuleTestOption("EyerAVCBlog"      "EyerAVCBlogTest"       EyerAVCBlog)
 
-
+OPTION(EyerPJSIP                    "option for EyerPJSIP"              ON)
+ModuleTestOption("EyerPJSIP"        "EyerPJSIPTest"         EyerPJSIP)
 
 
 
