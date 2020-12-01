@@ -42,19 +42,15 @@ namespace Eyer
 
 
             // Query Device Info
-            char * to = (char *)"sip:34020000001320000001@192.168.2.101";
-            char * from = (char *)"sip:Server@192.168.2.106";
+            char * to = (char *)"sip:34020000001320000001@192.168.2.101:5060";
+            char * from = (char *)"sip:34020000002000000001@34020000";
 
             osip_message_t * msg = NULL;
             eXosip_message_build_request(excontext, &msg, "MESSAGE", to, from, NULL);
-            char * queryContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-                                "<Query>\r\n"
-                                "<CmdType>DeviceInfo</CmdType>\r\n"
-                                "<SN>1234567</SN>\r\n"
-                                "<DeviceID>34020000001320000001</DeviceID>\r\n"
-                                "</Query>\r\n";
+            char * queryContent = "<?xml version=\"1.0\"?>\r\n<Query><CmdType>Catalog</CmdType><SN>4</SN><DeviceID>34020000001320000001</DeviceID></Query>";
 
-            osip_message_set_contact(msg, "sip:Server@192.168.2.106:5060");
+            osip_message_set_contact(msg, "sip:34020000002000000001@192.168.2.106:5060");
+            // osip_message_set_route(msg, "sip:34020000001320000001@192.168.2.101:5060");
             osip_message_set_body (msg, queryContent, strlen(queryContent));
             osip_message_set_content_type (msg, "Application/MANSCDP+xml");
             eXosip_message_send_request(excontext, msg);
@@ -63,7 +59,7 @@ namespace Eyer
             size_t _strlen = 0;
             osip_message_to_str(msg, &str, &_strlen);
 
-            printf("12345 miaomiao: %s\n", str);
+            // printf("12345 miaomiao: %s\n", str);
 
             osip_free(str);
 
