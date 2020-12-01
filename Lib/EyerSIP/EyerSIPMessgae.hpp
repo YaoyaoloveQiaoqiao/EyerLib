@@ -10,6 +10,8 @@
 #include "EyerSIPCseq.hpp"
 #include "EyerSIPContact.hpp"
 
+#include <osipparser2/osip_parser.h>
+
 namespace Eyer
 {
     class EyerSIPMessgaePrivate;
@@ -17,31 +19,12 @@ namespace Eyer
     class EyerSIPMessgae {
     public:
         EyerSIPMessgae();
+        EyerSIPMessgae(osip_message_t * sip);
         ~EyerSIPMessgae();
 
-        int Parse(EyerBuffer & buffer);
-
-
-
-
-        EyerString & GetMethod();
-
-        int GetFrom(EyerSIPFrom & from);
-        int GetTo(EyerSIPFrom & to);
-        int GetCallID(EyerSIPCallID & callId);
-        int GetCseq(EyerSIPCseq & cseq);
-        int GetContact(EyerSIPContact & contact, int pos);
-
-
-        int SetInfo();
-
-        int SetFrom(EyerSIPFrom & from);
-        int SetTo(EyerSIPFrom & to);
-        int SetCallID(EyerSIPCallID & callId);
-        int SetCseq(EyerSIPCseq & cseq);
-        int SetUri(EyerSIPUri & uri);
-
-        EyerBuffer ToBuffer();
+        EyerString GetDeviceId();
+        EyerString GetIp();
+        EyerString GetPort();
     private:
         EyerSIPMessgaePrivate * impl = nullptr;
     };

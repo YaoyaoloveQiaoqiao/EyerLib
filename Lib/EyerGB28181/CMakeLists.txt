@@ -13,7 +13,15 @@ add_library(
         SIPProcess.hpp
         SIPProcessRegister.cpp
         SIPProcessRegister.hpp
-        SIPProcessMessage.cpp SIPProcessMessage.hpp)
+        SIPProcessMessage.cpp
+        SIPProcessMessage.hpp
+        SIPDevice.cpp
+        SIPDevice.hpp
+        SIPDeviceManager.cpp
+        SIPDeviceManager.hpp
+        SIPServerContext.cpp
+        SIPServerContext.hpp
+)
 
 set(head_files
         EyerGB28181.hpp

@@ -10,8 +10,6 @@ namespace Eyer
     {
     public:
         osip_message_t * sip = nullptr;
-
-        EyerString method;
     };
 }
 

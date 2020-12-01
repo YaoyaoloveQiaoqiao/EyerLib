@@ -15,7 +15,7 @@ namespace Eyer
     int SIPServer::Start()
     {
         Stop();
-        mainThread = new SIPServerMainThread(port);
+        mainThread = new SIPServerMainThread(port, &context);
         mainThread->Start();
 
         return 0;

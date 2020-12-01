@@ -6,12 +6,14 @@
 #include <string.h>
 #include <sstream>
 
+#include "EyerSIP/EyerSIP.hpp"
+
 #define NONCE "9bd055"
 #define ALGORITHTHM "MD5"
 
 namespace Eyer
 {
-    int SIPProcessRegister::Process(struct eXosip_t * excontext, eXosip_event_t * je)
+    int SIPProcessRegister::Process(SIPServerContext * context, struct eXosip_t * excontext, eXosip_event_t * je)
     {
         osip_authorization_t * auth = NULL;
         osip_message_get_authorization(je->request, 0, &auth);
@@ -34,74 +36,47 @@ namespace Eyer
             eXosip_unlock(excontext);
         }
         else{
-            // 200
+            osip_message_t * asw_register = nullptr;
+            int ret = eXosip_message_build_answer (excontext, je->tid, 200, &asw_register);
+
             // TODO 验证信息 这里直接返回 200
+            EyerSIPMessgae sipMessgae(asw_register);
+            EyerString deviceID         = sipMessgae.GetDeviceId();
+            EyerString deviceIp         = sipMessgae.GetIp();
+            EyerString devicePort       = sipMessgae.GetPort();
+
+            EyerLog("deviceId: %s\n", deviceID.str);
+            EyerLog("deviceIp: %s\n", deviceIp.str);
+            EyerLog("devicePort: %s\n", devicePort.str);
+
+            SIPDevice device;
+            ret = context->deviceManager.FindDevice(device, deviceID);
+            if(ret){
+                // 新用户
+                EyerLog("New User Register\n");
+                context->deviceManager.Register(deviceID, deviceIp, devicePort);
+            }
+            else{
+                // 重复注册
+                EyerLog("User Register Again\n");
+            }
+
             osip_message_t * answer = NULL;
             eXosip_message_build_answer (excontext, je->tid, 200, &answer);
             eXosip_message_send_answer (excontext, je->tid, 200, answer);
 
-
             // Query Device Info
-            char * to = (char *)"sip:34020000001320000001@192.168.2.101";
-            char * from = (char *)"sip:Server@192.168.2.106";
+            EyerString to = EyerString("sip:") + deviceID + "@" + deviceIp + ":" + devicePort;
+            char * from = (char *)"sip:34020000002000000001@34020000";
 
             osip_message_t * msg = NULL;
-            eXosip_message_build_request(excontext, &msg, "MESSAGE", to, from, NULL);
-            char * queryContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-                                "<Query>\r\n"
-                                "<CmdType>DeviceInfo</CmdType>\r\n"
-                                "<SN>1234567</SN>\r\n"
-                                "<DeviceID>34020000001320000001</DeviceID>\r\n"
-                                "</Query>\r\n";
+            eXosip_message_build_request(excontext, &msg, "MESSAGE", to.str, from, NULL);
+            char * queryContent = "<?xml version=\"1.0\"?>\r\n<Query><CmdType>Catalog</CmdType><SN>4</SN><DeviceID>34020000001320000001</DeviceID></Query>";
 
-            osip_message_set_contact(msg, "sip:Server@192.168.2.106:5060");
+            osip_message_set_contact(msg, "sip:34020000002000000001@192.168.2.106:5060");
             osip_message_set_body (msg, queryContent, strlen(queryContent));
             osip_message_set_content_type (msg, "Application/MANSCDP+xml");
             eXosip_message_send_request(excontext, msg);
-
-            char * str = NULL;
-            size_t _strlen = 0;
-            osip_message_to_str(msg, &str, &_strlen);
-
-            printf("12345 miaomiao: %s\n", str);
-
-            osip_free(str);
-
-
-            /*
-
-            char * str = NULL;
-            size_t _strlen = 0;
-            osip_message_to_str(answer, &str, &_strlen);
-
-            printf("12345: %s\n", str);
-
-
-
-
-            osip_message_t * invite = NULL;
-            int ret = eXosip_call_build_initial_invite(excontext, &invite, to, from, NULL, "This si a call for a conversation");
-
-            char tmp[4096];
-            char * localip = "192.168.2.102";
-            char * port = "5555";
-            snprintf (tmp, 4096,
-                      "v=0\r\n"                           // SDP版本
-                      "o=josua 0 0 IN IP4 %s\r\n"         // 用户名、ID、版本、网络类型、地址类型、IP地址
-                      "s=conversation\r\n"                // 会话名称
-                      "c=IN IP4 %s\r\n"
-                      "t=0 0\r\n"                         // 开始时间、结束时间。此处不需要设置
-                      "m=audio %s RTP/AVP 0 8 101\r\n"    // 音频、传输端口、传输类型、格式列表
-                      "a=rtpmap:0 PCMU/8000\r\n"          // 以下为具体描述格式列表中的
-                      "a=rtpmap:8 PCMA/8000\r\n"
-                      "a=rtpmap:101 telephone-event/8000\r\n"
-                      "a=fmtp:101 0-11\r\n", localip, localip, port);
-
-            osip_message_set_body (invite, tmp, strlen (tmp));
-            osip_message_set_content_type (invite, "application/sdp");
-
-            ret = eXosip_call_send_initial_invite (excontext, invite);
-            */
         }
         return 0;
     }

@@ -6,7 +6,9 @@ add_library(
         EyerPJSIP.hpp
         PJ.hpp
         PJ.cpp
-)
+        PJSIPServer.cpp
+        PJSIPServer.hpp
+        PJSIPServerPrivate.hpp PJSIPHeader.hpp PJSIPProcessRegister.cpp PJSIPProcessRegister.hpp)
 
 set(head_files
         EyerPJSIP.hpp
