@@ -11,9 +11,10 @@
 
 namespace Eyer
 {
-    SIPServerMainThread::SIPServerMainThread(int _port)
+    SIPServerMainThread::SIPServerMainThread(int _port, SIPServerContext * _context)
     {
         port = _port;
+        context = _context;
     }
 
     SIPServerMainThread::~SIPServerMainThread()
@@ -140,11 +141,11 @@ namespace Eyer
                 PrintJe(je);
                 if (MSG_IS_REGISTER(je->request)){
                     SIPProcessRegister sipProcessRegister;
-                    sipProcessRegister.Process(excontext, je);
+                    sipProcessRegister.Process(context, excontext, je);
                 }
                 else {
                     SIPProcessMessage sipProcessMessage;
-                    sipProcessMessage.Process(excontext, je);
+                    sipProcessMessage.Process(context, excontext, je);
                 }
             }
             if(je->type == EXOSIP_MESSAGE_PROCEEDING) {
@@ -152,7 +153,6 @@ namespace Eyer
             }
             if(je->type == EXOSIP_MESSAGE_ANSWERED) {
                 printf("============EXOSIP_MESSAGE_ANSWERED============\n");
-                PrintJe(je);
             }
             if(je->type == EXOSIP_MESSAGE_REDIRECTED) {
                 printf("============EXOSIP_MESSAGE_REDIRECTED============\n");

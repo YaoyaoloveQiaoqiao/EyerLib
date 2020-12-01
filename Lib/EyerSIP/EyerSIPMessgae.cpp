@@ -15,6 +15,11 @@ namespace Eyer
         osip_message_init(&impl->sip);
     }
 
+    EyerSIPMessgae::EyerSIPMessgae(osip_message_t * sip) : EyerSIPMessgae()
+    {
+        osip_message_clone(sip, &impl->sip);
+    }
+
     EyerSIPMessgae::~EyerSIPMessgae()
     {
         if(impl->sip != nullptr){
@@ -27,123 +32,45 @@ namespace Eyer
         }
     }
 
-    int EyerSIPMessgae::Parse(EyerBuffer & buffer)
+    EyerString EyerSIPMessgae::GetDeviceId()
     {
-        int ret = osip_message_parse(impl->sip, (const char *)buffer.GetPtr(), buffer.GetLen());
-        if(ret){
-            return ret;
+        return osip_message_get_from(impl->sip)->url->username;
+    }
+
+    EyerString EyerSIPMessgae::GetIp()
+    {
+        char addr[20];
+        int port;
+        memset(addr, '\0', 20);
+
+        osip_via_t* via = nullptr;
+        osip_message_get_via(impl->sip, 0, &via);
+        if(!via || !via->host) {
         }
 
-        impl->method = osip_message_get_method(impl->sip);
+        osip_generic_param_t * br = nullptr;
+        osip_via_param_get_byname (via, "received", &br);
+        if (br != NULL && br->gvalue != NULL)
+            strcpy(addr, br->gvalue);
+        else
+            strcpy(addr, via->host);
 
-        osip_from_t * from = osip_message_get_from(impl->sip);
-        osip_to_t * to = osip_message_get_to(impl->sip);
 
-        return ret;
+        return addr;
     }
 
-    EyerString & EyerSIPMessgae::GetMethod()
+    EyerString EyerSIPMessgae::GetPort()
     {
-        return impl->method;
-    }
+        osip_via_t* via = nullptr;
+        osip_message_get_via(impl->sip, 0, &via);
+        if(!via || !via->host) {
+        }
 
-    int EyerSIPMessgae::GetFrom(EyerSIPFrom & from)
-    {
-        osip_from_t * from_t = osip_message_get_from(impl->sip);
-        osip_from_clone(from_t, &from.impl->from);
-        return 0;
-    }
+        osip_generic_param_t * br = nullptr;
+        osip_via_param_get_byname(via, "rport", &br);
+        if(!br || !br->gvalue) {
+        }
 
-    int EyerSIPMessgae::GetTo(EyerSIPFrom & to)
-    {
-        osip_from_t * from_t = osip_message_get_to(impl->sip);
-        osip_from_clone(from_t, &to.impl->from);
-        return 0;
-    }
-
-    int EyerSIPMessgae::GetCallID(EyerSIPCallID & callId)
-    {
-        osip_call_id_clone(impl->sip->call_id, &callId.impl->call_id);
-        return 0;
-    }
-
-    int EyerSIPMessgae::GetCseq(EyerSIPCseq & cseq)
-    {
-        osip_cseq_clone(impl->sip->cseq, &cseq.impl->cseq);
-        return 0;
-    }
-
-    int EyerSIPMessgae::GetContact(EyerSIPContact & contact, int pos)
-    {
-        // osip_message_get_contact(impl->sip, pos, &contact.impl->contact);
-        // osip_message_get_contact();
-        return 0;
-    }
-
-
-
-
-
-
-
-
-    int EyerSIPMessgae::SetFrom(EyerSIPFrom & from)
-    {
-        osip_to_clone(from.impl->from, &impl->sip->from);
-        return 0;
-    }
-
-    int EyerSIPMessgae::SetInfo()
-    {
-        // osip_message_set_version(impl->sip, osip_strdup("SIP/2.0"));
-        // osip_message_set_status_code(impl->sip, 401);
-        // osip_message_set_reason_phrase (impl->sip, osip_strdup("Unauthorized"));
-
-        osip_message_set_header(impl->sip, "WWW-Authenticate", "Digest realm=\"3402000000\",nonce=\"1677f194104d46aea6c9f8aebe507017\"");
-        osip_message_set_header(impl->sip, "Via", "Digest realm=\"3402000000\",nonce=\"1677f194104d46aea6c9f8aebe507017\"");
-
-        return 0;
-    }
-
-    int EyerSIPMessgae::SetTo(EyerSIPFrom & to)
-    {
-        osip_to_clone(to.impl->from, &impl->sip->to);
-        return 0;
-    }
-
-    int EyerSIPMessgae::SetCallID(EyerSIPCallID & callId)
-    {
-        osip_call_id_clone(callId.impl->call_id, &impl->sip->call_id);
-        return 0;
-    }
-
-    int EyerSIPMessgae::SetCseq(EyerSIPCseq & cseq)
-    {
-        osip_cseq_clone(cseq.impl->cseq, &impl->sip->cseq);
-        return 0;
-    }
-
-    int EyerSIPMessgae::SetUri(EyerSIPUri & uri)
-    {
-        osip_uri_clone(uri.impl->uri, &impl->sip->req_uri);
-        return 0;
-    }
-
-
-
-
-    EyerBuffer EyerSIPMessgae::ToBuffer()
-    {
-        char * dest = nullptr;
-        size_t message_length = 0;
-        osip_message_to_str(impl->sip, &dest, &message_length);
-
-        printf("message_length: %d\n", message_length);
-        printf("message:\n%s\n", dest);
-
-        EyerBuffer buffer;
-        buffer.Append((unsigned char *)dest, message_length);
-
-        return buffer;
+        return br->gvalue;
     }
 }

@@ -7,7 +7,7 @@ namespace Eyer
 {
     class SIPProcessMessage : public SIPProcess {
     public:
-        virtual int Process(struct eXosip_t * excontext, eXosip_event_t * je);
+        virtual int Process(SIPServerContext * context, struct eXosip_t * excontext, eXosip_event_t * je);
     };
 }
 

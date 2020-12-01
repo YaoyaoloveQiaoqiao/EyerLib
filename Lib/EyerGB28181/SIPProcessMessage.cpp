@@ -4,12 +4,12 @@
 
 namespace Eyer
 {
-    int SIPProcessMessage::Process(struct eXosip_t * excontext, eXosip_event_t * je)
+    int SIPProcessMessage::Process(SIPServerContext * context, struct eXosip_t * excontext, eXosip_event_t * je)
     {
         osip_body_t * dest = NULL;
         osip_message_get_body(je->request, 0, &dest);
         if(dest != NULL){
-            // printf("wwwwwwww::::%s\n", dest->body);
+            printf("%s\n", dest->body);
         }
 
         osip_message_t * answer = NULL;

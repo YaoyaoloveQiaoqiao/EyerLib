@@ -2,6 +2,7 @@
 #define EYERLIB_SIPSERVER_HPP
 
 #include "SIPServerMainThread.hpp"
+#include "SIPServerContext.hpp"
 
 namespace Eyer
 {
@@ -14,8 +15,8 @@ namespace Eyer
         int Stop();
     private:
         int port = 5060;
-
         SIPServerMainThread * mainThread = nullptr;
+        SIPServerContext context;
     };
 }
 
