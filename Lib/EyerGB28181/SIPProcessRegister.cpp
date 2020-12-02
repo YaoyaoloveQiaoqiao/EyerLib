@@ -65,6 +65,7 @@ namespace Eyer
             eXosip_message_build_answer (excontext, je->tid, 200, &answer);
             eXosip_message_send_answer (excontext, je->tid, 200, answer);
 
+            /*
             // Query Device Info
             EyerString to = EyerString("sip:") + deviceID + "@" + deviceIp + ":" + devicePort;
             char * from = (char *)"sip:34020000002000000001@34020000";
@@ -77,6 +78,7 @@ namespace Eyer
             osip_message_set_body (msg, queryContent, strlen(queryContent));
             osip_message_set_content_type (msg, "Application/MANSCDP+xml");
             eXosip_message_send_request(excontext, msg);
+            */
         }
         return 0;
     }
