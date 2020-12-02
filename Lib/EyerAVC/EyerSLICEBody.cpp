@@ -91,7 +91,7 @@ namespace Eyer
         }
         else {
             // TODO ae(v)
-            mb_type = bs.bs_read_ae();
+            // mb_type = bs.bs_read_ae();
         }
 
         if(I_MB_TYPE::I_PCM == mb_type){
