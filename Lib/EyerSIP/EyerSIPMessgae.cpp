@@ -32,6 +32,13 @@ namespace Eyer
         }
     }
 
+    int EyerSIPMessgae::GetFrom(EyerSIPFrom & from)
+    {
+        osip_from_t * osip_from = osip_message_get_from(impl->sip);
+        osip_from_clone(osip_from, &from.impl->from);
+        return 0;
+    }
+
     EyerString EyerSIPMessgae::GetDeviceId()
     {
         return osip_message_get_from(impl->sip)->url->username;
