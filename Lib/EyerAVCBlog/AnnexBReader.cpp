@@ -35,7 +35,7 @@ int AnnexBReader::Close()
 }
 
 // 用来读取一个 Nalu 文件
-int AnnexBReader::ReadNalu(uint8_t * data, int * dataLen)
+int AnnexBReader::ReadNalu(uint8_t * data, int * dataLen, int * startcodeLen)
 {
     while(1){
         if(bufferLen <= 0){
@@ -53,6 +53,8 @@ int AnnexBReader::ReadNalu(uint8_t * data, int * dataLen)
         if(!isStartCode){
             break;
         }
+
+        *startcodeLen = startCodeLen;
 
         // Find End Code
         int endPos = -1;

@@ -86,6 +86,8 @@ namespace Eyer
     {
         //TODO
         uint32_t mb_type = bs.bs_read_ue();
+        I_MB_TYPE mbType = mb_type;
+
         if(!pps.entropy_coding_mode_flag){
             mb_type = bs.bs_read_ue();
         }
@@ -99,6 +101,13 @@ namespace Eyer
         }
         else{
             int noSubMbPartSizeLessThan8x8Flag = 1;
+            if(mbType != I_MB_TYPE::I_NxN &&
+                MbPartPredMode(mbType, 0) != Intra_16x16 &&
+                NumMbPart(mbType) == 4
+            )
+            {
+
+            }
         }
 
 

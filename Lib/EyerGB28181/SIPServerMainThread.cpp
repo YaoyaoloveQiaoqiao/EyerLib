@@ -226,6 +226,8 @@ namespace Eyer
                 printf("============EXOSIP_EVENT_COUNT============\n");
             }
         }
+
+        eXosip_quit(excontext);
     }
 
     int SIPServerMainThread::PrintJe(eXosip_event_t * je)

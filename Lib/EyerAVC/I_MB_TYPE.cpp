@@ -2,7 +2,7 @@
 
 namespace Eyer
 {
-    I_MB_TYPE I_MB_TYPE::I_4x4(0,      "I_4x4");
+    I_MB_TYPE I_MB_TYPE::I_NxN(0,      "I_NxN");
     I_MB_TYPE I_MB_TYPE::I_PCM(25,     "I_PCM");
 
     I_MB_TYPE::I_MB_TYPE(int _val, const EyerString & _name) : EyerEnum(_val, _name)
@@ -34,7 +34,7 @@ namespace Eyer
     I_MB_TYPE & I_MB_TYPE::operator = (const int & mbType)
     {
         if(mbType == 0){
-            *this = I_4x4;
+            *this = I_NxN;
         }
         else if(mbType == 25){
             *this = I_PCM;

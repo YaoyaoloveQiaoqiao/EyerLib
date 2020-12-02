@@ -17,7 +17,7 @@ namespace Eyer
         bool operator == (const I_MB_TYPE & mbType);
 
     public:
-        static I_MB_TYPE I_4x4;
+        static I_MB_TYPE I_NxN;
 
         static I_MB_TYPE I_PCM;
     };

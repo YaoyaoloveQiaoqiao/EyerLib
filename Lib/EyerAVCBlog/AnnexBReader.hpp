@@ -20,7 +20,7 @@ public:
     int Close();
 
     // 用来读取一个 Nalu 文件
-    int ReadNalu(uint8_t * data, int * dataLen);
+    int ReadNalu(uint8_t * data, int * dataLen, int * startcodeLen);
 
 private:
     bool CheckStartCode(int & startCodeLen, uint8_t * bufPtr, int bufLen);
