@@ -17,55 +17,6 @@ public:
     virtual int OnMessageRecv(Eyer::UDPMessage * udpMessage)
     {
         printf("=====================================\n");
-        printf("buffer:\n %s\n", udpMessage->buffer.GetPtr());
-
-        Eyer::EyerSIPMessgae sipMessgae;
-        int ret = sipMessgae.Parse(udpMessage->buffer);
-        if(ret){
-            return -1;
-        }
-
-        printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
-
-        Eyer::EyerString method = sipMessgae.GetMethod();
-        printf("method: %s\n", method.str);
-
-        Eyer::EyerSIPFrom from;
-        sipMessgae.GetFrom(from);
-        from.PrintfInfo();
-
-        Eyer::EyerSIPFrom to;
-        sipMessgae.GetTo(to);
-        to.PrintfInfo();
-
-        Eyer::EyerSIPCallID callId;
-        sipMessgae.GetCallID(callId);
-
-        Eyer::EyerSIPCseq cseq;
-        sipMessgae.GetCseq(cseq);
-
-
-        Eyer::EyerSIPContact contact;
-        sipMessgae.GetContact(contact, 0);
-
-
-        Eyer::EyerSIPUri contactUri;
-        contact.GetUri(contactUri);
-
-
-
-        printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
-        Eyer::EyerSIPMessgae response;
-        response.SetInfo();
-        response.SetFrom(from);
-        response.SetTo(to);
-        response.SetCallID(callId);
-        response.SetCseq(cseq);
-        response.SetUri(contactUri);
-        Eyer::EyerBuffer responseBuffer = response.ToBuffer();
-
-        udpMessage->sockaddr.PrintInfo();
-        udpThread->Send(responseBuffer, udpMessage->sockaddr);
 
         printf("=====================================\n");
 

@@ -22,6 +22,8 @@ namespace Eyer
         EyerSIPMessgae(osip_message_t * sip);
         ~EyerSIPMessgae();
 
+        int GetFrom(EyerSIPFrom & from);
+
         EyerString GetDeviceId();
         EyerString GetIp();
         EyerString GetPort();

@@ -6,8 +6,22 @@
 
 #include "EyerGB28181/EyerGB28181.hpp"
 #include "EyerCore/EyerCore.hpp"
+#include "EyerNetwork/EyerNetwork.hpp"
+
+class MyEyerUDPCallback : public Eyer::EyerUDPCallback
+{
+public:
+    virtual int OnMessageRecv(Eyer::UDPMessage * udpMessage)
+    {
+        printf("UDP Len: %d\n", udpMessage->buffer.GetLen());
+        return 0;
+    }
+};
 
 TEST(GB28181, GB28181SipServer) {
+    Eyer::EyerUDPThread udpThread(6000, new MyEyerUDPCallback());
+    udpThread.Start();
+
     Eyer::SIPServer sipServer(5060);
     sipServer.Start();
 

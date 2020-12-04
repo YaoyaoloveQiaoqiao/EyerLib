@@ -82,6 +82,14 @@ namespace Eyer
             }
             if(je->type == EXOSIP_CALL_ANSWERED) {
                 printf("============EXOSIP_CALL_ANSWERED============\n");
+                PrintJe(je);
+
+                osip_message_t *ack = NULL;
+                eXosip_call_build_ack(excontext, je->did, &ack);
+
+                eXosip_lock(excontext);
+                eXosip_call_send_ack(excontext, je->did, ack);
+                eXosip_unlock(excontext);
             }
             if(je->type == EXOSIP_CALL_REDIRECTED) {
                 printf("============EXOSIP_CALL_REDIRECTED============\n");
@@ -226,6 +234,8 @@ namespace Eyer
                 printf("============EXOSIP_EVENT_COUNT============\n");
             }
         }
+
+        eXosip_quit(excontext);
     }
 
     int SIPServerMainThread::PrintJe(eXosip_event_t * je)

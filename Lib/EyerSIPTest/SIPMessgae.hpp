@@ -25,8 +25,6 @@ TEST(SIP, SIPMessage)
     buffer.Append((uint8_t *)sipStr, strlen(sipStr));
 
     Eyer::EyerSIPMessgae sipMessgae;
-
-    int ret = sipMessgae.Parse(buffer);
 }
 
 #endif //EYERLIB_SIPMESSGAE_HPP
