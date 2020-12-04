@@ -54,8 +54,8 @@ namespace Eyer
             chroma_format_idc = bs.bs_read_ue();
             fieldList.push_back(new EyerField("chroma_format_idc",                    chroma_format_idc));
             if(chroma_format_idc == 3) {
-                residual_colour_transform_flag = bs.bs_read_u1();
-                fieldList.push_back(new EyerField("residual_colour_transform_flag",   residual_colour_transform_flag));
+                separate_colour_plance_flag = bs.bs_read_u1();
+                fieldList.push_back(new EyerField("separate_colour_plance_flag",   separate_colour_plance_flag));
             }
             bit_depth_luma_minus8                   = bs.bs_read_ue();
             bit_depth_chroma_minus8                 = bs.bs_read_ue();
@@ -80,6 +80,13 @@ namespace Eyer
                     }
                 }
             }
+        }
+
+        if (separate_colour_plance_flag == 0){
+            ChromaArrayType = chroma_format_idc;
+        }
+        else{
+            ChromaArrayType = 1;
         }
 
         log2_max_frame_num_minus4               = bs.bs_read_ue();

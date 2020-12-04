@@ -83,7 +83,9 @@ namespace Eyer
         int seq_parameter_set_id = 0;
 
         int chroma_format_idc = 0;
-        int residual_colour_transform_flag = 0;
+        int separate_colour_plance_flag = 0;
+        int ChromaArrayType = 0;
+
         int bit_depth_luma_minus8 = 0;
         int bit_depth_chroma_minus8 = 0;
         int qpprime_y_zero_transform_bypass_flag = 0;

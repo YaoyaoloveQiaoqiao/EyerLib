@@ -134,4 +134,69 @@ namespace Eyer
         }
         return false;
     }
+
+    int32_t EyerBitStream::bs_read_me(int ChromaArrayType, MB_PART_PRED_MODE predMode)
+    {
+        uint32_t ue_index = bs_read_ue();
+        uint32_t val = 0;
+        // Table
+        if(ChromaArrayType == 1 || ChromaArrayType == 2){
+            if(predMode == MB_PART_PRED_MODE::Intra_4x4 || predMode == MB_PART_PRED_MODE::Intra_8x8){
+                uint32_t codec_block_pattern[] = {
+                        47, 31, 15, 0,
+                        23, 27, 29, 30,
+                        7, 11, 13, 14,
+                        39, 43, 45, 46,
+                        16, 3, 5, 10,
+                        12, 19, 21, 26,
+                        28, 35, 37, 42,
+                        44, 1, 2, 4,
+                        8, 17, 18, 20,
+                        25, 32, 33, 34,
+                        36, 40, 38, 41
+                };
+                val = codec_block_pattern[ue_index];
+            }
+            else if(predMode == MB_PART_PRED_MODE::Intra_16x16){
+                uint32_t codec_block_pattern[] = {
+                        0, 16, 1, 2,
+                        4, 8, 32, 3,
+                        5, 10, 12, 15,
+                        47, 7, 11, 13,
+                        14, 6, 9, 31,
+                        35, 37, 42, 44,
+                        33, 34, 36, 40,
+                        39, 43, 45, 46,
+                        17, 18, 20, 24,
+                        19, 12, 26, 28,
+                        23, 27, 29, 30,
+                        22, 25, 38, 41
+                };
+                val = codec_block_pattern[ue_index];
+            }
+        }
+
+        if(ChromaArrayType == 0 || ChromaArrayType == 3){
+            if(predMode == MB_PART_PRED_MODE::Intra_4x4 || predMode == MB_PART_PRED_MODE::Intra_8x8){
+                uint32_t codec_block_pattern[] = {
+                        15, 0, 7, 11,
+                        13, 14, 3, 5,
+                        10, 12, 1, 2,
+                        4, 8, 6, 9
+                };
+                val = codec_block_pattern[ue_index];
+            }
+            else if(predMode == MB_PART_PRED_MODE::Intra_16x16){
+                uint32_t codec_block_pattern[] = {
+                        0, 1, 2, 4,
+                        8, 3, 5, 10,
+                        12, 15, 7, 11,
+                        13, 14, 6, 9
+                };
+                val = codec_block_pattern[ue_index];
+            }
+        }
+
+        return val;
+    }
 }
