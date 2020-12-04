@@ -141,10 +141,27 @@ namespace Eyer
                         rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u(3);
                     }
                 }
-
-                int a = 14;
-                a = prev_intra4x4_pred_mode_flag[0];
             }
+
+            if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_8x8){
+                uint32_t prev_intra8x8_pred_mode_flag[4];
+                memset(prev_intra8x8_pred_mode_flag, 0, 4 * sizeof(uint32_t));
+                uint32_t rem_intra8x8_pred_mode_flag[4];
+                memset(rem_intra8x8_pred_mode_flag, 0, 4 * sizeof(uint32_t));
+                for(int luma8x8BlkIdx=0; luma8x8BlkIdx<4; luma8x8BlkIdx++){
+                    prev_intra8x8_pred_mode_flag[luma8x8BlkIdx] = bs.bs_read_u1();
+                    if(!prev_intra8x8_pred_mode_flag[luma8x8BlkIdx]){
+                        rem_intra8x8_pred_mode_flag[luma8x8BlkIdx] = bs.bs_read_u(3);
+                    }
+                }
+            }
+
+            if(sps.ChromaArrayType == 1 || sps.ChromaArrayType == 2){
+                uint32_t intra_chrome_pred_mode = bs.bs_read_ue();
+            }
+        }
+        else{
+            // TODO B P
         }
         return 0;
     }
