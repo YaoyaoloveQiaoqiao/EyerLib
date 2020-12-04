@@ -30,4 +30,16 @@ namespace Eyer
         }
         return 0;
     }
+
+
+    int StartStream(
+            EyerString & streamServerIp,
+            int streamServerPort,
+            EyerString & deviceId,
+            EyerString & channelId)
+    {
+        // 构建，放入消息队列
+
+        return 0;
+    }
 }

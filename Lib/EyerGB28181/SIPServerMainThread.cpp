@@ -83,7 +83,6 @@ namespace Eyer
             if(je->type == EXOSIP_CALL_ANSWERED) {
                 printf("============EXOSIP_CALL_ANSWERED============\n");
                 PrintJe(je);
-                //ACK
 
                 osip_message_t *ack = NULL;
                 eXosip_call_build_ack(excontext, je->did, &ack);

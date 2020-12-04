@@ -96,8 +96,6 @@ namespace Eyer
             osip_message_set_body(invite, body, bodyLen);
             osip_message_set_content_type(invite, "APPLICATION/SDP");
 
-
-
             eXosip_lock(excontext);
             int call_id = eXosip_call_send_initial_invite(excontext, invite);
             eXosip_unlock(excontext);

@@ -21,7 +21,7 @@ add_library(
         SIPDeviceManager.hpp
         SIPServerContext.cpp
         SIPServerContext.hpp
-)
+        SIPEventQueue.cpp SIPEventQueue.hpp SIPEvent.cpp SIPEvent.hpp)
 
 set(head_files
         EyerGB28181.hpp
