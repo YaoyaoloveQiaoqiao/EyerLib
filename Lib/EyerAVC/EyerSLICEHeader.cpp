@@ -58,7 +58,7 @@ namespace Eyer
     {
         sliceType = sh.slice_type;
 
-        if (sps.residual_colour_transform_flag) {
+        if (sps.separate_colour_plance_flag == 1) {
             sh.colour_plane_id = bs.bs_read_u(2);
             fieldList.push_back(new EyerField("colour_plane_id",                           sh.colour_plane_id));
         }

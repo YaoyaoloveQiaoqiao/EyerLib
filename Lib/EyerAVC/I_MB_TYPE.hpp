@@ -18,8 +18,8 @@ namespace Eyer
 
     public:
         static I_MB_TYPE I_NxN;
-
         static I_MB_TYPE I_PCM;
+
     };
 }
 

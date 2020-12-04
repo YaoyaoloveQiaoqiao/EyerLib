@@ -7,7 +7,6 @@ namespace Eyer
 
     I_MB_TYPE::I_MB_TYPE(int _val, const EyerString & _name) : EyerEnum(_val, _name)
     {
-
     }
 
     I_MB_TYPE::I_MB_TYPE(const I_MB_TYPE & mbType)

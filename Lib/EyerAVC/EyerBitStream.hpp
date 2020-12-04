@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "EyerCore/EyerCore.hpp"
+#include "MB_PART_PRED_MODE.hpp"
 
 namespace Eyer
 {
@@ -22,6 +23,8 @@ namespace Eyer
 
         uint32_t bs_read_ue();
         int32_t bs_read_se();
+
+        int32_t bs_read_me(int ChromaArrayType, MB_PART_PRED_MODE predMode);
 
         uint32_t bs_read_ae();
 
