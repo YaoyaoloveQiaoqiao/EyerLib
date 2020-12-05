@@ -5,6 +5,10 @@
 
 #include "MathTest.hpp"
 
+TEST(EyerLog, log){
+    EyerLog("EyerLog int: %d\n", 12345);
+}
+
 TEST(EyerString, string){
     for(int i=0;i<100;i++){
         Eyer::EyerString str = (Eyer::EyerString)"/Users/lichi/Downloads/size.flv";
@@ -107,7 +111,7 @@ TEST(EyerLinkedList_Test, insert_delete){
 
     list.find(0, data1);
     EXPECT_EQ(data1, 0);
-    EyerLog("2. data1:%d\n", data1);	
+    EyerLog("2. data1:%d\n", data1);
 }
 
 TEST(EyerLinkedList_Test, insertBack){
@@ -155,7 +159,7 @@ TEST(EyerLinkedList_Test, insertBack){
     EyerLog("2. data1:%d\n", data1);
 
     list.clear();
-    list.clear();	
+    list.clear();
 
 }
 
@@ -505,6 +509,9 @@ TEST(EyerBufferMut, EyerBufferCutOffTest){
 #include "MD5Test.hpp"
 
 int main(int argc,char **argv){
+    eyer_log_init();
     testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    int ret = RUN_ALL_TESTS();
+    eyer_log_uninit();
+    return ret;
 }

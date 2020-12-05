@@ -3,6 +3,9 @@
 namespace Eyer
 {
     SIPEventType SIPEventType::USER_REGISTER(1, "USER_REGISTER");
+    SIPEventType SIPEventType::REALTIME_REQUEST(2, "REALTIME_REQUEST");
+    SIPEventType SIPEventType::REALTIME_RESPONSE(3, "REALTIME_RESPONSE");
+
 
     SIPEventType::SIPEventType(int _val, EyerString _name)
     {
@@ -25,6 +28,16 @@ namespace Eyer
         val = eventType.val;
         name = eventType.name;
         return *this;
+    }
+
+    bool SIPEventType::operator == (const SIPEventType & eventType)
+    {
+        return val == eventType.val;
+    }
+
+    bool SIPEventType::operator != (const SIPEventType & eventType)
+    {
+        return !(*this == eventType);
     }
 
     EyerString & SIPEventType::GetName()

@@ -10,7 +10,15 @@ namespace Eyer
         EventUserRegister();
         ~EventUserRegister();
 
-        SIPEventType GetEventType();
+        EventUserRegister(const EventUserRegister & event);
+        EventUserRegister & operator = (const EventUserRegister & event);
+
+        virtual SIPEventType GetEventType();
+
+        virtual int Do(struct eXosip_t * excontext, SIPServerContext * context);
+
+    public:
+        EyerString deviceId;
     };
 }
 

@@ -1,4 +1,5 @@
 #include "SIPServer.hpp"
+#include "Event/EventStartRealTimeVideoRequest.hpp"
 
 namespace Eyer
 {
@@ -51,8 +52,12 @@ namespace Eyer
             EyerString & deviceId,
             EyerString & channelId)
     {
-        // 构建，放入消息队列
-
+        EventStartRealTimeVideoRequest * startRealTimeVideoRequest = new EventStartRealTimeVideoRequest();
+        startRealTimeVideoRequest->streamServerIp       = streamServerIp;
+        startRealTimeVideoRequest->streamServerPort     = streamServerPort;
+        startRealTimeVideoRequest->deviceId             = deviceId;
+        startRealTimeVideoRequest->channelId            = channelId;
+        context.eventQueue.PutEvent(startRealTimeVideoRequest);
         return 0;
     }
 

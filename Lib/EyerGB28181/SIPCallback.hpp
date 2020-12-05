@@ -1,6 +1,8 @@
 #ifndef EYERLIB_SIPCALLBACK_HPP
 #define EYERLIB_SIPCALLBACK_HPP
 
+#include "EyerCore/EyerCore.hpp"
+
 namespace Eyer
 {
     class SIPCallback {
@@ -8,7 +10,7 @@ namespace Eyer
         SIPCallback();
         ~SIPCallback();
 
-        virtual int UserRegister() = 0;
+        virtual int UserRegister(EyerString deviceId) = 0;
     };
 }
 

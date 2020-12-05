@@ -29,7 +29,7 @@ add_library(
         SIPEventThread.hpp
         Event/EventUserRegister.cpp
         Event/EventUserRegister.hpp
-        SIPEventType.cpp SIPEventType.hpp SIPCallback.cpp SIPCallback.hpp)
+        SIPEventType.cpp SIPEventType.hpp SIPCallback.cpp SIPCallback.hpp Event/EventStartRealTimeVideoRequest.cpp Event/EventStartRealTimeVideoRequest.hpp Event/EventStartRealTimeVideoResponse.cpp Event/EventStartRealTimeVideoResponse.hpp)
 
 set(head_files
         EyerGB28181.hpp

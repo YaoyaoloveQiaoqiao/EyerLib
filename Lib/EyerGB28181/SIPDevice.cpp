@@ -37,4 +37,14 @@ namespace Eyer
     {
         return deviceID;
     }
+
+    EyerString & SIPDevice::GetIP()
+    {
+        return ip;
+    }
+
+    EyerString & SIPDevice::GetPort()
+    {
+        return port;
+    }
 }

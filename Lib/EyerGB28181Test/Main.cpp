@@ -20,9 +20,26 @@ public:
 
 class MySIPCallback : public Eyer::SIPCallback
 {
-    virtual int UserRegister()
+public:
+    Eyer::SIPServer * sipServer = nullptr;
+
+    MySIPCallback(Eyer::SIPServer * _sipServer){
+        sipServer = _sipServer;
+    }
+
+    virtual int UserRegister(Eyer::EyerString deviceId)
     {
-        EyerLog("User Register\n");
+        EyerLog("User Register: %s\n", deviceId.str);
+
+        Eyer::EyerString streamServerIp = "192.168.2.104";
+        Eyer::EyerString channelId = "1234";
+
+        sipServer->StartStream(
+                streamServerIp,
+                6000,
+                deviceId,
+                channelId
+                );
         return 0;
     }
 };
@@ -31,13 +48,12 @@ TEST(GB28181, GB28181SipServer) {
     eyer_log_init();
     eye_log_set_level(1);
 
-    MySIPCallback sipCallback;
     MyEyerUDPCallback eyerUdpCallback;
-
     Eyer::EyerUDPThread udpThread(6000, &eyerUdpCallback);
     udpThread.Start();
 
     Eyer::SIPServer sipServer(5060);
+    MySIPCallback sipCallback(&sipServer);
     sipServer.SetCallback(&sipCallback);
     sipServer.Start();
 

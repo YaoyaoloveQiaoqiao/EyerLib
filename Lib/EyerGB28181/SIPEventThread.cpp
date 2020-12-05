@@ -2,6 +2,7 @@
 
 #include "EyerCore/EyerCore.hpp"
 #include "SIPServerContext.hpp"
+#include "Event/EventUserRegister.hpp"
 
 namespace Eyer
 {
@@ -12,9 +13,9 @@ namespace Eyer
 
     SIPEventThread::~SIPEventThread()
     {
-        while(eventQueue.Size() > 0){
+        while(context->eventQueue.Size() > 0){
             SIPEvent * event = nullptr;
-            eventQueue.GetEvent(&event);
+            context->eventQueue.GetEvent(&event);
             if(event != nullptr){
                 delete event;
                 event = nullptr;
@@ -27,26 +28,23 @@ namespace Eyer
         while(!stopFlag){
             Eyer::EyerTime::EyerSleepMilliseconds(1);
 
-            {
-                SIPEvent * event = nullptr;
-                context->eventQueue.GetEvent(&event);
-                if(event != nullptr){
-                    eventQueue.PutEvent(event);
-                }
-            }
-
-            {
-                SIPEvent * event = nullptr;
-                eventQueue.GetEvent(&event);
-                if(event != nullptr){
+            SIPEvent * event = nullptr;
+            context->eventQueue.GetEvent(&event);
+            if(event != nullptr){
+                if(event->to == SIPEventTarget::SIPEventTarget_EventThread){
                     SIPEventType eventType = event->GetEventType();
-
-                    if(context->callback != nullptr){
-                        context->callback->UserRegister();
+                    if(eventType == SIPEventType::USER_REGISTER){
+                        if(context->callback != nullptr){
+                            EventUserRegister * eventUserRegister = (EventUserRegister *)event;
+                            context->callback->UserRegister(eventUserRegister->deviceId);
+                        }
                     }
 
                     delete event;
                     event = nullptr;
+                }
+                else{
+                    context->eventQueue.PutEvent(event);
                 }
             }
         }

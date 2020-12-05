@@ -16,7 +16,6 @@ namespace Eyer
         virtual void Run();
 
     private:
-        SIPEventQueue eventQueue;
         SIPServerContext * context = nullptr;
     };
 }

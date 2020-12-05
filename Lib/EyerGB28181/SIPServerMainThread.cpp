@@ -54,10 +54,15 @@ namespace Eyer
             SIPEvent * event = nullptr;
             context->eventQueue.GetEvent(&event);
             if(event != nullptr){
-
-
-                delete event;
-                event = nullptr;
+                if(event->to == SIPEventTarget::SIPEventTarget_MainThread){
+                    EyerLog("SIPEventType: %s\n", event->GetEventType().GetName().str);
+                    event->Do(excontext, context);
+                    delete event;
+                    event = nullptr;
+                }
+                else{
+                    context->eventQueue.PutEvent(event);
+                }
             }
 
             if (je == NULL) {
@@ -249,26 +254,27 @@ namespace Eyer
 
     int SIPServerMainThread::PrintJe(eXosip_event_t * je)
     {
-        /*
         if(je->request != NULL){
-            printf("=================Request Start=================\n");
+            // printf("=================Request Start=================\n");
             char * str = NULL;
             size_t len = 0;
             osip_message_to_str(je->request, &str, &len);
-            printf("request msg: \n%s\n", str);
+            // EyerLog("Call Id: %d\n", je->request->call_id);
+            // EyerLog("tid: %d\n", je->tid);
+            // EyerLog("did: %d\n", je->did);
+            // EyerLog("request msg: \n%s\n", str);
             osip_free(str);
-            printf("=================Request End=================\n");
+            // printf("=================Request End=================\n");
         }
         if(je->response != NULL){
-            printf("=================Response Start=================\n");
+            // printf("=================Response Start=================\n");
             char * str = NULL;
             size_t len = 0;
             osip_message_to_str(je->response, &str, &len);
-            printf("response msg: \n%s\n", str);
+            // EyerLog("response msg: \n%s\n", str);
             osip_free(str);
-            printf("=================Response End=================\n");
+            // printf("=================Response End=================\n");
         }
-        */
         return 0;
     }
 }

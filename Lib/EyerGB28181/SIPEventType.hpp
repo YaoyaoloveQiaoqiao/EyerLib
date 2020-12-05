@@ -5,6 +5,13 @@
 
 namespace Eyer
 {
+    enum SIPEventTarget
+    {
+        SIPEventTarget_MainThread,
+        SIPEventTarget_EventThread,
+        SIPEventTarget_Count
+    };
+
     class SIPEventType {
     public:
         SIPEventType(int _val, EyerString _name);
@@ -13,6 +20,9 @@ namespace Eyer
         SIPEventType(const SIPEventType & eventType);
         SIPEventType & operator = (const SIPEventType & eventType);
 
+        bool operator == (const SIPEventType & eventType);
+        bool operator != (const SIPEventType & eventType);
+
         EyerString & GetName();
 
     private:
@@ -20,6 +30,8 @@ namespace Eyer
         EyerString name;
     public:
         static SIPEventType USER_REGISTER;
+        static SIPEventType REALTIME_REQUEST;
+        static SIPEventType REALTIME_RESPONSE;
     };
 }
 

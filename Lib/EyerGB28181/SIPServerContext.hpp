@@ -15,10 +15,11 @@ namespace Eyer
 
         SIPDeviceManager deviceManager;
         SIPEventQueue eventQueue;
-
         SIPEventThread * eventThread = nullptr;
-
         SIPCallback * callback = nullptr;
+
+        EyerString serverId = "34020000002000000001";
+        EyerString serverRealm = "34020000";
     };
 }
 
