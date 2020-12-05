@@ -38,6 +38,10 @@ add_library(
         EyerMD5.hpp
         EyerSockaddr.cpp
         EyerSockaddr.hpp
+        EyerLogThread.cpp
+        EyerLogThread.hpp
+        EyerLogBean.cpp
+        EyerLogBean.hpp
 )
 
 set(head_files 

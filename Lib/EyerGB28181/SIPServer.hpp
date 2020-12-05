@@ -4,6 +4,7 @@
 #include "SIPServerMainThread.hpp"
 #include "SIPServerContext.hpp"
 #include "EyerCore/EyerCore.hpp"
+#include "SIPEventThread.hpp"
 
 namespace Eyer
 {
@@ -14,6 +15,8 @@ namespace Eyer
 
         int Start();
         int Stop();
+
+        int SetCallback(SIPCallback * callback);
 
         int StartStream(
                 EyerString & streamServerIp,

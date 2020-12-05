@@ -2,6 +2,9 @@
 #define EYERLIB_SIPSERVERCONTEXT_HPP
 
 #include "SIPDeviceManager.hpp"
+#include "SIPEventQueue.hpp"
+#include "SIPEventThread.hpp"
+#include "SIPCallback.hpp"
 
 namespace Eyer
 {
@@ -11,6 +14,11 @@ namespace Eyer
         ~SIPServerContext();
 
         SIPDeviceManager deviceManager;
+        SIPEventQueue eventQueue;
+
+        SIPEventThread * eventThread = nullptr;
+
+        SIPCallback * callback = nullptr;
     };
 }
 

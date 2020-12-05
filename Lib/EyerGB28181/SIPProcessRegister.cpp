@@ -8,6 +8,8 @@
 
 #include "EyerSIP/EyerSIP.hpp"
 
+#include "Event/EventUserRegister.hpp"
+
 #define NONCE "9bd055"
 #define ALGORITHTHM "MD5"
 
@@ -45,9 +47,11 @@ namespace Eyer
             EyerString deviceIp         = sipMessgae.GetIp();
             EyerString devicePort       = sipMessgae.GetPort();
 
+            /*
             EyerLog("deviceId: %s\n", deviceID.str);
             EyerLog("deviceIp: %s\n", deviceIp.str);
             EyerLog("devicePort: %s\n", devicePort.str);
+            */
 
             SIPDevice device;
             ret = context->deviceManager.FindDevice(device, deviceID);
@@ -55,6 +59,9 @@ namespace Eyer
                 // 新用户
                 EyerLog("New User Register\n");
                 context->deviceManager.Register(deviceID, deviceIp, devicePort);
+                // 发送 消息
+                EventUserRegister * eventUserRegister = new EventUserRegister();
+                context->eventQueue.PutEvent(eventUserRegister);
             }
             else{
                 // 重复注册
@@ -66,7 +73,7 @@ namespace Eyer
             eXosip_message_send_answer (excontext, je->tid, 200, answer);
 
 
-
+            /*
             EyerString to = EyerString("sip:") + deviceID + "@" + deviceIp + ":" + devicePort;
             char * from = (char *)"sip:34020000002000000001@34020000";
             char * subject = (char *)"34020000001320000001:0,34020000002000000001:0";
@@ -76,7 +83,7 @@ namespace Eyer
 
 
             char *localSipId = "34020000002000000001";
-            char *localIpAddr= "192.168.2.100";
+            char *localIpAddr= "192.168.2.104";
             //sdp
             char body[500];
             int bodyLen = snprintf(body, 500,
@@ -99,6 +106,7 @@ namespace Eyer
             eXosip_lock(excontext);
             int call_id = eXosip_call_send_initial_invite(excontext, invite);
             eXosip_unlock(excontext);
+             */
 
             /*
             // Query Device Info

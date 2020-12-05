@@ -1,7 +1,6 @@
 #include "EyerThread.hpp"
 
 #include <functional>
-#include "EyerCore/EyerCore.hpp"
 
 namespace Eyer
 {
@@ -131,7 +130,7 @@ namespace Eyer
         while(eventLoopFlag){
             eventLoopIsStartFlag = 1;
             eventLoopIsStart.notify_all();
-            Eyer::EyerTime::EyerSleepMilliseconds(1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
 
         eventLoopIsEndFlag = 1;
