@@ -5,8 +5,10 @@ add_executable(
 
 include_directories (../)
 
-target_link_libraries (EyerAVCTest EyerCore)
+
 target_link_libraries (EyerAVCTest EyerAVC)
+target_link_libraries (EyerAVCTest EyerCore)
+target_link_libraries (EyerAVCTest EyerThread)
 target_link_libraries (EyerAVCTest gtest)
 
 file(COPY

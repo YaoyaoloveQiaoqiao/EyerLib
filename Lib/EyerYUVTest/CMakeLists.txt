@@ -12,8 +12,8 @@ target_link_libraries (EyerYUVTest EyerMP4)
 target_link_libraries (EyerYUVTest EyerHttp)
 target_link_libraries (EyerYUVTest EyerDASH)
 target_link_libraries (EyerYUVTest EyerAV)
-target_link_libraries (EyerYUVTest EyerThread)
 target_link_libraries (EyerYUVTest EyerCore)
+target_link_libraries (EyerYUVTest EyerThread)
 target_link_libraries (EyerYUVTest gtest)
 
 target_link_libraries (

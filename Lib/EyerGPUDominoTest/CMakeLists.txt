@@ -10,6 +10,7 @@ target_link_libraries (EyerGPUDominoTest EyerGPUDomino)
 target_link_libraries (EyerGPUDominoTest EyerGL)
 target_link_libraries (EyerGPUDominoTest EyerGLAD)
 target_link_libraries (EyerGPUDominoTest EyerCore)
+target_link_libraries (EyerGPUDominoTest EyerThread)
 
 INSTALL(
         TARGETS EyerGPUDominoTest
