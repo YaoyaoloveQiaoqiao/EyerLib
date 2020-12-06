@@ -16,6 +16,8 @@ namespace Eyer
         SIPDevice & operator = (const SIPDevice & device);
 
         EyerString & GetDeviceID();
+        EyerString & GetIP();
+        EyerString & GetPort();
 
     private:
         EyerString deviceID;

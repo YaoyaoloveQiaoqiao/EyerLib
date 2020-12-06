@@ -6,10 +6,12 @@ add_executable(
 include_directories (../)
 
 target_link_libraries (EyerTypeTest gtest)
-target_link_libraries (EyerTypeTest EyerCore)
+
 target_link_libraries (EyerTypeTest EyerType)
 target_link_libraries (EyerTypeTest EyerGL)
 target_link_libraries (EyerTypeTest EyerGLWindow)
+target_link_libraries (EyerTypeTest EyerCore)
+target_link_libraries (EyerTypeTest EyerThread)
 
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
     MESSAGE(STATUS "current platform: Linux ")

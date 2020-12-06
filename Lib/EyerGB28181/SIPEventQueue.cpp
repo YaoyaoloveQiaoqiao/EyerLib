@@ -18,4 +18,24 @@ namespace Eyer
             }
         }
     }
+
+    int SIPEventQueue::PutEvent(SIPEvent * event)
+    {
+        eventQueue.Push(event);
+        return 0;
+    }
+
+    int SIPEventQueue::GetEvent(SIPEvent ** event)
+    {
+        if(eventQueue.Size() <= 0){
+            return -1;
+        }
+        eventQueue.FrontPop(event);
+        return 0;
+    }
+
+    int SIPEventQueue::Size()
+    {
+        return eventQueue.Size();
+    }
 }

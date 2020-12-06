@@ -7,6 +7,7 @@ include_directories (../)
 target_link_libraries (EyerPJSIPTest gtest)
 target_link_libraries (EyerPJSIPTest EyerPJSIP)
 target_link_libraries (EyerPJSIPTest EyerCore)
+target_link_libraries (EyerPJSIPTest EyerThread)
 
 
 target_link_libraries (

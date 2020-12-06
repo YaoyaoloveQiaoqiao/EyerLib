@@ -11,6 +11,10 @@ namespace Eyer
         SIPEventQueue();
         ~SIPEventQueue();
 
+        int PutEvent(SIPEvent * event);
+        int GetEvent(SIPEvent ** event);
+
+        int Size();
     private:
         EyerLockQueue<SIPEvent> eventQueue;
     };

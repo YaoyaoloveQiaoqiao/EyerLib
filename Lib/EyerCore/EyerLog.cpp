@@ -5,7 +5,51 @@
 #include <string.h>
 #include <stdio.h>
 #include <thread>
+#include <stdarg.h>
 
+#include "EyerLogThread.hpp"
+#include "EyerLogBean.hpp"
+
+int eyer_log_init()
+{
+    Eyer::EyerLogThread::GetInstance()->Start();
+    return 0;
+}
+int eyer_log_uninit()
+{
+    Eyer::EyerLogThread::FreeInstance();
+    return 0;
+}
+
+int eye_log_set_level       (int level)
+{
+    Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
+    logThread->SetLevel(level);
+    return 0;
+}
+
+int eyer_log_param (int isLevel, int isFile, int isLine, int isFunc)
+{
+    return 0;
+}
+
+void eyer_log_log(const char * file, const char * function, int line, int level, const char * format, ...)
+{
+    char logStr[4096];
+    memset(logStr, 0, 4096);
+
+    va_list args;
+    va_start(args, format);
+    vsnprintf(logStr, 4096, format, args);
+    va_end(args);
+
+    Eyer::EyerLogBean * logBean = new Eyer::EyerLogBean(file, function, line, level, logStr);
+
+    Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
+    logThread->PutLog(logBean);
+}
+
+/*
 void EyerPrintf(const char * file, const char * function, int line, int level, const char * _format, ...)
 {
     time_t t;
@@ -85,3 +129,4 @@ void EyerPrintf(const char * file, const char * function, int line, int level, c
     }
     va_end(ap);  //结束时清理工作
 }
+*/

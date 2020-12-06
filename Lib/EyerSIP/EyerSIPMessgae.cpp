@@ -46,9 +46,8 @@ namespace Eyer
 
     EyerString EyerSIPMessgae::GetIp()
     {
-        char addr[20];
-        int port;
-        memset(addr, '\0', 20);
+        char addr[32];
+        memset(addr, '\0', 32);
 
         osip_via_t* via = nullptr;
         osip_message_get_via(impl->sip, 0, &via);
@@ -56,7 +55,7 @@ namespace Eyer
         }
 
         osip_generic_param_t * br = nullptr;
-        osip_via_param_get_byname (via, "received", &br);
+        osip_via_param_get_byname (via, (char *)"received", &br);
         if (br != NULL && br->gvalue != NULL)
             strcpy(addr, br->gvalue);
         else
