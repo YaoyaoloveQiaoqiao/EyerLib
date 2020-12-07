@@ -116,8 +116,17 @@ namespace Eyer
                 }
                 mb_pred(mbType, bs);
             }
+
+            uint32_t CodecBlockPatterLuma = 0;
+            uint32_t CodecBlockPatterChroma = 0;
             if(mbType.MbPartPredMode() != MB_PART_PRED_MODE::Intra_16x16){
                 uint32_t coded_block_pattern = bs.bs_read_me(sps.ChromaArrayType, mbType.MbPartPredMode());
+                CodecBlockPatterLuma = coded_block_pattern % 16;
+                CodecBlockPatterChroma = coded_block_pattern / 16;
+            }
+
+            if(CodecBlockPatterLuma > 0 || CodecBlockPatterChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+                int32_t mb_qp_delta = bs.bs_read_se();
             }
         }
 
