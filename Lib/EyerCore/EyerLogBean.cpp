@@ -9,6 +9,15 @@ namespace Eyer
         line        = _line;
         log         = _log;
         logLevel    = _level;
+
+        time_t t;
+        struct tm * lt;
+        time (&t);
+        lt = localtime (&t);
+
+        char timeStr[128];
+        sprintf(timeStr, "%d-%02d-%02d %02d:%02d:%02d", lt->tm_year + 1900, lt->tm_mon, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec);
+        timeS = timeStr;
     }
 
     EyerLogBean::~EyerLogBean()
@@ -53,5 +62,10 @@ namespace Eyer
     int EyerLogBean::GetLine()
     {
         return line;
+    }
+
+    EyerString & EyerLogBean::GetTimeStr()
+    {
+        return timeS;
     }
 }

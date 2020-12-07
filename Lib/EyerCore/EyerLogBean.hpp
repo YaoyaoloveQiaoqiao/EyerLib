@@ -15,6 +15,7 @@ namespace Eyer
         EyerString & GetFile();
         EyerString & GetFunction();
         EyerString & GetLog();
+        EyerString & GetTimeStr();
         int GetLine();
         int GetLevel();
 
@@ -24,6 +25,7 @@ namespace Eyer
         EyerString file;
         EyerString function;
         int line;
+        EyerString timeS;
     };
 }
 
