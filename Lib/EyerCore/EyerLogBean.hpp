@@ -2,6 +2,12 @@
 #define EYERLIB_EYERLOGBEAN_HPP
 
 #include "EyerString.hpp"
+#include <stdarg.h>
+#include <time.h>
+#include <string.h>
+#include <stdio.h>
+#include <thread>
+#include <stdarg.h>
 
 namespace Eyer
 {
