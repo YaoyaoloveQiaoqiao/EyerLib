@@ -18,12 +18,13 @@ public:
     {
         EyerLog("User Register: %s\n", deviceId.str);
 
-        Eyer::EyerString streamServerIp = "192.168.2.106";
+        // Eyer::EyerString streamServerIp = "39.105.183.99";
+        Eyer::EyerString streamServerIp = "39.105.183.99";
         Eyer::EyerString channelId = "1234";
 
         sipServer->StartStream(
                 streamServerIp,
-                6000,
+                9000,
                 deviceId,
                 channelId
                 );
@@ -41,7 +42,7 @@ TEST(GB28181, GB28181SipServer) {
     sipServer.SetCallback(&sipCallback);
     sipServer.Start();
 
-    for(int i=0;i<60 * 2;i++){
+    for(int i=0;i<60 * 10;i++){
         Eyer::EyerTime::EyerSleepMilliseconds(1000);
     }
 
