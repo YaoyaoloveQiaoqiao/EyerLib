@@ -1,22 +1,9 @@
 #include <gtest/gtest.h>
-
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <iostream>
 
 #include "EyerGB28181/EyerGB28181.hpp"
 #include "EyerCore/EyerCore.hpp"
-#include "EyerNetwork/EyerNetwork.hpp"
-
-class MyEyerUDPCallback : public Eyer::EyerUDPCallback
-{
-public:
-    virtual int OnMessageRecv(Eyer::UDPMessage * udpMessage)
-    {
-        printf("UDP Len: %d\n", udpMessage->buffer.GetLen());
-        return 0;
-    }
-};
+#include "EyerRTP/EyerRTP.hpp"
 
 class MySIPCallback : public Eyer::SIPCallback
 {
@@ -31,7 +18,7 @@ public:
     {
         EyerLog("User Register: %s\n", deviceId.str);
 
-        Eyer::EyerString streamServerIp = "192.168.2.104";
+        Eyer::EyerString streamServerIp = "192.168.2.106";
         Eyer::EyerString channelId = "1234";
 
         sipServer->StartStream(
@@ -47,9 +34,7 @@ public:
 TEST(GB28181, GB28181SipServer) {
     eye_log_set_level(1);
 
-    MyEyerUDPCallback eyerUdpCallback;
-    Eyer::EyerUDPThread udpThread(6000, &eyerUdpCallback);
-    udpThread.Start();
+    Eyer::EyerRTPServer rtpServer;
 
     Eyer::SIPServer sipServer(5060);
     MySIPCallback sipCallback(&sipServer);
@@ -61,10 +46,11 @@ TEST(GB28181, GB28181SipServer) {
     }
 
     sipServer.Stop();
-    udpThread.Stop();
 }
 
 int main(int argc,char **argv){
+    eyer_log_param(1, 1, 0, 0, 0);
+
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
