@@ -5,22 +5,15 @@ namespace Eyer
 {
     EyerLogThread * EyerLogThread::instance = nullptr;
 
+    EyerLogThread::GarbageCollector EyerLogThread::gc;
+
     EyerLogThread * EyerLogThread::GetInstance()
     {
         if(EyerLogThread::instance == nullptr){
             EyerLogThread::instance = new EyerLogThread();
+            EyerLogThread::instance->Start();
         }
         return EyerLogThread::instance;
-    }
-
-    int EyerLogThread::FreeInstance()
-    {
-        if(EyerLogThread::instance != nullptr){
-            EyerLogThread::instance->Stop();
-            delete EyerLogThread::instance;
-            EyerLogThread::instance = nullptr;
-        }
-        return 0;
     }
 
     EyerLogThread::EyerLogThread()
@@ -51,13 +44,52 @@ namespace Eyer
             if(logBean != nullptr){
                 // printf("[%d] [%s (%d)] [%s] %s", logBean->GetLevel(), logBean->GetFile().str, logBean->GetLine(), logBean->GetFunction().str, logBean->GetLog().str);
                 if(logBean->GetLevel() >= level){
-                    printf("[%2d] %s", logBean->GetLevel(), logBean->GetLog().str);
+                    PrintLog(logBean);
                 }
 
                 delete logBean;
                 logBean = nullptr;
             }
         }
+
+        while(logQueue.Size() > 0){
+            EyerLogBean * logBean = nullptr;
+            logQueue.FrontPop(&logBean);
+            if(logBean != nullptr){
+                if(logBean->GetLevel() >= level){
+                    PrintLog(logBean);
+                }
+
+                delete logBean;
+                logBean = nullptr;
+            }
+        }
+    }
+
+    int EyerLogThread::SetParam(EyerLogParam & _param)
+    {
+        param = _param;
+        return 0;
+    }
+
+    int EyerLogThread::PrintLog(EyerLogBean * logBean)
+    {
+        std::string logstr;
+        if(param.isLevel){
+            logstr += "[" + std::to_string(logBean->GetLevel()) + "] ";
+        }
+        if(param.isTime){
+            logstr += "[" + std::string(logBean->GetTimeStr().str) + "] ";
+        }
+        if(param.isFile){
+            logstr += "[" + std::string(logBean->GetFile().str) + "(" + std::to_string(logBean->GetLine()) + ")" + "] ";
+        }
+        if(param.isFunc){
+            logstr += "[" + std::string(logBean->GetFunction().str) + "] ";
+        }
+        logstr += std::string(logBean->GetLog().str);
+        printf("%s", logstr.c_str());
+        return 0;
     }
 
     int EyerLogThread::PutLog(EyerLogBean * logBean)

@@ -2,6 +2,12 @@
 #define EYERLIB_EYERLOGBEAN_HPP
 
 #include "EyerString.hpp"
+#include <stdarg.h>
+#include <time.h>
+#include <string.h>
+#include <stdio.h>
+#include <thread>
+#include <stdarg.h>
 
 namespace Eyer
 {
@@ -15,6 +21,7 @@ namespace Eyer
         EyerString & GetFile();
         EyerString & GetFunction();
         EyerString & GetLog();
+        EyerString & GetTimeStr();
         int GetLine();
         int GetLevel();
 
@@ -24,6 +31,7 @@ namespace Eyer
         EyerString file;
         EyerString function;
         int line;
+        EyerString timeS;
     };
 }
 

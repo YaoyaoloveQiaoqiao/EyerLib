@@ -10,17 +10,6 @@
 #include "EyerLogThread.hpp"
 #include "EyerLogBean.hpp"
 
-int eyer_log_init()
-{
-    Eyer::EyerLogThread::GetInstance()->Start();
-    return 0;
-}
-int eyer_log_uninit()
-{
-    Eyer::EyerLogThread::FreeInstance();
-    return 0;
-}
-
 int eye_log_set_level       (int level)
 {
     Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
@@ -28,8 +17,18 @@ int eye_log_set_level       (int level)
     return 0;
 }
 
-int eyer_log_param (int isLevel, int isFile, int isLine, int isFunc)
+int eyer_log_param (int isLevel, int isTime, int isFile, int isLine, int isFunc)
 {
+    Eyer::EyerLogParam param;
+    param.isLevel = isLevel;
+    param.isTime = isTime;
+    param.isFunc = isFunc;
+    param.isFile = isFile;
+    param.isLine = isLine;
+
+    Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
+    logThread->SetParam(param);
+
     return 0;
 }
 

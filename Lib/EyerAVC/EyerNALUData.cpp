@@ -59,12 +59,12 @@ namespace Eyer
         sodbBuffer.SetLen(sodbLen);
 
         // Print Info
-        printf("================================\n");
-        printf("nale len: %d, %d %d %d %d %d\n", naluBuffer.GetLen(), bufPtr[0], bufPtr[1], bufPtr[2], bufPtr[3], bufPtr[4]);
-        printf("nal_ref_idc: %s\n", nal_ref_idc.GetName().str);
-        printf("nal_unit_type: %s\n", nal_unit_type.GetName().str);
-        printf("rbsp len: %d\n", rbspLen);
-        printf("sodb len: %d\n", sodbLen);
+        EyerLog("================================\n");
+        EyerLog("nale len: %d, %d %d %d %d %d\n", naluBuffer.GetLen(), bufPtr[0], bufPtr[1], bufPtr[2], bufPtr[3], bufPtr[4]);
+        EyerLog("nal_ref_idc: %s\n", nal_ref_idc.GetName().str);
+        EyerLog("nal_unit_type: %s\n", nal_unit_type.GetName().str);
+        EyerLog("rbsp len: %d\n", rbspLen);
+        EyerLog("sodb len: %d\n", sodbLen);
 
         return 0;
     }

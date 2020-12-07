@@ -64,7 +64,7 @@ TEST(EyerString, string){
 
     Eyer::EyerURLUtil urlUtil("https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd");
     Eyer::EyerString m4vPath = urlUtil.GetAbsolutePath("./bbb_30fps_1920x1080_8000k/bbb_30fps_1920x1080_8000k_0.m4v");
-    printf("%s\n", m4vPath.str);
+    EyerLog("%s\n", m4vPath.str);
 }
 
 TEST(EyerTime, time){
@@ -509,9 +509,7 @@ TEST(EyerBufferMut, EyerBufferCutOffTest){
 #include "MD5Test.hpp"
 
 int main(int argc,char **argv){
-    eyer_log_init();
     testing::InitGoogleTest(&argc, argv);
     int ret = RUN_ALL_TESTS();
-    eyer_log_uninit();
     return ret;
 }

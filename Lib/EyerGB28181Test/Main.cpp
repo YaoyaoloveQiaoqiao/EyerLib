@@ -45,7 +45,6 @@ public:
 };
 
 TEST(GB28181, GB28181SipServer) {
-    eyer_log_init();
     eye_log_set_level(1);
 
     MyEyerUDPCallback eyerUdpCallback;
@@ -63,8 +62,6 @@ TEST(GB28181, GB28181SipServer) {
 
     sipServer.Stop();
     udpThread.Stop();
-
-    eyer_log_uninit();
 }
 
 int main(int argc,char **argv){
