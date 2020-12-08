@@ -47,23 +47,9 @@ namespace Eyer
             je = eXosip_event_wait(excontext, 0, 50);
 
             eXosip_lock(excontext);
-            // eXosip_default_action(excontext, je);
-            // eXosip_automatic_action(excontext);
+            eXosip_default_action(excontext, je);
+            eXosip_automatic_action(excontext);
             eXosip_unlock(excontext);
-
-            SIPEvent * event = nullptr;
-            context->eventQueue.GetEvent(&event);
-            if(event != nullptr){
-                if(event->to == SIPEventTarget::SIPEventTarget_MainThread){
-                    EyerLog("SIPEventType: %s\n", event->GetEventType().GetName().str);
-                    event->Do(excontext, context);
-                    delete event;
-                    event = nullptr;
-                }
-                else{
-                    context->eventQueue.PutEvent(event);
-                }
-            }
 
             if (je == NULL) {
                 continue;
@@ -247,6 +233,22 @@ namespace Eyer
             if(je->type == EXOSIP_EVENT_COUNT) {
                 EyerLog_1("============EXOSIP_EVENT_COUNT============\n");
             }
+
+
+
+            SIPEvent * event = nullptr;
+            context->eventQueue.GetEvent(&event);
+            if(event != nullptr){
+                if(event->to == SIPEventTarget::SIPEventTarget_MainThread){
+                    EyerLog("SIPEventType: %s\n", event->GetEventType().GetName().str);
+                    event->Do(excontext, context);
+                    delete event;
+                    event = nullptr;
+                }
+                else{
+                    context->eventQueue.PutEvent(event);
+                }
+            }
         }
 
         eXosip_quit(excontext);
@@ -259,19 +261,24 @@ namespace Eyer
             char * str = NULL;
             size_t len = 0;
             osip_message_to_str(je->request, &str, &len);
-            // EyerLog("Call Id: %d\n", je->request->call_id->number);
-            // EyerLog("tid: %d\n", je->tid);
-            // EyerLog("did: %d\n", je->did);
-            // EyerLog("request msg: \n%s\n", str);
+            EyerLog("cid: %d\n", je->cid);
+            EyerLog("did: %d\n", je->did);
+            EyerLog("tid: %d\n", je->tid);
+            EyerLog("request msg: \n%s\n", str);
             osip_free(str);
             // printf("=================Request End=================\n");
         }
         if(je->response != NULL){
             // printf("=================Response Start=================\n");
+
+
             char * str = NULL;
             size_t len = 0;
             osip_message_to_str(je->response, &str, &len);
-            // EyerLog("response msg: \n%s\n", str);
+            EyerLog("cid: %d\n", je->cid);
+            EyerLog("did: %d\n", je->did);
+            EyerLog("tid: %d\n", je->tid);
+            EyerLog("response msg: \n%s\n", str);
             osip_free(str);
             // printf("=================Response End=================\n");
         }
