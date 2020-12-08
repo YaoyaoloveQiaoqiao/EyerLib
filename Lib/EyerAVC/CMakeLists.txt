@@ -40,7 +40,7 @@ add_library(
         MB_PART_PRED_MODE.hpp
         MB_TYPE.cpp
         MB_TYPE.hpp
-)
+        EyerMacroblock.cpp EyerMacroblock.hpp)
 
 target_link_libraries (
         EyerAVC

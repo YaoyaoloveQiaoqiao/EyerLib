@@ -78,7 +78,7 @@ namespace Eyer
 
     int EyerNALU::PrintInfo()
     {
-        EyerLog("==============================================================\n");
+        // EyerLog("==============================================================\n");
         for(int i=0;i<fieldList.size();i++){
             EyerField * field = fieldList[i];
             EyerString key = field->GetKey();
@@ -98,7 +98,7 @@ namespace Eyer
                 EyerLog("%s%s\n", levelStr.str, key.str);
             }
         }
-        EyerLog("==============================================================\n");
+        // EyerLog("==============================================================\n");
         return 0;
     }
 

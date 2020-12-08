@@ -7,6 +7,7 @@
 #include "EyerPPS.hpp"
 #include "EyerSLICEHeader.hpp"
 #include "MB_TYPE.hpp"
+#include "EyerMacroblock.hpp"
 
 namespace Eyer
 {
@@ -22,8 +23,7 @@ namespace Eyer
         EyerPPS pps;
         EyerSLICEHeader sliceHeader;
 
-        int macroblock_layer(SLICEType sliceType, EyerBitStream & bs);
-        int mb_pred(MB_TYPE mbType, EyerBitStream & bs);
+        std::vector<EyerMacroblock *> macroblockList;
     };
 }
 
