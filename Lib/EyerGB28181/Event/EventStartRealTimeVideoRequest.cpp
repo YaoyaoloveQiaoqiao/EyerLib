@@ -64,7 +64,7 @@ namespace Eyer
                                "a=rtpmap:98 H264/90000\r\n"
                                "a=recvonly\r\n"
                                "y=%s\r\n", localSipId.str, streamServerIp.str,
-                               streamServerIp.str, streamServerPort, "0123");
+                               streamServerIp.str, streamServerPort, "100000123");
 
         osip_message_set_body(invite, body, bodyLen);
         osip_message_set_content_type(invite, "APPLICATION/SDP");

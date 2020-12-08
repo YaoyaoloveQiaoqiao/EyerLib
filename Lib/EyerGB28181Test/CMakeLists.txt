@@ -6,6 +6,7 @@ add_executable(
 include_directories (../)
 
 target_link_libraries (EyerGB28181Test EyerGB28181)
+target_link_libraries (EyerGB28181Test EyerRTP)
 target_link_libraries (EyerGB28181Test EyerNetwork)
 target_link_libraries (EyerGB28181Test EyerSIP)
 target_link_libraries (EyerGB28181Test EyerCore)
@@ -13,6 +14,7 @@ target_link_libraries (EyerGB28181Test EyerThread)
 target_link_libraries (EyerGB28181Test eXosip2)
 target_link_libraries (EyerGB28181Test osip2)
 target_link_libraries (EyerGB28181Test osipparser2)
+target_link_libraries (EyerGB28181Test jrtp)
 target_link_libraries (EyerGB28181Test gtest)
 
 INSTALL(

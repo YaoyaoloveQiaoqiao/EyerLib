@@ -76,7 +76,9 @@ namespace Eyer
     {
         std::string logstr;
         if(param.isLevel){
-            logstr += "[" + std::to_string(logBean->GetLevel()) + "] ";
+            char levelStr[8];
+            sprintf(levelStr, "[%2d] ", logBean->GetLevel());
+            logstr += levelStr;
         }
         if(param.isTime){
             logstr += "[" + std::string(logBean->GetTimeStr().str) + "] ";

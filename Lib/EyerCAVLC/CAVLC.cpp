@@ -20,32 +20,83 @@ namespace Eyer
     int CAVLC::Encode()
     {
         int coeff[] = {0, 3, -1, 0, 0, -1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-        int len = 16;
 
-        int totalCoeffs = 0;
-        for(int i=0; i<len; i++){
-            if(coeff[i] != 0){
-                totalCoeffs++;
-            }
-        }
+        // 统计非零系数
+        int totalCoeffs = GetTotleCoeff(coeff);
         printf("Total Coeffs: %d\n", totalCoeffs);
 
-        std::vector<int> trailingOnesList;
-        int trailingOnes = 0;
-        for(int i=len-1; i>=0; i--){
-            if(abs(coeff[i]) > 1){
-                break;
-            }
-            if(trailingOnesList.size() >= 3){
-                break;
-            }
-            if(abs(coeff[i]) == 1){
-                trailingOnesList.push_back(coeff[i]);
+        // 统计拖尾系数
+        int trailingSign[3] = {};
+        int trailingOnes = GetTrailingOnes(coeff, trailingSign);
+
+        printf("trailingSign: ");
+        for(int i=0;i<trailingOnes;i++){
+            printf("%d ", trailingSign[i]);
+        }
+        printf("\n");
+
+        int levelCnt = totalCoeffs - trailingOnes;
+        int * levels = new int[levelCnt];
+
+
+
+        if(levels != nullptr){
+            delete[] levels;
+            levels = nullptr;
+        }
+
+        // 当前块值 numberCurrent
+
+        // 普通非零系数幅值
+
+        // Totle Zeros
+
+        // Run Before
+
+        return 0;
+    }
+
+    int CAVLC::GetTotleCoeff(const int coeff[16])
+    {
+        int ret = 0;
+        for(int i=0; i<16; i++) {
+            if(coeff[i]) {
+                ret++;
             }
         }
-        trailingOnes = trailingOnesList.size();
-        printf("Trailing Ones: %d\n", trailingOnes);
+        return ret;
+    }
 
+    int CAVLC::GetTrailingOnes(const int coeff[16], int trailingSign[3])
+    {
+        int ret = 0;
+
+        for(int i=15; i>=0; i--){
+            if(abs(coeff[i]) > 1 || ret == 3){
+                break;
+            }
+            else if(abs(coeff[i]) == 1){
+                if(coeff[i] == 1){
+                    trailingSign[ret] = 1;
+                }
+                else{
+                    trailingSign[ret] = -1;
+                }
+                ret++;
+            }
+        }
+
+        return ret;
+    }
+
+    int CAVLC::GetLevels(const int coeff[16], int levels[], int levelCnt)
+    {
+        int levelIndex = levelCnt - 1;
+        for(int i=0;i<16;i++){
+            if(coeff[i] != 0){
+
+            }
+        }
         return 0;
     }
 }
