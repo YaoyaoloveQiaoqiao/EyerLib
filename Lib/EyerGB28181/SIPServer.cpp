@@ -1,5 +1,6 @@
 #include "SIPServer.hpp"
 #include "Event/EventStartRealTimeVideoRequest.hpp"
+#include "Callback/StartStreamCallback.hpp"
 
 namespace Eyer
 {
@@ -50,7 +51,8 @@ namespace Eyer
             EyerString & streamServerIp,
             int streamServerPort,
             EyerString & deviceId,
-            EyerString & channelId)
+            EyerString & channelId,
+            StartStreamCallback * startStreamCallback)
     {
         EventStartRealTimeVideoRequest * startRealTimeVideoRequest = new EventStartRealTimeVideoRequest();
         startRealTimeVideoRequest->streamServerIp       = streamServerIp;

@@ -8,6 +8,7 @@
 
 namespace Eyer
 {
+    class StartStreamCallback;
     class SIPServer {
     public:
         SIPServer(int _port = 5060);
@@ -22,7 +23,8 @@ namespace Eyer
                 EyerString & streamServerIp,
                 int streamServerPort,
                 EyerString & deviceId,
-                EyerString & channelId);
+                EyerString & channelId,
+                StartStreamCallback * startStreamCallback);
 
         int StopStream();
 

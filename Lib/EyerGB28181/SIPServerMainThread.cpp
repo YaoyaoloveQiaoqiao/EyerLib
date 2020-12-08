@@ -259,7 +259,7 @@ namespace Eyer
             char * str = NULL;
             size_t len = 0;
             osip_message_to_str(je->request, &str, &len);
-            // EyerLog("Call Id: %d\n", je->request->call_id);
+            // EyerLog("Call Id: %d\n", je->request->call_id->number);
             // EyerLog("tid: %d\n", je->tid);
             // EyerLog("did: %d\n", je->did);
             // EyerLog("request msg: \n%s\n", str);
