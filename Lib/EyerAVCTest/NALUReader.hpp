@@ -21,6 +21,7 @@ TEST(EyerAVC, NALUReader)
         }
 
         if(nalu.GetNALUType() == Eyer::NALUType::NALU_TYPE_SPS){
+            Eyer::BLOCK_TIME blockTime("SPS Time");
             sps.SetNALUData(nalu);
             sps.Parse();
             sps.PrintInfo();

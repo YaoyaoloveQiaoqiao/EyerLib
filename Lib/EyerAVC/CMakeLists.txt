@@ -40,7 +40,9 @@ add_library(
         MB_PART_PRED_MODE.hpp
         MB_TYPE.cpp
         MB_TYPE.hpp
-        EyerMacroblock.cpp EyerMacroblock.hpp)
+        EyerMacroblock.cpp
+        EyerMacroblock.hpp
+)
 
 target_link_libraries (
         EyerAVC
@@ -62,6 +64,12 @@ set(head_files
         EyerPPS.hpp
         EyerSLICE.hpp
         SLICEType.hpp
+        EyerSLICEHeader.hpp
+        EyerSLICEBody.hpp
+        I_MB_TYPE.hpp
+        MB_PART_PRED_MODE.hpp
+        MB_TYPE.hpp
+        EyerMacroblock.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)

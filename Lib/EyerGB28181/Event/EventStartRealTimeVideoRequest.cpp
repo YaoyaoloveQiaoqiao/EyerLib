@@ -72,9 +72,13 @@ namespace Eyer
         eXosip_lock(excontext);
         int call_id = eXosip_call_send_initial_invite(excontext, invite);
 
-        // eXosip_event_t * je = eXosip_event_wait(excontext, 0, 50);
+        EyerLog("eXosip_call_send_initial_invite ret: %d\n", call_id);
 
-        // EyerLog("tid: %d\n", je->tid);
+        char * dest = nullptr;
+        size_t message_length;
+        osip_message_to_str(invite, &dest, &message_length);
+        EyerLog("%s\n", dest);
+        osip_free(dest);
 
         eXosip_unlock(excontext);
 

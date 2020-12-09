@@ -26,8 +26,8 @@ public:
                 streamServerIp,
                 9000,
                 deviceId,
-                channelId
-                );
+                channelId,
+                nullptr);
         return 0;
     }
 };

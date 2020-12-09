@@ -42,7 +42,7 @@ add_library(
         EyerLogThread.hpp
         EyerLogBean.cpp
         EyerLogBean.hpp
-        EyerLogParam.cpp EyerLogParam.hpp)
+        EyerLogParam.cpp EyerLogParam.hpp BLOCK_TIME.cpp BLOCK_TIME.hpp)
 
 set(head_files 
         EyerString.hpp
