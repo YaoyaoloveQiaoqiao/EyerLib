@@ -111,8 +111,11 @@ ModuleTestOption("EyerAVCBlog"      "EyerAVCBlogTest"       EyerAVCBlog)
 OPTION(EyerPJSIP                    "option for EyerPJSIP"              OFF)
 ModuleTestOption("EyerPJSIP"        "EyerPJSIPTest"         EyerPJSIP)
 
-OPTION(EyerRTP                      "option for EyerRTP"              ON)
+OPTION(EyerRTP                      "option for EyerRTP"                ON)
 ModuleTestOption("EyerRTP"          "EyerRTPTest"           EyerRTP)
+
+OPTION(EyerThread                   "option for EyerThread"             ON)
+ModuleTestOption("EyerThread"       "EyerThreadTest"           EyerThread)
 
 
 OPTION(EyerAV           "option for EyerAV"             ON)
@@ -148,9 +151,6 @@ ModuleOption("EyerGPUDomino" EyerGPUDomino)
 OPTION(EyerGLShader      "option for EyerGLShader"      ON)
 ModuleOption("EyerGLShader" EyerGLShader)
 
-OPTION(EyerThread        "option for EyerThread"        ON)
-ModuleOption("EyerThread" EyerThread)
-
 OPTION(EyerImg           "option for EyerImg"           ON)
 ModuleOption("EyerImg" EyerImg)
 
@@ -169,7 +169,6 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerRenderTest)
     ADD_SUBDIRECTORY(EyerTypeTest)
     ADD_SUBDIRECTORY(EyerGPUDominoTest)
-    ADD_SUBDIRECTORY(EyerThreadTest)
     ADD_SUBDIRECTORY(EyerEventQueue)
     ADD_SUBDIRECTORY(EyerImgTest)
     ADD_SUBDIRECTORY(EyerYUVTest)
