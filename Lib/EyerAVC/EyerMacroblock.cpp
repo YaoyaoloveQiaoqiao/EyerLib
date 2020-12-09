@@ -125,7 +125,6 @@ namespace Eyer
                         for(blockSubIndexY = blockY; blockSubIndexY < blockY + 2; blockSubIndexY ++){
                             for(blockSubIndexX = blockX; blockSubIndexX < blockX + 2; blockSubIndexX ++){
                                 index8x8 = 2 * (blockY / 2) + blockX / 2;
-                                EyerLog("index8x8: %d\n", index8x8);
                                 if(CodecBlockPatterLuma & (1 << index8x8)){
                                     EyerLog("有残差，Block X: %d, Y: %d, Sub X: %d, Sub Y: %d\n", blockX, blockY, blockSubIndexX, blockSubIndexY);
                                 }
