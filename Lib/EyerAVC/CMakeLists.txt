@@ -42,6 +42,8 @@ add_library(
         MB_TYPE.hpp
         EyerMacroblock.cpp
         EyerMacroblock.hpp
+        EyerCoeff4x4Block.cpp
+        EyerCoeff4x4Block.hpp
 )
 
 target_link_libraries (
@@ -70,6 +72,7 @@ set(head_files
         MB_PART_PRED_MODE.hpp
         MB_TYPE.hpp
         EyerMacroblock.hpp
+        EyerCoeff4x4Block.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)

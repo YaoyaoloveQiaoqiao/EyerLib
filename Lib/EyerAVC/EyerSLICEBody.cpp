@@ -58,7 +58,7 @@ namespace Eyer
                 if(MbaffFrameFlag && (CurrMbAddr % 2 == 0 || (CurrMbAddr % 2 == 1 && prevMbSkipped))){
                     uint32_t mb_field_decoding_flag = bs.bs_read_u1();
                 }
-                EyerMacroblock * block = new EyerMacroblock();
+                EyerMacroblock * block = new EyerMacroblock(CurrMbAddr);
                 block->Parse(bs, sps, pps, sliceHeader);
                 macroblockList.push_back(block);
                 // macroblock_layer(sliceHeader.GetSLICEType() ,bs);
