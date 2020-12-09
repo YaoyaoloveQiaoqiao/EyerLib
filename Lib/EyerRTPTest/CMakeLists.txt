@@ -5,6 +5,7 @@ add_executable(
 
 include_directories (../)
 
+target_link_libraries (EyerRTPTest gtest)
 target_link_libraries (EyerRTPTest EyerRTP)
 
 INSTALL(

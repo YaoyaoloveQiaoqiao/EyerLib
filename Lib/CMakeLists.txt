@@ -108,8 +108,8 @@ ModuleTestOption("EyerGB28181"      "EyerGB28181Test"       EyerGB28181)
 OPTION(EyerAVCBlog                  "option for EyerAVCBlog"            ON)
 ModuleTestOption("EyerAVCBlog"      "EyerAVCBlogTest"       EyerAVCBlog)
 
-OPTION(EyerPJSIP                    "option for EyerPJSIP"              OFF)
-ModuleTestOption("EyerPJSIP"        "EyerPJSIPTest"         EyerPJSIP)
+# OPTION(EyerPJSIP                    "option for EyerPJSIP"              OFF)
+# ModuleTestOption("EyerPJSIP"        "EyerPJSIPTest"         EyerPJSIP)
 
 OPTION(EyerRTP                      "option for EyerRTP"                ON)
 ModuleTestOption("EyerRTP"          "EyerRTPTest"           EyerRTP)
