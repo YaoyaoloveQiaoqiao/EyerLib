@@ -165,8 +165,26 @@ namespace Eyer
         int numberCurrent; //nC
 
         numberCurrent = GetNumberCurrent(x, y);
+        if (numberCurrent < 2){
+            numCoeff_vlcIdx = 0;
+        }
+        else if(numberCurrent < 4){
+            numCoeff_vlcIdx = 1;
+        }
+        else if(numberCurrent < 8){
+            numCoeff_vlcIdx = 2;
+        }
+        else{
+            numCoeff_vlcIdx = 3;
+        }
 
+        // NumberCeoff
+        uint8_t numCoeff = 0;
+        uint8_t trailingOnes = 0;
 
+        int token = 0;
+
+        
 
         return err;
     }
