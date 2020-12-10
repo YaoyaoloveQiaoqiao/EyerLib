@@ -166,6 +166,8 @@ namespace Eyer
 
         numberCurrent = GetNumberCurrent(x, y);
 
+
+
         return err;
     }
 
@@ -181,6 +183,25 @@ namespace Eyer
         bool available_left = false;
 
         GetNeighborAvailable(available_top, available_left, topIndex, leftIndex, x, y);
+
+        if(!available_left && !available_top){
+            nC = 0;
+        }
+        else{
+            if(available_left){
+                // TODO
+                topNum;
+            }
+            if(available_top){
+                // TODO
+                leftNum;
+            }
+            nC = topNum + leftNum;
+            if(available_left && available_top){
+                nC++;
+                nC >> 1;
+            }
+        }
 
         return nC;
     }
@@ -206,7 +227,6 @@ namespace Eyer
                 topIndex = mbIndex;
             }
         }
-
 
         if(!left_egde_mb){
             available_left = true;
