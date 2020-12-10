@@ -12,7 +12,7 @@ namespace Eyer
         key = _key;
         unsignedIntVal = _val;
 
-        type = EyerFieldType::UNSIGNED_INT;
+        type = EyerFieldType::FIELD_UNSIGNED_INT;
 
         level = _level;
 
@@ -24,7 +24,7 @@ namespace Eyer
         key = _key;
         intVal = _val;
 
-        type = EyerFieldType::INT;
+        type = EyerFieldType::FIELD_INT;
 
         level = _level;
 
@@ -35,7 +35,7 @@ namespace Eyer
     {
         key = _key;
 
-        type = EyerFieldType::VOID;
+        type = EyerFieldType::FIELD_VOID;
 
         level = _level;
 

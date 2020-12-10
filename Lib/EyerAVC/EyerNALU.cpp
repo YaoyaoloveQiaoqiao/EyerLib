@@ -88,13 +88,13 @@ namespace Eyer
             for(int i=0;i<field->GetLevel();i++){
                 levelStr = levelStr + "\t";
             }
-            if(type == EyerFieldType::UNSIGNED_INT){
+            if(type == EyerFieldType::FIELD_UNSIGNED_INT){
                 EyerLog("%s%s = %u\n", levelStr.str, key.str, field->GetUnsignedIntVal());
             }
-            else if(type == EyerFieldType::INT){
+            else if(type == EyerFieldType::FIELD_INT){
                 EyerLog("%s%s = %d\n", levelStr.str, key.str, field->GetIntVal());
             }
-            else if(type == EyerFieldType::VOID){
+            else if(type == EyerFieldType::FIELD_VOID){
                 EyerLog("%s%s\n", levelStr.str, key.str);
             }
         }

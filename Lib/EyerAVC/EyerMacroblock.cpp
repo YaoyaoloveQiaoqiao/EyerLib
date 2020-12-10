@@ -3,9 +3,9 @@
 
 namespace Eyer
 {
-    EyerMacroblock::EyerMacroblock()
+    EyerMacroblock::EyerMacroblock(int _mbIndex)
     {
-
+        mbIndex = _mbIndex;
     }
 
     EyerMacroblock::~EyerMacroblock()
@@ -127,9 +127,12 @@ namespace Eyer
                                 index8x8 = 2 * (blockY / 2) + blockX / 2;
                                 if(CodecBlockPatterLuma & (1 << index8x8)){
                                     EyerLog("有残差，Block X: %d, Y: %d, Sub X: %d, Sub Y: %d\n", blockX, blockY, blockSubIndexX, blockSubIndexY);
+                                    lumaResidual[blockSubIndexY][blockSubIndexX].emptyBlock = true;
+                                    get_luma_coeff(blockSubIndexX, blockSubIndexY);
                                 }
                                 else{
-                                    // EyerLog("无残差，Block X: %d, Y: %d, Sub X: %d, Sub Y: %d\n", blockX, blockY, blockSubIndexX, blockSubIndexY);
+                                    EyerLog("无残差，Block X: %d, Y: %d, Sub X: %d, Sub Y: %d\n", blockX, blockY, blockSubIndexX, blockSubIndexY);
+                                    lumaResidual[blockSubIndexY][blockSubIndexX].emptyBlock = false;
                                 }
                             }
                         }
@@ -140,6 +143,123 @@ namespace Eyer
                 }
             }
         }
+        return 0;
+    }
+
+    int EyerMacroblock::get_luma_coeff(int x, int y)
+    {
+        int err;
+
+        // int blockType =
+        if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16 || mbType == MB_TYPE::I_PCM){
+            // LUMA_INTRA16x16AC
+        }
+        else{
+            // LUMA
+        }
+
+        int max_ceoff_number = 0;
+        int numCoeff_vlcIdx = 0, prefixLength = 0, suffixLength = 0, level_prefix = 0, level_suffix = 0;
+        int levelSuffixSize = 0, levelCode = 0, i = 0;
+
+        int numberCurrent; //nC
+
+        numberCurrent = GetNumberCurrent(x, y);
+        if (numberCurrent < 2){
+            numCoeff_vlcIdx = 0;
+        }
+        else if(numberCurrent < 4){
+            numCoeff_vlcIdx = 1;
+        }
+        else if(numberCurrent < 8){
+            numCoeff_vlcIdx = 2;
+        }
+        else{
+            numCoeff_vlcIdx = 3;
+        }
+
+        // NumberCeoff
+        uint8_t numCoeff = 0;
+        uint8_t trailingOnes = 0;
+
+        int token = 0;
+
+        
+
+        return err;
+    }
+
+    int EyerMacroblock::GetNumberCurrent(int x, int y)
+    {
+        int nC = 0;
+        int topIndex = 0;
+        int leftIndex = 0;
+        int topNum = 0;
+        int leftNum = 0;
+
+        bool available_top = false;
+        bool available_left = false;
+
+        GetNeighborAvailable(available_top, available_left, topIndex, leftIndex, x, y);
+
+        if(!available_left && !available_top){
+            nC = 0;
+        }
+        else{
+            if(available_left){
+                // TODO
+                topNum;
+            }
+            if(available_top){
+                // TODO
+                leftNum;
+            }
+            nC = topNum + leftNum;
+            if(available_left && available_top){
+                nC++;
+                nC >> 1;
+            }
+        }
+
+        return nC;
+    }
+
+    int EyerMacroblock::GetNeighborAvailable(bool & available_top, bool & available_left, int & topIndex, int & leftIndex, int blockIndexX, int blockIndexY){
+
+        int width_in_mb = sps.pic_width_in_mbs_minus1 + 1;
+        int height_in_mb = sps.pic_height_in_map_units_minus1 + 1;
+
+        bool left_egde_mb = (mbIndex % width_in_mb == 0);
+        bool top_egde_mb = (mbIndex < width_in_mb);
+
+        if(!top_egde_mb){
+            available_top = true;
+            topIndex = mbIndex - width_in_mb;
+        }
+        else{
+            if(blockIndexY == 0){
+                available_top = false;
+            }
+            else{
+                available_top = true;
+                topIndex = mbIndex;
+            }
+        }
+
+        if(!left_egde_mb){
+            available_left = true;
+            leftIndex = mbIndex - 1;
+        }
+        else{
+            if(blockIndexX == 0){
+                available_left = false;
+            }
+            else{
+                available_left = true;
+                leftIndex = mbIndex;
+            }
+        }
+
         return 0;
     }
 }
