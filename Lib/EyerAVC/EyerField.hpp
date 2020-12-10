@@ -5,9 +5,9 @@
 
 namespace Eyer{
     enum EyerFieldType{
-        UNSIGNED_INT = 2,
-        INT = 3,
-        VOID = 4
+        FIELD_UNSIGNED_INT = 2,
+        FIELD_INT = 3,
+        FIELD_VOID = 4
     };
 
     class EyerField {
@@ -33,7 +33,7 @@ namespace Eyer{
         EyerString & GetRemarks();
 
     private:
-        EyerFieldType type = EyerFieldType::INT;
+        EyerFieldType type = EyerFieldType::FIELD_INT;
         EyerString key = "";
 
         unsigned int unsignedIntVal         = 0;
