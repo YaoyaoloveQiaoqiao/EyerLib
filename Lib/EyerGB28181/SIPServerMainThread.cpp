@@ -257,30 +257,30 @@ namespace Eyer
     int SIPServerMainThread::PrintJe(eXosip_event_t * je)
     {
         if(je->request != NULL){
-            // printf("=================Request Start=================\n");
+            EyerLog("Call-ID: %s\n", je->request->call_id->number);
+
             char * str = NULL;
             size_t len = 0;
             osip_message_to_str(je->request, &str, &len);
-            EyerLog("cid: %d\n", je->cid);
-            EyerLog("did: %d\n", je->did);
-            EyerLog("tid: %d\n", je->tid);
             EyerLog("request msg: \n%s\n", str);
             osip_free(str);
-            // printf("=================Request End=================\n");
         }
         if(je->response != NULL){
-            // printf("=================Response Start=================\n");
-
+            EyerLog("Call-ID: %s\n", je->response->call_id->number);
 
             char * str = NULL;
             size_t len = 0;
             osip_message_to_str(je->response, &str, &len);
-            EyerLog("cid: %d\n", je->cid);
-            EyerLog("did: %d\n", je->did);
-            EyerLog("tid: %d\n", je->tid);
             EyerLog("response msg: \n%s\n", str);
             osip_free(str);
-            // printf("=================Response End=================\n");
+        }
+
+        if(je->ack != NULL){
+            char * str = NULL;
+            size_t len = 0;
+            osip_message_to_str(je->ack, &str, &len);
+            EyerLog("ack msg: \n%s\n", str);
+            osip_free(str);
         }
         return 0;
     }

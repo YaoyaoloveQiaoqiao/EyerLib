@@ -69,17 +69,11 @@ namespace Eyer
         osip_message_set_body(invite, body, bodyLen);
         osip_message_set_content_type(invite, "APPLICATION/SDP");
 
+        EyerLog("Invite Call-ID: %s\n", invite->call_id->number);
+
         eXosip_lock(excontext);
         int call_id = eXosip_call_send_initial_invite(excontext, invite);
-
         EyerLog("eXosip_call_send_initial_invite ret: %d\n", call_id);
-
-        char * dest = nullptr;
-        size_t message_length;
-        osip_message_to_str(invite, &dest, &message_length);
-        EyerLog("%s\n", dest);
-        osip_free(dest);
-
         eXosip_unlock(excontext);
 
         return 0;

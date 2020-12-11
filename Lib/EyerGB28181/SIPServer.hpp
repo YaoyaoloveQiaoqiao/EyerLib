@@ -5,6 +5,7 @@
 #include "SIPServerContext.hpp"
 #include "EyerCore/EyerCore.hpp"
 #include "SIPEventThread.hpp"
+#include "CallbackList.hpp"
 
 namespace Eyer
 {

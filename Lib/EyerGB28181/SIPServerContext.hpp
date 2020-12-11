@@ -5,6 +5,7 @@
 #include "SIPEventQueue.hpp"
 #include "SIPEventThread.hpp"
 #include "SIPCallback.hpp"
+#include "CallbackList.hpp"
 
 namespace Eyer
 {
@@ -15,6 +16,7 @@ namespace Eyer
 
         SIPDeviceManager deviceManager;
         SIPEventQueue eventQueue;
+        CallbackList callbackList;
         SIPEventThread * eventThread = nullptr;
         SIPCallback * callback = nullptr;
 

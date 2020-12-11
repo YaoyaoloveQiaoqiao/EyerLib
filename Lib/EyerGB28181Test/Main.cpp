@@ -50,7 +50,7 @@ TEST(GB28181, GB28181SipServer) {
 }
 
 int main(int argc,char **argv){
-    eyer_log_param(1, 1, 0, 0, 0);
+    eyer_log_param(1, 1, 1, 1, 0);
 
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
