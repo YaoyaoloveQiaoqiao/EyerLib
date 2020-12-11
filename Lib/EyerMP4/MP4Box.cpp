@@ -218,7 +218,7 @@ namespace Eyer
             levelStr = levelStr + "\t";
         }
 
-        printf("%s[%c%c%c%c] (%d bytes)\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD(), size);
+        EyerLog("%s[%c%c%c%c] (%lld bytes)\n", levelStr.str, type.GetA(), type.GetB(), type.GetC(), type.GetD(), size);
         if(type.HasSub()){
             for(int i=0;i<subBoxList.size();i++){
                 MP4Box * box = subBoxList[i];

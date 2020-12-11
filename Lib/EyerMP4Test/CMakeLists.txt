@@ -24,6 +24,7 @@ include_directories (../)
 
 target_link_libraries (EyerMP4Test EyerMP4)
 target_link_libraries (EyerMP4Test EyerCore)
+target_link_libraries (EyerMP4Test EyerThread)
 target_link_libraries (EyerMP4Test gtest)
 
 file(COPY

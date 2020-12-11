@@ -184,7 +184,7 @@ namespace Eyer
 
         int token = 0;
 
-        
+
 
         return err;
     }

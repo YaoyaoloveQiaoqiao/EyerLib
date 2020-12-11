@@ -73,7 +73,7 @@ namespace Eyer
         }
 
         osip_generic_param_t * br = nullptr;
-        osip_via_param_get_byname(via, "rport", &br);
+        osip_via_param_get_byname(via, (char *)"rport", &br);
         if(!br || !br->gvalue) {
         }
 
