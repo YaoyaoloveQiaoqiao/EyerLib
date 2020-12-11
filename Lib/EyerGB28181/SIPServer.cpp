@@ -59,6 +59,7 @@ namespace Eyer
         startRealTimeVideoRequest->streamServerPort     = streamServerPort;
         startRealTimeVideoRequest->deviceId             = deviceId;
         startRealTimeVideoRequest->channelId            = channelId;
+        startRealTimeVideoRequest->startStreamCallback  = startStreamCallback;
         context.eventQueue.PutEvent(startRealTimeVideoRequest);
         return 0;
     }

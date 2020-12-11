@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Callback/Callback.hpp"
+#include "EyerCore/EyerCore.hpp"
 
 namespace Eyer
 {
@@ -10,7 +11,7 @@ namespace Eyer
     {
     public:
         Callback * callback = nullptr;
-        int callbackId = 0;
+        EyerString callbackId;
     };
 
     class CallbackList
@@ -19,8 +20,8 @@ namespace Eyer
         CallbackList();
         ~CallbackList();
 
-        int PutCallback(Callback * callback, int callbackId);
-
+        int PutCallback(Callback * callback, EyerString & callbackId);
+        int FindCallback(Callback ** callback, EyerString & callbackId);
     private:
         std::vector<CallbackBean *> callbackList;
     };

@@ -22,10 +22,14 @@ namespace Eyer
 
     EventStartRealTimeVideoRequest & EventStartRealTimeVideoRequest::operator = (const EventStartRealTimeVideoRequest & event)
     {
-        streamServerIp = event.streamServerIp;
-        streamServerPort = event.streamServerPort;
-        deviceId = event.deviceId;
-        channelId = event.channelId;
+        to                      = event.to;
+        from                    = event.from;
+
+        streamServerIp          = event.streamServerIp;
+        streamServerPort        = event.streamServerPort;
+        deviceId                = event.deviceId;
+        channelId               = event.channelId;
+        startStreamCallback     = event.startStreamCallback;
         return *this;
     }
 
@@ -69,12 +73,13 @@ namespace Eyer
         osip_message_set_body(invite, body, bodyLen);
         osip_message_set_content_type(invite, "APPLICATION/SDP");
 
-        EyerLog("Invite Call-ID: %s\n", invite->call_id->number);
-
         eXosip_lock(excontext);
         int call_id = eXosip_call_send_initial_invite(excontext, invite);
         EyerLog("eXosip_call_send_initial_invite ret: %d\n", call_id);
         eXosip_unlock(excontext);
+
+        EyerString callId = invite->call_id->number;
+        context->callbackList.PutCallback(startStreamCallback, callId);
 
         return 0;
     }
