@@ -1,6 +1,7 @@
 #ifndef EYERLIB_EVENTSTARTREALTIMEVIDEOREQUEST_HPP
 #define EYERLIB_EVENTSTARTREALTIMEVIDEOREQUEST_HPP
 
+#include "Callback/StartStreamCallback.hpp"
 #include "SIPEvent.hpp"
 
 namespace Eyer
@@ -22,6 +23,7 @@ namespace Eyer
         int streamServerPort;
         EyerString deviceId;
         EyerString channelId;
+        StartStreamCallback * startStreamCallback = nullptr;
     };
 }
 

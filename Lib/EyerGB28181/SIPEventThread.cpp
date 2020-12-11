@@ -1,3 +1,4 @@
+#include "Event/EventStartRealTimeVideoResponse.hpp"
 #include "SIPEventThread.hpp"
 
 #include "EyerCore/EyerCore.hpp"
@@ -38,6 +39,10 @@ namespace Eyer
                             EventUserRegister * eventUserRegister = (EventUserRegister *)event;
                             context->callback->UserRegister(eventUserRegister->deviceId);
                         }
+                    }
+                    if(eventType == SIPEventType::REALTIME_RESPONSE){
+                        EventStartRealTimeVideoResponse * eventStartRealTimeVideoResponse = (EventStartRealTimeVideoResponse *)event;
+                        EyerLog("EventStartRealTimeVideoResponse Callback\n");
                     }
 
                     delete event;

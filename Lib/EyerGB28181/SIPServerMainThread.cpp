@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <iostream>
 #include <string.h>
+#include "Event/EventStartRealTimeVideoResponse.hpp"
 
 #include "SIPProcessRegister.hpp"
 #include "SIPProcessMessage.hpp"
@@ -83,6 +84,19 @@ namespace Eyer
             if(je->type == EXOSIP_CALL_ANSWERED) {
                 EyerLog_1("============EXOSIP_CALL_ANSWERED============\n");
                 PrintJe(je);
+
+                if(je->response != NULL){
+                    je->response->status_code;
+                    EyerString callId = je->response->call_id->number;
+                    Callback * callback = nullptr;
+                    context->callbackList.FindCallback(&callback, callId);
+                    if(callback != nullptr){
+                        if(callback->GetType() == CallbackType::START_STREAM_CALLBACK){
+                            EventStartRealTimeVideoResponse * eventStartRealTimeVideoResponse = new EventStartRealTimeVideoResponse();
+                            context->eventQueue.PutEvent(eventStartRealTimeVideoResponse);
+                        }
+                    }
+                }
 
                 osip_message_t *ack = NULL;
                 eXosip_call_build_ack(excontext, je->did, &ack);

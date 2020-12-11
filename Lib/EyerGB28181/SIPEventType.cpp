@@ -6,7 +6,6 @@ namespace Eyer
     SIPEventType SIPEventType::REALTIME_REQUEST(2, "REALTIME_REQUEST");
     SIPEventType SIPEventType::REALTIME_RESPONSE(3, "REALTIME_RESPONSE");
 
-
     SIPEventType::SIPEventType(int _val, EyerString _name)
     {
         val = _val;
