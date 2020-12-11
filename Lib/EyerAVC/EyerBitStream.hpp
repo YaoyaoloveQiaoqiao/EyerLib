@@ -16,6 +16,7 @@ namespace Eyer
 
         uint32_t bs_read_u8();
         uint32_t bs_read_u(int n);
+        uint32_t bs_peek_u(int n);
         uint32_t bs_read_u1();
 
         void bs_skip_u(int n);
