@@ -10,7 +10,11 @@ namespace Eyer {
         void *state = NULL;
 
         const AVBitStreamFilter * bsf = nullptr;
-        while (bsf = av_bsf_next(&state)) {
+        while (1) {
+            bsf = av_bsf_next(&state);
+            if(bsf == nullptr){
+                break;
+            }
             EyerLog("%s\n", bsf->name);
         }
 

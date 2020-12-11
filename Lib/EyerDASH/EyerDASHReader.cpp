@@ -104,8 +104,8 @@ namespace Eyer
     EyerDASHStream * EyerDASHReader::FindCurrentStream()
     {
         EyerDASHStream * stream = nullptr;
-        printf("Size: %d\n", streamList.size());
-        printf("Index: %d\n", currentIndex);
+        EyerLog("Size: %lu\n", streamList.size());
+        EyerLog("Index: %d\n", currentIndex);
         for(int i=0;i<streamList.size();i++){
             EyerDASHStream * _stream = streamList[i];
             int startIndex = _stream->GetStartIndex();

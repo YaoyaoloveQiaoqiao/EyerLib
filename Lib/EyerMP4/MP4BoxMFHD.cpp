@@ -69,7 +69,7 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%ssequence_number: %lld\n", levelStr.str, sequence_number);
+        printf("%ssequence_number: %u\n", levelStr.str, sequence_number);
 
         return 0;
     }
