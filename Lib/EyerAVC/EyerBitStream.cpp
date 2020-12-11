@@ -34,6 +34,31 @@ namespace Eyer
         return r;
     }
 
+    uint32_t EyerBitStream::bs_peek_u(int n)
+    {
+        uint32_t r = 0;
+
+        int temp_bits_left = bits_left;
+        uint8_t * temp_p = p;
+
+        for(int i=0; i<n; i++){
+
+            uint32_t r_u = 0;
+            temp_bits_left--;
+            if (!bs_eof()) {
+                r_u = ((*(temp_p)) >> temp_bits_left) & 0x01;
+            }
+            if (temp_bits_left == 0) {
+                temp_p++;
+                temp_bits_left = 8;
+            }
+
+            r |= ( r_u << ( n - i - 1 ) );
+        }
+
+        return r;
+    }
+
     uint32_t EyerBitStream::bs_read_u1()
     {
         uint32_t r = 0;
