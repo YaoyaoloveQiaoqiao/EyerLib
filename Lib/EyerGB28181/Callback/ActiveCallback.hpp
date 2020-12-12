@@ -3,14 +3,14 @@
 
 namespace Eyer
 {
-    enum CallbackType
+    enum ActiveCallbackType
     {
         START_STREAM_CALLBACK
     };
 
-    class Callback {
+    class ActiveCallback {
     public:
-        virtual CallbackType GetType() = 0;
+        virtual ActiveCallbackType GetType() = 0;
     };
 }
 

@@ -83,27 +83,7 @@ namespace Eyer
             }
             if(je->type == EXOSIP_CALL_ANSWERED) {
                 EyerLog_1("============EXOSIP_CALL_ANSWERED============\n");
-                PrintJe(je);
-
-                if(je->response != NULL){
-                    je->response->status_code;
-                    EyerString callId = je->response->call_id->number;
-                    Callback * callback = nullptr;
-                    context->callbackList.FindCallback(&callback, callId);
-                    if(callback != nullptr){
-                        if(callback->GetType() == CallbackType::START_STREAM_CALLBACK){
-                            EventStartRealTimeVideoResponse * eventStartRealTimeVideoResponse = new EventStartRealTimeVideoResponse();
-                            context->eventQueue.PutEvent(eventStartRealTimeVideoResponse);
-                        }
-                    }
-                }
-
-                osip_message_t *ack = NULL;
-                eXosip_call_build_ack(excontext, je->did, &ack);
-
-                eXosip_lock(excontext);
-                eXosip_call_send_ack(excontext, je->did, ack);
-                eXosip_unlock(excontext);
+                ANSWEREDProcess(je, excontext);
             }
             if(je->type == EXOSIP_CALL_REDIRECTED) {
                 EyerLog_1("============EXOSIP_CALL_REDIRECTED============\n");
@@ -120,11 +100,9 @@ namespace Eyer
             if(je->type == EXOSIP_CALL_ACK) {
                 EyerLog_1("============EXOSIP_CALL_ACK============\n");
             }
-
             if(je->type == EXOSIP_CALL_CANCELLED) {
                 EyerLog_1("============EXOSIP_CALL_CANCELLED============\n");
             }
-
             if(je->type == EXOSIP_CALL_MESSAGE_NEW) {
                 EyerLog_1("============EXOSIP_CALL_MESSAGE_NEW============\n");
             }
@@ -146,18 +124,12 @@ namespace Eyer
             if(je->type == EXOSIP_CALL_MESSAGE_GLOBALFAILURE) {
                 EyerLog_1("============EXOSIP_CALL_MESSAGE_GLOBALFAILURE============\n");
             }
-
-
             if(je->type == EXOSIP_CALL_CLOSED) {
                 EyerLog_1("============EXOSIP_CALL_CLOSED============\n");
             }
-
-
             if(je->type == EXOSIP_CALL_RELEASED) {
                 EyerLog_1("============EXOSIP_CALL_RELEASED============\n");
             }
-
-
             if(je->type == EXOSIP_MESSAGE_NEW) {
                 EyerLog_1("============EXOSIP_MESSAGE_NEW============\n");
                 PrintJe(je);
@@ -188,7 +160,6 @@ namespace Eyer
             if(je->type == EXOSIP_MESSAGE_GLOBALFAILURE) {
                 EyerLog_1("============EXOSIP_MESSAGE_GLOBALFAILURE============\n");
             }
-
             /* Presence and Instant Messaging */
             if(je->type == EXOSIP_SUBSCRIPTION_NOANSWER) {
                 EyerLog_1("============EXOSIP_SUBSCRIPTION_NOANSWER============\n");
@@ -214,13 +185,9 @@ namespace Eyer
             if(je->type == EXOSIP_SUBSCRIPTION_NOTIFY) {
                 EyerLog_1("============EXOSIP_SUBSCRIPTION_NOTIFY============\n");
             }
-
-
             if(je->type == EXOSIP_IN_SUBSCRIPTION_NEW) {
                 EyerLog_1("============EXOSIP_IN_SUBSCRIPTION_NEW============\n");
             }
-
-
             if(je->type == EXOSIP_NOTIFICATION_NOANSWER) {
                 EyerLog("============EXOSIP_NOTIFICATION_NOANSWER============\n");
             }
@@ -242,34 +209,62 @@ namespace Eyer
             if(je->type == EXOSIP_NOTIFICATION_GLOBALFAILURE) {
                 EyerLog_1("============EXOSIP_NOTIFICATION_GLOBALFAILURE============\n");
             }
-
-
             if(je->type == EXOSIP_EVENT_COUNT) {
                 EyerLog_1("============EXOSIP_EVENT_COUNT============\n");
             }
 
-
-
-            SIPEvent * event = nullptr;
-            context->eventQueue.GetEvent(&event);
-            if(event != nullptr){
-                if(event->to == SIPEventTarget::SIPEventTarget_MainThread){
-                    EyerLog("SIPEventType: %s\n", event->GetEventType().GetName().str);
-                    event->Do(excontext, context);
-                    delete event;
-                    event = nullptr;
-                }
-                else{
-                    context->eventQueue.PutEvent(event);
-                }
-            }
+            EventLoop(je, excontext);
         }
 
         eXosip_quit(excontext);
     }
 
+    int SIPServerMainThread::EventLoop(eXosip_event_t * je, struct eXosip_t * excontext)
+    {
+        SIPEvent * event = nullptr;
+        context->eventQueue.GetEvent(&event);
+        if(event != nullptr){
+            if(event->to == SIPEventTarget::SIPEventTarget_MainThread){
+                event->Do(excontext, context);
+                delete event;
+                event = nullptr;
+            }
+            else{
+                context->eventQueue.PutEvent(event);
+            }
+        }
+        return 0;
+    }
+
+    int SIPServerMainThread::ANSWEREDProcess(eXosip_event_t * je, struct eXosip_t * excontext)
+    {
+        if(je->response != NULL){
+            EyerString callId = je->response->call_id->number;
+            ActiveCallback * activeCallback = nullptr;
+            context->activeCallbackList.FindCallback(&activeCallback, callId);
+            if(activeCallback != nullptr){
+                if(activeCallback->GetType() == ActiveCallbackType::START_STREAM_CALLBACK){
+                    EventStartRealTimeVideoResponse * eventStartRealTimeVideoResponse = new EventStartRealTimeVideoResponse();
+                    eventStartRealTimeVideoResponse->status = je->response->status_code;
+                    eventStartRealTimeVideoResponse->callId = callId;
+                    context->eventQueue.PutEvent(eventStartRealTimeVideoResponse);
+                }
+            }
+        }
+
+        osip_message_t *ack = NULL;
+        eXosip_call_build_ack(excontext, je->did, &ack);
+
+        eXosip_lock(excontext);
+        eXosip_call_send_ack(excontext, je->did, ack);
+        eXosip_unlock(excontext);
+
+        return 0;
+    }
+
     int SIPServerMainThread::PrintJe(eXosip_event_t * je)
     {
+        /*
         if(je->request != NULL){
             EyerLog("Call-ID: %s\n", je->request->call_id->number);
 
@@ -296,6 +291,7 @@ namespace Eyer
             EyerLog("ack msg: \n%s\n", str);
             osip_free(str);
         }
+        */
         return 0;
     }
 }

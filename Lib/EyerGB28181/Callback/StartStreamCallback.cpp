@@ -2,8 +2,8 @@
 
 namespace Eyer
 {
-    CallbackType StartStreamCallback::GetType()
+    ActiveCallbackType StartStreamCallback::GetType()
     {
-        return CallbackType::START_STREAM_CALLBACK;
+        return ActiveCallbackType::START_STREAM_CALLBACK;
     }
 }

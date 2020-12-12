@@ -31,17 +31,19 @@ add_library(
         Event/EventUserRegister.hpp
         SIPEventType.cpp
         SIPEventType.hpp
-        SIPCallback.cpp
-        SIPCallback.hpp
+        PassiveCallback.cpp
+        PassiveCallback.hpp
         Event/EventStartRealTimeVideoRequest.cpp
         Event/EventStartRealTimeVideoRequest.hpp
         Event/EventStartRealTimeVideoResponse.cpp
         Event/EventStartRealTimeVideoResponse.hpp
         Callback/StartStreamCallback.cpp
         Callback/StartStreamCallback.hpp
-        CallbackList.cpp
-        CallbackList.hpp
-        Callback/Callback.cpp Callback/Callback.hpp)
+        ActiveCallbackList.cpp
+        ActiveCallbackList.hpp
+        Callback/ActiveCallback.cpp
+        Callback/ActiveCallback.hpp
+)
 
 set(head_files
         EyerGB28181.hpp
