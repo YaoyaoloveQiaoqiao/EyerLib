@@ -19,6 +19,9 @@ namespace Eyer
         SIPServerContext * context = nullptr;
 
         int PrintJe(eXosip_event_t * je);
+
+        int EventLoop           (eXosip_event_t * je, struct eXosip_t * excontext);
+        int ANSWEREDProcess     (eXosip_event_t * je, struct eXosip_t * excontext);
     };
 }
 

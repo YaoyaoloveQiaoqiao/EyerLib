@@ -41,9 +41,9 @@ namespace Eyer
         return 0;
     }
 
-    int SIPServer::SetCallback(SIPCallback * callback)
+    int SIPServer::SetCallback(PassiveCallback * callback)
     {
-        context.callback = callback;
+        context.passiveCallback = callback;
         return 0;
     }
 

@@ -4,8 +4,8 @@
 #include "SIPDeviceManager.hpp"
 #include "SIPEventQueue.hpp"
 #include "SIPEventThread.hpp"
-#include "SIPCallback.hpp"
-#include "CallbackList.hpp"
+#include "PassiveCallback.hpp"
+#include "ActiveCallbackList.hpp"
 
 namespace Eyer
 {
@@ -16,9 +16,9 @@ namespace Eyer
 
         SIPDeviceManager deviceManager;
         SIPEventQueue eventQueue;
-        CallbackList callbackList;
+        ActiveCallbackList activeCallbackList;
         SIPEventThread * eventThread = nullptr;
-        SIPCallback * callback = nullptr;
+        PassiveCallback * passiveCallback = nullptr;
 
         EyerString serverId = "34020000002000000001";
         EyerString serverRealm = "34020000";

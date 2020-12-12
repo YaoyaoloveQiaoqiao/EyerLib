@@ -4,8 +4,18 @@
 #include "EyerGB28181/EyerGB28181.hpp"
 #include "EyerCore/EyerCore.hpp"
 #include "EyerRTP/EyerRTP.hpp"
+#include "EyerGB28181/Callback/StartStreamCallback.hpp"
 
-class MySIPCallback : public Eyer::SIPCallback
+class MyStartStreamCallback : public Eyer::StartStreamCallback
+{
+    virtual int OnStartStream(int status)
+    {
+        EyerLog("OnStartStream: %d\n", status);
+        return 0;
+    }
+};
+
+class MySIPCallback : public Eyer::PassiveCallback
 {
 public:
     Eyer::SIPServer * sipServer = nullptr;
@@ -27,7 +37,7 @@ public:
                 9000,
                 deviceId,
                 channelId,
-                nullptr);
+                new MyStartStreamCallback());
         return 0;
     }
 };
@@ -50,7 +60,7 @@ TEST(GB28181, GB28181SipServer) {
 }
 
 int main(int argc,char **argv){
-    eyer_log_param(1, 1, 1, 1, 0);
+    eyer_log_param(1, 1, 0, 0, 0);
 
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
