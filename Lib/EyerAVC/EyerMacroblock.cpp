@@ -135,6 +135,14 @@ namespace Eyer
                                 if(CodecBlockPatterLuma & (1 << index8x8)){
                                     EyerLog("有残差，Block X: %d, Y: %d, Sub X: %d, Sub Y: %d\n", blockX, blockY, blockSubIndexX, blockSubIndexY);
                                     lumaResidual[blockSubIndexY][blockSubIndexX].emptyBlock = true;
+
+                                    /*
+                                    for(int i = 0;i < 10;i++){
+                                        uint32_t a = bs.bs_read_u1();
+                                        EyerLog("a: %d\n", a);
+                                    }
+                                    */
+
                                     get_luma_coeff(bs, blockSubIndexX, blockSubIndexY);
                                 }
                                 else{
@@ -208,6 +216,19 @@ namespace Eyer
                         EyerLog("第 %d 个 拖尾系数符号为: %d\n", coeffIdx, 1);
                     }
                 }
+            }
+
+            // levels
+            int level = 0;
+            if(numCoeff > 10 && trailingOnes < 3){
+                suffixLength = 1;
+            }
+            else{
+                trailingOnes = 0;
+            }
+
+            for (int k = 0; k <= numCoeff - 1 - trailingOnes; k++){
+                // Get levels
             }
         }
 
@@ -392,15 +413,17 @@ namespace Eyer
 
                 code = codeTable[xIdx];
 
+                // EyerLog("Miao!!!!!!! : %d, code: %d\n", bs.bs_peek_u(codeLen), code);
+
                 if(bs.bs_peek_u(codeLen) == code){
-                    EyerLog("Miao!!!!!!!\n");
                     value1 = xIdx;
                     value2 = yIdx;
                     bs.bs_skip_u(codeLen);
-
                     goto END;
                 }
             }
+            lengthTable += tableWidth;
+            codeTable += tableWidth;
         }
 
     END:
