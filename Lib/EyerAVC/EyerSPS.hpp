@@ -82,7 +82,8 @@ namespace Eyer
         int level_idc = 0;
         int seq_parameter_set_id = 0;
 
-        int chroma_format_idc = 0;
+        // 当 chroma_format_idc不存在时，应推断其值为 1（4：2：0的色度格式）。
+        int chroma_format_idc = 1;
         int separate_colour_plance_flag = 0;
         int ChromaArrayType = 0;
 

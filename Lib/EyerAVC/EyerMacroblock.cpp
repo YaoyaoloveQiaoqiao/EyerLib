@@ -52,10 +52,17 @@ namespace Eyer
                 mb_pred(bs);
             }
 
+            // EyerLog("Byte index: %d, bit offset: %d\n", bs.bits_left, bs.bits_left);
+
             if(mbType.MbPartPredMode() != MB_PART_PRED_MODE::Intra_16x16){
                 uint32_t coded_block_pattern = bs.bs_read_me(sps.ChromaArrayType, mbType.MbPartPredMode());
+
                 CodecBlockPatterLuma = coded_block_pattern % 16;
                 CodecBlockPatterChroma = coded_block_pattern / 16;
+
+                EyerLog("CBP: %d\n", coded_block_pattern);
+                EyerLog("CodecBlockPatterLuma: %d\n", CodecBlockPatterLuma);
+                EyerLog("CodecBlockPatterChroma: %d\n", CodecBlockPatterChroma);
             }
 
             if(CodecBlockPatterLuma > 0 || CodecBlockPatterChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){

@@ -163,6 +163,7 @@ namespace Eyer
     int32_t EyerBitStream::bs_read_me(int ChromaArrayType, MB_PART_PRED_MODE predMode)
     {
         uint32_t ue_index = bs_read_ue();
+        // EyerLog("UE index: %d\n", ue_index);
         uint32_t val = 0;
         // Table
         if(ChromaArrayType == 1 || ChromaArrayType == 2){
