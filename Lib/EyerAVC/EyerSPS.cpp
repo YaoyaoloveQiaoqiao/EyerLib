@@ -43,11 +43,10 @@ namespace Eyer
 
 
         if( profile_idc == 100      || profile_idc == 110       ||
-            profile_idc == 122      || profile_idc == 244       ||
-            profile_idc == 44       || profile_idc == 83        ||
-            profile_idc == 86       || profile_idc == 118       ||
-            profile_idc == 128      || profile_idc == 138       ||
-            profile_idc == 139      || profile_idc == 134
+            profile_idc == 122      || profile_idc == 244       || profile_idc == 44     ||
+            profile_idc == 83       || profile_idc == 86        || profile_idc == 118    ||
+            profile_idc == 128      || profile_idc == 138       || profile_idc == 139    ||
+            profile_idc == 134      || profile_idc == 135
            )
         {
             // TODO Heigh Profile
@@ -86,7 +85,7 @@ namespace Eyer
             ChromaArrayType = chroma_format_idc;
         }
         else{
-            ChromaArrayType = 1;
+            ChromaArrayType = 0;
         }
 
         log2_max_frame_num_minus4               = bs.bs_read_ue();
