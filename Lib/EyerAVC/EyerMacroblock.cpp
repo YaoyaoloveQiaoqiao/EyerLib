@@ -138,15 +138,9 @@ namespace Eyer
                             for(blockSubIndexX = blockX; blockSubIndexX < blockX + 2; blockSubIndexX ++){
                                 index8x8 = 2 * (blockY / 2) + blockX / 2;
                                 if(CodecBlockPatterLuma & (1 << index8x8)){
+                                    EyerLog("=================Sub Block=================\n");
                                     EyerLog("有残差，Block X: %d, Y: %d, Sub X: %d, Sub Y: %d\n", blockX, blockY, blockSubIndexX, blockSubIndexY);
                                     lumaResidual[blockSubIndexY][blockSubIndexX].emptyBlock = true;
-
-                                    /*
-                                    for(int i = 0;i < 10;i++){
-                                        uint32_t a = bs.bs_read_u1();
-                                        EyerLog("a: %d\n", a);
-                                    }
-                                    */
 
                                     get_luma_coeff(bs, blockSubIndexX, blockSubIndexY);
                                 }
@@ -170,7 +164,7 @@ namespace Eyer
     {
         int err;
 
-        int max_ceoff_number = 0;
+        int max_ceoff_number = 4;
         // int blockType =
         if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16 || mbType == MB_TYPE::I_PCM){
             // LUMA_INTRA16x16AC
@@ -207,6 +201,8 @@ namespace Eyer
 
         lumaResidual[y][x].numCoeff = (uint8_t)numCoeff;
 
+
+        EyerLog("Number Coeff: %d\n", numCoeff);
         // 拖尾系数的符号
         if(numCoeff != 0){
             if(trailingOnes){
@@ -225,14 +221,13 @@ namespace Eyer
 
             // levels
             int level = 0;
-            if(numCoeff > 10 && trailingOnes < 3){
+            if (numCoeff > 10 && trailingOnes < 3) {
                 suffixLength = 1;
             }
-            else{
+            else {
                 suffixLength = 0;
             }
-            for (int k = 0; k <= numCoeff - 1 - trailingOnes; k++)
-            {
+            for (int k = 0; k <= numCoeff - 1 - trailingOnes; k++) {
                 err = get_coeff_level(bs, level, k, trailingOnes, suffixLength);
                 if (err < 0) {
                     return err;
@@ -242,18 +237,48 @@ namespace Eyer
                     suffixLength = 1;
                 }
 
-                if ((abs(level) >(3 << (suffixLength - 1))) && (suffixLength < 6))
-                {
+                if ((abs(level) >(3 << (suffixLength - 1))) && (suffixLength < 6)) {
                     suffixLength++;
                 }
 
                 EyerLog("Level: %d\n", level);
             }
 
+            // zerosLeft
+            int totalZeros = 0;
+            if (numCoeff < max_ceoff_number) {
+                err = get_total_zeros(bs, totalZeros, numCoeff - 1);
+                if (err < 0) {
+                    return err;
+                }
+            }
+            else {
+                totalZeros = 0;
+            }
+            EyerLog("totalZeros: %d\n", totalZeros);
 
 
+            int runBefore_vlcIdx = 0;
+            i = numCoeff - 1;
+            int zerosLeft = totalZeros;
+            int run = 0;
+            if (zerosLeft > 0 && i > 0) {
+                do
+                {
+                    runBefore_vlcIdx = (zerosLeft - 1 < 6 ? zerosLeft - 1 : 6);
+                    err = get_run_before(bs, run, runBefore_vlcIdx);
+                    if (err < 0) {
+                        return err;
+                    }
+                    zerosLeft -= run;
+                    i--;
+                } while (zerosLeft != 0 && i != 0);
+            }
+            else {
+                run = 0;
+            }
 
-
+            EyerLog("Run: %d\n", run);
         }
 
         return err;
@@ -316,16 +341,6 @@ namespace Eyer
 
             search_for_value_in_2D_table(bs, totleCoeff, trailingOnes, token, lengthTable, codeTable, 17, 4);
         }
-
-        /*
-        for(int i=0;i<10;i++){
-            uint32_t a = bs.bs_read_u1();
-            EyerLog("%d\n", a);
-        }
-        EyerLog("\n");
-        */
-
-
 
         return ret;
     }
@@ -443,6 +458,9 @@ namespace Eyer
                     value1 = xIdx;
                     value2 = yIdx;
                     bs.bs_skip_u(codeLen);
+
+                    EyerLog("value1: %d, value2: %d\n", xIdx, yIdx);
+                    EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxx\n");
                     goto END;
                 }
             }
@@ -450,6 +468,7 @@ namespace Eyer
             codeTable += tableWidth;
         }
 
+        EyerLog("Not Found Error\n");
     END:
         return 0;
     }
@@ -496,6 +515,99 @@ namespace Eyer
         }
         else {
             level = (-levelCode - 1) >> 1;
+        }
+
+        return 0;
+    }
+
+
+    int EyerMacroblock::get_total_zeros(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx)
+    {
+        int totalZerosTable_Length[15][16] =
+            {
+                { 1,3,3,4,4,5,5,6,6,7,7,8,8,9,9,9 },
+                { 3,3,3,3,3,4,4,4,4,5,5,6,6,6,6 },
+                { 4,3,3,3,4,4,3,3,4,5,5,6,5,6 },
+                { 5,3,4,4,3,3,3,4,3,4,5,5,5 },
+                { 4,4,4,3,3,3,3,3,4,5,4,5 },
+                { 6,5,3,3,3,3,3,3,4,3,6 },
+                { 6,5,3,3,3,2,3,4,3,6 },
+                { 6,4,5,3,2,2,3,3,6 },
+                { 6,6,4,2,2,3,2,5 },
+                { 5,5,3,2,2,2,4 },
+                { 4,4,3,3,1,3 },
+                { 4,4,2,1,3 },
+                { 3,3,1,2 },
+                { 2,2,1 },
+                { 1,1 }
+            };
+
+        int totalZerosTable_Code[15][16] =
+            {
+                { 1,3,2,3,2,3,2,3,2,3,2,3,2,3,2,1 },
+                { 7,6,5,4,3,5,4,3,2,3,2,3,2,1,0 },
+                { 5,7,6,5,4,3,4,3,2,3,2,1,1,0 },
+                { 3,7,5,4,6,5,4,3,3,2,2,1,0 },
+                { 5,4,3,7,6,5,4,3,2,1,1,0 },
+                { 1,1,7,6,5,4,3,2,1,1,0 },
+                { 1,1,5,4,3,3,2,1,1,0 },
+                { 1,1,1,3,3,2,2,1,0 },
+                { 1,0,1,3,2,1,1,1, },
+                { 1,0,1,3,2,1,1, },
+                { 0,1,1,2,1,3 },
+                { 0,1,1,1,1 },
+                { 0,1,1,1 },
+                { 0,1,1 },
+                { 0,1 }
+            };
+
+        int err = 0;
+        int idx2 = 0;
+        int idx1 = 0;
+        int *lengthTable = &totalZerosTable_Length[totalZeros_vlcIdx][0];
+        int *codeTable = &totalZerosTable_Code[totalZeros_vlcIdx][0];
+        err = search_for_value_in_2D_table(bs, totalZeros, idx1, idx2, lengthTable, codeTable, 16, 1);
+        if (err < 0) {
+            return err;
+        }
+
+        return 0;
+    }
+
+
+    int EyerMacroblock::get_run_before(EyerBitStream & bs, int & runBefore, int runBefore_vlcIdx)
+    {
+        int runBeforeTable_Length[15][16] =
+            {
+                { 1,1 },
+                { 1,2,2 },
+                { 2,2,2,2 },
+                { 2,2,2,3,3 },
+                { 2,2,3,3,3,3 },
+                { 2,3,3,3,3,3,3 },
+                { 3,3,3,3,3,3,3,4,5,6,7,8,9,10,11 }
+            };
+
+        int runBeforeTable_Code[15][16] =
+            {
+                { 1,0 },
+                { 1,1,0 },
+                { 3,2,1,0 },
+                { 3,2,1,1,0 },
+                { 3,2,3,2,1,0 },
+                { 3,0,1,3,2,5,4 },
+                { 7,6,5,4,3,2,1,1,1,1,1,1,1,1,1 }
+            };
+
+
+        int idx1 = 0;
+        int idx2 = 0, err = 0;
+        int *lengthTable = &runBeforeTable_Length[runBefore_vlcIdx][0];
+        int *codeTable = &runBeforeTable_Code[runBefore_vlcIdx][0];
+        err = search_for_value_in_2D_table(bs, runBefore, idx1, idx2, lengthTable, codeTable, 16, 1);
+        if (err < 0)
+        {
+            return err;
         }
 
         return 0;

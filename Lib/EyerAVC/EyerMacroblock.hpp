@@ -35,6 +35,10 @@ namespace Eyer
         int search_for_value_in_2D_table(EyerBitStream & bs, int &value1, int &value2, int &code, int *lengthTable, int *codeTable, int tableWidth, int tableHeight);
 
         int get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength);
+
+        int get_total_zeros(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx);
+
+        int get_run_before(EyerBitStream & bs, int & runBefore, int runBefore_vlcIdx);
     private:
         EyerSPS sps;
         EyerPPS pps;
