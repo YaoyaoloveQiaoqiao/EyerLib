@@ -1,6 +1,11 @@
 #include "EyerMacroblock.hpp"
 #include "EyerBitStream.hpp"
 
+#include <algorithm>
+#include <cstdio>
+#include <cmath>
+#include <iostream>
+
 namespace Eyer
 {
     EyerMacroblock::EyerMacroblock(int _mbIndex)
@@ -224,12 +229,31 @@ namespace Eyer
                 suffixLength = 1;
             }
             else{
-                trailingOnes = 0;
+                suffixLength = 0;
+            }
+            for (int k = 0; k <= numCoeff - 1 - trailingOnes; k++)
+            {
+                err = get_coeff_level(bs, level, k, trailingOnes, suffixLength);
+                if (err < 0) {
+                    return err;
+                }
+
+                if (suffixLength == 0) {
+                    suffixLength = 1;
+                }
+
+                if ((abs(level) >(3 << (suffixLength - 1))) && (suffixLength < 6))
+                {
+                    suffixLength++;
+                }
+
+                EyerLog("Level: %d\n", level);
             }
 
-            for (int k = 0; k <= numCoeff - 1 - trailingOnes; k++){
-                // Get levels
-            }
+
+
+
+
         }
 
         return err;
@@ -427,6 +451,53 @@ namespace Eyer
         }
 
     END:
+        return 0;
+    }
+
+
+    int EyerMacroblock::get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength)
+    {
+        int prefixLength = 0, level_prefix = 0, level_suffix = 0;
+        int levelSuffixSize = 0, levelCode = 0, i = 0;
+
+        while (!bs.bs_read_u1()) {
+            level_prefix++;
+        }
+        prefixLength = level_prefix + 1;
+        if (level_prefix == 14 && suffixLength == 0) {
+            levelSuffixSize = 4;
+        }
+        else if (level_prefix == 15) {
+            levelSuffixSize = level_prefix - 3;
+        }
+        else {
+            levelSuffixSize = suffixLength;
+        }
+        if (levelSuffixSize > 0) {
+            // level_suffix = Get_uint_code_num(m_pSODB, m_bypeOffset, m_bitOffset, levelSuffixSize);
+            level_suffix = bs.bs_read_u(levelSuffixSize);
+        }
+        else {
+            level_suffix = 0;
+        }
+        levelCode = (std::min(15, level_prefix) << suffixLength) + level_suffix;
+        if (level_prefix >= 15 && suffixLength == 0) {
+            levelCode += 15;
+        }
+        if (level_prefix >= 16) {
+            levelCode += (1 << (level_prefix - 3)) - 4096;
+        }
+        if (levelIdx == 0 && trailingOnes < 3) {
+            levelCode += 2;
+        }
+
+        if (levelCode % 2 == 0) {
+            level = (levelCode + 2) >> 1;
+        }
+        else {
+            level = (-levelCode - 1) >> 1;
+        }
+
         return 0;
     }
 }
