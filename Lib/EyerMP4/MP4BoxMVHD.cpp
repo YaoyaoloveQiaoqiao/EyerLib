@@ -127,19 +127,19 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%screation_time: %lld\n", levelStr.str, creation_time);
-        printf("%smodification_time: %lld\n", levelStr.str, modification_time);
-        printf("%stimescale: %d\n", levelStr.str, timescale);
-        printf("%sduration: %lld\n", levelStr.str, duration);
+        EyerLog("%screation_time: %lld\n", levelStr.str, creation_time);
+        EyerLog("%smodification_time: %lld\n", levelStr.str, modification_time);
+        EyerLog("%stimescale: %d\n", levelStr.str, timescale);
+        EyerLog("%sduration: %lld\n", levelStr.str, duration);
 
-        printf("%srate: %f\n", levelStr.str, rate);
-        printf("%svolume: %f\n", levelStr.str, volume);
+        EyerLog("%srate: %f\n", levelStr.str, rate);
+        EyerLog("%svolume: %f\n", levelStr.str, volume);
 
-        printf("%s[ %f, %f, %f\n", levelStr.str,  matrix[0], matrix[1], matrix[2]);
-        printf("%s  %f, %f, %f\n", levelStr.str,  matrix[3], matrix[4], matrix[5]);
-        printf("%s  %f, %f, %f ]\n",levelStr.str, matrix[6], matrix[7], matrix[8]);
+        EyerLog("%s[ %f, %f, %f\n", levelStr.str,  matrix[0], matrix[1], matrix[2]);
+        EyerLog("%s  %f, %f, %f\n", levelStr.str,  matrix[3], matrix[4], matrix[5]);
+        EyerLog("%s  %f, %f, %f ]\n",levelStr.str, matrix[6], matrix[7], matrix[8]);
 
-        printf("%snext_track_ID: %d\n", levelStr.str, next_track_ID);
+        EyerLog("%snext_track_ID: %d\n", levelStr.str, next_track_ID);
 
 
         return 0;

@@ -78,12 +78,12 @@ namespace Eyer{
         }
         levelStr = levelStr + "\t";
 
-        printf("%strack_ID: %d\n", levelStr.str, track_ID);
-        printf("%sbase_data_offset: %lld\n", levelStr.str, base_data_offset);
-        printf("%ssample_description_index: %d\n", levelStr.str, sample_description_index);
-        printf("%sdefault_sample_duration: %d\n", levelStr.str, default_sample_duration);
-        printf("%sdefault_sample_size: %d\n", levelStr.str, default_sample_size);
-        printf("%sdefault_sample_flags: %d\n", levelStr.str, default_sample_flags);
+        EyerLog("%strack_ID: %d\n", levelStr.str, track_ID);
+        EyerLog("%sbase_data_offset: %lld\n", levelStr.str, base_data_offset);
+        EyerLog("%ssample_description_index: %d\n", levelStr.str, sample_description_index);
+        EyerLog("%sdefault_sample_duration: %d\n", levelStr.str, default_sample_duration);
+        EyerLog("%sdefault_sample_size: %d\n", levelStr.str, default_sample_size);
+        EyerLog("%sdefault_sample_flags: %d\n", levelStr.str, default_sample_flags);
 
         return 0;
     }

@@ -94,10 +94,10 @@ namespace Eyer {
         }
         levelStr = levelStr + "\t";
 
-        printf("%screation_time: %lld\n", levelStr.str, creation_time);
-        printf("%smodification_time: %lld\n", levelStr.str, modification_time);
-        printf("%stime_scale: %d\n", levelStr.str, time_scale);
-        printf("%sduration: %lld\n", levelStr.str, duration);
+        EyerLog("%screation_time: %lld\n", levelStr.str, creation_time);
+        EyerLog("%smodification_time: %lld\n", levelStr.str, modification_time);
+        EyerLog("%stime_scale: %d\n", levelStr.str, time_scale);
+        EyerLog("%sduration: %lld\n", levelStr.str, duration);
 
         return 0;
     }

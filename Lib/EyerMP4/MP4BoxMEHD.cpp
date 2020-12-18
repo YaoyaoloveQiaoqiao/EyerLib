@@ -79,7 +79,7 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%sfragment_duration: %lld\n", levelStr.str, fragment_duration);
+        EyerLog("%sfragment_duration: %lld\n", levelStr.str, fragment_duration);
 
         return 0;
     }

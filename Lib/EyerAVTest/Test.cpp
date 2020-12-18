@@ -6,7 +6,8 @@
 TEST(AVDecoder, AVDecoderTest)
 {
     // Eyer::EyerAVReader reader("/Users/lichi/annie/xiaomai.mp4");
-    Eyer::EyerAVReader reader("/Users/lichi/Downloads/scene_03.mp4");
+    // Eyer::EyerAVReader reader("/Users/lichi/Downloads/scene_03.mp4");
+    Eyer::EyerAVReader reader("/Users/lichi/Desktop/huyou_error.mp4");
     int ret = reader.Open();
     if(ret){
         printf("Open Fail ret: %d\n", ret);
@@ -28,6 +29,9 @@ TEST(AVDecoder, AVDecoderTest)
 
     Eyer::AnnexB_to_avcC annexBToAvcC;
 
+
+    FILE * fff = fopen("/Users/lichi/Desktop/huyou_error.yuv", "wb");
+
     double maxVideoPts = 0.0;
     while(1){
         Eyer::EyerAVPacket packetA;
@@ -40,6 +44,42 @@ TEST(AVDecoder, AVDecoderTest)
             continue;
         }
 
+        videoStream.ScalerPacketPTS(packetA);
+        // printf("packet: %f\n", packetA.GetSecPTS());
+
+        videoDecoder.SendPacket(&packetA);
+        while (1){
+            Eyer::EyerAVFrame frame;
+            ret = videoDecoder.RecvFrame(&frame);
+            if(ret){
+                break;
+            }
+
+            int width = frame.GetWidth();
+            int height = frame.GetHeight();
+
+            // printf("w: %d, h: %d\n", width, height);
+
+            /*
+            unsigned char * y = (unsigned char *)malloc(width * height);
+            unsigned char * u = (unsigned char *)malloc(width * height / 4);
+            unsigned char * v = (unsigned char *)malloc(width * height / 4);
+
+            frame.GetYData(y);
+            frame.GetUData(u);
+            frame.GetVData(v);
+
+            fwrite(y, width * height, 1, fff);
+            fwrite(u, width * height / 4, 1, fff);
+            fwrite(v, width * height / 4, 1, fff);
+
+            free(y);
+            free(u);
+            free(v);
+             */
+        }
+
+        /*
         videoStream.ScalerPacketPTS(packetA);
         if(maxVideoPts <= packetA.GetSecPTS()){
             maxVideoPts = packetA.GetSecPTS();
@@ -55,6 +95,7 @@ TEST(AVDecoder, AVDecoderTest)
 
 
         // 转成 avcC
+
         annexBToAvcC.SendAnnexB(packet.GetDataPtr(), packet.GetSize());
         while(1){
             Eyer::EyerBuffer avccBuffer;
@@ -79,11 +120,12 @@ TEST(AVDecoder, AVDecoderTest)
                 printf("PTS: %lld\n", frame.GetPTS());
             }
         }
+         */
 
         // printf("%d %d %d %d %d\n", packet.GetDataPtr()[0], packet.GetDataPtr()[1], packet.GetDataPtr()[2], packet.GetDataPtr()[3], packet.GetDataPtr()[4]);
     }
 
-
+    fclose(fff);
     reader.Close();
 }
 

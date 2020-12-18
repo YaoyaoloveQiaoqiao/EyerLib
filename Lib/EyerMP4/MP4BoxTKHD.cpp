@@ -135,22 +135,22 @@ namespace Eyer {
         }
         levelStr = levelStr + "\t";
 
-        printf("%screation_time: %lld\n", levelStr.str, creation_time);
-        printf("%smodification_time: %lld\n", levelStr.str, modification_time);
-        printf("%strack_ID: %d\n", levelStr.str, track_ID);
-        printf("%sduration: %lld\n", levelStr.str, duration);
+        EyerLog("%screation_time: %lld\n", levelStr.str, creation_time);
+        EyerLog("%smodification_time: %lld\n", levelStr.str, modification_time);
+        EyerLog("%strack_ID: %d\n", levelStr.str, track_ID);
+        EyerLog("%sduration: %lld\n", levelStr.str, duration);
 
-        printf("%slayer: %d\n", levelStr.str, layer);
-        printf("%salternate_group: %d\n", levelStr.str, alternate_group);
+        EyerLog("%slayer: %d\n", levelStr.str, layer);
+        EyerLog("%salternate_group: %d\n", levelStr.str, alternate_group);
 
-        printf("%svolume: %f\n", levelStr.str, volume);
+        EyerLog("%svolume: %f\n", levelStr.str, volume);
 
-        printf("%s[ %f, %f, %f\n", levelStr.str,  matrix[0], matrix[1], matrix[2]);
-        printf("%s  %f, %f, %f\n", levelStr.str,  matrix[3], matrix[4], matrix[5]);
-        printf("%s  %f, %f, %f ]\n",levelStr.str, matrix[6], matrix[7], matrix[8]);
+        EyerLog("%s[ %f, %f, %f\n", levelStr.str,  matrix[0], matrix[1], matrix[2]);
+        EyerLog("%s  %f, %f, %f\n", levelStr.str,  matrix[3], matrix[4], matrix[5]);
+        EyerLog("%s  %f, %f, %f ]\n",levelStr.str, matrix[6], matrix[7], matrix[8]);
 
-        printf("%swidth: %d\n", levelStr.str, width);
-        printf("%sheight: %d\n", levelStr.str, height);
+        EyerLog("%swidth: %d\n", levelStr.str, width);
+        EyerLog("%sheight: %d\n", levelStr.str, height);
 
         return 0;
     }

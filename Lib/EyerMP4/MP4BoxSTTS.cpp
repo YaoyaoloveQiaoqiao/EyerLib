@@ -80,8 +80,8 @@ namespace Eyer
         levelStr = levelStr + "\t";
 
         for(int i=0;i<sampleList.size();i++){
-            printf("%ssample_count: %d\n", levelStr.str, sampleList[i]->sample_count);
-            printf("%ssample_delta: %d\n", levelStr.str, sampleList[i]->sample_delta);
+            EyerLog("%ssample_count: %d\n", levelStr.str, sampleList[i]->sample_count);
+            EyerLog("%ssample_delta: %d\n", levelStr.str, sampleList[i]->sample_delta);
         }
 
         return 0;
