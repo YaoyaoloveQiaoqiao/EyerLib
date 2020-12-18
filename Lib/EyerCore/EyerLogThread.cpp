@@ -27,8 +27,6 @@ namespace Eyer
             EyerLogBean * logBean = nullptr;
             logQueue.FrontPop(&logBean);
             if(logBean != nullptr){
-                printf("%s", logBean->GetLog().str);
-
                 delete logBean;
                 logBean = nullptr;
             }
@@ -39,16 +37,17 @@ namespace Eyer
     {
         while(!stopFlag){
             EyerTime::EyerSleepMilliseconds(1);
-            EyerLogBean * logBean = nullptr;
-            logQueue.FrontPop(&logBean);
-            if(logBean != nullptr){
-                // printf("[%d] [%s (%d)] [%s] %s", logBean->GetLevel(), logBean->GetFile().str, logBean->GetLine(), logBean->GetFunction().str, logBean->GetLog().str);
-                if(logBean->GetLevel() >= level){
-                    PrintLog(logBean);
+            // printf("[%d] [%s (%d)] [%s] %s", logBean->GetLevel(), logBean->GetFile().str, logBean->GetLine(), logBean->GetFunction().str, logBean->GetLog().str);
+            while(logQueue.Size() > 0){
+                EyerLogBean * logBean = nullptr;
+                logQueue.FrontPop(&logBean);
+                if(logBean != nullptr){
+                    if(logBean->GetLevel() >= level){
+                        PrintLog(logBean);
+                    }
+                    delete logBean;
+                    logBean = nullptr;
                 }
-
-                delete logBean;
-                logBean = nullptr;
             }
         }
 

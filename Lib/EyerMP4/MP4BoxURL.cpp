@@ -52,7 +52,7 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%slocation: %s\n", levelStr.str, location.str);
+        EyerLog("%slocation: %s\n", levelStr.str, location.str);
 
         return 0;
     }

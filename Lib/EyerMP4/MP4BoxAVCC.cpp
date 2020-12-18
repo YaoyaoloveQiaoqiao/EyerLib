@@ -138,25 +138,25 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%sconfigurationVersion: %d\n", levelStr.str, configurationVersion);
-        printf("%sAVCProfileIndication: %d\n", levelStr.str, AVCProfileIndication);
-        printf("%sprofile_compatibility: %d\n", levelStr.str, profile_compatibility);
-        printf("%sAVCLevelIndication: %d\n", levelStr.str, AVCLevelIndication);
-        printf("%slengthSizeMinusOne: %d\n", levelStr.str, lengthSizeMinusOne);
+        EyerLog("%sconfigurationVersion: %d\n", levelStr.str, configurationVersion);
+        EyerLog("%sAVCProfileIndication: %d\n", levelStr.str, AVCProfileIndication);
+        EyerLog("%sprofile_compatibility: %d\n", levelStr.str, profile_compatibility);
+        EyerLog("%sAVCLevelIndication: %d\n", levelStr.str, AVCLevelIndication);
+        EyerLog("%slengthSizeMinusOne: %d\n", levelStr.str, lengthSizeMinusOne);
 
         for(int i=0; i<spsList.size(); i++){
-            printf("%ssps len: %d\n", levelStr.str, spsList[i]->GetLen());
+            EyerLog("%ssps len: %d\n", levelStr.str, spsList[i]->GetLen());
         }
         for(int i=0; i<ppsList.size(); i++){
-            printf("%spps len: %d\n", levelStr.str, ppsList[i]->GetLen());
+            EyerLog("%spps len: %d\n", levelStr.str, ppsList[i]->GetLen());
         }
 
-        printf("%schroma_format: %d\n",                 levelStr.str, chroma_format);
-        printf("%sbit_depth_luma_minus8: %d\n",         levelStr.str, bit_depth_luma_minus8);
-        printf("%sbit_depth_chroma_minus8: %d\n",       levelStr.str, bit_depth_chroma_minus8);
+        EyerLog("%schroma_format: %d\n",                 levelStr.str, chroma_format);
+        EyerLog("%sbit_depth_luma_minus8: %d\n",         levelStr.str, bit_depth_luma_minus8);
+        EyerLog("%sbit_depth_chroma_minus8: %d\n",       levelStr.str, bit_depth_chroma_minus8);
 
         for(int i=0; i<spsExtList.size(); i++){
-            printf("%sspsExt len: %d\n", levelStr.str, spsExtList[i]->GetLen());
+            EyerLog("%sspsExt len: %d\n", levelStr.str, spsExtList[i]->GetLen());
         }
 
         return 0;
