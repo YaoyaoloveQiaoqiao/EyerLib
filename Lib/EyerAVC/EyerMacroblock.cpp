@@ -185,16 +185,12 @@ namespace Eyer
         int numCoeff = 0;
         int trailingOnes = 0;
 
-        int token = 0;
-
-
         EyerCAVLC cavlc;
         cavlc.GetCoeffNumTrailingOnes(bs, numCoeff, trailingOnes, nC);
 
         lumaResidual[y][x].numCoeff = (uint8_t)numCoeff;
 
-
-        EyerLog("Number Coeff: %d\n", numCoeff);
+        EyerLog("Number Coeff: %d, Trailing Ones: %d\n", numCoeff, trailingOnes);
         // 拖尾系数的符号
         if(numCoeff != 0){
             if(trailingOnes){

@@ -46,9 +46,6 @@ namespace Eyer
         uint32_t CodecBlockPatterChroma = 0;
 
         EyerCoeff4x4Block lumaResidual[4][4];
-
-
-
     };
 }
 
