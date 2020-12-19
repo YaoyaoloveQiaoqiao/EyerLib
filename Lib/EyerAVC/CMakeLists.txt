@@ -44,6 +44,10 @@ add_library(
         EyerMacroblock.hpp
         EyerCoeff4x4Block.cpp
         EyerCoeff4x4Block.hpp
+        EyerCAVLC.cpp
+        EyerCAVLC.hpp
+        AVCTable.hpp
+        AVCTable.cpp
 )
 
 target_link_libraries (
