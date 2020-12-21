@@ -8,7 +8,7 @@
 
 TEST(EyerMP4, MP4BoxMVHD)
 {
-    printf("=======================MVHD=======================\n");
+    EyerLog("=======================MVHD=======================\n");
     Eyer::MP4BoxMVHD mvhd;
     mvhd.SetDefaultData();
     mvhd.PrintInfo();
@@ -21,6 +21,8 @@ TEST(EyerMP4, MP4BoxMVHD)
     mvhd2.PrintInfo();
 
     ASSERT_EQ(mvhd, mvhd2) << "MVHD Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_MVHDTEST_HPP

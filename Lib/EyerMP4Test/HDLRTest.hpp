@@ -10,7 +10,7 @@
 
 TEST(EyerMP4, MP4BoxHDLR)
 {
-    printf("=======================HDLR=======================\n");
+    EyerLog("=======================HDLR=======================\n");
     Eyer::MP4BoxHDLR hdlr;
     hdlr.SetDefaultData();
     hdlr.PrintInfo();
@@ -23,6 +23,8 @@ TEST(EyerMP4, MP4BoxHDLR)
     hdlr2.PrintInfo();
 
     ASSERT_EQ(hdlr, hdlr2) << "HDLR Error";
+
+    eyer_log_clear();
 }
 
 

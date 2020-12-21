@@ -12,23 +12,24 @@
 
 TEST(EyerMP4, MP4BoxMFHD)
 {
-printf("=======================MFHD=======================\n");
-Eyer::MP4BoxMFHD mfhd;
-mfhd.SetDefaultData();
-mfhd.PrintInfo();
+    EyerLog("=======================MFHD=======================\n");
+    Eyer::MP4BoxMFHD mfhd;
+    mfhd.SetDefaultData();
+    mfhd.PrintInfo();
 
-Eyer::EyerBuffer buffer = mfhd.Serialize();
-/*unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
-buffer.GetBuffer(data);*/
-/*for(int i=0; i<buffer.GetLen(); i++){
-    printf("buffer: %c", data[i]);
-}*/
-Eyer::MP4BoxMFHD mfhd2;
-mfhd2.Parse(buffer);
+    Eyer::EyerBuffer buffer = mfhd.Serialize();
+    /*unsigned char * data = (unsigned char *)malloc(buffer.GetLen());
+    buffer.GetBuffer(data);*/
+    /*for(int i=0; i<buffer.GetLen(); i++){
+        printf("buffer: %c", data[i]);
+    }*/
+    Eyer::MP4BoxMFHD mfhd2;
+    mfhd2.Parse(buffer);
 
-mfhd2.PrintInfo();
+    mfhd2.PrintInfo();
 
-ASSERT_EQ(mfhd, mfhd2) << "MFHD Error";
+    ASSERT_EQ(mfhd, mfhd2) << "MFHD Error";
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_MFHDTEST_HPP

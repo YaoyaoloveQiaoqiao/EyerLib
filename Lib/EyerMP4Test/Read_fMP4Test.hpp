@@ -10,7 +10,7 @@
 
 TEST(EyerMP4, EyerReadfMP4)
 {
-    printf("=======================Read fMP4=======================\n");
+    EyerLog("=======================Read fMP4=======================\n");
     // FILE * fp = fopen("/Users/lichi/annie/xiaomai.mp4", "rb");
     FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
 
@@ -38,6 +38,8 @@ TEST(EyerMP4, EyerReadfMP4)
     free(data);
 
     fclose(fp);
+
+    eyer_log_clear();
 }
 
 
