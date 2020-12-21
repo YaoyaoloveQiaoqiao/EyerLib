@@ -133,7 +133,7 @@ namespace Eyer
             int blockSubIndexY = 0;
             for(blockY = 0; blockY < 4; blockY += 2){
                 for(blockX = 0; blockX < 4; blockX += 2){
-                    EyerLog("8x8 Block\n");
+                    // EyerLog("8x8 Block\n");
                     if(!pps.entropy_coding_mode_flag){
                         //CAVLC
                         for(blockSubIndexY = blockY; blockSubIndexY < blockY + 2; blockSubIndexY ++){
