@@ -10,7 +10,7 @@
 
 TEST(EyerMP4, MP4BoxELST)
 {
-    printf("=======================ELST=======================\n");
+    EyerLog("=======================ELST=======================\n");
     Eyer::MP4BoxELST elst;
     elst.SetDefaultData();
     elst.PrintInfo();
@@ -23,6 +23,8 @@ TEST(EyerMP4, MP4BoxELST)
     elst2.PrintInfo();
 
     ASSERT_EQ(elst, elst2) << "ELST Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_ELSTTEST_HPP

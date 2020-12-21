@@ -8,7 +8,7 @@
 
 TEST(EyerMP4, MP4BoxSTSC)
 {
-    printf("=======================STSC=======================\n");
+    EyerLog("=======================STSC=======================\n");
     Eyer::MP4BoxSTSC stsc;
     stsc.SetDefaultData();
     stsc.PrintInfo();
@@ -21,6 +21,8 @@ TEST(EyerMP4, MP4BoxSTSC)
     stsc2.PrintInfo();
 
     ASSERT_EQ(stsc, stsc2) << "STSC Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_STSCTEST_HPP

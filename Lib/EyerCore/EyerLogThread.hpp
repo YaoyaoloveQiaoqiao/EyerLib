@@ -31,6 +31,8 @@ namespace Eyer
 
         virtual void Run();
 
+        int Clear();
+
         int SetLevel(int _level);
 
         int SetParam(EyerLogParam & param);

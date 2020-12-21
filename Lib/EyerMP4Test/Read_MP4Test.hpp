@@ -10,7 +10,7 @@
 
 TEST(EyerMP4, EyerReadMP4)
 {
-    printf("=======================Read MP4=======================\n");
+    EyerLog("=======================Read MP4=======================\n");
     // FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
     // FILE * fp = fopen("/Users/lichi/Desktop/size_merge.mp4", "rb");
     FILE * fp = fopen("./demo.mp4", "rb");
@@ -44,6 +44,8 @@ TEST(EyerMP4, EyerReadMP4)
     free(data);
 
     fclose(fp);
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_READ_MP4TEST_HPP

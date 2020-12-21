@@ -39,9 +39,10 @@
 extern "C" {
 #endif
 
-int eye_log_set_level       (int level);
-int eyer_log_param          (int isLevel, int isTime, int isFile, int isLine, int isFunc);
-void eyer_log_log           (const char * file, const char * function, int line, int level, const char * format, ...);
+int     eye_log_set_level       (int level);
+int     eyer_log_param          (int isLevel, int isTime, int isFile, int isLine, int isFunc);
+void    eyer_log_log            (const char * file, const char * function, int line, int level, const char * format, ...);
+int     eyer_log_clear          ();
 
 #ifdef __cplusplus
 }
