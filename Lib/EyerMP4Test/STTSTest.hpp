@@ -8,7 +8,7 @@
 
 TEST(EyerMP4, MP4BoxSTTS)
 {
-    printf("=======================STTS=======================\n");
+    EyerLog("=======================STTS=======================\n");
     Eyer::MP4BoxSTTS stts;
     stts.SetDefaultData();
     stts.PrintInfo();
@@ -21,6 +21,8 @@ TEST(EyerMP4, MP4BoxSTTS)
     stts2.PrintInfo();
 
     ASSERT_EQ(stts, stts2) << "STTS Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_STTSTEST_HPP

@@ -52,11 +52,10 @@ namespace Eyer
                 // TODO B P Slice
             }
             else{
-                uint8_t transform_size_8x8_flag = 0;
                 if(pps.transform_8x8_mode_flag && mbType == MB_TYPE::I_NxN){
                     transform_size_8x8_flag = bs.bs_read_u1();
                 }
-                mb_pred(bs);
+                MbPred(bs);
             }
 
             // EyerLog("Byte index: %d, bit offset: %d\n", bs.bits_left, bs.bits_left);
@@ -64,24 +63,24 @@ namespace Eyer
             if(mbType.MbPartPredMode() != MB_PART_PRED_MODE::Intra_16x16){
                 uint32_t coded_block_pattern = bs.bs_read_me(sps.ChromaArrayType, mbType.MbPartPredMode());
 
-                CodecBlockPatterLuma = coded_block_pattern % 16;
+                CodedBlockPatternLuma = coded_block_pattern % 16;
                 CodecBlockPatterChroma = coded_block_pattern / 16;
 
                 EyerLog("CBP: %d\n", coded_block_pattern);
-                EyerLog("CodecBlockPatterLuma: %d\n", CodecBlockPatterLuma);
+                EyerLog("CodecBlockPatterLuma: %d\n", CodedBlockPatternLuma);
                 EyerLog("CodecBlockPatterChroma: %d\n", CodecBlockPatterChroma);
             }
 
-            if(CodecBlockPatterLuma > 0 || CodecBlockPatterChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+            if(CodedBlockPatternLuma > 0 || CodecBlockPatterChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                 int32_t mb_qp_delta = bs.bs_read_se();
-                residual(bs);
+                Residual(bs, 0, 15);
             }
         }
 
         return 0;
     }
 
-    int EyerMacroblock::mb_pred(EyerBitStream & bs){
+    int EyerMacroblock::MbPred(EyerBitStream & bs){
         if(
                 mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_4x4 ||
                 mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_8x8 ||
@@ -114,7 +113,7 @@ namespace Eyer
             }
 
             if(sps.ChromaArrayType == 1 || sps.ChromaArrayType == 2){
-                uint32_t intra_chrome_pred_mode = bs.bs_read_ue();
+                intra_chroma_pred_mode = bs.bs_read_ue();
             }
         }
         else{
@@ -123,9 +122,68 @@ namespace Eyer
         return 0;
     }
 
-    int EyerMacroblock::residual(EyerBitStream & bs)
+    int EyerMacroblock::Residual(EyerBitStream & bs, int startIdx, int endIdx)
     {
-        if(CodecBlockPatterLuma){
+        ResidualLuma(bs, startIdx, endIdx);
+        return 0;
+    }
+
+    int EyerMacroblock::ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx)
+    {
+        if(startIdx == 0 && mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+            // 解 DC 分量
+        }
+
+        for(int i8x8 = 0; i8x8 < 4; i8x8++){
+            if(!transform_size_8x8_flag || !pps.entropy_coding_mode_flag){
+                for(int i4x4 = 0; i4x4 < 4; i4x4++ ) {
+                    if(CodedBlockPatternLuma & (1 << i8x8)){
+                        EyerLog("有残差，i8x8 Block: %d, i4x4 Block: %d\n", i8x8, i4x4);
+                        if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+                            // 解 AC 分量
+                        }
+                        else{
+                            ResidualBlockCavlc(bs);
+                        }
+                    }
+                    else if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+                        // 将所有 AC 分量赋值为 0 ， 一共 15 个
+                    }
+                    else{
+
+                    }
+                    if(!pps.entropy_coding_mode_flag && transform_size_8x8_flag){
+                        // 8x8
+                        for(int i = 0; i < 16; i++){
+                            // level8x8[ i8x8 ][ 4 * i + i4x4 ] = level4x4[ i8x8 * 4 + i4x4 ][ i ]
+                        }
+                    }
+                }
+            }
+
+            else if(CodedBlockPatternLuma & (1 << i8x8)){
+                // residual_block( level8x8[ i8x8 ], 4 * startIdx, 4 * endIdx + 3, 64 )
+            }
+            else{
+                for(int i = 0; i < 64; i++ ){
+
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs)
+    {
+
+        return 0;
+    }
+
+    int EyerMacroblock::_Residual(EyerBitStream & bs, int startIdx, int endIdx)
+    {
+        EyerLog("ChromaArrayType: %d\n", sps.ChromaArrayType);
+        if(CodedBlockPatternLuma){
             int index8x8 = 0;
             int blockX = 0;
             int blockY = 0;
@@ -133,17 +191,16 @@ namespace Eyer
             int blockSubIndexY = 0;
             for(blockY = 0; blockY < 4; blockY += 2){
                 for(blockX = 0; blockX < 4; blockX += 2){
-                    EyerLog("8x8 Block\n");
+                    // EyerLog("8x8 Block\n");
                     if(!pps.entropy_coding_mode_flag){
                         //CAVLC
                         for(blockSubIndexY = blockY; blockSubIndexY < blockY + 2; blockSubIndexY ++){
                             for(blockSubIndexX = blockX; blockSubIndexX < blockX + 2; blockSubIndexX ++){
                                 index8x8 = 2 * (blockY / 2) + blockX / 2;
-                                if(CodecBlockPatterLuma & (1 << index8x8)){
+                                if(CodedBlockPatternLuma & (1 << index8x8)){
                                     EyerLog("=================Sub Block=================\n");
                                     EyerLog("有残差，Block X: %d, Y: %d, Sub X: %d, Sub Y: %d\n", blockX, blockY, blockSubIndexX, blockSubIndexY);
                                     lumaResidual[blockSubIndexY][blockSubIndexX].emptyBlock = true;
-
                                     get_luma_coeff(bs, blockSubIndexX, blockSubIndexY);
                                 }
                                 else{
@@ -158,6 +215,10 @@ namespace Eyer
                     }
                 }
             }
+        }
+
+        if(CodecBlockPatterChroma){
+
         }
         return 0;
     }

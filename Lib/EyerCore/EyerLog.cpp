@@ -48,6 +48,35 @@ void eyer_log_log(const char * file, const char * function, int line, int level,
     logThread->PutLog(logBean);
 }
 
+int     eyer_log_clear          ()
+{
+    class ClearEyerRunnable : public Eyer::EyerRunnable
+    {
+    public:
+        ClearEyerRunnable(Eyer::EyerLogThread * _logThread)
+        {
+            logThread = _logThread;
+        }
+
+        virtual void Run()
+        {
+            logThread->Clear();
+        }
+    private:
+        Eyer::EyerLogThread * logThread = nullptr;
+    };
+
+    Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
+
+    ClearEyerRunnable clearRunnable(logThread);
+
+    logThread->PushEvent(&clearRunnable);
+    logThread->StartEventLoop();
+    logThread->StopEventLoop();
+
+    return 0;
+}
+
 /*
 void EyerPrintf(const char * file, const char * function, int line, int level, const char * _format, ...)
 {

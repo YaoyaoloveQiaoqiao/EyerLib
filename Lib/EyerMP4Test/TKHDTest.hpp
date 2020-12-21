@@ -8,7 +8,7 @@
 
 TEST(EyerMP4, MP4BoxTKHD)
 {
-    printf("=======================TKHD=======================\n");
+    EyerLog("=======================TKHD=======================\n");
     Eyer::MP4BoxTKHD tkhd;
     tkhd.SetDefaultData();
     tkhd.PrintInfo();
@@ -23,6 +23,8 @@ TEST(EyerMP4, MP4BoxTKHD)
     ASSERT_EQ(tkhd, tkhd2) << "TKHD Error";
     ASSERT_EQ(tkhd.Serialize().GetLen() , 92) << "TKHD Len Error";
     ASSERT_EQ(tkhd2.Serialize().GetLen(), 92) << "TKHD Len Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_TKHDTEST_HPP

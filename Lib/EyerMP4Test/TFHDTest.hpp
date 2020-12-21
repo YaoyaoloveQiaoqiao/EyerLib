@@ -11,7 +11,7 @@
 #include "EyerMP4/EyerMP4.hpp"
 
 TEST(EyerMP4, MP4BoxTFHD){
-    printf("=======================TFHD=======================\n");
+    EyerLog("=======================TFHD=======================\n");
     Eyer::MP4BoxTFHD tfhd;
     tfhd.SetDefaultData();
     tfhd.PrintInfo();
@@ -24,6 +24,8 @@ TEST(EyerMP4, MP4BoxTFHD){
     tfhd2.PrintInfo();
 
     ASSERT_EQ(tfhd, tfhd2) << "TFHD Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_TFHDTEST_HPP

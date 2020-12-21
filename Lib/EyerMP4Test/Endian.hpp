@@ -14,9 +14,9 @@ TEST(EyerMP4, Endian)
         uint64_t a = 123;
         uint64_t b = Eyer::EyerUtil::EndianHtonll(a);
         uint64_t c = Eyer::EyerUtil::EndianNtohll(b);
-        printf("a: %lld\n", a);
-        printf("b: %lld\n", b);
-        printf("c: %lld\n", c);
+        EyerLog("a: %lld\n", a);
+        EyerLog("b: %lld\n", b);
+        EyerLog("c: %lld\n", c);
 
         ASSERT_EQ(a, c) << "Error Endian";
     }
@@ -24,9 +24,9 @@ TEST(EyerMP4, Endian)
         uint32_t a = 123;
         uint32_t b = Eyer::EyerUtil::EndianHtonl(a);
         uint32_t c = Eyer::EyerUtil::EndianNtohl(b);
-        printf("a: %d\n", a);
-        printf("b: %d\n", b);
-        printf("c: %d\n", c);
+        EyerLog("a: %d\n", a);
+        EyerLog("b: %d\n", b);
+        EyerLog("c: %d\n", c);
 
         ASSERT_EQ(a, c) << "Error Endian";
     }
@@ -35,13 +35,14 @@ TEST(EyerMP4, Endian)
         uint16_t a = 123;
         uint16_t b = Eyer::EyerUtil::EndianHtons(a);
         uint16_t c = Eyer::EyerUtil::EndianNtohs(b);
-        printf("a: %d\n", a);
-        printf("b: %d\n", b);
-        printf("c: %d\n", c);
+        EyerLog("a: %d\n", a);
+        EyerLog("b: %d\n", b);
+        EyerLog("c: %d\n", c);
 
         ASSERT_EQ(a, c) << "Error Endian";
     }
 
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_ENDIAN_HPP

@@ -18,8 +18,14 @@ namespace Eyer
         int Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader);
 
     private:
-        int mb_pred     (EyerBitStream & bs);
-        int residual    (EyerBitStream & bs);
+        int MbPred       (EyerBitStream & bs);
+        int Residual     (EyerBitStream & bs, int startIdx, int endIdx);
+
+        int ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx);
+
+        int ResidualBlockCavlc(EyerBitStream & bs);
+
+        int _Residual    (EyerBitStream & bs, int startIdx, int endIdx);
 
         int get_luma_coeff(EyerBitStream & bs, int x, int y);
 
@@ -41,9 +47,13 @@ namespace Eyer
 
         int mbIndex = 0;
 
+        uint8_t transform_size_8x8_flag = 0;
+
         MB_TYPE mbType = MB_TYPE::I_NxN;
-        uint32_t CodecBlockPatterLuma = 0;
+        uint32_t CodedBlockPatternLuma = 0;
         uint32_t CodecBlockPatterChroma = 0;
+
+        uint32_t intra_chroma_pred_mode = 0;
 
         EyerCoeff4x4Block lumaResidual[4][4];
     };

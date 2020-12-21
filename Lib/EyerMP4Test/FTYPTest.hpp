@@ -8,7 +8,7 @@
 
 TEST(EyerMP4, EyerMP4_FTYP)
 {
-    printf("=======================FTYP=======================\n");
+    EyerLog("=======================FTYP=======================\n");
     Eyer::MP4BoxFTYP ftyp;
     ftyp.SetDefaultData();
     ftyp.PrintInfo();
@@ -21,6 +21,8 @@ TEST(EyerMP4, EyerMP4_FTYP)
     ftyp2.PrintInfo();
 
     ASSERT_EQ(ftyp, ftyp2) << "FTYP Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_FTYPTEST_HPP
