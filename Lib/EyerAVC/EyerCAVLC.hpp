@@ -10,7 +10,7 @@ namespace Eyer
         EyerCAVLC();
         ~EyerCAVLC();
 
-        int GetCoeffNumTrailingOnes(EyerBitStream & bs, int & totleCoeff, int & trailingOnes, int nC);
+        int Get_TotalCoeff_TrailingOnes(EyerBitStream & bs, int & totleCoeff, int & trailingOnes, int nC);
     };
 }
 

@@ -23,11 +23,7 @@ namespace Eyer
 
         int ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx);
 
-        int ResidualBlockCavlc(EyerBitStream & bs);
-
-        int _Residual    (EyerBitStream & bs, int startIdx, int endIdx);
-
-        int get_luma_coeff(EyerBitStream & bs, int x, int y);
+        int ResidualBlockCavlc(EyerBitStream & bs, int blockX, int blockY, int startIdx, int endIdx);
 
         int GetNumberCurrent(int x, int y);
         int GetNeighborAvailable(bool & available_top, bool & available_left, int & topIndex, int & leftIndex, int blockIndexX, int blockIndexY);
@@ -51,7 +47,7 @@ namespace Eyer
 
         MB_TYPE mbType = MB_TYPE::I_NxN;
         uint32_t CodedBlockPatternLuma = 0;
-        uint32_t CodecBlockPatterChroma = 0;
+        uint32_t CodedBlockPatternChroma = 0;
 
         uint32_t intra_chroma_pred_mode = 0;
 
