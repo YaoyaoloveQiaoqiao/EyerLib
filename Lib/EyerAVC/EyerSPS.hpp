@@ -85,7 +85,10 @@ namespace Eyer
         // 当 chroma_format_idc不存在时，应推断其值为 1（4：2：0的色度格式）。
         int chroma_format_idc = 1;
         int separate_colour_plance_flag = 0;
+
         int ChromaArrayType = 0;
+        int SubWidthC = 0;
+        int SubHeightC = 0;
 
         int bit_depth_luma_minus8 = 0;
         int bit_depth_chroma_minus8 = 0;

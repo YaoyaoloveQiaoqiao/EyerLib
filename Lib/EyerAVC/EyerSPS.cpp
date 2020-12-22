@@ -88,6 +88,19 @@ namespace Eyer
             ChromaArrayType = 0;
         }
 
+        if (chroma_format_idc == 1) {
+            SubWidthC = 2;
+            SubHeightC = 2;
+        }
+        if (chroma_format_idc == 2) {
+            SubWidthC = 2;
+            SubHeightC = 1;
+        }
+        if (chroma_format_idc == 3) {
+            SubWidthC = 1;
+            SubHeightC = 1;
+        }
+
         log2_max_frame_num_minus4               = bs.bs_read_ue();
         pic_order_cnt_type                      = bs.bs_read_ue();
 
