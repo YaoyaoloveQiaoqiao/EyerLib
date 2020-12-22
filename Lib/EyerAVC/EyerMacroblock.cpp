@@ -130,6 +130,8 @@ namespace Eyer
         if(sps.ChromaArrayType == 1 || sps.ChromaArrayType == 2) {
             int NumC8x8 = 4 / (sps.SubWidthC * sps.SubHeightC);
 
+            EyerLog("NumC8x8: %d\n", NumC8x8);
+
             // 读取 DC 分量
             for (int iCbCr = 0; iCbCr < 2; iCbCr++) {
                 if ((CodedBlockPatternChroma & 3) && startIdx == 0) {
@@ -137,14 +139,16 @@ namespace Eyer
                     // ResidualBlockCavlc(bs, blockX, blockY, startIdx, endIdx);
                 } else {
                     for (int i = 0; i < 4 * NumC8x8; i++) {
-                        // ChromaDCLevel[ iCbCr ][ i ] = 0
+
                     }
                 }
             }
 
             for (int iCbCr = 0; iCbCr < 2; iCbCr++){
                 for(int i8x8 = 0; i8x8 < NumC8x8; i8x8++ ){
+                    for(int i4x4 = 0; i4x4 < 4; i4x4++ ){
 
+                    }
                 }
             }
         }
