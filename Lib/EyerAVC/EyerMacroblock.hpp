@@ -23,7 +23,7 @@ namespace Eyer
 
         int ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx);
 
-        int ResidualBlockCavlc(EyerBitStream & bs, int blockX, int blockY, int startIdx, int endIdx);
+        int ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff);
 
         int GetNumberCurrent(int x, int y);
         int GetNeighborAvailable(bool & available_top, bool & available_left, int & topIndex, int & leftIndex, int blockIndexX, int blockIndexY);

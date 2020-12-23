@@ -46,6 +46,21 @@ namespace Eyer
             },
         };
 
+    int AVCTable::CoeffTokenTableChromaDC_Length[4][5] =
+        {
+            { 2, 6, 6, 6, 6, },
+            { 0, 1, 6, 7, 8, },
+            { 0, 0, 3, 7, 8, },
+            { 0, 0, 0, 6, 7, }
+        };
+
+    int AVCTable::CoeffTokenTableChromaDC_Code[4][5] =
+        {
+            { 1,7,4,3,2 },
+            { 0,1,6,3,3 },
+            { 0,0,1,2,2 },
+            { 0,0,0,5,0 }
+        };
 
     int AVCTable::SearchForValueIn2DTable(EyerBitStream & bs, int &value1, int &value2, int &code, int *lengthTable, int *codeTable, int tableWidth, int tableHeight)
     {
@@ -63,7 +78,7 @@ namespace Eyer
                     value2 = yIdx;
                     bs.bs_skip_u(codeLen);
 
-                    // EyerLog("=================== value1: %d, value2: %d\n", xIdx, yIdx);
+                    EyerLog("=================== value1: %d, value2: %d\n", xIdx, yIdx);
                     goto END;
                 }
             }
