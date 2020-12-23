@@ -44,6 +44,8 @@ TEST(EyerAVC, NALUReader)
             slice.PrintInfo();
         }
     }
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_NALUREADER_HPP
