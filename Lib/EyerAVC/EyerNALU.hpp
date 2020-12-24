@@ -25,10 +25,11 @@ namespace Eyer
 
         NALUType & GetNALUType();
 
+    public:
+        EyerSyntax rootSyntax;
     protected:
         EyerNALUData naluData;
-        EyerSyntax rootSyntax;
-
+        
         bool valid = false;
         int intlog2(int x);
     };
