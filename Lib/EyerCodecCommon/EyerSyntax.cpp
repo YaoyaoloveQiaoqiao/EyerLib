@@ -2,7 +2,7 @@
 
 namespace Eyer
 {
-    EyerSyntax::EyerSyntax() : EyerSyntax("root")
+    EyerSyntax::EyerSyntax() : EyerSyntax(true, "root")
     {
     }
 
@@ -86,8 +86,7 @@ namespace Eyer
 
     int EyerSyntax::Put(bool valid, const EyerString & _name, const EyerString & _value)
     {
-        EyerSyntax * syntax = new EyerSyntax(_name, level + 1);
-        syntax->SetValid(valid);
+        EyerSyntax * syntax = new EyerSyntax(valid, _name, level + 1);
         syntax->SetValue(_value);
         childList.push_back(syntax);
         return 0;
