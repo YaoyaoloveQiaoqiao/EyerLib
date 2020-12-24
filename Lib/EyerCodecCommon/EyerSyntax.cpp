@@ -34,6 +34,7 @@ namespace Eyer
         name    = syntax.name;
         level   = syntax.level;
         value   = syntax.value;
+        valid   = syntax.valid;
         return *this;
     }
 

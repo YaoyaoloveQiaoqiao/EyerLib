@@ -29,7 +29,7 @@ namespace Eyer
         EyerSyntax rootSyntax;
     protected:
         EyerNALUData naluData;
-        
+
         bool valid = false;
         int intlog2(int x);
     };
