@@ -18,7 +18,7 @@ namespace Eyer
         macroblockList.clear();
     }
 
-    int EyerSLICEBody::Parse(EyerBitStream & bs, EyerFieldList & fieldList, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
+    int EyerSLICEBody::Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
     {
         sps = _sps;
         pps = _pps;

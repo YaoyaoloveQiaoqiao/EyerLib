@@ -130,21 +130,38 @@ namespace Eyer
         if(sps.ChromaArrayType == 1 || sps.ChromaArrayType == 2) {
             int NumC8x8 = 4 / (sps.SubWidthC * sps.SubHeightC);
 
+            EyerLog("NumC8x8: %d\n", NumC8x8);
+
             // 读取 DC 分量
             for (int iCbCr = 0; iCbCr < 2; iCbCr++) {
                 if ((CodedBlockPatternChroma & 3) && startIdx == 0) {
-                    // residual_block( ChromaDCLevel[ iCbCr ], 0, 4 * NumC8x8 − 1, 4 * NumC8x8 )
-                    // ResidualBlockCavlc(bs, blockX, blockY, startIdx, endIdx);
+                    int nC = 0;
+                    if(sps.ChromaArrayType == 1){
+                        nC = -1;
+                    }
+                    if(sps.ChromaArrayType == 2){
+                        nC = -2;
+                    }
+                    int totleCoeff = 0;
+                    ResidualBlockCavlc(bs, totleCoeff, nC, 0, 4 * NumC8x8 - 1, 4 * NumC8x8);
                 } else {
                     for (int i = 0; i < 4 * NumC8x8; i++) {
-                        // ChromaDCLevel[ iCbCr ][ i ] = 0
+
                     }
                 }
             }
 
             for (int iCbCr = 0; iCbCr < 2; iCbCr++){
                 for(int i8x8 = 0; i8x8 < NumC8x8; i8x8++ ){
+                    for(int i4x4 = 0; i4x4 < 4; i4x4++ ){
+                        if(CodedBlockPatternChroma & 2){
+                            int totleCoeff = 0;
+                            // ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15, 4 * NumC8x8);
+                        }
+                        else{
 
+                        }
+                    }
                 }
             }
         }
@@ -171,7 +188,11 @@ namespace Eyer
                                     // 解 AC 分量
                                 }
                                 else{
-                                    ResidualBlockCavlc(bs, blockX, blockY, startIdx, endIdx);
+                                    int nC = GetNumberCurrent(blockX, blockY);
+
+                                    int totleCoeff = 0;
+                                    ResidualBlockCavlc(bs, totleCoeff, nC, startIdx, endIdx, 16);
+                                    lumaResidual[blockY][blockX].numCoeff = (uint8_t)totleCoeff;
                                 }
                             }
                             else if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
@@ -203,11 +224,9 @@ namespace Eyer
         return 0;
     }
 
-    int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, int blockX, int blockY, int startIdx, int endIdx)
+    int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff)
     {
-        int nC = GetNumberCurrent(blockX, blockY);
-
-        int totleCoeff = 0;
+        // int totleCoeff = 0;
         int trailingOnes = 0;
 
         EyerCAVLC cavlc;
@@ -323,7 +342,7 @@ namespace Eyer
             // EyerLog("coeffNum: %d\n", coeffNum);
         }
 
-        lumaResidual[blockY][blockX].numCoeff = (uint8_t)totleCoeff;
+        // lumaResidual[blockY][blockX].numCoeff = (uint8_t)totleCoeff;
 
         return 0;
     }

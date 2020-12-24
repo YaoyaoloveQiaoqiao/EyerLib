@@ -75,6 +75,8 @@ ENDFUNCTION(ModuleTestOption)
 
 ADD_SUBDIRECTORY(googletest)
 
+ADD_SUBDIRECTORY(EyerCodecCommon)
+
 OPTION(EyerCore                     "option for EyerCore"               ON)
 ModuleTestOption("EyerCore"         "EyerCoreTest"          EyerCore)
 
