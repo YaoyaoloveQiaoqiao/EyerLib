@@ -15,6 +15,7 @@ target_link_libraries (
 
 set(head_files
         EyerCodecCommon.hpp
+        EyerSyntax.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCodecCommon)
