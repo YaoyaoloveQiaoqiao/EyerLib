@@ -14,28 +14,13 @@ namespace Eyer
 
     EyerNALU::~EyerNALU()
     {
-        for(int i=0;i<fieldList.size();i++){
-            delete fieldList[i];
-        }
-        fieldList.clear();
     }
 
     EyerNALU & EyerNALU::operator = (const EyerNALU & nalu)
     {
         naluData    = nalu.naluData;
         valid       = nalu.valid;
-
-        for(int i=0;i<fieldList.size();i++){
-            delete fieldList[i];
-        }
-        fieldList.clear();
-
-        for( int i = 0; i < nalu.fieldList.size(); i++ ){
-            EyerField * f = nalu.fieldList[i];
-            EyerField * tempF = new EyerField(*f);
-            fieldList.push_back(tempF);
-        }
-
+        rootSyntax  = nalu.rootSyntax;
         return *this;
     }
 
@@ -50,24 +35,8 @@ namespace Eyer
         return naluData.GetNALUType();
     }
 
-    int EyerNALU::GetFieldSize()
-    {
-        return fieldList.size();
-    }
-
-    int EyerNALU::GetField(EyerField & field, int index)
-    {
-        EyerField * f = fieldList.at(index);
-        field = *f;
-        return 0;
-    }
-
     int EyerNALU::Parse()
     {
-        for(int i=0;i<fieldList.size();i++){
-            delete fieldList[i];
-        }
-        fieldList.clear();
         return 0;
     }
 
@@ -79,25 +48,7 @@ namespace Eyer
     int EyerNALU::PrintInfo()
     {
         // EyerLog("==============================================================\n");
-        for(int i=0;i<fieldList.size();i++){
-            EyerField * field = fieldList[i];
-            EyerString key = field->GetKey();
-            EyerFieldType type = field->GetType();
-
-            EyerString levelStr = "";
-            for(int i=0;i<field->GetLevel();i++){
-                levelStr = levelStr + "\t";
-            }
-            if(type == EyerFieldType::FIELD_UNSIGNED_INT){
-                EyerLog("%s%s = %u\n", levelStr.str, key.str, field->GetUnsignedIntVal());
-            }
-            else if(type == EyerFieldType::FIELD_INT){
-                EyerLog("%s%s = %d\n", levelStr.str, key.str, field->GetIntVal());
-            }
-            else if(type == EyerFieldType::FIELD_VOID){
-                EyerLog("%s%s\n", levelStr.str, key.str);
-            }
-        }
+        rootSyntax.PrintInfo();
         // EyerLog("==============================================================\n");
         return 0;
     }

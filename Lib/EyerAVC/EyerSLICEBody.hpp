@@ -16,7 +16,7 @@ namespace Eyer
         EyerSLICEBody();
         ~EyerSLICEBody();
 
-        int Parse(EyerBitStream & bs, EyerFieldList & fieldList, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader);
+        int Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader);
 
     private:
         EyerSPS sps;

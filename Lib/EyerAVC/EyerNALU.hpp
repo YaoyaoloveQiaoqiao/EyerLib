@@ -3,6 +3,7 @@
 
 #include "EyerNALUData.hpp"
 #include "EyerField.hpp"
+#include "EyerCodecCommon/EyerCodecCommon.hpp"
 
 namespace Eyer
 {
@@ -30,10 +31,9 @@ namespace Eyer
 
     protected:
         EyerNALUData naluData;
-        std::vector<EyerField *> fieldList;
+        EyerSyntax rootSyntax;
 
         bool valid = false;
-
         int intlog2(int x);
     };
 }

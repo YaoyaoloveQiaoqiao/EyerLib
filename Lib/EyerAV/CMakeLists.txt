@@ -42,7 +42,7 @@ add_library(
         EyerAVBitstreamFilterPrivate.hpp
         AnnexB_to_avcC.cpp
         AnnexB_to_avcC.hpp
-        ../EyerPJSIPTest/Main.cpp ../EyerRTPTest/Main.cpp)
+)
 
 target_link_libraries (EyerAV EyerCore)
 
