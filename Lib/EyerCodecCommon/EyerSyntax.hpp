@@ -9,7 +9,7 @@ namespace Eyer
     public:
         EyerSyntax();
         ~EyerSyntax();
-        EyerSyntax(const EyerString & name, int level = 0);
+        EyerSyntax(bool _valid, const EyerString & name, int level = 0);
         EyerSyntax(const EyerSyntax & syntax);
         EyerSyntax & operator = (const EyerSyntax & syntax);
 

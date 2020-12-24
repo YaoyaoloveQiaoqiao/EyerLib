@@ -80,12 +80,12 @@ namespace Eyer
                                         "    profile_idc == 128 || profile_idc == 138 || profile_idc == 139 ||\n"
                                         "    profile_idc == 134 || profile_idc == 135\n"
                                         ")";
-        EyerSyntax if_profile_idcSyntax(if_profile_idc_str, rootSyntax.GetLevel() + 1);
+        EyerSyntax if_profile_idcSyntax(true, if_profile_idc_str, rootSyntax.GetLevel() + 1);
         {
             if_profile_idcSyntax.Put(isHigh, "chroma_format_idc", chroma_format_idc);
             bool is_chroma_format_idc_equals_3 = (chroma_format_idc == 3);
 
-            EyerSyntax if_chroma_format_idc_Syntax("if(chroma_format_idc == 3)", if_profile_idcSyntax.GetLevel() + 1);
+            EyerSyntax if_chroma_format_idc_Syntax(isHigh, "if(chroma_format_idc == 3)", if_profile_idcSyntax.GetLevel() + 1);
             {
                 if_chroma_format_idc_Syntax.Put(isHigh && is_chroma_format_idc_equals_3, "separate_colour_plance_flag", separate_colour_plance_flag);
             }
