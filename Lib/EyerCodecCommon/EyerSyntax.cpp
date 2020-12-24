@@ -14,8 +14,9 @@ namespace Eyer
         childList.clear();
     }
 
-    EyerSyntax::EyerSyntax(const EyerString & _name, int _level)
+    EyerSyntax::EyerSyntax(bool _valid, const EyerString & _name, int _level)
     {
+        valid   = _valid;
         level   = _level;
         name    = _name;
     }
