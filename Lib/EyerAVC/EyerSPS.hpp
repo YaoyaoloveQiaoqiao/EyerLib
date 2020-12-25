@@ -27,11 +27,11 @@ namespace Eyer
     public:
         int aspect_ratio_info_present_flag;
         int aspect_ratio_idc;
-        int sar_width;
-        int sar_height;
-        int overscan_info_present_flag;
-        int overscan_appropriate_flag;
-        int video_signal_type_present_flag;
+        int sar_width = 0;
+        int sar_height = 0;
+        int overscan_info_present_flag = 0;
+        int overscan_appropriate_flag = 0;
+        int video_signal_type_present_flag = 0;
         int video_format;
         int video_full_range_flag;
         int colour_description_present_flag;
@@ -138,7 +138,7 @@ namespace Eyer
         EyerSPSVUI vui;
 
         int ReadScalingList(EyerBitStream & bs, int * scalingList, int sizeOfScalingList, int * useDefaultScalingMatrixFlag);
-        int ReadVuiParameters(EyerBitStream & bs);
+        int ReadVuiParameters(EyerBitStream & bs, EyerSyntax & syntax);
         int ReadHrdParameters(EyerHRD & hrd, EyerBitStream & bs);
     };
 }

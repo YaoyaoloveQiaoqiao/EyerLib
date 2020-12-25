@@ -6,7 +6,7 @@ namespace Eyer
 {
     EyerSPS::EyerSPS()
     {
-
+        memset(&vui, 0, sizeof(vui));
     }
 
     EyerSPS::~EyerSPS()
@@ -31,6 +31,7 @@ namespace Eyer
         level_idc = bs.bs_read_u8();
         seq_parameter_set_id = bs.bs_read_ue();
 
+        // ===================== Syntax Start =====================
         rootSyntax.PutValid("profile_idc",                      profile_idc);
         rootSyntax.PutValid("constraint_set0_flag",             constraint_set0_flag);
         rootSyntax.PutValid("constraint_set1_flag",             constraint_set1_flag);
@@ -41,6 +42,7 @@ namespace Eyer
         rootSyntax.PutValid("reserved_zero_2bits",              0);
         rootSyntax.PutValid("level_idc",                        level_idc);
         rootSyntax.PutValid("seq_parameter_set_id",             seq_parameter_set_id);
+        // ===================== Syntax End =====================
 
         bool isHigh = (profile_idc == 100      || profile_idc == 110       ||
                   profile_idc == 122      || profile_idc == 244       || profile_idc == 44     ||
@@ -74,6 +76,7 @@ namespace Eyer
             }
         }
 
+        // ===================== Syntax Start =====================
         EyerString if_profile_idc_str = "if( profile_idc == 100 || profile_idc == 110 ||\n"
                                         "    profile_idc == 122 || profile_idc == 244 || profile_idc == 44  ||\n"
                                         "    profile_idc == 83  || profile_idc == 86  || profile_idc == 118 ||\n"
@@ -97,10 +100,8 @@ namespace Eyer
             if_profile_idcSyntax.Put(isHigh, "seq_scaling_matrix_present_flag",         seq_scaling_matrix_present_flag);
             // TODO if(seq_scaling_matrix_present_flag) {
         }
-
         rootSyntax.Put(if_profile_idcSyntax);
-
-
+        // ===================== Syntax End =====================
 
 
         if (separate_colour_plance_flag == 0){
@@ -129,9 +130,13 @@ namespace Eyer
         log2_max_frame_num_minus4               = bs.bs_read_ue();
         pic_order_cnt_type                      = bs.bs_read_ue();
 
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
-        rootSyntax.Put(true, "log2_max_frame_num_minus4", log2_max_frame_num_minus4);
-        rootSyntax.Put(true, "pic_order_cnt_type", pic_order_cnt_type);
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "log2_max_frame_num_minus4",       log2_max_frame_num_minus4);
+        rootSyntax.Put(true, "pic_order_cnt_type",              pic_order_cnt_type);
+        // ===================== Syntax End =====================
 
         if(pic_order_cnt_type == 0) {
             log2_max_pic_order_cnt_lsb_minus4 = bs.bs_read_ue();
@@ -147,15 +152,55 @@ namespace Eyer
             }
         }
 
+        // ===================== Syntax Start =====================
+        EyerSyntax if_pic_order_cnt_type_A_Syntax(true, "if(pic_order_cnt_type == 0)", rootSyntax.GetLevel() + 1);
+        {
+            if_pic_order_cnt_type_A_Syntax.Put(pic_order_cnt_type == 0, "log2_max_pic_order_cnt_lsb_minus4", log2_max_pic_order_cnt_lsb_minus4);
+        }
+        rootSyntax.Put(if_pic_order_cnt_type_A_Syntax);
+        EyerSyntax if_pic_order_cnt_type_B_Syntax(true, "else if(pic_order_cnt_type == 1)", rootSyntax.GetLevel() + 1);
+        {
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "delta_pic_order_always_zero_flag",         delta_pic_order_always_zero_flag);
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "offset_for_non_ref_pic",                   offset_for_non_ref_pic);
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "offset_for_top_to_bottom_field",           offset_for_top_to_bottom_field);
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "num_ref_frames_in_pic_order_cnt_cycle",    num_ref_frames_in_pic_order_cnt_cycle);
+
+            EyerSyntax for_num_ref_frames_in_pic_order_cnt_cycle(pic_order_cnt_type == 1, "for(int i=0; i<num_ref_frames_in_pic_order_cnt_cycle; i++)", if_pic_order_cnt_type_B_Syntax.GetLevel() + 1);
+            for(int i=0; i<num_ref_frames_in_pic_order_cnt_cycle; i++) {
+                for_num_ref_frames_in_pic_order_cnt_cycle.Put(pic_order_cnt_type == 1, EyerString() + "offset_for_ref_frame[" + EyerString::Number(i) + "]", offset_for_ref_frame[i]);
+            }
+            if_pic_order_cnt_type_B_Syntax.Put(for_num_ref_frames_in_pic_order_cnt_cycle);
+        }
+        rootSyntax.Put(if_pic_order_cnt_type_B_Syntax);
+        // ===================== Syntax End =====================
+
+
         num_ref_frames                              = bs.bs_read_ue();
         gaps_in_frame_num_value_allowed_flag        = bs.bs_read_u1();
         pic_width_in_mbs_minus1                     = bs.bs_read_ue();
         pic_height_in_map_units_minus1              = bs.bs_read_ue();
         frame_mbs_only_flag                         = bs.bs_read_u1();
 
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "num_ref_frames",                              num_ref_frames);
+        rootSyntax.Put(true, "gaps_in_frame_num_value_allowed_flag",        gaps_in_frame_num_value_allowed_flag);
+        rootSyntax.Put(true, "pic_width_in_mbs_minus1",                     pic_width_in_mbs_minus1);
+        rootSyntax.Put(true, "pic_height_in_map_units_minus1",              pic_height_in_map_units_minus1);
+        rootSyntax.Put(true, "frame_mbs_only_flag",                         frame_mbs_only_flag);
+        // ===================== Syntax End =====================
+
         if(!frame_mbs_only_flag) {
             mb_adaptive_frame_field_flag = bs.bs_read_u1();
         }
+
+        // ===================== Syntax Start =====================
+        EyerSyntax if_frame_mbs_only_flag_Syntax(true, "if(!frame_mbs_only_flag)", rootSyntax.GetLevel() + 1);
+        {
+            if_frame_mbs_only_flag_Syntax.Put(!frame_mbs_only_flag, "mb_adaptive_frame_field_flag", mb_adaptive_frame_field_flag);
+        }
+        rootSyntax.Put(if_frame_mbs_only_flag_Syntax);
+        // ===================== Syntax End =====================
+
 
         direct_8x8_inference_flag       = bs.bs_read_u1();
         frame_cropping_flag             = bs.bs_read_u1();
@@ -167,10 +212,33 @@ namespace Eyer
             frame_crop_bottom_offset        = bs.bs_read_ue();
         }
 
+
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "direct_8x8_inference_flag",   direct_8x8_inference_flag);
+        rootSyntax.Put(true, "frame_cropping_flag",         frame_cropping_flag);
+        EyerSyntax if_frame_cropping_flag_Syntax(true, "if(frame_cropping_flag)", rootSyntax.GetLevel() + 1);
+        {
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,      "frame_crop_left_offset",   frame_crop_left_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_crop_right_offset,  "frame_crop_right_offset",  frame_crop_right_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_crop_top_offset,    "frame_crop_top_offset",    frame_crop_top_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_crop_bottom_offset, "frame_crop_bottom_offset", frame_crop_left_offset);
+        }
+        rootSyntax.Put(if_frame_cropping_flag_Syntax);
+        // ===================== Syntax End =====================
+
+
         vui_parameters_present_flag         = bs.bs_read_u1();
 
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "vui_parameters_present_flag",   vui_parameters_present_flag);
+        // ===================== Syntax End =====================
+
         if(vui_parameters_present_flag){
-            ReadVuiParameters(bs);
+            // ===================== Syntax Start =====================
+            EyerSyntax if_vui_parameters_present_flag_Syntax(true, "if(vui_parameters_present_flag)", rootSyntax.GetLevel() + 1);
+            ReadVuiParameters(bs, if_vui_parameters_present_flag_Syntax);
+            rootSyntax.Put(if_vui_parameters_present_flag_Syntax);
+            // ===================== Syntax End =====================
         }
 
         valid = true;
@@ -206,13 +274,15 @@ namespace Eyer
         return 0;
     }
 
-    int EyerSPS::ReadVuiParameters(EyerBitStream & bs)
+    int EyerSPS::ReadVuiParameters(EyerBitStream & bs, EyerSyntax & syntax)
     {
+        bool isVui = true;
+
         int vuilevel = 1;
 
         int SAR_Extended = 255;
         vui.aspect_ratio_info_present_flag = bs.bs_read_u1();
-        if(vui.aspect_ratio_info_present_flag ) {
+        if(vui.aspect_ratio_info_present_flag) {
             vui.aspect_ratio_idc = bs.bs_read_u8();
             if(vui.aspect_ratio_idc == SAR_Extended){
                 vui.sar_width      = bs.bs_read_u(16);
@@ -220,10 +290,34 @@ namespace Eyer
             }
         }
 
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "aspect_ratio_info_present_flag", vui.aspect_ratio_info_present_flag);
+        EyerSyntax if_aspect_ratio_info_present_flag_Syntax(isVui, "if(aspect_ratio_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_aspect_ratio_info_present_flag_Syntax.Put(isVui && vui.aspect_ratio_info_present_flag, "aspect_ratio_idc", vui.aspect_ratio_idc);
+            EyerSyntax if_aspect_ratio_idc_Syntax(isVui && vui.aspect_ratio_info_present_flag, "if(vui.aspect_ratio_idc == SAR_Extended)", if_aspect_ratio_info_present_flag_Syntax.GetLevel() + 1);
+            {
+                if_aspect_ratio_idc_Syntax.Put(isVui && vui.aspect_ratio_info_present_flag && vui.aspect_ratio_idc == SAR_Extended, "sar_width", vui.sar_width);
+                if_aspect_ratio_idc_Syntax.Put(isVui && vui.aspect_ratio_info_present_flag && vui.aspect_ratio_idc == SAR_Extended, "sar_height", vui.sar_height);
+            }
+            if_aspect_ratio_info_present_flag_Syntax.Put(if_aspect_ratio_idc_Syntax);
+        }
+        syntax.Put(if_aspect_ratio_info_present_flag_Syntax);
+        // ===================== Syntax End =====================
+
+
         vui.overscan_info_present_flag = bs.bs_read_u1();
         if(vui.overscan_info_present_flag) {
             vui.overscan_appropriate_flag = bs.bs_read_u1();
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "overscan_info_present_flag", vui.overscan_info_present_flag);
+        EyerSyntax if_overscan_info_present_flag_Syntax(isVui, "if(overscan_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_overscan_info_present_flag_Syntax.Put(isVui && vui.overscan_info_present_flag, "overscan_appropriate_flag", vui.overscan_appropriate_flag);
+        }
+        syntax.Put(if_overscan_info_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         vui.video_signal_type_present_flag = bs.bs_read_u1();
         if(vui.video_signal_type_present_flag) {
@@ -236,12 +330,31 @@ namespace Eyer
                 vui.matrix_coefficients                 = bs.bs_read_u8();
             }
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "video_signal_type_present_flag", vui.video_signal_type_present_flag);
+        EyerSyntax if_video_signal_type_present_flag_Syntax(isVui, "if(overscan_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_video_signal_type_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag, "video_format", vui.video_format);
+            if_video_signal_type_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag, "video_full_range_flag", vui.video_full_range_flag);
+            if_video_signal_type_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag, "colour_description_present_flag", vui.colour_description_present_flag);
+            EyerSyntax if_colour_description_present_flag_Syntax(isVui && vui.video_signal_type_present_flag, "if(overscan_info_present_flag)", if_video_signal_type_present_flag_Syntax.GetLevel() + 1);
+            {
+                if_colour_description_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag && vui.colour_description_present_flag, "colour_primaries", vui.colour_primaries);
+                if_colour_description_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag && vui.colour_description_present_flag, "transfer_characteristics", vui.transfer_characteristics);
+                if_colour_description_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag && vui.colour_description_present_flag, "matrix_coefficients", vui.matrix_coefficients);
+            }
+            if_video_signal_type_present_flag_Syntax.Put(if_colour_description_present_flag_Syntax);
+        }
+        syntax.Put(if_video_signal_type_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         vui.chroma_loc_info_present_flag                = bs.bs_read_u1();
         if(vui.chroma_loc_info_present_flag) {
             vui.chroma_sample_loc_type_top_field        = bs.bs_read_ue();
             vui.chroma_sample_loc_type_bottom_field     = bs.bs_read_ue();
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         vui.timing_info_present_flag = bs.bs_read_u1();
         if(vui.timing_info_present_flag) {
@@ -249,20 +362,28 @@ namespace Eyer
             vui.time_scale                              = bs.bs_read_u(32);
             vui.fixed_frame_rate_flag                   = bs.bs_read_u1();
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         vui.nal_hrd_parameters_present_flag = bs.bs_read_u1();
         if(vui.nal_hrd_parameters_present_flag) {
             ReadHrdParameters(vui.hrd_nal, bs);
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         vui.vcl_hrd_parameters_present_flag = bs.bs_read_u1();
         if(vui.vcl_hrd_parameters_present_flag) {
             ReadHrdParameters(vui.hrd_vcl, bs);
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         if(vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag) {
             vui.low_delay_hrd_flag = bs.bs_read_u1();
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         vui.pic_struct_present_flag         = bs.bs_read_u1();
         vui.bitstream_restriction_flag      = bs.bs_read_u1();
@@ -276,6 +397,8 @@ namespace Eyer
             vui.num_reorder_frames                          = bs.bs_read_ue();
             vui.max_dec_frame_buffering                     = bs.bs_read_ue();
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         return 0;
     }

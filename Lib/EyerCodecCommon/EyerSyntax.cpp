@@ -132,7 +132,7 @@ namespace Eyer
         for(int i=0;i<level;i++){
             t = t + "\t";
         }
-        EyerLog("%s%s = %s\n", t.str, name.str, value.str);
+        EyerLog("%d %s%s = %s\n", valid, t.str, name.str, value.str);
         for(int i=0;i<childList.size();i++){
             childList[i]->PrintInfo();
         }
