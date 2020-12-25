@@ -354,6 +354,13 @@ namespace Eyer
             vui.chroma_sample_loc_type_bottom_field     = bs.bs_read_ue();
         }
         // ===================== Syntax Start =====================
+        syntax.Put(isVui, "chroma_loc_info_present_flag", vui.chroma_loc_info_present_flag);
+        EyerSyntax if_chroma_loc_info_present_flag_Syntax(isVui, "if(chroma_loc_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_chroma_loc_info_present_flag_Syntax.Put(isVui && vui.chroma_loc_info_present_flag, "chroma_sample_loc_type_top_field", vui.chroma_sample_loc_type_top_field);
+            if_chroma_loc_info_present_flag_Syntax.Put(isVui && vui.chroma_loc_info_present_flag, "chroma_sample_loc_type_bottom_field", vui.chroma_sample_loc_type_bottom_field);
+        }
+        syntax.Put(if_chroma_loc_info_present_flag_Syntax);
         // ===================== Syntax End =====================
 
         vui.timing_info_present_flag = bs.bs_read_u1();
@@ -363,6 +370,14 @@ namespace Eyer
             vui.fixed_frame_rate_flag                   = bs.bs_read_u1();
         }
         // ===================== Syntax Start =====================
+        syntax.Put(isVui, "timing_info_present_flag", vui.timing_info_present_flag);
+        EyerSyntax if_timing_info_present_flag_Syntax(isVui, "if(timing_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_timing_info_present_flag_Syntax.Put(isVui && vui.timing_info_present_flag, "num_units_in_tick",      vui.num_units_in_tick);
+            if_timing_info_present_flag_Syntax.Put(isVui && vui.timing_info_present_flag, "time_scale",             vui.time_scale);
+            if_timing_info_present_flag_Syntax.Put(isVui && vui.timing_info_present_flag, "fixed_frame_rate_flag",  vui.fixed_frame_rate_flag);
+        }
+        syntax.Put(if_timing_info_present_flag_Syntax);
         // ===================== Syntax End =====================
 
         vui.nal_hrd_parameters_present_flag = bs.bs_read_u1();
@@ -370,6 +385,7 @@ namespace Eyer
             ReadHrdParameters(vui.hrd_nal, bs);
         }
         // ===================== Syntax Start =====================
+        syntax.Put(isVui, "nal_hrd_parameters_present_flag", vui.nal_hrd_parameters_present_flag);
         // ===================== Syntax End =====================
 
         vui.vcl_hrd_parameters_present_flag = bs.bs_read_u1();
@@ -377,12 +393,14 @@ namespace Eyer
             ReadHrdParameters(vui.hrd_vcl, bs);
         }
         // ===================== Syntax Start =====================
+        syntax.Put(isVui, "vcl_hrd_parameters_present_flag", vui.vcl_hrd_parameters_present_flag);
         // ===================== Syntax End =====================
 
         if(vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag) {
             vui.low_delay_hrd_flag = bs.bs_read_u1();
         }
         // ===================== Syntax Start =====================
+
         // ===================== Syntax End =====================
 
         vui.pic_struct_present_flag         = bs.bs_read_u1();
@@ -398,6 +416,20 @@ namespace Eyer
             vui.max_dec_frame_buffering                     = bs.bs_read_ue();
         }
         // ===================== Syntax Start =====================
+        syntax.Put(isVui, "pic_struct_present_flag", vui.pic_struct_present_flag);
+        syntax.Put(isVui, "bitstream_restriction_flag", vui.bitstream_restriction_flag);
+
+        EyerSyntax if_bitstream_restriction_flag_Syntax(isVui, "if(vui.bitstream_restriction_flag)", syntax.GetLevel() + 1);
+        {
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "motion_vectors_over_pic_boundaries_flag", vui.motion_vectors_over_pic_boundaries_flag);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "max_bytes_per_pic_denom", vui.max_bytes_per_pic_denom);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "max_bits_per_mb_denom", vui.max_bits_per_mb_denom);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "log2_max_mv_length_horizontal", vui.log2_max_mv_length_horizontal);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "log2_max_mv_length_vertical", vui.log2_max_mv_length_vertical);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "num_reorder_frames", vui.num_reorder_frames);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "max_dec_frame_buffering", vui.max_dec_frame_buffering);
+        }
+        syntax.Put(if_bitstream_restriction_flag_Syntax);
         // ===================== Syntax End =====================
 
         return 0;
