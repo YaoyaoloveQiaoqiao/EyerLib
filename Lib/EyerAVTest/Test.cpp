@@ -67,7 +67,7 @@ TEST(AVDecoder, AVDecoderTest)
             Eyer::EyerAVFrame destFrame;
             frame.Scale(destFrame, frame.GetWidth(), frame.GetHeight(), Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_RGB8);
 
-            encoder.SendFrame(&destFrame);
+            encoder.SendFrame(&frame);
             while(1){
                 Eyer::EyerAVPacket outPacket;
                 ret = encoder.RecvPacket(&outPacket);
