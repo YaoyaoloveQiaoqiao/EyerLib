@@ -218,10 +218,10 @@ namespace Eyer
         rootSyntax.Put(true, "frame_cropping_flag",         frame_cropping_flag);
         EyerSyntax if_frame_cropping_flag_Syntax(true, "if(frame_cropping_flag)", rootSyntax.GetLevel() + 1);
         {
-            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,      "frame_crop_left_offset",   frame_crop_left_offset);
-            if_frame_cropping_flag_Syntax.Put(frame_crop_right_offset,  "frame_crop_right_offset",  frame_crop_right_offset);
-            if_frame_cropping_flag_Syntax.Put(frame_crop_top_offset,    "frame_crop_top_offset",    frame_crop_top_offset);
-            if_frame_cropping_flag_Syntax.Put(frame_crop_bottom_offset, "frame_crop_bottom_offset", frame_crop_left_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_left_offset",   frame_crop_left_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_right_offset",  frame_crop_right_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_top_offset",    frame_crop_top_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_bottom_offset", frame_crop_left_offset);
         }
         rootSyntax.Put(if_frame_cropping_flag_Syntax);
         // ===================== Syntax End =====================
