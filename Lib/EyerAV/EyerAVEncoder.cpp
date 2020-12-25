@@ -108,6 +108,29 @@ namespace Eyer
             // piml->codecContext->bit_rate = 8192;
         }
 
+        if(param->codecId == CodecId::CODEC_ID_GIF){
+            codec = avcodec_find_encoder(AV_CODEC_ID_GIF);
+
+            if(piml->codecContext != nullptr){
+                if(avcodec_is_open(piml->codecContext)){
+                    avcodec_close(piml->codecContext);
+                }
+                avcodec_free_context(&piml->codecContext);
+                piml->codecContext = nullptr;
+            }
+
+            piml->codecContext = avcodec_alloc_context3(codec);
+
+            piml->codecContext->time_base.den = param->fps;
+            piml->codecContext->time_base.num = 1;
+
+            piml->codecContext->codec_type = AVMEDIA_TYPE_VIDEO;
+            // piml->codecContext->pix_fmt = AV_PIX_FMT_YUVJ420P;
+            piml->codecContext->pix_fmt = AV_PIX_FMT_RGB8;
+            piml->codecContext->width = param->width;
+            piml->codecContext->height = param->height;
+        }
+
         int ret = avcodec_open2(piml->codecContext, codec, nullptr);
         if(ret){
             EyerLog("Open Decoder Fail\n");

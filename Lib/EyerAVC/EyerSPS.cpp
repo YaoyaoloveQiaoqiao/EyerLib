@@ -38,7 +38,7 @@ namespace Eyer
         rootSyntax.PutValid("constraint_set3_flag",             constraint_set3_flag);
         rootSyntax.PutValid("constraint_set4_flag",             constraint_set4_flag);
         rootSyntax.PutValid("constraint_set5_flag",             constraint_set5_flag);
-        rootSyntax.PutValid("reserved_zero_2bits",          0);
+        rootSyntax.PutValid("reserved_zero_2bits",              0);
         rootSyntax.PutValid("level_idc",                        level_idc);
         rootSyntax.PutValid("seq_parameter_set_id",             seq_parameter_set_id);
 
@@ -95,6 +95,7 @@ namespace Eyer
             if_profile_idcSyntax.Put(isHigh, "bit_depth_chroma_minus8",                 bit_depth_chroma_minus8);
             if_profile_idcSyntax.Put(isHigh, "qpprime_y_zero_transform_bypass_flag",    qpprime_y_zero_transform_bypass_flag);
             if_profile_idcSyntax.Put(isHigh, "seq_scaling_matrix_present_flag",         seq_scaling_matrix_present_flag);
+            // TODO if(seq_scaling_matrix_present_flag) {
         }
 
         rootSyntax.Put(if_profile_idcSyntax);
@@ -122,8 +123,15 @@ namespace Eyer
             SubHeightC = 1;
         }
 
+
+
+
         log2_max_frame_num_minus4               = bs.bs_read_ue();
         pic_order_cnt_type                      = bs.bs_read_ue();
+
+
+        rootSyntax.Put(true, "log2_max_frame_num_minus4", log2_max_frame_num_minus4);
+        rootSyntax.Put(true, "pic_order_cnt_type", pic_order_cnt_type);
 
         if(pic_order_cnt_type == 0) {
             log2_max_pic_order_cnt_lsb_minus4 = bs.bs_read_ue();

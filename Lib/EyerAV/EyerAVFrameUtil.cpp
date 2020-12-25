@@ -39,7 +39,9 @@ namespace Eyer {
         if(format == EyerAVPixelFormat::Eyer_AV_PIX_FMT_RGBA){
             return AVPixelFormat::AV_PIX_FMT_RGBA;
         }
-
+        if(format == EyerAVPixelFormat::Eyer_AV_PIX_FMT_RGB8){
+            return AVPixelFormat::AV_PIX_FMT_RGB8;
+        }
         return AVPixelFormat::AV_PIX_FMT_NONE;
     }
 
