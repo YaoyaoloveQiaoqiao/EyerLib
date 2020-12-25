@@ -46,7 +46,9 @@ namespace Eyer
 
         Eyer_AV_PIX_FMT_YUVJ420P = 107,
 
-        Eyer_AV_PIX_FMT_RGBA = 201
+        Eyer_AV_PIX_FMT_RGBA = 201,
+
+        Eyer_AV_PIX_FMT_RGB8 = 202
     };
 
     enum EyerAVStreamType{
@@ -294,7 +296,8 @@ namespace Eyer
     {
         CODEC_ID_UNKNOW = 0,
         CODEC_ID_H264 = 1,
-        CODEC_ID_AAC = 2
+        CODEC_ID_AAC = 2,
+        CODEC_ID_GIF = 3,
     };
 
     class EncoderParam

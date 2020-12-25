@@ -5,167 +5,84 @@
 
 TEST(AVDecoder, AVDecoderTest)
 {
-    // Eyer::EyerAVReader reader("/Users/lichi/annie/xiaomai.mp4");
-    // Eyer::EyerAVReader reader("/Users/lichi/Downloads/scene_03.mp4");
-    Eyer::EyerAVReader reader("/Users/lichi/Desktop/huyou_error.mp4");
-    int ret = reader.Open();
+    Eyer::EyerAVWriter writer("./demoout.gif");
+    writer.Open();
+
+    Eyer::EyerAVEncoder encoder;
+    Eyer::EncoderParam param;
+    param.codecId = Eyer::CodecId::CODEC_ID_GIF;
+    param.width = 1920;
+    param.height = 1080;
+    param.fps = 30;
+    // 初始化编码器
+    int ret = encoder.Init(&param);
+
+
+    int outStreamId = writer.AddStream(&encoder);
+
+    writer.WriteHand();
+
+
+
+    Eyer::EyerAVReader reader("./demo.mp4");
+    ret = reader.Open();
     if(ret){
-        printf("Open Fail ret: %d\n", ret);
         return;
     }
 
-    Eyer::EyerAVBitstreamFilter::QueryAllBitstreamFilter();
+    int videoStream = reader.GetVideoStreamIndex();
 
+    Eyer::EyerAVStream stream;
+    reader.GetStream(stream, videoStream);
 
-    Eyer::EyerAVStream videoStream;
-    int videoStreamIndex = reader.GetVideoStreamIndex();
+    Eyer::EyerAVDecoder decoder;
+    decoder.Init(&stream);
 
-    reader.GetStream(videoStream, videoStreamIndex);
-
-    Eyer::EyerAVDecoder videoDecoder;
-    videoDecoder.Init(&videoStream);
-
-    Eyer::EyerAVBitstreamFilter filter(Eyer::EyerAVBitstreamFilterType::h264_mp4toannexb, videoStream);
-
-    Eyer::AnnexB_to_avcC annexBToAvcC;
-
-
-    FILE * fff = fopen("/Users/lichi/Desktop/huyou_error.yuv", "wb");
-
-    double maxVideoPts = 0.0;
     while(1){
-        Eyer::EyerAVPacket packetA;
-        ret = reader.Read(&packetA);
+        Eyer::EyerAVPacket packet;
+        ret = reader.Read(&packet);
         if(ret){
             break;
         }
 
-        if(packetA.GetStreamId() != videoStreamIndex){
+        if(packet.GetStreamId() != videoStream){
             continue;
         }
 
-        videoStream.ScalerPacketPTS(packetA);
-        // printf("packet: %f\n", packetA.GetSecPTS());
-
-        videoDecoder.SendPacket(&packetA);
-        while (1){
-            Eyer::EyerAVFrame frame;
-            ret = videoDecoder.RecvFrame(&frame);
-            if(ret){
-                break;
-            }
-
-            int width = frame.GetWidth();
-            int height = frame.GetHeight();
-
-            // printf("w: %d, h: %d\n", width, height);
-
-            /*
-            unsigned char * y = (unsigned char *)malloc(width * height);
-            unsigned char * u = (unsigned char *)malloc(width * height / 4);
-            unsigned char * v = (unsigned char *)malloc(width * height / 4);
-
-            frame.GetYData(y);
-            frame.GetUData(u);
-            frame.GetVData(v);
-
-            fwrite(y, width * height, 1, fff);
-            fwrite(u, width * height / 4, 1, fff);
-            fwrite(v, width * height / 4, 1, fff);
-
-            free(y);
-            free(u);
-            free(v);
-             */
+        ret = decoder.SendPacket(&packet);
+        if(ret){
+            break;
         }
 
-        /*
-        videoStream.ScalerPacketPTS(packetA);
-        if(maxVideoPts <= packetA.GetSecPTS()){
-            maxVideoPts = packetA.GetSecPTS();
-        }
-        // printf("packet: %f\n", maxVideoPts);
-
-
-        // 转成 AnnexB
-        filter.SendPacket(&packetA);
-
-        Eyer::EyerAVPacket packet;
-        filter.ReceivePacket(&packet);
-
-
-        // 转成 avcC
-
-        annexBToAvcC.SendAnnexB(packet.GetDataPtr(), packet.GetSize());
         while(1){
-            Eyer::EyerBuffer avccBuffer;
-            bool isExtradata;
-            ret = annexBToAvcC.RecvAvcC(avccBuffer, isExtradata);
+            Eyer::EyerAVFrame frame;
+            ret = decoder.RecvFrame(&frame);
             if(ret){
                 break;
             }
 
-            printf("%x %x %x %x %x\n", avccBuffer.GetPtr()[0], avccBuffer.GetPtr()[1], avccBuffer.GetPtr()[2], avccBuffer.GetPtr()[3], avccBuffer.GetPtr()[4]);
+            EyerLog("PTS %lld\n", frame.GetPTS());
 
-            Eyer::EyerAVPacket packetAvcC;
-            packetAvcC.SetDataPtr(avccBuffer.GetPtr());
-            videoDecoder.SendPacket(&packetAvcC);
+            // 转颜色空间 YUV->RGB8
+            Eyer::EyerAVFrame destFrame;
+            frame.Scale(destFrame, frame.GetWidth(), frame.GetHeight(), Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_RGB8);
+
+            encoder.SendFrame(&destFrame);
             while(1){
-                Eyer::EyerAVFrame frame;
-                ret = videoDecoder.RecvFrame(&frame);
+                Eyer::EyerAVPacket outPacket;
+                ret = encoder.RecvPacket(&outPacket);
                 if(ret){
                     break;
                 }
-
-                printf("PTS: %lld\n", frame.GetPTS());
+                outPacket.SetStreamId(outStreamId);
+                writer.WritePacket(&outPacket);
             }
         }
-         */
-
-        // printf("%d %d %d %d %d\n", packet.GetDataPtr()[0], packet.GetDataPtr()[1], packet.GetDataPtr()[2], packet.GetDataPtr()[3], packet.GetDataPtr()[4]);
     }
 
-    fclose(fff);
     reader.Close();
+    writer.Close();
 }
-
-/*
-TEST(A, ATest){
-    Eyer::EyerDASHReader * dashReader = new Eyer::EyerDASHReader("http://redknot.cn/DASH/xiaomai_dash.mpd");
-
-    for(int i=0;i<10;i++){
-        dashReader->CreateStream(i % 3 + 1);
-        Eyer::EyerAVReader reader("rtmp://redknot.cn:1935/demo/aaa", dashReader);
-        int ret = reader.Open();
-        if(ret){
-            printf("Open Fail ret: %d\n", ret);
-            return;
-        }
-
-        int streamCount = reader.GetStreamCount();
-        printf("Stream Count: %d\n", streamCount);
-
-        int packetIndex = 0;
-        while(1){
-            Eyer::EyerAVPacket packet;
-            ret = reader.Read(&packet);
-            if(ret){
-                break;
-            }
-            // printf("Packet: %lld, Stream Id: %d\n", packet.GetPTS(), packet.GetStreamId());
-
-            packetIndex++;
-            if(packetIndex == 20){
-                dashReader->SwitchStream(3);
-            }
-        }
-
-        printf("End\n");
-
-        reader.Close();
-    }
-}
- */
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
