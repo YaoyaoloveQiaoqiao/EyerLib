@@ -13,13 +13,13 @@ namespace Eyer
 
     }
 
-    int EyerSLICEHeader::Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & _naluData)
+    int EyerSLICEHeader::Parse(EyerBitStream & bs, EyerSyntax & syntax, EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & _naluData)
     {
         sps = _sps;
         pps = _pps;
         naluData = _naluData;
 
-        ParseHeadPartA(bs);
+        ParseHeadPartA(bs, syntax);
 
         // Select SPS PPS
         if(!sps.isValid()){
@@ -29,7 +29,7 @@ namespace Eyer
             return -1;
         }
 
-        ParseHeadPartB(bs);
+        ParseHeadPartB(bs, syntax);
 
         return 0;
     }
@@ -39,26 +39,41 @@ namespace Eyer
         return sliceType;
     }
 
-    int EyerSLICEHeader::ParseHeadPartA(EyerBitStream & bs)
+    int EyerSLICEHeader::ParseHeadPartA(EyerBitStream & bs, EyerSyntax & syntax)
     {
         sh.first_mb_in_slice           = bs.bs_read_ue();
         sh.slice_type                  = bs.bs_read_ue();
         sh.pic_parameter_set_id        = bs.bs_read_ue();
+
+        syntax.Put(true, "first_mb_in_slice",       sh.first_mb_in_slice);
+        syntax.Put(true, "slice_type",              sh.slice_type);
+        syntax.Put(true, "pic_parameter_set_id",    sh.pic_parameter_set_id);
 
         sliceType = sh.slice_type;
 
         return 0;
     }
 
-    int EyerSLICEHeader::ParseHeadPartB(EyerBitStream & bs)
+    int EyerSLICEHeader::ParseHeadPartB(EyerBitStream & bs, EyerSyntax & syntax)
     {
         sliceType = sh.slice_type;
 
         if (sps.separate_colour_plance_flag == 1) {
             sh.colour_plane_id = bs.bs_read_u(2);
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_colour_plance_flag_Syntax(true, "if(separate_colour_plance_flag == 1)", syntax.GetLevel() + 1);
+        {
+            bool is = sps.separate_colour_plance_flag == 1;
+            if_colour_plance_flag_Syntax.Put(true && is, "colour_plane_id", sh.colour_plane_id);
+        }
+        syntax.Put(if_colour_plance_flag_Syntax);
+        // ===================== Syntax End =====================
 
         sh.frame_num = bs.bs_read_u(sps.log2_max_frame_num_minus4 + 4);
+        // ===================== Syntax Start =====================
+        syntax.Put(true, "frame_num", sh.frame_num);
+        // ===================== Syntax End =====================
 
         if(!sps.frame_mbs_only_flag){
             sh.field_pic_flag = bs.bs_read_u1();
@@ -66,17 +81,53 @@ namespace Eyer
                 sh.bottom_field_flag = bs.bs_read_u1();
             }
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_frame_mbs_only_flag(true, "if(!sps.frame_mbs_only_flag)", syntax.GetLevel() + 1);
+        {
+            bool isA = !sps.frame_mbs_only_flag;
+            if_frame_mbs_only_flag.Put(isA, "field_pic_flag", sh.field_pic_flag);
+            EyerSyntax if_field_pic_flag(true && isA, "if(field_pic_flag)", if_frame_mbs_only_flag.GetLevel() + 1);
+            {
+                bool isB = sh.field_pic_flag;
+                if_field_pic_flag.Put(true && isA && isB, "bottom_field_flag", sh.bottom_field_flag);
+            }
+            if_frame_mbs_only_flag.Put(if_field_pic_flag);
+        }
+        syntax.Put(if_frame_mbs_only_flag);
+        // ===================== Syntax End =====================
 
         if(naluData.GetNALUType() == NALUType::NALU_TYPE_IDR) {
             sh.idr_pic_id = bs.bs_read_ue();
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_idr(true, "if(naluType == IDR)", syntax.GetLevel() + 1);
+        {
+            bool is = naluData.GetNALUType() == NALUType::NALU_TYPE_IDR;
+            if_idr.Put(is, "idr_pic_id", sh.idr_pic_id);
+        }
+        syntax.Put(if_idr);
+        // ===================== Syntax End =====================
 
         if(sps.pic_order_cnt_type == 0){
             sh.pic_order_cnt_lsb = bs.bs_read_u(sps.log2_max_pic_order_cnt_lsb_minus4 + 4);
-            if(pps.pic_order_present_flag && !sh.field_pic_flag ) {
+            if(pps.pic_order_present_flag && !sh.field_pic_flag) {
                 sh.delta_pic_order_cnt_bottom = bs.bs_read_se();
             }
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_pic_order_cnt_type(true, "if(pic_order_cnt_type == 0)", syntax.GetLevel() + 1);
+        {
+            bool is = sps.pic_order_cnt_type == 0;
+            if_pic_order_cnt_type.Put(is, "pic_order_cnt_lsb", sh.pic_order_cnt_lsb);
+            EyerSyntax ifs(is, "pic_order_present_flag && !sh.field_pic_flag", if_pic_order_cnt_type.GetLevel() + 1);
+            {
+                bool isA = pps.pic_order_present_flag && !sh.field_pic_flag;
+                ifs.Put(is && isA, "delta_pic_order_cnt_bottom", sh.delta_pic_order_cnt_bottom);
+            }
+            if_pic_order_cnt_type.Put(ifs);
+        }
+        syntax.Put(if_pic_order_cnt_type);
+        // ===================== Syntax End =====================
 
         if(sps.pic_order_cnt_type == 1 && !sps.delta_pic_order_always_zero_flag) {
             sh.delta_pic_order_cnt[0] = bs.bs_read_se();
@@ -84,14 +135,39 @@ namespace Eyer
                 sh.delta_pic_order_cnt[1] = bs.bs_read_se();
             }
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_cnt_type(true, "if(sps.pic_order_cnt_type == 1 && !sps.delta_pic_order_always_zero_flag)", syntax.GetLevel() + 1);
+        {
+            bool isA = sps.pic_order_cnt_type == 1 && !sps.delta_pic_order_always_zero_flag;
+            if_cnt_type.Put(isA, "delta_pic_order_cnt[0]", sh.delta_pic_order_cnt[0]);
+            EyerSyntax if_a(isA, "if(pic_order_present_flag && !field_pic_flag)", if_cnt_type.GetLevel() + 1);
+            {
+                bool isB = pps.pic_order_present_flag && !sh.field_pic_flag;
+                if_a.Put(isA && isB, "delta_pic_order_cnt[1]", sh.delta_pic_order_cnt[1]);
+            }
+            if_cnt_type.Put(if_a);
+        }
+        syntax.Put(if_cnt_type);
+        // ===================== Syntax End =====================
 
         if(pps.redundant_pic_cnt_present_flag) {
             sh.redundant_pic_cnt = bs.bs_read_ue();
         }
+        // ===================== Syntax Start =====================
+        /*
+        EyerSyntax if_cnt_present_flag();
+        {
+
+        }
+        syntax.Put(if_cnt_present_flag);
+        */
+        // ===================== Syntax End =====================
 
         if(sliceType == SLICEType::SLICE_TYPE_B) {
             sh.direct_spatial_mv_pred_flag = bs.bs_read_u1();
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         if(sliceType == SLICEType::SLICE_TYPE_P || sliceType == SLICEType::SLICE_TYPE_SP || sliceType == SLICEType::SLICE_TYPE_B) {
             sh.num_ref_idx_active_override_flag = bs.bs_read_u1();
@@ -102,6 +178,8 @@ namespace Eyer
                 }
             }
         }
+        // ===================== Syntax Start =====================
+        // ===================== Syntax End =====================
 
         ReadRefPicListReordering(bs);
 

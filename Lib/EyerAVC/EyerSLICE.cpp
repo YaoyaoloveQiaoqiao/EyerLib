@@ -30,12 +30,12 @@ namespace Eyer
         EyerNALU::Parse();
 
         EyerBitStream bs(naluData.GetRBSPBuffer());
-        int ret = sliceHeader.Parse(bs, sps, pps, naluData);
+        int ret = sliceHeader.Parse(bs, rootSyntax, sps, pps, naluData);
         if(ret){
             return -1;
         }
 
-        ret = sliceBody.Parse(bs, sps, pps, sliceHeader);
+        ret = sliceBody.Parse(bs, rootSyntax, sps, pps, sliceHeader);
         if(ret){
             return -1;
         }

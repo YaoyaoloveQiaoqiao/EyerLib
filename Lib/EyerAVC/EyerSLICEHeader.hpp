@@ -93,7 +93,7 @@ namespace Eyer
 
         SLICEType GetSLICEType();
 
-        int Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & _naluData);
+        int Parse(EyerBitStream & bs, EyerSyntax & syntax, EyerSPS & _sps, EyerPPS & _pps, EyerNALUData & _naluData);
 
     public:
         SliceHeaderData sh;
@@ -104,8 +104,8 @@ namespace Eyer
 
         SLICEType sliceType;
 
-        int ParseHeadPartA(EyerBitStream & bs);
-        int ParseHeadPartB(EyerBitStream & bs);
+        int ParseHeadPartA(EyerBitStream & bs, EyerSyntax & syntax);
+        int ParseHeadPartB(EyerBitStream & bs, EyerSyntax & syntax);
 
         int ReadRefPicListReordering    (EyerBitStream & bs);
         int ReadPredWeightTable         (EyerBitStream & bs);
