@@ -131,9 +131,6 @@ namespace Eyer
         pic_order_cnt_type                      = bs.bs_read_ue();
 
         // ===================== Syntax Start =====================
-        // ===================== Syntax End =====================
-
-        // ===================== Syntax Start =====================
         rootSyntax.Put(true, "log2_max_frame_num_minus4",       log2_max_frame_num_minus4);
         rootSyntax.Put(true, "pic_order_cnt_type",              pic_order_cnt_type);
         // ===================== Syntax End =====================
@@ -386,6 +383,11 @@ namespace Eyer
         }
         // ===================== Syntax Start =====================
         syntax.Put(isVui, "nal_hrd_parameters_present_flag", vui.nal_hrd_parameters_present_flag);
+        EyerSyntax if_nal_hrd_parameters_present_flag_Syntax(isVui, "if(nal_hrd_parameters_present_flag)", syntax.GetLevel() + 1);
+        {
+
+        }
+        syntax.Put(if_nal_hrd_parameters_present_flag_Syntax);
         // ===================== Syntax End =====================
 
         vui.vcl_hrd_parameters_present_flag = bs.bs_read_u1();
@@ -394,13 +396,23 @@ namespace Eyer
         }
         // ===================== Syntax Start =====================
         syntax.Put(isVui, "vcl_hrd_parameters_present_flag", vui.vcl_hrd_parameters_present_flag);
+        EyerSyntax if_vcl_hrd_parameters_present_flag_Syntax(isVui, "if(vcl_hrd_parameters_present_flag)", syntax.GetLevel() + 1);
+        {
+
+        }
+        syntax.Put(if_vcl_hrd_parameters_present_flag_Syntax);
         // ===================== Syntax End =====================
 
         if(vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag) {
             vui.low_delay_hrd_flag = bs.bs_read_u1();
         }
         // ===================== Syntax Start =====================
-
+        EyerSyntax if_nal_hrd_vcl_hrd_Syntax(isVui, "if(nal_hrd_parameters_present_flag || vcl_hrd_parameters_present_flag)", syntax.GetLevel() + 1);
+        {
+            bool isHRD = vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag;
+            if_nal_hrd_vcl_hrd_Syntax.Put(isVui && isHRD, "low_delay_hrd_flag", vui.low_delay_hrd_flag);
+        }
+        syntax.Put(if_nal_hrd_vcl_hrd_Syntax);
         // ===================== Syntax End =====================
 
         vui.pic_struct_present_flag         = bs.bs_read_u1();
