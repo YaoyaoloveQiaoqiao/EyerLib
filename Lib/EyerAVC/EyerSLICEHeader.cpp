@@ -154,11 +154,13 @@ namespace Eyer
             sh.redundant_pic_cnt = bs.bs_read_ue();
         }
         // ===================== Syntax Start =====================
+        /*
         EyerSyntax if_cnt_present_flag();
         {
-            
+
         }
         syntax.Put(if_cnt_present_flag);
+        */
         // ===================== Syntax End =====================
 
         if(sliceType == SLICEType::SLICE_TYPE_B) {
