@@ -48,7 +48,9 @@ add_library(
         EyerCAVLC.hpp
         AVCTable.hpp
         AVCTable.cpp
-        RESIDUAL_TYPE.cpp RESIDUAL_TYPE.hpp)
+        RESIDUAL_TYPE.cpp
+        RESIDUAL_TYPE.hpp
+)
 
 target_link_libraries (
         EyerAVC
@@ -77,6 +79,7 @@ set(head_files
         MB_TYPE.hpp
         EyerMacroblock.hpp
         EyerCoeff4x4Block.hpp
+        RESIDUAL_TYPE.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)
