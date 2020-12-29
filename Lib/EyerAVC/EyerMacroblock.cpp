@@ -74,7 +74,6 @@ namespace Eyer
             if(CodedBlockPatternLuma > 0 || CodedBlockPatternChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                 int32_t mb_qp_delta = bs.bs_read_se();
                 Residual(bs, 0, 15);
-                // _Residual(bs, 0, 15);
             }
         }
 
@@ -175,50 +174,45 @@ namespace Eyer
             // 解 DC 分量
         }
 
-        for(int i8x8Y = 0; i8x8Y < 4; i8x8Y += 2){
-            for (int i8x8X = 0; i8x8X < 4; i8x8X += 2) {
-                int i8x8 = 2 * (i8x8Y / 2) + i8x8X / 2;
-                if(!transform_size_8x8_flag || !pps.entropy_coding_mode_flag){
-                    for(int blockY = i8x8Y; blockY < i8x8Y + 2; blockY ++) {
-                        for (int blockX = i8x8X; blockX < i8x8X + 2; blockX++) {
-                            if(CodedBlockPatternLuma & (1 << i8x8)){
-                                EyerLog("====================================(%d, %d)====================================\n", blockX, blockY);
-                                EyerLog("有残差, x: %d, y: %d\n", blockX, blockY);
-                                if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
-                                    // 解 AC 分量
-                                }
-                                else{
-                                    int nC = GetNumberCurrent(blockX, blockY);
-
-                                    int totleCoeff = 0;
-                                    ResidualBlockCavlc(bs, totleCoeff, nC, startIdx, endIdx, 16);
-                                    lumaResidual[blockY][blockX].numCoeff = (uint8_t)totleCoeff;
-                                }
-                            }
-                            else if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
-                                // 将所有 AC 分量赋值为 0 ， 一共 15 个
-                            }
-                            else{
-
-                            }
-                            if(!pps.entropy_coding_mode_flag && transform_size_8x8_flag){
-                                // 8x8
-                                for(int i = 0; i < 16; i++){
-                                    // level8x8[ i8x8 ][ 4 * i + i4x4 ] = level4x4[ i8x8 * 4 + i4x4 ][ i ]
-                                }
-                            }
+        for(int i8x8 = 0; i8x8 < 4; i8x8++){
+            if(!transform_size_8x8_flag || !pps.entropy_coding_mode_flag){
+                for(int i4x4 = 0; i4x4 < 4; i4x4++) {
+                    if(CodedBlockPatternLuma & (1 << i8x8)){
+                        EyerLog("====================================(i8x8: %d, i4x4: %d)====================================\n", i8x8, i4x4);
+                        EyerLog("有残差, i8x8: %d, i4x4: %d\n", i8x8, i4x4);
+                        if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+                            // 解 AC 分量
+                        }
+                        else{
+                            int nC = GetNumberCurrent(i8x8, i4x4);
+                            int totleCoeff = 0;
+                            ResidualBlockCavlc(bs, totleCoeff, nC, startIdx, endIdx, 16);
                         }
                     }
-                }
-                else if( CodedBlockPatternLuma & ( 1 << i8x8 ) ){
-                    // residual_block( level8x8[ i8x8 ], 4 * startIdx, 4 * endIdx + 3, 64 )
-                }
-                else{
-                    for(int i = 0; i < 64; i++ ){
-                        // level8x8[ i8x8 ][ i ] = 0;
+                    else if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+                        // 将所有 AC 分量赋值为 0 ， 一共 15 个
                     }
+                    else{
+
+                    }
+                    if(!pps.entropy_coding_mode_flag && transform_size_8x8_flag){
+                        // 8x8
+                        for(int i = 0; i < 16; i++){
+                            // level8x8[ i8x8 ][ 4 * i + i4x4 ] = level4x4[ i8x8 * 4 + i4x4 ][ i ]
+                        }
+                    }
+
                 }
             }
+            else if( CodedBlockPatternLuma & ( 1 << i8x8 ) ){
+                // residual_block( level8x8[ i8x8 ], 4 * startIdx, 4 * endIdx + 3, 64 )
+            }
+            else{
+                for(int i = 0; i < 64; i++ ){
+                    // level8x8[ i8x8 ][ i ] = 0;
+                }
+            }
+
         }
 
         return 0;
@@ -348,102 +342,53 @@ namespace Eyer
     }
 
 
-    int EyerMacroblock::GetNumberCurrent(int x, int y)
+    int EyerMacroblock::GetNumberCurrent(int i8x8, int i4x4)
     {
         int nC = 0;
-        int topIndex = 0;
-        int leftIndex = 0;
-        int topNum = 0;
-        int leftNum = 0;
 
-        bool available_top = false;
-        bool available_left = false;
+        EyerCoeff4x4Block * top = nullptr;
+        EyerCoeff4x4Block * left = nullptr;
 
-        GetNeighborAvailable(available_top, available_left, topIndex, leftIndex, x, y);
-
-        if(!available_left && !available_top){
-            nC = 0;
+        // Get Top
+        EyerLog("TopTop: %d, %d\n", i8x8, i4x4);
+        int i4x4Top = i4x4 - 2;
+        if(i4x4Top >= 0){
+            // 8x8 块内
+            top = &lumaResidual[i8x8][i4x4Top];
+            // EyerLog("Top: %d, %d\n", i8x8, i4x4Top);
         }
         else{
-            if(available_left){
-                leftNum = GetLeftNeighborCoeffNum(leftIndex, x, y);
+            // 需要找上方的一个 8x8
+            int i8x8Top = i8x8 - 2;
+            if(i8x8Top >= 0){
+                top = &lumaResidual[i8x8Top][i4x4 + 2];
+                // EyerLog("Top: %d, %d\n", i8x8Top, i4x4 + 2);
             }
-            if(available_top){
-                topNum = GetTopNeighborCoeffNum(topIndex, x, y);
+            else{
+                // 超出宏块
+                // EyerLog("Top: No\n");
             }
+        }
 
-            nC = topNum + leftNum;
-            if(available_left && available_top){
-                nC++;
-                nC = nC >> 1;
-            }
-            // EyerLog("nC top: %d, left: %d, nC: %d\n", topNum, leftNum, nC);
+        // Get Left
+        
+
+        int topNum = 0;
+        int leftNum = 0;
+        if(top != nullptr){
+            topNum = top->numCoeff;
+        }
+        if(left != nullptr){
+            leftNum = left->numCoeff;
+        }
+
+        nC = topNum + leftNum;
+        if(top != nullptr && left != nullptr){
+            nC++;
+            nC = nC >> 1;
         }
 
         return nC;
-    }
-
-    int EyerMacroblock::GetTopNeighborCoeffNum(int topIdx, int blockX, int blockY)
-    {
-        int nzCeoff = 0;
-        int target_idx_y = 0;
-        if(topIdx == mbIndex){
-            target_idx_y = blockY - 1;
-            nzCeoff = lumaResidual[target_idx_y][blockX].numCoeff;
-        }
-
-        return nzCeoff;
-    }
-
-    int EyerMacroblock::GetLeftNeighborCoeffNum(int leftIdx, int blockX, int blockY)
-    {
-        int nzCeoff = 0;
-        int target_idx_x = 0;
-        if(leftIdx == mbIndex){
-            target_idx_x = blockX - 1;
-            nzCeoff = lumaResidual[blockY][target_idx_x].numCoeff;
-        }
-
-        return nzCeoff;
-    }
-
-    int EyerMacroblock::GetNeighborAvailable(bool & available_top, bool & available_left, int & topIndex, int & leftIndex, int blockIndexX, int blockIndexY){
-
-        int width_in_mb = sps.pic_width_in_mbs_minus1 + 1;
-        int height_in_mb = sps.pic_height_in_map_units_minus1 + 1;
-
-        bool left_egde_mb = (mbIndex % width_in_mb == 0);
-        bool top_egde_mb = (mbIndex < width_in_mb);
-
-        if(!top_egde_mb){
-            available_top = true;
-            topIndex = mbIndex - width_in_mb;
-        }
-        else{
-            if(blockIndexY == 0){
-                available_top = false;
-            }
-            else{
-                available_top = true;
-                topIndex = mbIndex;
-            }
-        }
-
-        if(!left_egde_mb){
-            available_left = true;
-            leftIndex = mbIndex - 1;
-        }
-        else{
-            if(blockIndexX == 0){
-                available_left = false;
-            }
-            else{
-                available_left = true;
-                leftIndex = mbIndex;
-            }
-        }
-
-        return 0;
     }
 
     int EyerMacroblock::get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength)

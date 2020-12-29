@@ -25,11 +25,7 @@ namespace Eyer
 
         int ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff);
 
-        int GetNumberCurrent(int x, int y);
-        int GetNeighborAvailable(bool & available_top, bool & available_left, int & topIndex, int & leftIndex, int blockIndexX, int blockIndexY);
-
-        int GetTopNeighborCoeffNum(int topIdx, int blockX, int blockY);
-        int GetLeftNeighborCoeffNum(int leftIdx, int blockX, int blockY);
+        int GetNumberCurrent(int i8x8, int i4x4);
 
         int get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength);
 
@@ -52,6 +48,7 @@ namespace Eyer
         uint32_t intra_chroma_pred_mode = 0;
 
         EyerCoeff4x4Block lumaResidual[4][4];
+        // EyerCoeff4x4Block chromaResidual_NumC8x8_1[2][2];
     };
 }
 
