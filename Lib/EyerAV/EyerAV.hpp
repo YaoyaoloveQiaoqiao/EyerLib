@@ -5,5 +5,7 @@
 #include "AVUtil/AVUtil.hpp"
 #include "EyerAVBitstreamFilter.hpp"
 #include "AnnexB_to_avcC.hpp"
+#include "EyerPureColorCheck.h"
+#include "EyerPureColorBlock.hpp"
 
 #endif
