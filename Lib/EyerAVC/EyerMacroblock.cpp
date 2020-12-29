@@ -187,6 +187,7 @@ namespace Eyer
                             int nC = GetNumberCurrent(i8x8, i4x4);
                             int totleCoeff = 0;
                             ResidualBlockCavlc(bs, totleCoeff, nC, startIdx, endIdx, 16);
+                            lumaResidual[i8x8][i4x4].numCoeff = (uint8_t)totleCoeff;
                         }
                     }
                     else if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
@@ -336,8 +337,6 @@ namespace Eyer
             // EyerLog("coeffNum: %d\n", coeffNum);
         }
 
-        // lumaResidual[blockY][blockX].numCoeff = (uint8_t)totleCoeff;
-
         return 0;
     }
 
@@ -349,29 +348,28 @@ namespace Eyer
         EyerCoeff4x4Block * top = nullptr;
         EyerCoeff4x4Block * left = nullptr;
 
+        int blockX = i8x8 % 2 * 2 + i4x4 % 2;
+        int blockY = i8x8 / 2 * 2 + i4x4 / 2;
+
         // Get Top
-        EyerLog("TopTop: %d, %d\n", i8x8, i4x4);
-        int i4x4Top = i4x4 - 2;
-        if(i4x4Top >= 0){
-            // 8x8 块内
-            top = &lumaResidual[i8x8][i4x4Top];
-            // EyerLog("Top: %d, %d\n", i8x8, i4x4Top);
+        if(blockY > 0){
+            // 宏块内查找
+            top = findLumaBlock(blockX, blockY - 1);
         }
         else{
-            // 需要找上方的一个 8x8
-            int i8x8Top = i8x8 - 2;
-            if(i8x8Top >= 0){
-                top = &lumaResidual[i8x8Top][i4x4 + 2];
-                // EyerLog("Top: %d, %d\n", i8x8Top, i4x4 + 2);
-            }
-            else{
-                // 超出宏块
-                // EyerLog("Top: No\n");
-            }
+            // 宏块外查找
         }
 
+
         // Get Left
-        
+        if(blockX > 0){
+            // 宏块内查找
+            left = findLumaBlock(blockX - 1, blockY);
+        }
+        else{
+            // 宏块外查找
+        }
+
 
         int topNum = 0;
         int leftNum = 0;
@@ -389,6 +387,14 @@ namespace Eyer
         }
 
         return nC;
+    }
+
+    EyerCoeff4x4Block * EyerMacroblock::findLumaBlock(int blockX, int blockY)
+    {
+        int i8x8 = blockY / 2 * 2 + blockX / 2;
+        int i4x4 = blockY % 2 * 2 + blockX % 2;
+
+        return &lumaResidual[i8x8][i4x4];
     }
 
     int EyerMacroblock::get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength)

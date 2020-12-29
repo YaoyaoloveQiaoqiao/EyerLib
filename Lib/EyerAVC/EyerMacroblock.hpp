@@ -49,6 +49,8 @@ namespace Eyer
 
         EyerCoeff4x4Block lumaResidual[4][4];
         // EyerCoeff4x4Block chromaResidual_NumC8x8_1[2][2];
+
+        EyerCoeff4x4Block * findLumaBlock(int blockX, int blockY);
     };
 }
 
