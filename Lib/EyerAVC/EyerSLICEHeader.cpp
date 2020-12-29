@@ -154,19 +154,24 @@ namespace Eyer
             sh.redundant_pic_cnt = bs.bs_read_ue();
         }
         // ===================== Syntax Start =====================
-        /*
-        EyerSyntax if_cnt_present_flag();
+        EyerSyntax if_cnt_present_flag(true, "if(redundant_pic_cnt_present_flag)", syntax.GetLevel() + 1);
         {
-
+            bool isA = pps.redundant_pic_cnt_present_flag;
+            if_cnt_present_flag.Put(true && isA, "redundant_pic_cnt", sh.redundant_pic_cnt);
         }
         syntax.Put(if_cnt_present_flag);
-        */
         // ===================== Syntax End =====================
 
         if(sliceType == SLICEType::SLICE_TYPE_B) {
             sh.direct_spatial_mv_pred_flag = bs.bs_read_u1();
         }
         // ===================== Syntax Start =====================
+        EyerSyntax if_B_Slice(true, "if(slice_type == B)", syntax.GetLevel() + 1);
+        {
+            bool isA = sliceType == SLICEType::SLICE_TYPE_B;
+            if_B_Slice.Put(true && isA, "direct_spatial_mv_pred_flag", sh.direct_spatial_mv_pred_flag);
+        }
+        syntax.Put(if_B_Slice);
         // ===================== Syntax End =====================
 
         if(sliceType == SLICEType::SLICE_TYPE_P || sliceType == SLICEType::SLICE_TYPE_SP || sliceType == SLICEType::SLICE_TYPE_B) {
@@ -179,6 +184,24 @@ namespace Eyer
             }
         }
         // ===================== Syntax Start =====================
+        EyerSyntax id_slice_pb(true, "slice_type == P || slice_type == SP || slice_type == B", syntax.GetLevel() + 1);
+        {
+            bool isA = sliceType == SLICEType::SLICE_TYPE_P || sliceType == SLICEType::SLICE_TYPE_SP || sliceType == SLICEType::SLICE_TYPE_B;
+            id_slice_pb.Put(true && isA, "num_ref_idx_active_override_flag", sh.num_ref_idx_active_override_flag);
+            EyerSyntax ifA(true && isA, "if(num_ref_idx_active_override_flag)", id_slice_pb.GetLevel() + 1);
+            {
+                bool isB = sh.num_ref_idx_active_override_flag;
+                ifA.Put(true && isA && isB, "num_ref_idx_l0_active_minus1", sh.num_ref_idx_l0_active_minus1);
+                EyerSyntax ifB(true && isA && isB, "sliceType == SLICEType::SLICE_TYPE_B", ifA.GetLevel() + 1);
+                {
+                    bool isC = sliceType == SLICEType::SLICE_TYPE_B;
+                    ifB.Put(true && isA && isB && isC, "num_ref_idx_l1_active_minus1", sh.num_ref_idx_l1_active_minus1);
+                }
+                ifA.Put(ifB);
+            }
+            id_slice_pb.Put(ifA);
+        }
+        syntax.Put(id_slice_pb);
         // ===================== Syntax End =====================
 
         ReadRefPicListReordering(bs);
@@ -197,6 +220,16 @@ namespace Eyer
             sh.cabac_init_idc = bs.bs_read_ue();
         }
         sh.slice_qp_delta = bs.bs_read_se();
+        // ===================== Syntax Start =====================
+        EyerSyntax entropy_coding_mode_flag(true, "if(entropy_coding_mode_flag && slice_type != I && slice_type != SI)", syntax.GetLevel() + 1);
+        {
+            bool isA = pps.entropy_coding_mode_flag && sliceType != SLICEType::SLICE_TYPE_I && sliceType != SLICEType::SLICE_TYPE_SI;
+            entropy_coding_mode_flag.Put(true && isA, "cabac_init_idc", sh.cabac_init_idc);
+        }
+        syntax.Put(entropy_coding_mode_flag);
+        syntax.Put(true, "slice_qp_delta", sh.slice_qp_delta);
+        // ===================== Syntax End =====================
+
 
         if(sliceType == SLICEType::SLICE_TYPE_SP || sliceType == SLICEType::SLICE_TYPE_SI){
             if(sliceType == SLICEType::SLICE_TYPE_SP){
@@ -204,6 +237,20 @@ namespace Eyer
             }
             sh.slice_qs_delta = bs.bs_read_se();
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_sp_si(true, "if(slice_type == SP || slice_type == slice_typeSI)", syntax.GetLevel() + 1);
+        {
+            bool isA = sliceType == SLICEType::SLICE_TYPE_SP || sliceType == SLICEType::SLICE_TYPE_SI;
+            EyerSyntax if_sp(true && isA, "if(slice_type == SP)", if_sp_si.GetLevel() + 1);
+            {
+                bool isB = sliceType == SLICEType::SLICE_TYPE_SP;
+                if_sp.Put(true && isA && isB, "sp_for_switch_flag", sh.sp_for_switch_flag);
+            }
+            if_sp_si.Put(if_sp);
+        }
+        syntax.Put(if_sp_si);
+        // ===================== Syntax End =====================
+
 
         if(pps.deblocking_filter_control_present_flag) {
             sh.disable_deblocking_filter_idc = bs.bs_read_ue();
@@ -212,10 +259,34 @@ namespace Eyer
                 sh.slice_beta_offset_div2 = bs.bs_read_se();
             }
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_deblocking(true, "if(deblocking_filter_control_present_flag)", syntax.GetLevel() + 1);
+        {
+            bool isA = pps.deblocking_filter_control_present_flag;
+            if_deblocking.Put(true && isA, "disable_deblocking_filter_idc", sh.disable_deblocking_filter_idc);
+            EyerSyntax if_deblocking_idc(true && isA, "if(sh.disable_deblocking_filter_idc != 1)", if_deblocking.GetLevel() + 1);
+            {
+                bool isB = sh.disable_deblocking_filter_idc != 1;
+                if_deblocking_idc.Put(true && isA && isB, "slice_alpha_c0_offset_div2", sh.slice_alpha_c0_offset_div2);
+                if_deblocking_idc.Put(true && isA && isB, "slice_beta_offset_div2", sh.slice_beta_offset_div2);
+            }
+            if_deblocking.Put(if_deblocking_idc);
+        }
+        syntax.Put(if_deblocking);
+        // ===================== Syntax End =====================
+
         if(pps.num_slice_groups_minus1 > 0 && pps.slice_group_map_type >= 3 && pps.slice_group_map_type <= 5) {
             int v = intlog2( pps.pic_size_in_map_units_minus1 +  pps.slice_group_change_rate_minus1 + 1);
             sh.slice_group_change_cycle = bs.bs_read_u(v); // FIXME add 2?
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_miaowu(true, "if(num_slice_groups_minus1 > 0 && slice_group_map_type >= 3 && slice_group_map_type <= 5)", syntax.GetLevel() + 1);
+        {
+            bool isA = pps.num_slice_groups_minus1 > 0 && pps.slice_group_map_type >= 3 && pps.slice_group_map_type <= 5;
+            if_miaowu.Put(true && isA, "slice_group_change_cycle", sh.slice_group_change_cycle);
+        }
+        syntax.Put(if_miaowu);
+        // ===================== Syntax End =====================
 
         return 0;
     }
@@ -233,7 +304,6 @@ namespace Eyer
                 {
                     n++;
                     sh.rplr.reorder_l0.reordering_of_pic_nums_idc[n] = bs.bs_read_ue();
-                    // fieldList.push_back(new EyerField(EyerString("reorder_l0.reordering_of_pic_nums_idc[") + EyerString::Number(n) + "]", sh.rplr.reorder_l0.reordering_of_pic_nums_idc[n], nullptr, level + 1));
                     if( sh.rplr.reorder_l0.reordering_of_pic_nums_idc[n] == 0 ||
                         sh.rplr.reorder_l0.reordering_of_pic_nums_idc[n] == 1 )
                     {
@@ -256,7 +326,6 @@ namespace Eyer
                 {
                     n++;
                     sh.rplr.reorder_l1.reordering_of_pic_nums_idc[n] = bs.bs_read_ue();
-                    // fieldList.push_back(new EyerField(EyerString("reorder_l1.reordering_of_pic_nums_idc[") + EyerString::Number(n) + "]", sh.rplr.reorder_l1.reordering_of_pic_nums_idc[n], nullptr, level + 1));
                     if(sh.rplr.reorder_l1.reordering_of_pic_nums_idc[n] == 0 || sh.rplr.reorder_l1.reordering_of_pic_nums_idc[n] == 1) {
                         sh.rplr.reorder_l1.abs_diff_pic_num_minus1[n] = bs.bs_read_ue();
                     }

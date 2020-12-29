@@ -138,7 +138,7 @@ namespace Eyer
         EyerSPSVUI vui;
 
         int ReadScalingList(EyerBitStream & bs, int * scalingList, int sizeOfScalingList, int * useDefaultScalingMatrixFlag);
-        int ReadVuiParameters(EyerBitStream & bs, EyerSyntax & syntax);
+        int ReadVuiParameters(EyerBitStream & bs, EyerSyntax & syntax, bool isVui);
         int ReadHrdParameters(EyerHRD & hrd, EyerBitStream & bs);
     };
 }
