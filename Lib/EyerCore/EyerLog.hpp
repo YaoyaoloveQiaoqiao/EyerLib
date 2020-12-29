@@ -32,7 +32,12 @@
 #define EyerLog_8(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 8, format, ##__VA_ARGS__)
 #define EyerLog_9(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 9, format, ##__VA_ARGS__)
 #define EyerLog_10(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 10, format, ##__VA_ARGS__)
-#define EyerLog(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 10, format, ##__VA_ARGS__)
+#define EyerLog(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 5, format, ##__VA_ARGS__)
+
+#define EyerINFO(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 5, format, ##__VA_ARGS__)
+#define EyerWRANING(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 10, format, ##__VA_ARGS__)
+#define EyerERROR(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 20, format, ##__VA_ARGS__)
+
 #endif
 
 #ifdef __cplusplus
