@@ -44,6 +44,7 @@ namespace Eyer
         int moreDataFlag = 1;
         int prevMbSkipped = 0;
 
+        int mbIndex = 0;
         do{
             if(sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_I && sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_SI) {
                 if (!pps.entropy_coding_mode_flag) {
@@ -61,6 +62,7 @@ namespace Eyer
                 EyerMacroblock * block = new EyerMacroblock(CurrMbAddr);
                 block->Parse(bs, sps, pps, sliceHeader);
                 macroblockList.push_back(block);
+                mbIndex++;
                 // macroblock_layer(sliceHeader.GetSLICEType() ,bs);
             }
             if(!pps.entropy_coding_mode_flag){
@@ -82,7 +84,9 @@ namespace Eyer
             //TODO CurrMbAddr = NextMbAddress(CurrMbAddr);
 
             //TODO DEBUG
-            moreDataFlag = 0;
+            if(mbIndex >= 2){
+                moreDataFlag = 0;
+            }
         }
         while (moreDataFlag);
 

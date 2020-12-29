@@ -48,7 +48,7 @@ add_library(
         EyerCAVLC.hpp
         AVCTable.hpp
         AVCTable.cpp
-)
+        RESIDUAL_TYPE.cpp RESIDUAL_TYPE.hpp)
 
 target_link_libraries (
         EyerAVC
