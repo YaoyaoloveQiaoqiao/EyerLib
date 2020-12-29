@@ -7,6 +7,7 @@
 #include "EyerSLICEHeader.hpp"
 #include "MB_TYPE.hpp"
 #include "EyerCoeff4x4Block.hpp"
+#include "RESIDUAL_TYPE.hpp"
 
 namespace Eyer
 {
@@ -25,7 +26,7 @@ namespace Eyer
 
         int ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff);
 
-        int GetNumberCurrent(int i8x8, int i4x4);
+        int GetNumberCurrent(int i8x8, int i4x4, RESIDUAL_TYPE & type);
 
         int get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength);
 
@@ -48,7 +49,10 @@ namespace Eyer
         uint32_t intra_chroma_pred_mode = 0;
 
         EyerCoeff4x4Block lumaResidual[4][4];
-        // EyerCoeff4x4Block chromaResidual_NumC8x8_1[2][2];
+        EyerCoeff4x4Block chromaCrResidual[4][4];
+        EyerCoeff4x4Block chromaCbResidual[4][4];
+
+        EyerCoeff4x4Block * findBlock(int blockX, int blockY, RESIDUAL_TYPE & type);
     };
 }
 

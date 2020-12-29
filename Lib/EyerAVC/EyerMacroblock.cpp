@@ -58,8 +58,6 @@ namespace Eyer
                 MbPred(bs);
             }
 
-            // EyerLog("Byte index: %d, bit offset: %d\n", bs.bits_left, bs.bits_left);
-
             if(mbType.MbPartPredMode() != MB_PART_PRED_MODE::Intra_16x16){
                 uint32_t coded_block_pattern = bs.bs_read_me(sps.ChromaArrayType, mbType.MbPartPredMode());
 
@@ -133,6 +131,7 @@ namespace Eyer
 
             // 读取 DC 分量
             for (int iCbCr = 0; iCbCr < 2; iCbCr++) {
+                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma DC xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
                 if ((CodedBlockPatternChroma & 3) && startIdx == 0) {
                     int nC = 0;
                     if(sps.ChromaArrayType == 1){
@@ -155,7 +154,20 @@ namespace Eyer
                     for(int i4x4 = 0; i4x4 < 4; i4x4++ ){
                         if(CodedBlockPatternChroma & 2){
                             int totleCoeff = 0;
-                            // ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15, 4 * NumC8x8);
+                            if(iCbCr == 0){
+                                // Cb
+                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma Cb xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+                                int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CB);
+                                ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
+                                chromaCbResidual[i8x8][i4x4].numCoeff = totleCoeff;
+                            }
+                            if(iCbCr == 1){
+                                // Cr
+                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma Cr xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+                                int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CR);
+                                ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
+                                chromaCrResidual[i8x8][i4x4].numCoeff = totleCoeff;
+                            }
                         }
                         else{
 
@@ -178,15 +190,16 @@ namespace Eyer
             if(!transform_size_8x8_flag || !pps.entropy_coding_mode_flag){
                 for(int i4x4 = 0; i4x4 < 4; i4x4++) {
                     if(CodedBlockPatternLuma & (1 << i8x8)){
-                        EyerLog("====================================(i8x8: %d, i4x4: %d)====================================\n", i8x8, i4x4);
+                        EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Luma 4x4 (i8x8: %d, i4x4: %d) xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", i8x8, i4x4);
                         EyerLog("有残差, i8x8: %d, i4x4: %d\n", i8x8, i4x4);
                         if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                             // 解 AC 分量
                         }
                         else{
-                            int nC = GetNumberCurrent(i8x8, i4x4);
+                            int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::LUMA);
                             int totleCoeff = 0;
                             ResidualBlockCavlc(bs, totleCoeff, nC, startIdx, endIdx, 16);
+                            lumaResidual[i8x8][i4x4].numCoeff = (uint8_t)totleCoeff;
                         }
                     }
                     else if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
@@ -201,7 +214,6 @@ namespace Eyer
                             // level8x8[ i8x8 ][ 4 * i + i4x4 ] = level4x4[ i8x8 * 4 + i4x4 ][ i ]
                         }
                     }
-
                 }
             }
             else if( CodedBlockPatternLuma & ( 1 << i8x8 ) ){
@@ -212,7 +224,6 @@ namespace Eyer
                     // level8x8[ i8x8 ][ i ] = 0;
                 }
             }
-
         }
 
         return 0;
@@ -330,48 +341,41 @@ namespace Eyer
             for(int i = totleCoeff - 1; i >= 0; i--) {
                 coeffNum += runVal[i] + 1;
                 coeffLevel[startIdx + coeffNum] = levelVal[i];
-
-                // EyerLog("%d\n", levelVal[i]);
             }
-            // EyerLog("coeffNum: %d\n", coeffNum);
         }
-
-        // lumaResidual[blockY][blockX].numCoeff = (uint8_t)totleCoeff;
 
         return 0;
     }
 
 
-    int EyerMacroblock::GetNumberCurrent(int i8x8, int i4x4)
+    int EyerMacroblock::GetNumberCurrent(int i8x8, int i4x4, RESIDUAL_TYPE & type)
     {
         int nC = 0;
 
         EyerCoeff4x4Block * top = nullptr;
         EyerCoeff4x4Block * left = nullptr;
 
+        int blockX = i8x8 % 2 * 2 + i4x4 % 2;
+        int blockY = i8x8 / 2 * 2 + i4x4 / 2;
+
         // Get Top
-        EyerLog("TopTop: %d, %d\n", i8x8, i4x4);
-        int i4x4Top = i4x4 - 2;
-        if(i4x4Top >= 0){
-            // 8x8 块内
-            top = &lumaResidual[i8x8][i4x4Top];
-            // EyerLog("Top: %d, %d\n", i8x8, i4x4Top);
+        if(blockY > 0){
+            // 宏块内查找
+            top = findBlock(blockX, blockY - 1, type);
         }
         else{
-            // 需要找上方的一个 8x8
-            int i8x8Top = i8x8 - 2;
-            if(i8x8Top >= 0){
-                top = &lumaResidual[i8x8Top][i4x4 + 2];
-                // EyerLog("Top: %d, %d\n", i8x8Top, i4x4 + 2);
-            }
-            else{
-                // 超出宏块
-                // EyerLog("Top: No\n");
-            }
+            // 宏块外查找
         }
 
         // Get Left
-        
+        if(blockX > 0){
+            // 宏块内查找
+            left = findBlock(blockX - 1, blockY, type);
+        }
+        else{
+            // 宏块外查找
+        }
+
 
         int topNum = 0;
         int leftNum = 0;
@@ -389,6 +393,24 @@ namespace Eyer
         }
 
         return nC;
+    }
+
+    EyerCoeff4x4Block * EyerMacroblock::findBlock(int blockX, int blockY, RESIDUAL_TYPE & type)
+    {
+        int i8x8 = blockY / 2 * 2 + blockX / 2;
+        int i4x4 = blockY % 2 * 2 + blockX % 2;
+
+        if(type == RESIDUAL_TYPE::LUMA){
+            return &lumaResidual[i8x8][i4x4];
+        }
+        else if(type == RESIDUAL_TYPE::CHROMA_CR){
+            return &chromaCrResidual[i8x8][i4x4];
+        }
+        else if(type == RESIDUAL_TYPE::CHROMA_CB){
+            return &chromaCbResidual[i8x8][i4x4];
+        }
+
+        return &lumaResidual[i8x8][i4x4];
     }
 
     int EyerMacroblock::get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength)
