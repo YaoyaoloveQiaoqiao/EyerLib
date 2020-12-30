@@ -1,10 +1,7 @@
-//
-// Created by chuchun on 2020/12/30.
-//
-
 #include <EyerCore/EyerLog.hpp>
 #include "EyerPureColorCheck.h"
 #include "EyerPureColorBlock.hpp"
+#include <math.h>
 
 Eyer::EyerPureColorCheck::EyerPureColorCheck()
 {
