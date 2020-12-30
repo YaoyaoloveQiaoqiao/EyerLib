@@ -38,6 +38,7 @@ TEST(EyerAVC, NALUReader)
             // slice.PrintInfo();
         }
         if(nalu.GetNALUType() == Eyer::NALUType::NALU_TYPE_IDR){
+            EyerLog_8("==========================================================\n");
             Eyer::EyerSLICE slice(sps, pps);
             slice.SetNALUData(nalu);
             slice.Parse();

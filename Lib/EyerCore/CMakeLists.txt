@@ -46,6 +46,8 @@ add_library(
         EyerLogParam.hpp
         BLOCK_TIME.cpp
         BLOCK_TIME.hpp
+        EyerTable.cpp
+        EyerTable.hpp
 )
 
 set(head_files 
@@ -71,6 +73,7 @@ set(head_files
         EyerLogParam.hpp
         EyerLogBean.hpp
         EyerLogThread.hpp
+        EyerTable.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCore)

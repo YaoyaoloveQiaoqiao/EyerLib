@@ -3,6 +3,8 @@
 #include "EyerCAVLC.hpp"
 #include "AVCTable.hpp"
 
+#include "EyerSLICEBody.hpp"
+
 #include <algorithm>
 #include <cstdio>
 #include <cmath>
@@ -10,14 +12,50 @@
 
 namespace Eyer
 {
-    EyerMacroblock::EyerMacroblock(int _mbIndex)
+    EyerMacroblock::EyerMacroblock()
+    {
+        mbIndex = -1;
+        mbAddrA = nullptr;
+        mbAddrB = nullptr;
+        mbAddrC = nullptr;
+        mbAddrD = nullptr;
+    }
+
+    EyerMacroblock::EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD)
     {
         mbIndex = _mbIndex;
+        if(_mbAddrA != nullptr){
+            mbAddrA = new EyerMacroblock(*_mbAddrA);
+        }
+        if(_mbAddrB != nullptr){
+            mbAddrB = new EyerMacroblock(*_mbAddrB);
+        }
+        if(_mbAddrC != nullptr){
+            mbAddrC = new EyerMacroblock(*_mbAddrC);
+        }
+        if(_mbAddrD != nullptr){
+            mbAddrD = new EyerMacroblock(*_mbAddrD);
+        }
     }
 
     EyerMacroblock::~EyerMacroblock()
     {
-
+        if(mbAddrA != nullptr){
+            delete mbAddrA;
+            mbAddrA = nullptr;
+        }
+        if(mbAddrB != nullptr){
+            delete mbAddrB;
+            mbAddrB = nullptr;
+        }
+        if(mbAddrC != nullptr){
+            delete mbAddrC;
+            mbAddrC = nullptr;
+        }
+        if(mbAddrD != nullptr){
+            delete mbAddrD;
+            mbAddrD = nullptr;
+        }
     }
 
     int EyerMacroblock::Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
@@ -143,6 +181,7 @@ namespace Eyer
                     int totleCoeff = 0;
                     ResidualBlockCavlc(bs, totleCoeff, nC, 0, 4 * NumC8x8 - 1, 4 * NumC8x8);
                 } else {
+                    EyerERROR("Chroma DC Error\n");
                     for (int i = 0; i < 4 * NumC8x8; i++) {
 
                     }
@@ -156,21 +195,21 @@ namespace Eyer
                             int totleCoeff = 0;
                             if(iCbCr == 0){
                                 // Cb
-                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma Cb xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cb xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CB);
                                 ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                                 chromaCbResidual[i8x8][i4x4].numCoeff = totleCoeff;
                             }
                             if(iCbCr == 1){
                                 // Cr
-                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma Cr xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cr xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CR);
                                 ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                                 chromaCrResidual[i8x8][i4x4].numCoeff = totleCoeff;
                             }
                         }
                         else{
-
+                            EyerERROR("Chroma AC Error\n");
                         }
                     }
                 }
@@ -261,7 +300,7 @@ namespace Eyer
                     while (!bs.bs_read_u1()) {
                         level_prefix++;
                     }
-                    EyerLog("level_prefix: %d\n", level_prefix);
+                    // EyerLog("level_prefix: %d\n", level_prefix);
 
                     int levelSuffixSize = 0;
                     if (level_prefix == 14 && suffixLength == 0) {
@@ -319,7 +358,7 @@ namespace Eyer
             else{
                 zerosLeft = 0;
             }
-            EyerLog("zerosLeft: %d\n", zerosLeft);
+
 
             uint32_t runVal[32] = {0};
             for(int i = 0; i < totleCoeff - 1; i++) {
@@ -342,7 +381,11 @@ namespace Eyer
                 coeffNum += runVal[i] + 1;
                 coeffLevel[startIdx + coeffNum] = levelVal[i];
             }
+
+            EyerLog("zerosLeft: %d\n", zerosLeft);
         }
+
+
 
         return 0;
     }
@@ -365,6 +408,14 @@ namespace Eyer
         }
         else{
             // 宏块外查找
+            if(mbAddrB != nullptr){
+                if(type == RESIDUAL_TYPE::LUMA){
+                    top = mbAddrA->findBlock(blockX, 3, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    top = mbAddrA->findBlock(blockX, 1, type);
+                }
+            }
         }
 
         // Get Left
@@ -374,6 +425,15 @@ namespace Eyer
         }
         else{
             // 宏块外查找
+            if(mbAddrA != nullptr){
+                // EyerLog_8("MbIndex: %d, blockX: %d, blockY: %d, Block\n", mbIndex, blockX, blockY);
+                if(type == RESIDUAL_TYPE::LUMA){
+                    left = mbAddrA->findBlock(3, blockY, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    left = mbAddrA->findBlock(1, blockY, type);
+                }
+            }
         }
 
 
