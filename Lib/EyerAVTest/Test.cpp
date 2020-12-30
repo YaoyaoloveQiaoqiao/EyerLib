@@ -3,6 +3,9 @@
 #include "EyerAV/EyerAV.hpp"
 #include "EyerDASH/EyerDASH.hpp"
 
+#include "EyerAVPureColorCheck.hpp"
+
+/*
 TEST(AVDecoder, AVDecoderTest)
 {
     Eyer::EyerAVWriter writer("./demoout.gif");
@@ -83,6 +86,7 @@ TEST(AVDecoder, AVDecoderTest)
     reader.Close();
     writer.Close();
 }
+*/
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
