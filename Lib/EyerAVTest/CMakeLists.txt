@@ -11,6 +11,7 @@ add_executable(
         EyerAVDecoderAudioTest.h
         EyerAVBitmapTest.h
         EyerAVPureColorCheck.hpp
+        AVGif.hpp
 )
 
 include_directories (../)
