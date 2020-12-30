@@ -42,7 +42,7 @@ add_library(
         EyerAVBitstreamFilterPrivate.hpp
         AnnexB_to_avcC.cpp
         AnnexB_to_avcC.hpp
-)
+        EyerPureColorCheck.cpp EyerPureColorCheck.h EyerPureColorBlock.cpp EyerPureColorBlock.hpp)
 
 target_link_libraries (EyerAV EyerCore)
 
