@@ -25,6 +25,8 @@ namespace Eyer
 
         EyerGomino & operator = (EyerGomino & gomino);
 
+        EyerGomino & operator << (EyerGomino & gomino);
+
         int ClearAll();
 
         EyerString name;
