@@ -107,6 +107,31 @@ TEST(CppTest, Cpp_Extends){
 
         childList.clear();
     }
+
+    printf("============================\n");
+    printf("char: %d\n", sizeof(char));
+    printf("unsigned char: %d\n", sizeof(unsigned char));
+
+    printf("short: %d\n", sizeof(short));
+    printf("unsigned short: %d\n", sizeof(unsigned short));
+
+    printf("int: %d\n", sizeof(int));
+    printf("unsigned int: %d\n", sizeof(unsigned int));
+
+    printf("long: %d\n", sizeof(long));
+    printf("unsigned long: %d\n", sizeof(unsigned long));
+
+    printf("long long: %d\n", sizeof(long long));
+    printf("unsigned long long: %d\n", sizeof(unsigned long long));
+    printf("============================\n");
+
+
+    bool a = 1;
+    bool b = 0;
+
+    bool c = 12<15;
+
+    std::cout << c << std::endl;
 }
 
 int main(int argc,char **argv){

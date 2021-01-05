@@ -83,6 +83,12 @@ namespace Eyer
         return 0;
     }
 
+    int EyerLogThread::SetPath(const EyerString & _path)
+    {
+        path = _path;
+        return 0;
+    }
+
     int EyerLogThread::SetParam(EyerLogParam & _param)
     {
         param = _param;
@@ -107,7 +113,16 @@ namespace Eyer
             logstr += "[" + std::string(logBean->GetFunction().str) + "] ";
         }
         logstr += std::string(logBean->GetLog().str);
-        printf("%s", logstr.c_str());
+
+        if(path.IsEmpty()){
+            printf("%s", logstr.c_str());
+        }
+        else{
+            FILE * f = fopen(path.str, "a+");
+            fputs(logstr.c_str(), f);
+            fclose(f);
+        }
+
         return 0;
     }
 

@@ -17,5 +17,6 @@
 #include "EyerSockaddr.hpp"
 #include "BLOCK_TIME.hpp"
 #include "EyerTable.hpp"
+#include "EyerRand.hpp"
 
 #endif

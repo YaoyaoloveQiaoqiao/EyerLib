@@ -10,7 +10,20 @@
 #include "EyerLogThread.hpp"
 #include "EyerLogBean.hpp"
 
-int eye_log_set_level       (int level)
+int eyer_log_path(const char * path)
+{
+    Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
+    return logThread->SetPath(path);
+}
+
+int eyer_log_set_level(int level)
+{
+    Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
+    logThread->SetLevel(level);
+    return 0;
+}
+
+int eye_log_set_level(int level)
 {
     Eyer::EyerLogThread * logThread = Eyer::EyerLogThread::GetInstance();
     logThread->SetLevel(level);
