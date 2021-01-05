@@ -5,17 +5,19 @@
 
 namespace Eyer
 {
-    EyerSLICEBody::EyerSLICEBody()
+    EyerSLICEBody::EyerSLICEBody() : mbTable(0, 0)
     {
 
     }
 
     EyerSLICEBody::~EyerSLICEBody()
     {
+        /*
         for(int i=0;i<macroblockList.size();i++){
             delete macroblockList[i];
         }
         macroblockList.clear();
+         */
     }
 
     int EyerSLICEBody::Parse(EyerBitStream & bs, EyerSyntax & syntax, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
@@ -31,6 +33,20 @@ namespace Eyer
             return -1;
         }
 
+        // 初始化 宏块 Table
+        // 将宏块列表更新
+        int w_mbs_nums = sps.pic_width_in_mbs_minus1 + 1;
+        int h_mbs_nums = sps.pic_height_in_map_units_minus1 + 1;
+        mbTable.Resize(w_mbs_nums, h_mbs_nums);
+        for(int y=0; y<h_mbs_nums; y++){
+            for(int x=0; x<w_mbs_nums; x++){
+                EyerMacroblock * n = nullptr;
+                mbTable.Set(x, y, n);
+            }
+        }
+
+
+
         if(pps.entropy_coding_mode_flag){
             // 进行对齐操作
             while(!bs.bs_byte_aligned()) {
@@ -44,7 +60,6 @@ namespace Eyer
         int moreDataFlag = 1;
         int prevMbSkipped = 0;
 
-        int mbIndex = 0;
         do{
             if(sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_I && sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_SI) {
                 if (!pps.entropy_coding_mode_flag) {
@@ -59,11 +74,33 @@ namespace Eyer
                 if(MbaffFrameFlag && (CurrMbAddr % 2 == 0 || (CurrMbAddr % 2 == 1 && prevMbSkipped))){
                     uint32_t mb_field_decoding_flag = bs.bs_read_u1();
                 }
-                EyerMacroblock * block = new EyerMacroblock(CurrMbAddr);
+
+                int x = CurrMbAddr % (sps.pic_width_in_mbs_minus1 + 1);
+                int y = CurrMbAddr / (sps.pic_width_in_mbs_minus1 + 1);
+
+                int mbAddrA_X = x - 1;
+                int mbAddrA_Y = y;
+                EyerMacroblock * mbAddrA = nullptr;
+                mbTable.Get(mbAddrA, mbAddrA_X, mbAddrA_Y);
+
+                int mbAddrB_X = x;
+                int mbAddrB_Y = y - 1;
+                EyerMacroblock * mbAddrB = nullptr;
+                mbTable.Get(mbAddrB, mbAddrB_X, mbAddrB_Y);
+
+                int mbAddrC_X = x + 1;
+                int mbAddrC_Y = y - 1;
+                EyerMacroblock * mbAddrC = nullptr;
+                mbTable.Get(mbAddrC, mbAddrC_X, mbAddrC_Y);
+
+                int mbAddrD_X = x - 1;
+                int mbAddrD_Y = y - 1;
+                EyerMacroblock * mbAddrD = nullptr;
+                mbTable.Get(mbAddrD, mbAddrD_X, mbAddrD_Y);
+
+                EyerMacroblock * block = new EyerMacroblock(CurrMbAddr, mbAddrA, mbAddrB, mbAddrC, mbAddrD);
                 block->Parse(bs, sps, pps, sliceHeader);
-                macroblockList.push_back(block);
-                mbIndex++;
-                // macroblock_layer(sliceHeader.GetSLICEType() ,bs);
+                mbTable.Set(x, y, block);
             }
             if(!pps.entropy_coding_mode_flag){
                 moreDataFlag = bs.more_data();
@@ -82,9 +119,10 @@ namespace Eyer
             }
 
             //TODO CurrMbAddr = NextMbAddress(CurrMbAddr);
+            CurrMbAddr++;
 
             //TODO DEBUG
-            if(mbIndex >= 2){
+            if(CurrMbAddr >= 2){
                 moreDataFlag = 0;
             }
         }

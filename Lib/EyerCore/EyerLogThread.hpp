@@ -35,6 +35,8 @@ namespace Eyer
 
         int SetLevel(int _level);
 
+        int SetPath(const EyerString & path);
+
         int SetParam(EyerLogParam & param);
 
         int PutLog(EyerLogBean * logBean);
@@ -46,6 +48,7 @@ namespace Eyer
         int inline PrintLog(EyerLogBean * logBean);
 
         EyerLogParam param;
+        EyerString path;
     };
 }
 

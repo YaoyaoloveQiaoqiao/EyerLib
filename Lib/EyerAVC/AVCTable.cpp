@@ -78,7 +78,7 @@ namespace Eyer
                     value2 = yIdx;
                     bs.bs_skip_u(codeLen);
 
-                    EyerLog("=================== value1: %d, value2: %d\n", xIdx, yIdx);
+                    // EyerLog("=================== value1: %d, value2: %d\n", xIdx, yIdx);
                     goto END;
                 }
             }

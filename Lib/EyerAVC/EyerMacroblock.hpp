@@ -5,18 +5,24 @@
 #include "EyerSPS.hpp"
 #include "EyerPPS.hpp"
 #include "EyerSLICEHeader.hpp"
+
 #include "MB_TYPE.hpp"
 #include "EyerCoeff4x4Block.hpp"
 #include "RESIDUAL_TYPE.hpp"
 
 namespace Eyer
 {
+    class EyerMacroblock;
+
     class EyerMacroblock {
     public:
-        EyerMacroblock(int _mbIndex);
+        EyerMacroblock();
+        EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD);
         ~EyerMacroblock();
 
         int Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader);
+
+        EyerCoeff4x4Block * findBlock(int blockX, int blockY, RESIDUAL_TYPE & type);
 
     private:
         int MbPred       (EyerBitStream & bs);
@@ -38,6 +44,11 @@ namespace Eyer
         EyerPPS pps;
         EyerSLICEHeader sliceHeader;
 
+        EyerMacroblock * mbAddrA = nullptr;
+        EyerMacroblock * mbAddrB = nullptr;
+        EyerMacroblock * mbAddrC = nullptr;
+        EyerMacroblock * mbAddrD = nullptr;
+
         int mbIndex = 0;
 
         uint8_t transform_size_8x8_flag = 0;
@@ -51,8 +62,6 @@ namespace Eyer
         EyerCoeff4x4Block lumaResidual[4][4];
         EyerCoeff4x4Block chromaCrResidual[4][4];
         EyerCoeff4x4Block chromaCbResidual[4][4];
-
-        EyerCoeff4x4Block * findBlock(int blockX, int blockY, RESIDUAL_TYPE & type);
     };
 }
 
