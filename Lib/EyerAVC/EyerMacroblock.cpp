@@ -109,6 +109,7 @@ namespace Eyer
 
             if(CodedBlockPatternLuma > 0 || CodedBlockPatternChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                 int32_t mb_qp_delta = bs.bs_read_se();
+                EyerLog("mb_qp_delta: %d\n", mb_qp_delta);
                 Residual(bs, 0, 15);
             }
         }
