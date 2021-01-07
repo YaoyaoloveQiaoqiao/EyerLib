@@ -169,7 +169,7 @@ namespace Eyer
 
             // 读取 DC 分量
             for (int iCbCr = 0; iCbCr < 2; iCbCr++) {
-                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma DC xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+                EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma DC xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex);
                 if ((CodedBlockPatternChroma & 3) && startIdx == 0) {
                     int nC = 0;
                     if(sps.ChromaArrayType == 1){
@@ -179,7 +179,7 @@ namespace Eyer
                         nC = -2;
                     }
                     int totleCoeff = 0;
-                    ResidualBlockCavlc(bs, totleCoeff, nC, 0, 4 * NumC8x8 - 1, 4 * NumC8x8);
+                    ResidualBlockCavlc(bs, totleCoeff, nC, 0, 4 * NumC8x8 - 1, 4 * NumC8x8, true);
                 } else {
                     EyerERROR("Chroma DC Error\n");
                     for (int i = 0; i < 4 * NumC8x8; i++) {
@@ -195,21 +195,21 @@ namespace Eyer
                             int totleCoeff = 0;
                             if(iCbCr == 0){
                                 // Cb
-                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cb xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+                                EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cb xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex);
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CB);
                                 ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                                 chromaCbResidual[i8x8][i4x4].numCoeff = totleCoeff;
                             }
                             if(iCbCr == 1){
                                 // Cr
-                                EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cr xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+                                EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cr xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex);
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CR);
                                 ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                                 chromaCrResidual[i8x8][i4x4].numCoeff = totleCoeff;
                             }
                         }
                         else{
-                            EyerERROR("Chroma AC Error\n");
+                            EyerERROR("Chroma NO AC\n");
                         }
                     }
                 }
@@ -229,7 +229,7 @@ namespace Eyer
             if(!transform_size_8x8_flag || !pps.entropy_coding_mode_flag){
                 for(int i4x4 = 0; i4x4 < 4; i4x4++) {
                     if(CodedBlockPatternLuma & (1 << i8x8)){
-                        EyerLog("xxxxxxxxxxxxxxxxxxxxxxxxxxxx Luma 4x4 (i8x8: %d, i4x4: %d) xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", i8x8, i4x4);
+                        EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Luma 4x4 (i8x8: %d, i4x4: %d) xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex, i8x8, i4x4);
                         EyerLog("有残差, i8x8: %d, i4x4: %d\n", i8x8, i4x4);
                         if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                             // 解 AC 分量
@@ -268,9 +268,9 @@ namespace Eyer
         return 0;
     }
 
-    int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff)
+    int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC)
     {
-        // int totleCoeff = 0;
+        bs.PrintInfo();
         int trailingOnes = 0;
 
         EyerCAVLC cavlc;
@@ -278,114 +278,75 @@ namespace Eyer
 
         EyerLog("totleCoeff: %d, trailingOnes: %d\n", totleCoeff, trailingOnes);
 
-        int levelVal[32] = {0};
+        if (totleCoeff) {
+            EyerLog("before trailing_ones_sign_flag\n");
+            bs.PrintInfo();
+            if (trailingOnes){
+                for(int i=0;i<trailingOnes;i++){
+                    uint32_t trailing_ones_sign_flag = bs.bs_read_u1();
+                    // EyerLog("Sign: %d\n", trailing_ones_sign_flag);
+                }
+            }
 
-        if(totleCoeff > 0){
+            EyerLog("before levels\n");
+            bs.PrintInfo();
+            // 读取非零系数的振幅
             int suffixLength = 0;
             if(totleCoeff > 10 && trailingOnes < 3) {
                 suffixLength = 1;
             }
-            else {
+            else{
                 suffixLength = 0;
             }
-
-            for(int i = 0; i < totleCoeff; i++) {
-                if(i < trailingOnes) {
-                    uint32_t trailing_ones_sign_flag = bs.bs_read_u1();
-                    levelVal[i] = 1 - 2 * trailing_ones_sign_flag;
+            for(int k=0; k<totleCoeff - trailingOnes; k++) {
+                // Get levels
+                int levelVal = 0;
+                get_coeff_level(bs, levelVal, k, trailingOnes, suffixLength);
+                if(suffixLength == 0){
+                    suffixLength = 1;
                 }
-                else{
-                    // 读取 level_prefix
-                    int level_prefix = 0;
-                    while (!bs.bs_read_u1()) {
-                        level_prefix++;
-                    }
-                    // EyerLog("level_prefix: %d\n", level_prefix);
-
-                    int levelSuffixSize = 0;
-                    if (level_prefix == 14 && suffixLength == 0) {
-                        levelSuffixSize = 4;
-                    }
-                    else if (level_prefix == 15) {
-                        levelSuffixSize = level_prefix - 3;
-                    }
-                    else {
-                        levelSuffixSize = suffixLength;
-                    }
-
-                    int level_suffix = 0;
-                    if (levelSuffixSize > 0) {
-                        level_suffix = bs.bs_read_u(levelSuffixSize);
-                    }
-                    else {
-                        level_suffix = 0;
-                    }
-
-                    int levelCode = (std::min(15, level_prefix) << suffixLength) + level_suffix;
-                    if (level_prefix >= 15 && suffixLength == 0) {
-                        levelCode += 15;
-                    }
-
-                    if(level_prefix >= 16){
-                        levelCode += (1 << ( level_prefix - 3)) - 4096;
-                    }
-                    if( i == trailingOnes && trailingOnes < 3 ){
-                        levelCode += 2;
-                    }
-                    if( levelCode % 2 == 0 ){
-                        levelVal[i] = ( levelCode + 2) >> 1;
-                    }
-                    else{
-                        levelVal[i] = (-levelCode - 1) >> 1;
-                    }
-                    if( suffixLength == 0 ){
-                        suffixLength = 1;
-                    }
-                    if(std::abs( levelVal[ i ] ) > (3 << ( suffixLength - 1 )) && suffixLength < 6 ) {
-                        suffixLength++;
-                    }
+                if(abs(levelVal) > (3 << (suffixLength - 1)) && (suffixLength < 6)){
+                    suffixLength++;
                 }
             }
 
-
-
-            int zerosLeft = 0;
-            if(totleCoeff < endIdx - startIdx + 1) {
-                int totalZeros = 0;
-                get_total_zeros(bs, totalZeros, totleCoeff - 1);
-                zerosLeft = totalZeros;
+            EyerLog("before Totle Zeros\n");
+            bs.PrintInfo();
+            // Totle Zeros 对于 Chrome DC 的 SubBlock，是不一样的。
+            // Totle Zeros
+            int totleZeros = 0;
+            if(totleCoeff < maxNumCoeff) {
+                if(isChromaDC){
+                    get_total_zeros_chrome_dc(bs, totleZeros, totleCoeff - 1);
+                }else{
+                    get_total_zeros(bs, totleZeros, totleCoeff - 1);
+                }
             }
             else{
-                zerosLeft = 0;
+                totleZeros = 0;
             }
 
 
-            uint32_t runVal[32] = {0};
-            for(int i = 0; i < totleCoeff - 1; i++) {
-                int runBefore_vlcIdx = (zerosLeft - 1 < 6 ? zerosLeft - 1 : 6);
-                if(zerosLeft > 0) {
-                    int run_before;
-                    get_run_before(bs, run_before, runBefore_vlcIdx);
-                    runVal[ i ] = run_before;
-                } else {
-                    runVal[i] = 0;
-                }
-                zerosLeft = zerosLeft - runVal[i];
+            EyerLog("before Run Before\n");
+            bs.PrintInfo();
+            // Run Before
+            int runBeforeVlcIdx = 0;
+            int zerosLeft = totleZeros;
+            int i = totleCoeff - 1;
+            int run = 0;
+            if(zerosLeft > 0 && i > 0){
+                do{
+                    runBeforeVlcIdx = (zerosLeft - 1 < 6) ? zerosLeft - 1 : 6;
+                    get_run_before(bs, run, runBeforeVlcIdx);
+
+                    zerosLeft -= run;
+                    i--;
+                }while(zerosLeft != 0 && i != 0);
             }
-            runVal[totleCoeff - 1] = zerosLeft;
-
-            int coeffLevel[32] = {0};
-
-            int coeffNum = -1;
-            for(int i = totleCoeff - 1; i >= 0; i--) {
-                coeffNum += runVal[i] + 1;
-                coeffLevel[startIdx + coeffNum] = levelVal[i];
+            else {
+                run = 0;
             }
-
-            EyerLog("zerosLeft: %d\n", zerosLeft);
         }
-
-
 
         return 0;
     }
@@ -410,10 +371,10 @@ namespace Eyer
             // 宏块外查找
             if(mbAddrB != nullptr){
                 if(type == RESIDUAL_TYPE::LUMA){
-                    top = mbAddrA->findBlock(blockX, 3, type);
+                    top = mbAddrB->findBlock(blockX, 3, type);
                 }
                 if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
-                    top = mbAddrA->findBlock(blockX, 1, type);
+                    top = mbAddrB->findBlock(blockX, 1, type);
                 }
             }
         }
@@ -475,40 +436,48 @@ namespace Eyer
 
     int EyerMacroblock::get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength)
     {
-        int prefixLength = 0, level_prefix = 0, level_suffix = 0;
-        int levelSuffixSize = 0, levelCode = 0, i = 0;
-
-        while (!bs.bs_read_u1()) {
+        // 或者 level_prefix
+        int level_prefix = 0;
+        while(bs.bs_read_u1() == 0){
             level_prefix++;
         }
-        EyerLog("level_prefix: %d\n", level_prefix);
-        prefixLength = level_prefix + 1;
-        if (level_prefix == 14 && suffixLength == 0) {
+
+        // 获取 levelSuffixSize
+        int levelSuffixSize = 0;
+        if(level_prefix == 14 && suffixLength == 0){
             levelSuffixSize = 4;
         }
-        else if (level_prefix == 15) {
+        else if(level_prefix >= 15){
             levelSuffixSize = level_prefix - 3;
         }
-        else {
+        else{
             levelSuffixSize = suffixLength;
         }
 
-        EyerLog("levelSuffixSize: %d\n", levelSuffixSize);
-        if (levelSuffixSize > 0) {
-            // level_suffix = Get_uint_code_num(m_pSODB, m_bypeOffset, m_bitOffset, levelSuffixSize);
-            level_suffix = bs.bs_read_u(levelSuffixSize);
+        // 计算 levelCode
+        int levelCode = (std::min(15, level_prefix) << suffixLength);
+        if(suffixLength > 0 || level_prefix >= 14){
+            // 获取 level_suffix
+            int level_suffix = 0;
+            if(levelSuffixSize > 0){
+                level_suffix = bs.bs_read_u(levelSuffixSize);
+            }
+            else{
+                level_suffix = 0;
+            }
+
+            levelCode += level_suffix;
         }
-        else {
-            level_suffix = 0;
-        }
-        levelCode = (std::min(15, level_prefix) << suffixLength) + level_suffix;
-        if (level_prefix >= 15 && suffixLength == 0) {
+
+        if(level_prefix >= 15 && suffixLength == 0){
             levelCode += 15;
         }
-        if (level_prefix >= 16) {
+        if(level_prefix >= 16){
             levelCode += (1 << (level_prefix - 3)) - 4096;
         }
-        if (levelIdx == 0 && trailingOnes < 3) {
+
+        // if(i == trailingOnes && trailingOnes < 3){
+        if(levelIdx == 0 && trailingOnes < 3){
             levelCode += 2;
         }
 
@@ -573,7 +542,36 @@ namespace Eyer
             return err;
         }
 
-        return 0;
+        return err;
+    }
+
+    int EyerMacroblock::get_total_zeros_chrome_dc(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx)
+    {
+        int totalZerosTableChromaDC_Length[3][4] =
+            {
+                { 1, 2, 3, 3, },
+                { 1, 2, 2, 0, },
+                { 1, 1, 0, 0, }
+            };
+
+        int totalZerosTableChromaDC_Code[3][4] =
+            {
+                { 1, 1, 1, 0, },
+                { 1, 1, 0, 0, },
+                { 1, 0, 0, 0, }
+            };
+
+        int err = 0;
+        int idx2 = 0;
+        int idx1 = 0;
+        int *lengthTable = &totalZerosTableChromaDC_Length[totalZeros_vlcIdx][0];
+        int *codeTable = &totalZerosTableChromaDC_Code[totalZeros_vlcIdx][0];
+        err = AVCTable::SearchForValueIn2DTable(bs, totalZeros, idx1, idx2, lengthTable, codeTable, 16, 1);
+        if (err < 0) {
+            return err;
+        }
+
+        return err;
     }
 
 

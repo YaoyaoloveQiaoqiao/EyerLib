@@ -19,6 +19,13 @@ namespace Eyer
 
     }
 
+    int EyerBitStream::PrintInfo()
+    {
+        int byteOffset = p - start;
+        EyerLog("bit offset: %d\n", byteOffset * 8 + (8 - bits_left));
+        return 0;
+    }
+
     uint32_t EyerBitStream::bs_read_u8()
     {
         return bs_read_u(8);

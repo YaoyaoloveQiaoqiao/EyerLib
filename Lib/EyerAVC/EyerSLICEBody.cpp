@@ -70,6 +70,9 @@ namespace Eyer
                 }
             }
 
+            EyerERROR("sps.pic_width_in_mbs_minus1 + 1 : %d\n", sps.pic_width_in_mbs_minus1 + 1);
+            EyerERROR("sps.pic_height_in_map_units_minus1 + 1 : %d\n", sps.pic_height_in_map_units_minus1 + 1);
+
             if(moreDataFlag){
                 if(MbaffFrameFlag && (CurrMbAddr % 2 == 0 || (CurrMbAddr % 2 == 1 && prevMbSkipped))){
                     uint32_t mb_field_decoding_flag = bs.bs_read_u1();
@@ -122,9 +125,13 @@ namespace Eyer
             CurrMbAddr++;
 
             //TODO DEBUG
-            if(CurrMbAddr >= 2){
+
+            if(CurrMbAddr >= 30){
                 moreDataFlag = 0;
             }
+
+            EyerERROR("moreDataFlag: %d\n", moreDataFlag);
+            EyerERROR("CurrMbAddr: %d\n", CurrMbAddr);
         }
         while (moreDataFlag);
 
