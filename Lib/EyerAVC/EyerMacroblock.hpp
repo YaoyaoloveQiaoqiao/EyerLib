@@ -30,13 +30,14 @@ namespace Eyer
 
         int ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx);
 
-        int ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff);
+        int ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC = false);
 
         int GetNumberCurrent(int i8x8, int i4x4, RESIDUAL_TYPE & type);
 
         int get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength);
 
         int get_total_zeros(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx);
+        int get_total_zeros_chrome_dc(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx);
 
         int get_run_before(EyerBitStream & bs, int & runBefore, int runBefore_vlcIdx);
     private:

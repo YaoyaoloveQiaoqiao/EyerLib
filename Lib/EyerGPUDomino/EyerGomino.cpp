@@ -30,4 +30,9 @@ namespace Eyer
     {
         return 0;
     }
+
+    EyerGomino & EyerGomino::operator << (EyerGomino & gomino)
+    {
+        return *this;
+    }
 }

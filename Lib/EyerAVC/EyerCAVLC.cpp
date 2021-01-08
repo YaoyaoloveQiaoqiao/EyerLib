@@ -61,6 +61,7 @@ namespace Eyer
 
             int token = 0;
             AVCTable::SearchForValueIn2DTable(bs, totleCoeff, trailingOnes, token, lengthTable, codeTable, 5, 4);
+            EyerLog("Token: %d\n", token);
         }
         if(nC == -2){
 

@@ -22,7 +22,7 @@ TEST(AVDecoder, GIF)
 
 
 
-    Eyer::EyerAVReader reader("./demo.mp4");
+    Eyer::EyerAVReader reader("/Users/lichi/Desktop/1609920171194clip.mp4");
     ret = reader.Open();
     if(ret){
         return;
@@ -58,9 +58,9 @@ TEST(AVDecoder, GIF)
             if(ret){
                 break;
             }
-
             EyerLog("PTS %lld\n", frame.GetPTS());
 
+            /*
             // 转颜色空间 YUV->RGB8
             Eyer::EyerAVFrame destFrame;
             frame.Scale(destFrame, frame.GetWidth(), frame.GetHeight(), Eyer::EyerAVPixelFormat::Eyer_AV_PIX_FMT_RGB8);
@@ -75,6 +75,7 @@ TEST(AVDecoder, GIF)
                 outPacket.SetStreamId(outStreamId);
                 writer.WritePacket(&outPacket);
             }
+             */
         }
     }
 
