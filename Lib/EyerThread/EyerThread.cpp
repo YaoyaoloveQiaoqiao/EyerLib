@@ -68,6 +68,7 @@ namespace Eyer
     {
         eventLoopFlag = 1;
         while(1){
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             if(eventLoopStatus == 1){
                 break;
             }
@@ -78,18 +79,35 @@ namespace Eyer
     int EyerThread::StopEventLoop()
     {
         eventLoopFlag = 0;
+        while(1){
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            if(eventLoopStatus == 0){
+                break;
+            }
+        }
         return 0;
     }
 
     int EyerThread::EventLoop()
     {
-        if(){
-
+        if(!eventLoopFlag){
+            return -1;
         }
 
         eventLoopStatus = 1;
-        while(1){
 
+        while(eventQueue.size()){
+            EyerRunnable * runnable = eventQueue.front();
+            eventQueue.pop();
+            if(runnable != nullptr){
+                runnable->Run();
+            }
+        }
+
+        while(1){
+            if(eventLoopFlag == 0){
+                break;
+            }
         }
         eventLoopStatus = 0;
         return 0;
