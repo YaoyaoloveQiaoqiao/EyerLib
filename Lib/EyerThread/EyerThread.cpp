@@ -90,13 +90,13 @@ namespace Eyer
 
     int EyerThread::EventLoop()
     {
-        if(!eventLoopFlag){
+        if(!eventLoopFlag) {
             return -1;
         }
 
         eventLoopStatus = 1;
 
-        while(eventQueue.size()){
+        while(eventQueue.size()) {
             EyerRunnable * runnable = eventQueue.front();
             eventQueue.pop();
             if(runnable != nullptr){
@@ -104,12 +104,15 @@ namespace Eyer
             }
         }
 
-        while(1){
+        while(1) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             if(eventLoopFlag == 0){
                 break;
             }
         }
+
         eventLoopStatus = 0;
+
         return 0;
     }
 }
