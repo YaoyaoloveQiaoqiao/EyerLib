@@ -16,14 +16,10 @@ public:
 
     virtual void Run()
     {
-        SetRunning();
-
         while(!stopFlag){
             printf("this from: %s\n", tag.str);
             Eyer::EyerTime::EyerSleepMilliseconds(1000);
         }
-
-        SetStoping();
     }
 };
 
@@ -77,7 +73,7 @@ class EventLoopEvent : public Eyer::EyerRunnable
 };
 
 TEST(Eyer, EyerEventLoop){
-    for(int i=0;i<50;i++){
+    for(int i=0;i<5;i++){
         EyerLog("=======================================\n");
         EventLoopThread eventLoopThread;
         eventLoopThread.Start();
