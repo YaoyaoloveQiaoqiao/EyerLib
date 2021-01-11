@@ -24,7 +24,7 @@ namespace Eyer
             }
         }
 
-        int Push(T t)
+        int Push(T & t)
         {
             std::lock_guard<std::mutex> lg(mut);
             queue.push(t);
@@ -45,7 +45,7 @@ namespace Eyer
             return ret;
         }
 
-        int FrontPop(T &t)
+        int FrontPop(T & t)
         {
             std::lock_guard<std::mutex> lg(mut);
             int ret = -1;
