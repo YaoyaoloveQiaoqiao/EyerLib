@@ -91,8 +91,8 @@ ModuleTestOption("EyerDASH"         "EyerDASHTest"          EyerDASH)
 OPTION(EyerAVC                      "option for EyerAVC"                ON)
 ModuleTestOption("EyerAVC"          "EyerAVCTest"           EyerAVC)
 
-# OPTION(EyerCAVLC                    "option for EyerCAVLC"              ON)
-# ModuleTestOption("EyerCAVLC"        "EyerCAVLCTest"         EyerCAVLC)
+OPTION(EyerCAVLC                    "option for EyerCAVLC"              ON)
+ModuleTestOption("EyerCAVLC"        "EyerCAVLCTest"         EyerCAVLC)
 
 OPTION(EyerNetwork                  "option for EyerNetwork"            ON)
 ModuleTestOption("EyerNetwork"      "EyerNetworkTest"       EyerNetwork)
