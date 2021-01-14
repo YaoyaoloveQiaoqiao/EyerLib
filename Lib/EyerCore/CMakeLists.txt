@@ -11,7 +11,6 @@ add_library(
         EyerLog.cpp
         EyerMath.hpp
         EyerString.cpp
-
         EyerMat.cpp
         EyerMat4x4.cpp
         EyerMat4x1.cpp
@@ -19,10 +18,8 @@ add_library(
         EyerMat2x1.cpp
         EyerRand.cpp
         EyerTime.cpp
-
         EyerLRUMap.hpp
         EyerLockQueue.hpp
-
         EyerTime.hpp
         EyerBuffer.cpp
         EyerBuffer.hpp
@@ -54,6 +51,10 @@ add_library(
         EyerObserver.hpp
         EyerSubject.cpp
         EyerSubject.hpp
+        EyerObserverQueue.h
+        EyerObserverQueue_C.cpp
+        EyerBuffer.h
+        EyerBuffer_C.cpp
 )
 
 set(head_files 
@@ -81,6 +82,8 @@ set(head_files
         EyerLogThread.hpp
         EyerTable.hpp
         EyerRand.hpp
+        EyerObserverQueue.h
+        EyerBuffer.h
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCore)
