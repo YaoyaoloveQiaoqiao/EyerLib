@@ -122,6 +122,11 @@ OPTION(EyerThread                   "option for EyerThread"             ON)
 ModuleTestOption("EyerThread"       "EyerThreadTest"           EyerThread)
 
 
+OPTION(EyerSignal                   "option for EyerSignal"             ON)
+ModuleTestOption("EyerSignal"       "EyerSignalTest"           EyerSignal)
+
+
+
 OPTION(EyerAV           "option for EyerAV"             ON)
 ModuleOption("EyerAV" EyerAV)
 
