@@ -13,6 +13,8 @@ TEST(EyerAVC, NALUReader)
     Eyer::EyerSPS sps;
     Eyer::EyerPPS pps;
 
+    int is = 0;
+
     while(1){
         Eyer::EyerNALUData nalu;
         int ret = annexB.ReadNALU(nalu);
@@ -38,11 +40,17 @@ TEST(EyerAVC, NALUReader)
             // slice.PrintInfo();
         }
         if(nalu.GetNALUType() == Eyer::NALUType::NALU_TYPE_IDR){
+            EyerLog_8("nalu: %d\n", nalu.GetRBSPBuffer().GetLen());
             EyerLog_8("==========================================================\n");
-            Eyer::EyerSLICE slice(sps, pps);
-            slice.SetNALUData(nalu);
-            slice.Parse();
-            slice.PrintInfo();
+            if(is == 0){
+                Eyer::EyerSLICE slice(sps, pps);
+                slice.SetNALUData(nalu);
+                slice.Parse();
+                // slice.PrintInfo();
+
+                // is = 1;
+            }
+
         }
     }
 

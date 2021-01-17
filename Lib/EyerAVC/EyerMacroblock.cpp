@@ -271,7 +271,6 @@ namespace Eyer
 
     int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC)
     {
-        bs.PrintInfo();
         int trailingOnes = 0;
 
         EyerCAVLC cavlc;
@@ -280,8 +279,8 @@ namespace Eyer
         EyerLog("totleCoeff: %d, trailingOnes: %d\n", totleCoeff, trailingOnes);
 
         if (totleCoeff) {
-            EyerLog("before trailing_ones_sign_flag\n");
             bs.PrintInfo();
+            EyerLog("before trailing_ones_sign_flag\n");
             if (trailingOnes){
                 for(int i=0;i<trailingOnes;i++){
                     uint32_t trailing_ones_sign_flag = bs.bs_read_u1();
@@ -289,8 +288,8 @@ namespace Eyer
                 }
             }
 
-            EyerLog("before levels\n");
             bs.PrintInfo();
+            EyerLog("before levels\n");
             // 读取非零系数的振幅
             int suffixLength = 0;
             if(totleCoeff > 10 && trailingOnes < 3) {
@@ -311,8 +310,8 @@ namespace Eyer
                 }
             }
 
-            EyerLog("before Totle Zeros\n");
             bs.PrintInfo();
+            EyerLog("before Totle Zeros\n");
             // Totle Zeros 对于 Chrome DC 的 SubBlock，是不一样的。
             // Totle Zeros
             int totleZeros = 0;
@@ -327,9 +326,8 @@ namespace Eyer
                 totleZeros = 0;
             }
 
-
-            EyerLog("before Run Before\n");
             bs.PrintInfo();
+            EyerLog("before Run Before\n");
             // Run Before
             int runBeforeVlcIdx = 0;
             int zerosLeft = totleZeros;
