@@ -1,0 +1,17 @@
+add_executable(
+        EyerSignalTest
+        Main.cpp
+)
+
+include_directories (../)
+
+target_link_libraries (EyerSignalTest EyerCore)
+target_link_libraries (EyerSignalTest EyerThread)
+target_link_libraries (EyerSignalTest gtest)
+
+INSTALL(
+        TARGETS EyerSignalTest
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+)

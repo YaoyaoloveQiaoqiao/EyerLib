@@ -19,10 +19,10 @@ namespace Eyer
 
     }
 
-    int EyerBitStream::PrintInfo()
+    int EyerBitStream::PrintInfo(int level)
     {
         int byteOffset = p - start;
-        EyerLog("bit offset: %d\n", byteOffset * 8 + (8 - bits_left));
+        EyerLogLevel(level, "bit offset: %d / %d\n", byteOffset * 8 + (8 - bits_left), (end - start) * 8);
         return 0;
     }
 
@@ -145,25 +145,36 @@ namespace Eyer
     {
         EyerBitStream tempBitstream(end - 1, 1);
 
-        int index_rbsp_stop_one_bit = 8;
+        int lastByte[8];
+        // int index_rbsp_stop_one_bit = 8;
         for(int i=0;i<8;i++){
-            int a = tempBitstream.bs_read_u1();
-            if(a == 1){
-                index_rbsp_stop_one_bit -= i;
+            lastByte[i] = tempBitstream.bs_read_u1();
+        }
+
+        int traing_len = 0;
+        for(int i=7;i>=0;i--){
+            traing_len++;
+            if(lastByte[i] == 1){
+                break;
             }
         }
 
-        if (p < end - 1) {
+        EyerERROR("traing_len: %d\n", traing_len);
+
+        int p_pos = p - start;
+        if(p_pos < (end - start - 1)){
             return true;
         }
-        else if(p == end - 1){
-            if(bits_left <= index_rbsp_stop_one_bit){
+
+        if(p_pos = (end - start)){
+            if(bits_left > traing_len){
+                return true;
+            }
+            else{
                 return false;
             }
         }
-        else{
-            return false;
-        }
+
         return false;
     }
 

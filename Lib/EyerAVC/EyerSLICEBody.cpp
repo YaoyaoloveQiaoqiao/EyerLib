@@ -22,6 +22,7 @@ namespace Eyer
 
     int EyerSLICEBody::Parse(EyerBitStream & bs, EyerSyntax & syntax, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
     {
+        EyerERROR("====================IDR====================\n");
         sps = _sps;
         pps = _pps;
         sliceHeader = _sliceHeader;
@@ -57,10 +58,12 @@ namespace Eyer
 
         int MbaffFrameFlag = sps.mb_adaptive_frame_field_flag && !sliceHeader.sh.field_pic_flag;
         int CurrMbAddr = sliceHeader.sh.first_mb_in_slice * (1 + MbaffFrameFlag);
-        int moreDataFlag = 1;
+        bool moreDataFlag = true;
         int prevMbSkipped = 0;
 
         do{
+            bs.PrintInfo();
+
             if(sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_I && sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_SI) {
                 if (!pps.entropy_coding_mode_flag) {
 
@@ -69,6 +72,7 @@ namespace Eyer
 
                 }
             }
+
 
             EyerERROR("sps.pic_width_in_mbs_minus1 + 1 : %d\n", sps.pic_width_in_mbs_minus1 + 1);
             EyerERROR("sps.pic_height_in_map_units_minus1 + 1 : %d\n", sps.pic_height_in_map_units_minus1 + 1);
@@ -121,17 +125,21 @@ namespace Eyer
                 }
             }
 
-            //TODO CurrMbAddr = NextMbAddress(CurrMbAddr);
-            CurrMbAddr++;
 
             //TODO DEBUG
 
-            if(CurrMbAddr >= 30){
-                moreDataFlag = 0;
+            if(CurrMbAddr >= 99){
+                // moreDataFlag = 0;
             }
+
+            bs.PrintInfo(20);
 
             EyerERROR("moreDataFlag: %d\n", moreDataFlag);
             EyerERROR("CurrMbAddr: %d\n", CurrMbAddr);
+            EyerERROR("======BLOCK======\n");
+
+            //TODO CurrMbAddr = NextMbAddress(CurrMbAddr);
+            CurrMbAddr++;
         }
         while (moreDataFlag);
 
