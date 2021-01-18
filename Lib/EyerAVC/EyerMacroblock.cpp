@@ -173,7 +173,7 @@ namespace Eyer
             EyerLog("\tSubWidthC: %d, SubHeightC: %d\n", sps.SubWidthC, sps.SubHeightC);
             EyerLog("\tNumC8x8: %d\n", NumC8x8);
 
-            EyerLog("\t\txxxxxxxxxxxxxxxx Chroma DC xxxxxxxxxxxxxxxx\n");
+            EyerLog("\t\txxxxxxxxxxxxxxxxxxxxxxxx Chroma DC xxxxxxxxxxxxxxxxxxxxxxxx\n");
             // 读取 DC 分量
             for (int iCbCr = 0; iCbCr < 2; iCbCr++) {
                 EyerLog("\t\t\txxxxxxxxxxxxxxxx Chroma DC : %d xxxxxxxxxxxxxxxx\n", iCbCr);
@@ -196,7 +196,7 @@ namespace Eyer
             }
 
             for (int iCbCr = 0; iCbCr < 2; iCbCr++){
-                EyerLog("\t\txxxxxxxxxxxxxxxx Chroma AC xxxxxxxxxxxxxxxx\n");
+                EyerLog("\t\txxxxxxxxxxxxxxxxxxxxxxxx Chroma AC xxxxxxxxxxxxxxxxxxxxxxxx\n");
                 for(int i8x8 = 0; i8x8 < NumC8x8; i8x8++ ){
                     for(int i4x4 = 0; i4x4 < 4; i4x4++ ){
                         if(CodedBlockPatternChroma & 2){
@@ -292,7 +292,7 @@ namespace Eyer
         EyerLog("\t\t\t\tTotleCoeff: %d, TrailingOnes: %d\n", totleCoeff, trailingOnes);
 
         if (totleCoeff) {
-            EyerLog("\t\t\t\tGet trailing_ones_sign_flag:\n");
+            EyerLog("\t\t\t\tGet trailing_ones_sign_flag(逆序):\n");
             if (trailingOnes){
                 for(int i=0;i<trailingOnes;i++){
                     uint32_t trailing_ones_sign_flag = bs.bs_read_u1();
@@ -360,6 +360,8 @@ namespace Eyer
                 run = 0;
             }
         }
+
+
 
         return 0;
     }

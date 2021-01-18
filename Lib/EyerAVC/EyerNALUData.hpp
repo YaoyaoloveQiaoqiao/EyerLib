@@ -18,12 +18,10 @@ namespace Eyer
 
         EyerBuffer & GetNaluBuffer();
         EyerBuffer & GetRBSPBuffer();
-        EyerBuffer & GetSODBBuffer();
 
     public:
         EyerBuffer naluBuffer;
         EyerBuffer rbspBuffer;
-        EyerBuffer sodbBuffer;
 
         int startCodeLen = 0;
 
