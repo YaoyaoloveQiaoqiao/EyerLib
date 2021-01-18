@@ -12,17 +12,12 @@ namespace Eyer
 
     EyerSLICEBody::~EyerSLICEBody()
     {
-        /*
-        for(int i=0;i<macroblockList.size();i++){
-            delete macroblockList[i];
-        }
-        macroblockList.clear();
-         */
+
     }
 
     int EyerSLICEBody::Parse(EyerBitStream & bs, EyerSyntax & syntax, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
     {
-        EyerERROR("====================IDR====================\n");
+        // EyerERROR("====================IDR====================\n");
         sps = _sps;
         pps = _pps;
         sliceHeader = _sliceHeader;
@@ -46,8 +41,6 @@ namespace Eyer
             }
         }
 
-
-
         if(pps.entropy_coding_mode_flag){
             // 进行对齐操作
             while(!bs.bs_byte_aligned()) {
@@ -62,8 +55,6 @@ namespace Eyer
         int prevMbSkipped = 0;
 
         do{
-            bs.PrintInfo();
-
             if(sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_I && sliceHeader.GetSLICEType() != SLICEType::SLICE_TYPE_SI) {
                 if (!pps.entropy_coding_mode_flag) {
 
@@ -72,10 +63,6 @@ namespace Eyer
 
                 }
             }
-
-
-            EyerERROR("sps.pic_width_in_mbs_minus1 + 1 : %d\n", sps.pic_width_in_mbs_minus1 + 1);
-            EyerERROR("sps.pic_height_in_map_units_minus1 + 1 : %d\n", sps.pic_height_in_map_units_minus1 + 1);
 
             if(moreDataFlag){
                 if(MbaffFrameFlag && (CurrMbAddr % 2 == 0 || (CurrMbAddr % 2 == 1 && prevMbSkipped))){
@@ -128,8 +115,8 @@ namespace Eyer
 
             //TODO DEBUG
 
-            if(CurrMbAddr >= 99){
-                // moreDataFlag = 0;
+            if(CurrMbAddr >= w_mbs_nums * h_mbs_nums){
+                moreDataFlag = 0;
             }
 
             bs.PrintInfo(20);

@@ -25,8 +25,6 @@ namespace Eyer
         EyerSLICEHeader sliceHeader;
 
         EyerTable<EyerMacroblock *> mbTable;
-
-        // std::vector<EyerMacroblock *> macroblockList;
     };
 }
 

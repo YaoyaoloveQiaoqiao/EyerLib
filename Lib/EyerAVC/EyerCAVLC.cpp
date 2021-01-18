@@ -15,7 +15,6 @@ namespace Eyer
 
     int EyerCAVLC::Get_TotalCoeff_TrailingOnes(EyerBitStream & bs, int & totleCoeff, int & trailingOnes, int nC)
     {
-        EyerLog("nC: %d\n", nC);
         if(nC >= 0){
             int numCoeffIndex = 0;
             if (nC < 2){
@@ -61,7 +60,7 @@ namespace Eyer
 
             int token = 0;
             AVCTable::SearchForValueIn2DTable(bs, totleCoeff, trailingOnes, token, lengthTable, codeTable, 5, 4);
-            EyerLog("Token: %d\n", token);
+            // EyerLog("Token: %d\n", token);
         }
         if(nC == -2){
 

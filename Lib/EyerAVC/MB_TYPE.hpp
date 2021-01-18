@@ -12,6 +12,8 @@ namespace Eyer
         ~MB_TYPE();
         MB_TYPE(const MB_TYPE & mbType);
 
+        EyerString & GetStr();
+
         MB_TYPE & operator = (const MB_TYPE & mbType);
 
         bool operator == (const MB_TYPE & mbType);

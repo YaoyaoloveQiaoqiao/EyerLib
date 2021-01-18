@@ -13,9 +13,6 @@ TEST(EyerAVC, NALUReader)
 
     Eyer::EyerSPS sps;
     Eyer::EyerPPS pps;
-    int is = 0;
-
-    int gopId = 0;
 
     while(1){
         Eyer::EyerNALUData nalu;
@@ -25,7 +22,6 @@ TEST(EyerAVC, NALUReader)
         }
 
         if(nalu.GetNALUType() == Eyer::NALUType::NALU_TYPE_SPS){
-            gopId++;
             sps.SetNALUData(nalu);
             sps.Parse();
             sps.PrintInfo();
@@ -59,7 +55,6 @@ TEST(EyerAVC, NALUReader)
         fwrite(nalu.GetNaluBuffer().GetPtr(), nalu.GetNaluBuffer().GetLen(), 1, f);
         fclose(f);
         */
-
     }
 
     eyer_log_clear();
