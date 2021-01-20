@@ -3,8 +3,6 @@
 #include "EyerCore/EyerCore.hpp"
 #include "EyerGL/EyerGL.hpp"
 
-#include "MathTest.hpp"
-
 TEST(EyerLog, log){
     EyerLog("EyerLog int: %d\n", 12345);
 }
@@ -507,6 +505,7 @@ TEST(EyerBufferMut, EyerBufferCutOffTest){
 }
 
 #include "MD5Test.hpp"
+#include "MathTest.hpp"
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
