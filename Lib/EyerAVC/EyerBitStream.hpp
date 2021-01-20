@@ -35,7 +35,7 @@ namespace Eyer
 
         bool more_data();
 
-        int PrintInfo();
+        int PrintInfo(int level = 5);
 
     public:
         uint8_t * start;

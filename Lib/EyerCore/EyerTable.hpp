@@ -36,6 +36,20 @@ namespace Eyer
 
         int Set(int x, int y, T & t)
         {
+            if(x < 0){
+                return -1;
+            }
+            if(x >= w){
+                return -1;
+            }
+
+            if(y < 0){
+                return -1;
+            }
+            if(y >= h){
+                return -1;
+            }
+
             int index = y * w + x;
             vec[index] = t;
             return 0;

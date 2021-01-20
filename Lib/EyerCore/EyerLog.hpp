@@ -34,6 +34,8 @@
 #define EyerLog_10(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 10, format, ##__VA_ARGS__)
 #define EyerLog(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 5, format, ##__VA_ARGS__)
 
+#define EyerLogLevel(level, format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, level, format, ##__VA_ARGS__)
+
 #define EyerINFO(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 5, format, ##__VA_ARGS__)
 #define EyerWRANING(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 10, format, ##__VA_ARGS__)
 #define EyerERROR(format, ...) eyer_log_log(__FILE__, __FUNCTION__, __LINE__, 20, format, ##__VA_ARGS__)

@@ -146,6 +146,7 @@ namespace Eyer
         // ===================== Syntax End =====================
 
         // TODO more_rbsp_data
+        /*
         if(bs.more_data()) {
             transform_8x8_mode_flag             = bs.bs_read_u1();
             pic_scaling_matrix_present_flag     = bs.bs_read_u1();
@@ -153,6 +154,7 @@ namespace Eyer
                 // TODO
             }
         }
+        */
 
         valid = true;
 

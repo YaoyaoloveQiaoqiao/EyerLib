@@ -12,16 +12,12 @@ namespace Eyer
 
     EyerSLICEBody::~EyerSLICEBody()
     {
-        /*
-        for(int i=0;i<macroblockList.size();i++){
-            delete macroblockList[i];
-        }
-        macroblockList.clear();
-         */
+
     }
 
     int EyerSLICEBody::Parse(EyerBitStream & bs, EyerSyntax & syntax, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
     {
+        // EyerERROR("====================IDR====================\n");
         sps = _sps;
         pps = _pps;
         sliceHeader = _sliceHeader;
@@ -45,8 +41,6 @@ namespace Eyer
             }
         }
 
-
-
         if(pps.entropy_coding_mode_flag){
             // 进行对齐操作
             while(!bs.bs_byte_aligned()) {
@@ -57,7 +51,7 @@ namespace Eyer
 
         int MbaffFrameFlag = sps.mb_adaptive_frame_field_flag && !sliceHeader.sh.field_pic_flag;
         int CurrMbAddr = sliceHeader.sh.first_mb_in_slice * (1 + MbaffFrameFlag);
-        int moreDataFlag = 1;
+        bool moreDataFlag = true;
         int prevMbSkipped = 0;
 
         do{
@@ -69,9 +63,6 @@ namespace Eyer
 
                 }
             }
-
-            EyerERROR("sps.pic_width_in_mbs_minus1 + 1 : %d\n", sps.pic_width_in_mbs_minus1 + 1);
-            EyerERROR("sps.pic_height_in_map_units_minus1 + 1 : %d\n", sps.pic_height_in_map_units_minus1 + 1);
 
             if(moreDataFlag){
                 if(MbaffFrameFlag && (CurrMbAddr % 2 == 0 || (CurrMbAddr % 2 == 1 && prevMbSkipped))){
@@ -121,17 +112,21 @@ namespace Eyer
                 }
             }
 
-            //TODO CurrMbAddr = NextMbAddress(CurrMbAddr);
-            CurrMbAddr++;
 
             //TODO DEBUG
 
-            if(CurrMbAddr >= 30){
+            if(CurrMbAddr >= w_mbs_nums * h_mbs_nums){
                 moreDataFlag = 0;
             }
 
+            bs.PrintInfo(20);
+
             EyerERROR("moreDataFlag: %d\n", moreDataFlag);
             EyerERROR("CurrMbAddr: %d\n", CurrMbAddr);
+            EyerERROR("======BLOCK======\n");
+
+            //TODO CurrMbAddr = NextMbAddress(CurrMbAddr);
+            CurrMbAddr++;
         }
         while (moreDataFlag);
 
