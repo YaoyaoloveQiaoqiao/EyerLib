@@ -5,7 +5,7 @@ add_library(
         EyerAVCBlog
         AnnexBReader.hpp
         AnnexBReader.cpp
-)
+        BitStream.cpp BitStream.hpp)
 
 set(head_files
         )
