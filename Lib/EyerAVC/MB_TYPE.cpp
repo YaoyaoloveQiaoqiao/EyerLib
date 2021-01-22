@@ -46,6 +46,11 @@ namespace Eyer
         *this = mbType;
     }
 
+    EyerString & MB_TYPE::GetStr()
+    {
+        return name;
+    }
+
     MB_TYPE & MB_TYPE::operator = (const MB_TYPE & mbType)
     {
         sliceType = mbType.sliceType;

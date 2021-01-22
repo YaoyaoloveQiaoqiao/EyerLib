@@ -29,11 +29,6 @@ namespace Eyer
         return rbspBuffer;
     }
 
-    EyerBuffer & EyerNALUData::GetSODBBuffer()
-    {
-        return sodbBuffer;
-    }
-
     int EyerNALUData::SetData(EyerBuffer & _naluBuffer, int _startCodeLen)
     {
         naluBuffer = _naluBuffer;
@@ -54,9 +49,6 @@ namespace Eyer
         rbspBuffer.SetLen(rbspLen);
 
         // RBSPtoSODB
-        sodbBuffer = rbspBuffer;
-        int sodbLen = RBSPtoSODB(sodbBuffer.GetPtr(), sodbBuffer.GetLen() - 1);
-        sodbBuffer.SetLen(sodbLen);
 
         // Print Info
         EyerLog("================================\n");
@@ -64,7 +56,6 @@ namespace Eyer
         EyerLog("nal_ref_idc: %s\n", nal_ref_idc.GetName().str);
         EyerLog("nal_unit_type: %s\n", nal_unit_type.GetName().str);
         EyerLog("rbsp len: %d\n", rbspLen);
-        EyerLog("sodb len: %d\n", sodbLen);
 
         return 0;
     }
