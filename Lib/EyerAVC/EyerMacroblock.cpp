@@ -60,6 +60,7 @@ namespace Eyer
 
     int EyerMacroblock::Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
     {
+        EyerLog("===========================EyerMacroblock: %d===========================\n", mbIndex);
         sps = _sps;
         pps = _pps;
         sliceHeader = _sliceHeader;
@@ -77,6 +78,8 @@ namespace Eyer
         }
 
         mbType = MB_TYPE::Select(sliceType, mb_type);
+        EyerLog("\tMacroblock Type: %s\n", mbType.GetStr().str);
+
         if(MB_TYPE::I_PCM == mbType){
             //TODO PCM
         }
@@ -102,14 +105,14 @@ namespace Eyer
                 CodedBlockPatternLuma = coded_block_pattern % 16;
                 CodedBlockPatternChroma = coded_block_pattern / 16;
 
-                EyerLog("CBP: %d\n", coded_block_pattern);
-                EyerLog("CodedBlockPatternLuma: %d\n", CodedBlockPatternLuma);
-                EyerLog("CodedBlockPatternChroma: %d\n", CodedBlockPatternChroma);
+                EyerLog("\tCodedBlockPattern(CBP): %d\n", coded_block_pattern);
+                EyerLog("\tCodedBlockPattern(CBP) Luma Part: %d\n", CodedBlockPatternLuma);
+                EyerLog("\tCodedBlockPattern(CBP) Chroma Part: %d\n", CodedBlockPatternChroma);
             }
 
             if(CodedBlockPatternLuma > 0 || CodedBlockPatternChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                 int32_t mb_qp_delta = bs.bs_read_se();
-                EyerLog("mb_qp_delta: %d\n", mb_qp_delta);
+                EyerLog("\tmb_qp_delta: %d\n", mb_qp_delta);
                 Residual(bs, 0, 15);
             }
         }
@@ -163,14 +166,17 @@ namespace Eyer
     {
         ResidualLuma(bs, startIdx, endIdx);
 
+
+        EyerLog("\t===========================Residual Chroma===========================\n");
         if(sps.ChromaArrayType == 1 || sps.ChromaArrayType == 2) {
             int NumC8x8 = 4 / (sps.SubWidthC * sps.SubHeightC);
+            EyerLog("\tSubWidthC: %d, SubHeightC: %d\n", sps.SubWidthC, sps.SubHeightC);
+            EyerLog("\tNumC8x8: %d\n", NumC8x8);
 
-            EyerLog("NumC8x8: %d\n", NumC8x8);
-
+            EyerLog("\t\txxxxxxxxxxxxxxxxxxxxxxxx Chroma DC xxxxxxxxxxxxxxxxxxxxxxxx\n");
             // 读取 DC 分量
             for (int iCbCr = 0; iCbCr < 2; iCbCr++) {
-                EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma DC xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex);
+                EyerLog("\t\t\txxxxxxxxxxxxxxxx Chroma DC : %d xxxxxxxxxxxxxxxx\n", iCbCr);
                 if ((CodedBlockPatternChroma & 3) && startIdx == 0) {
                     int nC = 0;
                     if(sps.ChromaArrayType == 1){
@@ -190,20 +196,21 @@ namespace Eyer
             }
 
             for (int iCbCr = 0; iCbCr < 2; iCbCr++){
+                EyerLog("\t\txxxxxxxxxxxxxxxxxxxxxxxx Chroma AC xxxxxxxxxxxxxxxxxxxxxxxx\n");
                 for(int i8x8 = 0; i8x8 < NumC8x8; i8x8++ ){
                     for(int i4x4 = 0; i4x4 < 4; i4x4++ ){
                         if(CodedBlockPatternChroma & 2){
                             int totleCoeff = 0;
                             if(iCbCr == 0){
                                 // Cb
-                                EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cb xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex);
+                                EyerLog("\t\t\txxxxxxxxxxxxxxxx Chroma AC Cb : %d xxxxxxxxxxxxxxxx\n", i4x4);
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CB);
                                 ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                                 chromaCbResidual[i8x8][i4x4].numCoeff = totleCoeff;
                             }
                             if(iCbCr == 1){
                                 // Cr
-                                EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Chroma AC Cr xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex);
+                                EyerLog("\t\t\txxxxxxxxxxxxxxxx Chroma AC Cr : %d xxxxxxxxxxxxxxxx\n", i4x4);
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CR);
                                 ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                                 chromaCrResidual[i8x8][i4x4].numCoeff = totleCoeff;
@@ -222,6 +229,8 @@ namespace Eyer
 
     int EyerMacroblock::ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx)
     {
+        EyerLog("\t===========================Residual Luma===========================\n");
+
         if(startIdx == 0 && mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
             // 解 DC 分量
         }
@@ -230,13 +239,14 @@ namespace Eyer
             if(!transform_size_8x8_flag || !pps.entropy_coding_mode_flag){
                 for(int i4x4 = 0; i4x4 < 4; i4x4++) {
                     if(CodedBlockPatternLuma & (1 << i8x8)){
-                        EyerLog("%d xxxxxxxxxxxxxxxxxxxxxxxxxxxx Luma 4x4 (i8x8: %d, i4x4: %d) xxxxxxxxxxxxxxxxxxxxxxxxxxxx\n", mbIndex, i8x8, i4x4);
-                        EyerLog("有残差, i8x8: %d, i4x4: %d\n", i8x8, i4x4);
+                        EyerLog("\t\txxxxxxxxxxxxxxxx Luma 4x4 (i8x8: %d, i4x4: %d) xxxxxxxxxxxxxxxx\n", i8x8, i4x4);
+                        EyerLog("\t\t有残差, i8x8: %d, i4x4: %d\n", i8x8, i4x4);
                         if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                             // 解 AC 分量
                             EyerLog("Intra_16x16 AC\n");
                         }
                         else{
+                            EyerLog("\t\tLUMA 4x4\n");
                             int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::LUMA);
                             int totleCoeff = 0;
                             ResidualBlockCavlc(bs, totleCoeff, nC, startIdx, endIdx, 16);
@@ -272,25 +282,27 @@ namespace Eyer
 
     int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC)
     {
+        EyerLog("\t\t\tCAVLC:\n");
+        EyerLog("\t\t\tnC: %d\n", nC);
+
         int trailingOnes = 0;
 
         EyerCAVLC cavlc;
         cavlc.Get_TotalCoeff_TrailingOnes(bs, totleCoeff, trailingOnes, nC);
 
-        EyerLog("totleCoeff: %d, trailingOnes: %d\n", totleCoeff, trailingOnes);
+        EyerLog("\t\t\t\tTotleCoeff: %d, TrailingOnes: %d\n", totleCoeff, trailingOnes);
 
         if (totleCoeff) {
-            bs.PrintInfo();
-            EyerLog("before trailing_ones_sign_flag\n");
+            EyerLog("\t\t\t\tGet trailing_ones_sign_flag(逆序):\n");
             if (trailingOnes){
                 for(int i=0;i<trailingOnes;i++){
                     uint32_t trailing_ones_sign_flag = bs.bs_read_u1();
-                    // EyerLog("Sign: %d\n", trailing_ones_sign_flag);
+                    EyerLog("\t\t\t\t\ttrailing_ones_sign_flag[%d]: %d\n", i, trailing_ones_sign_flag);
                 }
             }
 
-            bs.PrintInfo();
-            EyerLog("before levels\n");
+
+            EyerLog("\t\t\t\tGet levels: \n");
             // 读取非零系数的振幅
             int suffixLength = 0;
             if(totleCoeff > 10 && trailingOnes < 3) {
@@ -309,12 +321,12 @@ namespace Eyer
                 if(abs(levelVal) > (3 << (suffixLength - 1)) && (suffixLength < 6)){
                     suffixLength++;
                 }
+
+                EyerLog("\t\t\t\t\tlevels[%d]: %d\n", k, levelVal);
             }
 
-            bs.PrintInfo();
-            EyerLog("before Totle Zeros\n");
+            EyerLog("\t\t\t\tGet totle zeros: \n");
             // Totle Zeros 对于 Chrome DC 的 SubBlock，是不一样的。
-            // Totle Zeros
             int totleZeros = 0;
             if(totleCoeff < maxNumCoeff) {
                 if(isChromaDC){
@@ -326,9 +338,9 @@ namespace Eyer
             else{
                 totleZeros = 0;
             }
+            EyerLog("\t\t\t\t\ttotle zeros: %d\n", totleZeros);
 
-            bs.PrintInfo();
-            EyerLog("before Run Before\n");
+            EyerLog("\t\t\t\tGet Run Before: \n");
             // Run Before
             int runBeforeVlcIdx = 0;
             int zerosLeft = totleZeros;
@@ -339,6 +351,8 @@ namespace Eyer
                     runBeforeVlcIdx = (zerosLeft - 1 < 6) ? zerosLeft - 1 : 6;
                     get_run_before(bs, run, runBeforeVlcIdx);
 
+                    EyerLog("\t\t\t\t\tRun Before: %d\n", run);
+
                     zerosLeft -= run;
                     i--;
                 }while(zerosLeft != 0 && i != 0);
@@ -347,6 +361,8 @@ namespace Eyer
                 run = 0;
             }
         }
+
+
 
         return 0;
     }
