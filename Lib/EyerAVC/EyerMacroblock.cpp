@@ -243,6 +243,7 @@ namespace Eyer
                         EyerLog("\t\t有残差, i8x8: %d, i4x4: %d\n", i8x8, i4x4);
                         if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
                             // 解 AC 分量
+                            EyerLog("Intra_16x16 AC\n");
                         }
                         else{
                             EyerLog("\t\tLUMA 4x4\n");

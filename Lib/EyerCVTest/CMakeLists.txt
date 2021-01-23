@@ -14,6 +14,8 @@ target_link_libraries (EyerCVTest opencv_flann)
 target_link_libraries (EyerCVTest opencv_highgui)
 target_link_libraries (EyerCVTest opencv_imgcodecs)
 target_link_libraries (EyerCVTest opencv_imgproc)
+target_link_libraries (EyerCVTest EyerCore)
+target_link_libraries (EyerCVTest EyerThread)
 
 file(COPY
         ${CMAKE_CURRENT_SOURCE_DIR}/bug_a.jpg

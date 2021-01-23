@@ -96,19 +96,20 @@ TEST(EyerSignal, GenPic)
 
 TEST(EyerSignal, DCT)
 {
-    float input[1024];
-    for(int i = 0;i<1024;i++){
-        input[i] = sin(i * 1.0f);
-        // EyerLog("%f\n", input[i]);
+
+    int len = 128;
+    float input[len];
+    for(int i = 0;i<len;i++){
+        input[i] = sin(i * 1.0f) * 0.5f + 0.5f;        // EyerLog("%f\n", input[i]);
     }
 
     Eyer::DCT<float> dct;
 
-    float output[1024];
-    dct.DCT1D(input, 1024, output, 1024);
+    float output[len];
+    dct.DCT1D(input, len, output, len);
 
-    for(int i = 0;i<1024;i++){
-        // EyerLog("%f\n", output[i]);
+    for(int i = 0;i<len;i++){
+        EyerLog("%f\n", output[i]);
     }
 }
 
