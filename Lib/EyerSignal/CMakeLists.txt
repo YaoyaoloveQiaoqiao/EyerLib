@@ -4,7 +4,13 @@ include_directories (./)
 add_library(
         EyerSignal
         # SHARED
-        EyerSignal.cpp EyerSignal.hpp DCT.cpp DCT.hpp)
+        EyerSignal.cpp
+        EyerSignal.hpp
+        DCT.cpp
+        DCT.hpp
+        EyerPalette.cpp
+        EyerPalette.hpp
+        EyerPixel.cpp EyerPixel.hpp)
 
 set(head_files
         EyerSignal.hpp
