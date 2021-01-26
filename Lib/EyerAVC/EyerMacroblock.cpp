@@ -126,15 +126,23 @@ namespace Eyer
                 mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_8x8 ||
                 mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16
                 ){
+            EyerLog("\tRead luma Pred Mode\n");
             if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_4x4){
+                EyerLog("\t\tIntra_4x4\n");
                 uint32_t prev_intra4x4_pred_mode_flag[16];
                 memset(prev_intra4x4_pred_mode_flag, 0, 16 * sizeof(uint32_t));
                 uint32_t rem_intra4x4_pred_mode_flag[16];
                 memset(rem_intra4x4_pred_mode_flag, 0, 16 * sizeof(uint32_t));
                 for(int luma4x4BlkIdx=0; luma4x4BlkIdx<16; luma4x4BlkIdx++){
                     prev_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u1();
+                    EyerLog("\t\t\tprev_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
                     if(!prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]){
+                        EyerLog("\t\t\t\t不能采用预测的模式\n");
                         rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u(3);
+                        EyerLog("\t\t\t\t\trem_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, rem_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
+                    }
+                    else{
+                        EyerLog("\t\t\t\t请采用预测的模式\n");
                     }
                 }
             }
