@@ -10,6 +10,11 @@ TEST(EyerSignal, EyerSignalTest)
 
 }
 
+TEST(EyerSignal, DCT4x4)
+{
+
+}
+
 TEST(EyerSignal, GenPic)
 {
     // 8bit R G B W
