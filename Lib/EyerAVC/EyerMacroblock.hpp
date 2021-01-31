@@ -24,13 +24,15 @@ namespace Eyer
 
         EyerCoeff4x4Block * findBlock(int blockX, int blockY, RESIDUAL_TYPE & type);
 
+        int RestoreCoeffMatrix();
+
     private:
         int MbPred       (EyerBitStream & bs);
         int Residual     (EyerBitStream & bs, int startIdx, int endIdx);
 
         int ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx);
 
-        int ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC = false);
+        int ResidualBlockCavlc(EyerBitStream & bs, EyerCoeff4x4Block & coeff4x4Block, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC = false);
 
         int GetNumberCurrent(int i8x8, int i4x4, RESIDUAL_TYPE & type);
 
@@ -61,8 +63,14 @@ namespace Eyer
         uint32_t intra_chroma_pred_mode = 0;
 
         EyerCoeff4x4Block lumaResidual[4][4];
-        EyerCoeff4x4Block chromaCrResidual[4][4];
-        EyerCoeff4x4Block chromaCbResidual[4][4];
+
+        EyerCoeff4x4Block chromaResidualDC[2];
+
+        EyerCoeff4x4Block chromaCrResidualAC[4][4];
+        EyerCoeff4x4Block chromaCbResidualAC[4][4];
+
+
+        int swap(int & x, int & y);
     };
 }
 

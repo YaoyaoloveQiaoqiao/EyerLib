@@ -13,7 +13,15 @@ namespace Eyer
 
         bool emptyBlock = false;
 
-        uint8_t numCoeff;
+        int totleCoeff = 0;
+        int trailingOnes = 0;
+
+        int trailingSign[3] = {0};
+        int levels[16] = {0};
+
+        int totleZeros = 0;
+
+        int runBefore[16] = {0};
     };
 }
 

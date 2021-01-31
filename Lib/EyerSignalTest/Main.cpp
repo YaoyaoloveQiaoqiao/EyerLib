@@ -12,7 +12,12 @@ TEST(EyerSignal, EyerSignalTest)
 
 // #include "DCT.hpp"
 
-TEST(EyerSignal, DCT2D)
+TEST(EyerSignal, DCT4x4)
+{
+
+}
+
+TEST(EyerSignal, GenPic)
 {
     int w = 20;
     int h = 20;

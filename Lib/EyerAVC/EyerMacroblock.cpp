@@ -126,15 +126,23 @@ namespace Eyer
                 mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_8x8 ||
                 mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16
                 ){
+            EyerLog("\tRead luma Pred Mode\n");
             if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_4x4){
+                EyerLog("\t\tIntra_4x4\n");
                 uint32_t prev_intra4x4_pred_mode_flag[16];
                 memset(prev_intra4x4_pred_mode_flag, 0, 16 * sizeof(uint32_t));
                 uint32_t rem_intra4x4_pred_mode_flag[16];
                 memset(rem_intra4x4_pred_mode_flag, 0, 16 * sizeof(uint32_t));
                 for(int luma4x4BlkIdx=0; luma4x4BlkIdx<16; luma4x4BlkIdx++){
                     prev_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u1();
+                    EyerLog("\t\t\tprev_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
                     if(!prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]){
+                        EyerLog("\t\t\t\t不能采用预测的模式\n");
                         rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u(3);
+                        EyerLog("\t\t\t\t\trem_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, rem_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
+                    }
+                    else{
+                        EyerLog("\t\t\t\t请采用预测的模式\n");
                     }
                 }
             }
@@ -186,7 +194,7 @@ namespace Eyer
                         nC = -2;
                     }
                     int totleCoeff = 0;
-                    ResidualBlockCavlc(bs, totleCoeff, nC, 0, 4 * NumC8x8 - 1, 4 * NumC8x8, true);
+                    ResidualBlockCavlc(bs, chromaResidualDC[iCbCr], nC, 0, 4 * NumC8x8 - 1, 4 * NumC8x8, true);
                 } else {
                     EyerERROR("Chroma DC Error\n");
                     for (int i = 0; i < 4 * NumC8x8; i++) {
@@ -205,15 +213,13 @@ namespace Eyer
                                 // Cb
                                 EyerLog("\t\t\txxxxxxxxxxxxxxxx Chroma AC Cb : %d xxxxxxxxxxxxxxxx\n", i4x4);
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CB);
-                                ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
-                                chromaCbResidual[i8x8][i4x4].numCoeff = totleCoeff;
+                                ResidualBlockCavlc(bs, chromaCbResidualAC[i8x8][i4x4], nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                             }
                             if(iCbCr == 1){
                                 // Cr
                                 EyerLog("\t\t\txxxxxxxxxxxxxxxx Chroma AC Cr : %d xxxxxxxxxxxxxxxx\n", i4x4);
                                 int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::CHROMA_CR);
-                                ResidualBlockCavlc(bs, totleCoeff, nC, std::max(0, startIdx - 1), endIdx - 1, 15);
-                                chromaCrResidual[i8x8][i4x4].numCoeff = totleCoeff;
+                                ResidualBlockCavlc(bs, chromaCrResidualAC[i8x8][i4x4], nC, std::max(0, startIdx - 1), endIdx - 1, 15);
                             }
                         }
                         else{
@@ -249,8 +255,7 @@ namespace Eyer
                             EyerLog("\t\tLUMA 4x4\n");
                             int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::LUMA);
                             int totleCoeff = 0;
-                            ResidualBlockCavlc(bs, totleCoeff, nC, startIdx, endIdx, 16);
-                            lumaResidual[i8x8][i4x4].numCoeff = (uint8_t)totleCoeff;
+                            ResidualBlockCavlc(bs, lumaResidual[i8x8][i4x4], nC, startIdx, endIdx, 16);
                         }
                     }
                     else if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
@@ -280,11 +285,12 @@ namespace Eyer
         return 0;
     }
 
-    int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, int & totleCoeff, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC)
+    int EyerMacroblock::ResidualBlockCavlc(EyerBitStream & bs, EyerCoeff4x4Block & coeff4x4Block, int nC, int startIdx, int endIdx, int maxNumCoeff, bool isChromaDC)
     {
         EyerLog("\t\t\tCAVLC:\n");
         EyerLog("\t\t\tnC: %d\n", nC);
 
+        int totleCoeff = 0;
         int trailingOnes = 0;
 
         EyerCAVLC cavlc;
@@ -292,15 +298,18 @@ namespace Eyer
 
         EyerLog("\t\t\t\tTotleCoeff: %d, TrailingOnes: %d\n", totleCoeff, trailingOnes);
 
+        coeff4x4Block.totleCoeff = totleCoeff;
+        coeff4x4Block.trailingOnes = trailingOnes;
+
         if (totleCoeff) {
             EyerLog("\t\t\t\tGet trailing_ones_sign_flag(逆序):\n");
             if (trailingOnes){
                 for(int i=0;i<trailingOnes;i++){
                     uint32_t trailing_ones_sign_flag = bs.bs_read_u1();
                     EyerLog("\t\t\t\t\ttrailing_ones_sign_flag[%d]: %d\n", i, trailing_ones_sign_flag);
+                    coeff4x4Block.trailingSign[i] = trailing_ones_sign_flag;
                 }
             }
-
 
             EyerLog("\t\t\t\tGet levels: \n");
             // 读取非零系数的振幅
@@ -323,6 +332,7 @@ namespace Eyer
                 }
 
                 EyerLog("\t\t\t\t\tlevels[%d]: %d\n", k, levelVal);
+                coeff4x4Block.levels[k] = levelVal;
             }
 
             EyerLog("\t\t\t\tGet totle zeros: \n");
@@ -339,6 +349,7 @@ namespace Eyer
                 totleZeros = 0;
             }
             EyerLog("\t\t\t\t\ttotle zeros: %d\n", totleZeros);
+            coeff4x4Block.totleZeros = totleZeros;
 
             EyerLog("\t\t\t\tGet Run Before: \n");
             // Run Before
@@ -352,6 +363,7 @@ namespace Eyer
                     get_run_before(bs, run, runBeforeVlcIdx);
 
                     EyerLog("\t\t\t\t\tRun Before: %d\n", run);
+                    coeff4x4Block.runBefore[i] = run;
 
                     zerosLeft -= run;
                     i--;
@@ -362,11 +374,120 @@ namespace Eyer
             }
         }
 
+        EyerLog("\t\t\t\tRestore: \n");
 
+        int SNAL_SCAN[16][2] = {
+                {0, 0}, {1, 0}, {0, 1}, {0, 2},
+                {1, 1}, {2, 0}, {3, 0}, {2, 1},
+                {1, 2}, {0, 3}, {1, 3}, {2, 2},
+                {3, 1}, {3, 2}, {2, 3}, {3, 3}
+        };
+
+        int coeffNum[16] = {0};
+        // trailingOnes
+        for(int i=coeff4x4Block.totleCoeff - 1, j = trailingOnes - 1; j >= 0; j--) {
+            if(coeff4x4Block.trailingSign[j] == 1){
+                coeffNum[i--] = -1;
+            }
+            else{
+                coeffNum[i--] = 1;
+            }
+        }
+        // levels
+        for(int i=coeff4x4Block.totleCoeff - coeff4x4Block.trailingOnes - 1; i >= 0; i--) {
+            coeffNum[i] = coeff4x4Block.levels[coeff4x4Block.totleCoeff - coeff4x4Block.trailingOnes - 1 - i];
+        }
+        // runbefore
+        int totleZeros = coeff4x4Block.totleZeros;
+        for(int i=coeff4x4Block.totleCoeff - 1; i > 0; i--) {
+            swap(coeffNum[i], coeffNum[i+totleZeros]);
+            totleZeros -= coeff4x4Block.runBefore[i];
+        }
+        swap(coeffNum[0], coeffNum[totleZeros]);
+
+
+        EyerString logStr = "";
+        for(int i=0;i<16;i++){
+            logStr = logStr + EyerString::Number(coeffNum[i]) + " ";
+        }
+        EyerLog("\t\t\t\t\t%s\n", logStr.str);
+
+        int coeffBuf[4][4] = {0};
+        int residualBuf[4][4] = {0};
+
+        for(int i=0;i<16;i++){
+            int * s = SNAL_SCAN[i];
+            coeffBuf[s[0]][s[1]] = coeffNum[i];
+        }
+
+        EyerLog("\n\n");
+        for(int i=0;i<4;i++){
+            EyerString line = "";
+            for(int j=0;j<4;j++){
+                line = line + EyerString::Number(coeffBuf[i][j], "%4d") + " ";
+            }
+            EyerLog("\t\t\t\t\t%s\n", line.str);
+        }
+
+        // 水平变换
+        int temp1[4] = {0};
+        int temp2[4] = {0};
+        for(int j=0;j<4;j++){
+            for(int i=0;i<4;i++){
+                temp1[i] = coeffBuf[i][j];
+            }
+            temp2[0] = temp1[0] + temp1[2];
+            temp2[1] = temp1[0] - temp1[2];
+            temp2[2] = (temp1[1] >> 1) - temp1[3];
+            temp2[3] = temp1[1] + (temp1[3] >> 1);
+
+            for(int i=0;i<2;i++){
+                int i1 = 3 - i;
+                residualBuf[i][j] = temp2[i] + temp2[i1];
+                residualBuf[i1][j] = temp2[i] - temp2[i1];
+            }
+        }
+
+        // 垂直变换
+        for(int i=0;i<4;i++){
+            for(int j=0;j<4;j++){
+                temp1[j] = residualBuf[i][j];
+            }
+            temp2[0] = temp1[0] + temp1[2];
+            temp2[1] = temp1[0] - temp1[2];
+            temp2[2] = (temp1[1] >> 1) - temp1[3];
+            temp2[3] = temp1[1] + (temp1[3] >> 1);
+
+            for(int j=0;j<2;j++){
+                int j1 = 3 - j;
+                residualBuf[i][j] = temp2[j] + temp2[j1];
+                residualBuf[i][j1] = temp2[j] - temp2[j1];
+            }
+        }
+
+        EyerLog("\n\n");
+        for(int i=0;i<4;i++){
+            EyerString line = "";
+            for(int j=0;j<4;j++){
+                line = line + EyerString::Number(residualBuf[i][j], "%4d") + " ";
+            }
+            EyerLog("\t\t\t\t\t%s\n", line.str);
+        }
 
         return 0;
     }
 
+    int EyerMacroblock::RestoreCoeffMatrix()
+    {
+        uint32_t cbpLuma = CodedBlockPatternLuma;
+        uint32_t cbpChroma = CodedBlockPatternChroma;
+
+        if(mbType == MB_TYPE::I_NxN){
+
+        }
+
+        return 0;
+    }
 
     int EyerMacroblock::GetNumberCurrent(int i8x8, int i4x4, RESIDUAL_TYPE & type)
     {
@@ -417,10 +538,10 @@ namespace Eyer
         int topNum = 0;
         int leftNum = 0;
         if(top != nullptr){
-            topNum = top->numCoeff;
+            topNum = top->totleCoeff;
         }
         if(left != nullptr){
-            leftNum = left->numCoeff;
+            leftNum = left->totleCoeff;
         }
 
         nC = topNum + leftNum;
@@ -441,10 +562,10 @@ namespace Eyer
             return &lumaResidual[i8x8][i4x4];
         }
         else if(type == RESIDUAL_TYPE::CHROMA_CR){
-            return &chromaCrResidual[i8x8][i4x4];
+            return &chromaCrResidualAC[i8x8][i4x4];
         }
         else if(type == RESIDUAL_TYPE::CHROMA_CB){
-            return &chromaCbResidual[i8x8][i4x4];
+            return &chromaCbResidualAC[i8x8][i4x4];
         }
 
         return &lumaResidual[i8x8][i4x4];
@@ -626,6 +747,14 @@ namespace Eyer
             return err;
         }
 
+        return 0;
+    }
+
+    int EyerMacroblock::swap(int & x, int & y)
+    {
+        int c = x;
+        x = y;
+        y = c;
         return 0;
     }
 }

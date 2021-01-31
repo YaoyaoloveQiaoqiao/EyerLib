@@ -115,11 +115,51 @@ TEST(CVTest, DCT2D){
 
     imshow("src", src);
     imshow("dct", srcDCT);
+    // imshow("src", src);
+    // imshow("dct", srcDCT);
+    // cv::waitKey();
 
     cv::waitKey();
 }
 
+TEST(CVTest, DCT2D4x4){
+    float input2[4][4] = {
+            {4, 4, 4, 4},
+            {4, 4, 4, 4},
+            {4, 4, 4, 4},
+            {4, 4, 4, 4},
+    };
+
+    float input[4][4] = {
+            {-35, -36, -38, -39},
+            {-34, -34, -34, -34},
+            {-32, -33, -35, -36},
+            {-27, -29, -33, -35},
+    };
+
+    cv::Mat src(4 ,4,  CV_32FC1, input);
+    for(int i=0;i<src.rows;i++){
+        for(int j=0;j<src.cols;j++){
+            printf( " %.3f ", src.col(j).at<float>(i));
+        }
+        printf("\n");
+    }
+
+
+    cv::Mat srcDCT;
+    dct(src, srcDCT);
+
+    for(int i=0;i<srcDCT.rows;i++){
+        for(int j=0;j<srcDCT.cols;j++){
+            printf( " %.3f ", srcDCT.col(j).at<float>(i));
+        }
+        printf("\n");
+    }
+}
+
 int main(int argc,char **argv){
+    eyer_log_path("./aaa.log");
+
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
