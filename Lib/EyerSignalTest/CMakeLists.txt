@@ -1,7 +1,7 @@
 add_executable(
         EyerSignalTest
         Main.cpp
-)
+        GenRGBWImage.h DCT.hpp)
 
 include_directories (../)
 
