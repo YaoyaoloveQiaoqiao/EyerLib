@@ -134,15 +134,35 @@ namespace Eyer
                 uint32_t rem_intra4x4_pred_mode_flag[16];
                 memset(rem_intra4x4_pred_mode_flag, 0, 16 * sizeof(uint32_t));
                 for(int luma4x4BlkIdx=0; luma4x4BlkIdx<16; luma4x4BlkIdx++){
+                    //转换序号到 8x8 4x4
+                    int i8x8 = luma4x4BlkIdx / 4;
+                    int i4x4 = luma4x4BlkIdx % 4;
+                    EyerLog("\t\t\t转换序号 luma4x4BlkIdx: %d, i8x8: %d, i4x4: %d\n", luma4x4BlkIdx, i8x8, i4x4);
+
+                    // 获取模式
+                    EyerLog("\t\t\t\t获取相邻块的预测值\n");
+                    EyerCoeff4x4Block * top = nullptr;
+                    EyerCoeff4x4Block * left = nullptr;
+                    GetTopLeftBlock(&top, &left, i8x8, i4x4, RESIDUAL_TYPE::LUMA);
+
+                    int pred_mode = 0;
+                    if(top != nullptr){
+
+                    }
+                    if(left != nullptr){
+
+                    }
+
                     prev_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u1();
-                    EyerLog("\t\t\tprev_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
+                    EyerLog("\t\t\t\tprev_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
                     if(!prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]){
-                        EyerLog("\t\t\t\t不能采用预测的模式\n");
+                        EyerLog("\t\t\t\t\t不能采用预测的模式\n");
                         rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u(3);
                         EyerLog("\t\t\t\t\trem_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, rem_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
                     }
                     else{
-                        EyerLog("\t\t\t\t请采用预测的模式\n");
+                        EyerLog("\t\t\t\t\t请采用预测的模式\n");
+                        lumaResidual[i8x8][i4x4].luma_pred_mode = pred_mode;
                     }
                 }
             }
@@ -193,7 +213,6 @@ namespace Eyer
                     if(sps.ChromaArrayType == 2){
                         nC = -2;
                     }
-                    int totleCoeff = 0;
                     ResidualBlockCavlc(bs, chromaResidualDC[iCbCr], nC, 0, 4 * NumC8x8 - 1, 4 * NumC8x8, true);
                 } else {
                     EyerERROR("Chroma DC Error\n");
@@ -254,7 +273,6 @@ namespace Eyer
                         else{
                             EyerLog("\t\tLUMA 4x4\n");
                             int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::LUMA);
-                            int totleCoeff = 0;
                             ResidualBlockCavlc(bs, lumaResidual[i8x8][i4x4], nC, startIdx, endIdx, 16);
                         }
                     }
@@ -496,44 +514,7 @@ namespace Eyer
         EyerCoeff4x4Block * top = nullptr;
         EyerCoeff4x4Block * left = nullptr;
 
-        int blockX = i8x8 % 2 * 2 + i4x4 % 2;
-        int blockY = i8x8 / 2 * 2 + i4x4 / 2;
-
-        // Get Top
-        if(blockY > 0){
-            // 宏块内查找
-            top = findBlock(blockX, blockY - 1, type);
-        }
-        else{
-            // 宏块外查找
-            if(mbAddrB != nullptr){
-                if(type == RESIDUAL_TYPE::LUMA){
-                    top = mbAddrB->findBlock(blockX, 3, type);
-                }
-                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
-                    top = mbAddrB->findBlock(blockX, 1, type);
-                }
-            }
-        }
-
-        // Get Left
-        if(blockX > 0){
-            // 宏块内查找
-            left = findBlock(blockX - 1, blockY, type);
-        }
-        else{
-            // 宏块外查找
-            if(mbAddrA != nullptr){
-                // EyerLog_8("MbIndex: %d, blockX: %d, blockY: %d, Block\n", mbIndex, blockX, blockY);
-                if(type == RESIDUAL_TYPE::LUMA){
-                    left = mbAddrA->findBlock(3, blockY, type);
-                }
-                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
-                    left = mbAddrA->findBlock(1, blockY, type);
-                }
-            }
-        }
-
+        GetTopLeftBlock(&top, &left, i8x8, i4x4, type);
 
         int topNum = 0;
         int leftNum = 0;
@@ -551,6 +532,50 @@ namespace Eyer
         }
 
         return nC;
+    }
+
+    int EyerMacroblock::GetTopLeftBlock(EyerCoeff4x4Block ** top, EyerCoeff4x4Block ** left, int i8x8, int i4x4, RESIDUAL_TYPE & type)
+    {
+        // TODO 422 444
+        int blockX = i8x8 % 2 * 2 + i4x4 % 2;
+        int blockY = i8x8 / 2 * 2 + i4x4 / 2;
+
+        // Get Top
+        if(blockY > 0){
+            // 宏块内查找
+            *top = findBlock(blockX, blockY - 1, type);
+        }
+        else{
+            // 宏块外查找
+            if(mbAddrB != nullptr){
+                if(type == RESIDUAL_TYPE::LUMA){
+                    *top = mbAddrB->findBlock(blockX, 3, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    *top = mbAddrB->findBlock(blockX, 1, type);
+                }
+            }
+        }
+
+        // Get Left
+        if(blockX > 0){
+            // 宏块内查找
+            *left = findBlock(blockX - 1, blockY, type);
+        }
+        else{
+            // 宏块外查找
+            if(mbAddrA != nullptr){
+                // EyerLog_8("MbIndex: %d, blockX: %d, blockY: %d, Block\n", mbIndex, blockX, blockY);
+                if(type == RESIDUAL_TYPE::LUMA){
+                    *left = mbAddrA->findBlock(3, blockY, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    *left = mbAddrA->findBlock(1, blockY, type);
+                }
+            }
+        }
+
+        return 0;
     }
 
     EyerCoeff4x4Block * EyerMacroblock::findBlock(int blockX, int blockY, RESIDUAL_TYPE & type)

@@ -36,6 +36,8 @@ namespace Eyer
 
         int GetNumberCurrent(int i8x8, int i4x4, RESIDUAL_TYPE & type);
 
+        int GetTopLeftBlock(EyerCoeff4x4Block ** top, EyerCoeff4x4Block ** left, int i8x8, int i4x4, RESIDUAL_TYPE & type);
+
         int get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength);
 
         int get_total_zeros(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx);
