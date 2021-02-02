@@ -10,7 +10,9 @@ add_library(
         DCT.hpp
         EyerPalette.cpp
         EyerPalette.hpp
-        EyerPixel.cpp EyerPixel.hpp Eatrix.cpp Eatrix.hpp)
+        EyerPixel.cpp
+        EyerPixel.hpp
+)
 
 set(head_files
         EyerSignal.hpp

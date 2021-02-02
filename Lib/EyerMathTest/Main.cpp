@@ -1,0 +1,146 @@
+#include <gtest/gtest.h>
+#include "EyerMath/EyerMath.hpp"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+TEST(EyerMath, MatrixInit)
+{
+    Eyer::EatrixF mat(5, 5);
+    mat.PrintInfo();
+
+    Eyer::EatrixF mat2(2, 2);
+    mat2.PrintInfo();
+
+    Eyer::EatrixF mat3(1, 1);
+    mat3.PrintInfo();
+
+    Eyer::EatrixF mat4(4, 3);
+    mat4.PrintInfo();
+}
+
+TEST(EyerMath, Matrix4x4)
+{
+    Eyer::EatrixF4x4 mat4X4;
+    mat4X4.PrintInfo();
+    Eyer::EatrixF4x4 matA;
+    Eyer::EatrixF4x4 matB;
+    Eyer::EatrixF4x4 matC = matA * matB;
+    matC = matA * matB;
+}
+
+bool cmpMat(const Eyer::EatrixF4x4 & matC, const glm::mat4 & testMat)
+{
+    for(int i=0;i<4;i++){
+        Eyer::EyerString str = "";
+        for(int j=0;j<4;j++){
+            float a = glm::value_ptr(testMat)[i * 4 + j];
+            float b = matC.Get(i, j);
+            str = str + Eyer::EyerString::Number(a, " %04.4f ");
+            str = str + "==";
+            str = str + Eyer::EyerString::Number(b, " %04.4f ");
+            str = str + "  ";
+        }
+        EyerLog("%s\n", str.str);
+    }
+
+    for(int i=0;i<4;i++){
+        for(int j=0;j<4;j++){
+            float a = glm::value_ptr(testMat)[i * 4 + j];
+            float b = matC.Get(i, j);
+            if(a != b){
+                printf("a: %f, b: %f\n", a, b);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+TEST(EyerMath, Matrix4x4_multiplication)
+{
+    float a[] = {
+            1, 2, 3, 4,
+            5, 6, 7, 8,
+            9, 10, 11, 12,
+            13, 14, 15, 16
+    };
+    Eyer::EatrixF4x4 matA;
+    matA.SetData(a, 16);
+
+    float b[] = {
+            1, 0, 0, 0,
+            0, 3, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1,
+    };
+    Eyer::EatrixF4x4 matB;
+    matB.SetData(b, 16);
+
+    EyerLog("==================== * ====================\n");
+    Eyer::EatrixF4x4 matC = matA * matB;
+    matC.PrintInfo();
+
+    glm::mat4 testMatA = glm::make_mat4(a);
+    glm::mat4 testMatB = glm::make_mat4(b);
+    glm::mat4 testMatC = testMatB * testMatA;
+
+    ASSERT_EQ(cmpMat(matC, testMatC), true);
+
+    EyerLog("==================== - ====================\n");
+    matC = matA - matB;
+    matC.PrintInfo();
+    testMatC = testMatA - testMatB;
+
+    ASSERT_EQ(cmpMat(matC, testMatC), true);
+
+    EyerLog("==================== + ====================\n");
+
+    matC = matA + matB;
+    matC.PrintInfo();
+    testMatC = testMatA + testMatB;
+
+    ASSERT_EQ(cmpMat(matC, testMatC), true);
+}
+
+
+TEST(EyerMath, Matrix4x4_perspective)
+{
+
+    int width = 1920;
+    int height = 1080;
+
+    Eyer::EatrixF4x4 matC;
+    matC.SetPerspective(Eyer::Eath::DegreesToRadians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
+
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
+
+    cmpMat(~matC, proj);
+    // ASSERT_EQ(cmpMat(~matC, proj), true);
+}
+
+TEST(EyerMath, Matrix4x4_view)
+{
+    Eyer::EatrixF4x4 matC;
+    matC.LookAt(0.0f, 4.0f, 6.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f
+                );
+
+    glm::mat4 view;
+    view = glm::lookAt(glm::vec3(0.0f, 4.0f, 6.0f),
+                       glm::vec3(0.0f, 0.0f, 0.0f),
+                       glm::vec3(0.0f, 1.0f, 0.0f));
+    cmpMat(~matC, view);
+    // ASSERT_EQ(cmpMat(~matC, proj), true);
+}
+
+int main(int argc,char **argv){
+    eyer_log_thread(0);
+
+    testing::InitGoogleTest(&argc, argv);
+    int ret = RUN_ALL_TESTS();
+    return ret;
+}

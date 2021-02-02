@@ -2,7 +2,8 @@
 #define EYERLIB_DCT_HPP
 
 #include <math.h>
-#include "Eatrix.hpp"
+#include <stdio.h>
+#include "EyerMath/EyerMath.hpp"
 
 namespace Eyer
 {

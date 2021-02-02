@@ -52,6 +52,8 @@ int     eyer_log_param          (int isLevel, int isTime, int isFile, int isLine
 void    eyer_log_log            (const char * file, const char * function, int line, int level, const char * format, ...);
 int     eyer_log_clear          ();
 
+void    eyer_log_thread             (int thread);
+
 int     eyer_log_path           (const char * path);
 
 #ifdef __cplusplus
