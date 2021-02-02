@@ -280,12 +280,12 @@ namespace Eyer
             sh.slice_group_change_cycle = bs.bs_read_u(v); // FIXME add 2?
         }
         // ===================== Syntax Start =====================
-        EyerSyntax if_miaowu(true, "if(num_slice_groups_minus1 > 0 && slice_group_map_type >= 3 && slice_group_map_type <= 5)", syntax.GetLevel() + 1);
+        EyerSyntax if_num_slice_groups_minus1(true, "if(num_slice_groups_minus1 > 0 && slice_group_map_type >= 3 && slice_group_map_type <= 5)", syntax.GetLevel() + 1);
         {
             bool isA = pps.num_slice_groups_minus1 > 0 && pps.slice_group_map_type >= 3 && pps.slice_group_map_type <= 5;
-            if_miaowu.Put(true && isA, "slice_group_change_cycle", sh.slice_group_change_cycle);
+            if_num_slice_groups_minus1.Put(true && isA, "slice_group_change_cycle", sh.slice_group_change_cycle);
         }
-        syntax.Put(if_miaowu);
+        syntax.Put(if_num_slice_groups_minus1);
         // ===================== Syntax End =====================
 
         return 0;
