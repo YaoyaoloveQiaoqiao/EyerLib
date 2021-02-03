@@ -9,6 +9,7 @@
 
 #include "EyerLogThread.hpp"
 #include "EyerLogBean.hpp"
+#include "eyer_log_thread_flag.hpp"
 
 int eyer_log_path(const char * path)
 {
@@ -43,6 +44,11 @@ int eyer_log_param (int isLevel, int isTime, int isFile, int isLine, int isFunc)
     logThread->SetParam(param);
 
     return 0;
+}
+
+void     eyer_log_thread             (int thread)
+{
+    Eyer::EyerLogThread::eyer_log_thread_flag = thread;
 }
 
 void eyer_log_log(const char * file, const char * function, int line, int level, const char * format, ...)

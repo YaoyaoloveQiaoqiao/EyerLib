@@ -19,6 +19,7 @@ MESSAGE(STATUS "operation system is ${CMAKE_SYSTEM}")
 SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/install/)
 
 include_directories (googletest/googletest/include)
+include_directories (glm/)
 
 include_directories (EyerGLAD/glad/include/)
 include_directories (${CMAKE_SOURCE_DIR}/../../Lib/glfw_install/include)
@@ -126,6 +127,12 @@ ModuleTestOption("EyerThread"       "EyerThreadTest"           EyerThread)
 
 OPTION(EyerSignal                   "option for EyerSignal"             ON)
 ModuleTestOption("EyerSignal"       "EyerSignalTest"           EyerSignal)
+
+OPTION(EyerMath                     "option for EyerMath"             ON)
+ModuleTestOption("EyerMath"         "EyerMathTest"              EyerMath)
+
+
+
 
 
 

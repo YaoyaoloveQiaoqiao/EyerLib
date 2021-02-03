@@ -122,7 +122,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerGLProgram::PutMatrix4fv(EyerString key, EyerMat4x4 & _mat)
+    int EyerGLProgram::PutMatrix4fv(EyerString key, EatrixF4x4 & _mat)
     {
 #ifdef QT_EYER_PLAYER
         GLuint location = ctx->glGetUniformLocation(programId, key.str);
@@ -131,7 +131,7 @@ namespace Eyer
 #endif
 
 
-        EyerMat4x4 mat = ~_mat;
+        EatrixF4x4 mat = ~_mat;
         int matLen = mat.GetMatLen();
         float * m = (float *)malloc(matLen);
         mat.GetMat(m);

@@ -55,7 +55,7 @@ add_library(
         EyerObserverQueue_C.cpp
         EyerBuffer.h
         EyerBuffer_C.cpp
-)
+        eyer_log_thread_flag.hpp)
 
 set(head_files 
         EyerString.hpp
