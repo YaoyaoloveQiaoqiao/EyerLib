@@ -76,14 +76,14 @@ namespace Eyer
         return 0;
     }
 
-    int EyerGLFrameDraw::SetMVP(EyerMat4x4 & _mvp)
+    int EyerGLFrameDraw::SetMVP(EatrixF4x4 & _mvp)
     {
         if(mvp != nullptr){
             delete mvp;
             mvp = nullptr;
         }
 
-        mvp = new EyerMat4x4(_mvp);
+        mvp = new EatrixF4x4(_mvp);
 
         return 0;
     }

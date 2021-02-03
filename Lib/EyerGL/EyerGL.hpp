@@ -2,6 +2,7 @@
 #define	EYER_LIB_GL_AV_H
 
 #include "EyerCore/EyerCore.hpp"
+#include "EyerMath/EyerMath.hpp"
 #include <vector>
 
 #ifdef QT_EYER_PLAYER
@@ -35,6 +36,14 @@ namespace Eyer
 #else
 #define EyerGLContext _EyerGLContext
 #endif
+
+    enum EyerGLDrawType
+    {
+        TRIANGLES,
+        LINE,
+        LINE_LOOP,
+        POINT
+    };
 
     class EyerGLCMD
     {
@@ -84,7 +93,7 @@ namespace Eyer
         int UseProgram();
 
         int PutUniform1i(EyerString key, int value);
-        int PutMatrix4fv(EyerString key, EyerMat4x4 & mat);
+        int PutMatrix4fv(EyerString key, EatrixF4x4 & mat);
         int PutUniform1f(EyerString key, float value);
     };
 
@@ -105,7 +114,7 @@ namespace Eyer
         int SetEBO(unsigned int * EBOdata, int bufferSize);
         int AddVBO(float * VBOdata, int bufferSize, int layout, int size = 3, unsigned int stride = 0);
 
-        int DrawVAO();
+        int DrawVAO(EyerGLDrawType drawType);
     };
 
     class EyerGLDrawTexture
@@ -133,11 +142,11 @@ namespace Eyer
 
         int SetVAO(EyerGLVAO * vao);
         int PutTexture(EyerString uniform, EyerGLTexture * texture, int textureIndex = 0);
-        int PutMatrix4fv(EyerString uniform, EyerMat4x4 & mat);
+        int PutMatrix4fv(EyerString uniform, EatrixF4x4 & mat);
         int PutUniform1f(EyerString uniform, float val);
         int PutUniform1i(EyerString uniform, int val);
 
-        int Draw();
+        int Draw(EyerGLDrawType drawType = EyerGLDrawType::TRIANGLES);
     };
 
     class EyerGLTexture : public EyerGLCMD

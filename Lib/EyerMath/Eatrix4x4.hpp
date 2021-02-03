@@ -41,6 +41,15 @@ namespace Eyer
             return *this;
         }
 
+        int SetScale(T x, T y, T z)
+        {
+            Eatrix<T>::mat[0][0] = x;         Eatrix<T>::mat[0][1] = 0.0;       Eatrix<T>::mat[0][2] = 0.0;         Eatrix<T>::mat[0][3] = 0.0;
+            Eatrix<T>::mat[1][0] = 0.0;       Eatrix<T>::mat[1][1] = y;         Eatrix<T>::mat[1][2] = 0.0;         Eatrix<T>::mat[1][3] = 0.0;
+            Eatrix<T>::mat[2][0] = 0.0;       Eatrix<T>::mat[2][1] = 0.0;       Eatrix<T>::mat[2][2] = z;           Eatrix<T>::mat[2][3] = 0.0;
+            Eatrix<T>::mat[3][0] = 0.0;       Eatrix<T>::mat[3][1] = 0.0;       Eatrix<T>::mat[3][2] = 0.0;         Eatrix<T>::mat[3][3] = 1.0;
+            return 0;
+        }
+
         int SetRotate(T x, T y, T z, T a)
         {
             Eatrix<T>::mat[0][0] = cos(a) + x * x * (1 - cos(a));      Eatrix<T>::mat[0][1] = x * y * (1 - cos(a)) - z * sin(a); Eatrix<T>::mat[0][2] = x * z * (1 - cos(a)) + y * sin(a);  Eatrix<T>::mat[0][3] = 0.0;

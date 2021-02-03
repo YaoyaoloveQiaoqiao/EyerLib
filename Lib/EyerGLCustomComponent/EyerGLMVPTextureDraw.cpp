@@ -53,7 +53,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerGLMVPTextureDraw::SetMVP(EyerMat4x4 & _mvp)
+    int EyerGLMVPTextureDraw::SetMVP(EatrixF4x4 & _mvp)
     {
         mvp = _mvp;
         return 0;

@@ -39,7 +39,7 @@ namespace Eyer
         }
     }
 
-    int EyerGLVAO::DrawVAO()
+    int EyerGLVAO::DrawVAO(EyerGLDrawType drawType)
     {
         if(VAOId == 0){
             return -1;
@@ -51,7 +51,18 @@ namespace Eyer
         ctx->glBindVertexArray(0);
 #else
         glBindVertexArray(VAOId);
-        glDrawElements(GL_TRIANGLES, DrawTime, GL_UNSIGNED_INT, 0);
+        if(drawType == EyerGLDrawType::TRIANGLES){
+            glDrawElements(GL_TRIANGLES, DrawTime, GL_UNSIGNED_INT, 0);
+        }
+        else if(drawType == EyerGLDrawType::LINE_LOOP){
+            glDrawElements(GL_LINE_LOOP, DrawTime, GL_UNSIGNED_INT, 0);
+        }
+        else if(drawType == EyerGLDrawType::LINE){
+            // glDrawElements(GL_LINE, DrawTime, GL_UNSIGNED_INT, 0);
+        }
+        else if(drawType == EyerGLDrawType::POINT){
+            glDrawElements(GL_TRIANGLES, DrawTime, GL_UNSIGNED_INT, 0);
+        }
         glBindVertexArray(0);
 #endif
 
