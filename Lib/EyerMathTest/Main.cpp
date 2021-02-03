@@ -137,6 +137,65 @@ TEST(EyerMath, Matrix4x4_view)
     // ASSERT_EQ(cmpMat(~matC, proj), true);
 }
 
+
+TEST(EyerMath, ColorSpace)
+{
+    Eyer::EectorF3 yuv(0.5, 0.0, 0.0);
+    float yuv2020_rgb2020[] = {
+            1.0000, -0.0000, 1.4746,
+            1.0000, -0.1645, -0.5713,
+            1.0000, 1.8814, -0.0001
+    };
+    Eyer::EatrixF3x3 mat_yuv2020_rgb2020;
+    mat_yuv2020_rgb2020.SetData(yuv2020_rgb2020, 9);
+    mat_yuv2020_rgb2020.PrintInfo();
+
+    Eyer::EectorF3 rgb2020 = mat_yuv2020_rgb2020 * yuv;
+
+
+    rgb2020.SetX(0.7);
+    rgb2020.SetY(0.5);
+    rgb2020.SetZ(0.5);
+    rgb2020.PrintInfo();
+
+
+
+    float rgb2020_xyz[] = {
+            0.6370, 0.1446, 0.1689,
+            0.2627, 0.6780, 0.0593,
+            0,      0.0281, 1.0610
+    };
+    Eyer::EatrixF3x3 mat_rgb2020_xyz;
+    mat_rgb2020_xyz.SetData(rgb2020_xyz, 9);
+    mat_rgb2020_xyz.PrintInfo();
+
+    Eyer::EectorF3 xyz = (mat_rgb2020_xyz) * rgb2020;
+    xyz.PrintInfo();
+
+    float xyz_rgb709[] = {
+            3.240625,	-1.537208,	-0.498629,
+            -0.968931,	1.875756,	0.041518,
+            0.055710,	-0.204021,	1.056996
+    };
+
+    Eyer::EatrixF3x3 mat_xyz_rgb709;
+    mat_xyz_rgb709.SetData(xyz_rgb709, 9);
+    mat_xyz_rgb709.PrintInfo();
+
+    Eyer::EectorF3 rgb709 = (mat_xyz_rgb709) * xyz;
+    rgb709.PrintInfo();
+
+
+
+    rgb709 = (mat_xyz_rgb709 * mat_rgb2020_xyz * mat_yuv2020_rgb2020) * yuv;
+    rgb709.PrintInfo();
+
+    Eyer::EatrixF3x3 out = mat_xyz_rgb709 * mat_rgb2020_xyz * mat_yuv2020_rgb2020;
+
+    out = ~out;
+    out.PrintInfo();
+}
+
 int main(int argc,char **argv){
     eyer_log_thread(0);
 

@@ -112,7 +112,7 @@ namespace Eyer
          * @param m
          * @return
          */
-        const Eatrix operator * (const Eatrix &m)
+        Eatrix operator * (const Eatrix &m)
         {
             Eatrix res(row, m.col);
             for (int i = 0; i < res.row; i++) {
@@ -157,7 +157,7 @@ namespace Eyer
          * @param
          * @return
          */
-        const Eatrix operator ~ ()
+        Eatrix operator ~ ()
         {
             Eatrix res(row, col);
             for (int i = 0; i < row; i++) {
