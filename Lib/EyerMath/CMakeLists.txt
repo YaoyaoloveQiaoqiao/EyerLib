@@ -11,6 +11,8 @@ add_library(
         Eath.hpp
         Eatrix3x1.hpp
         Eatrix3x3.hpp
+        EnterPolation.cpp
+        EnterPolation.hpp
 )
 
 set(head_files

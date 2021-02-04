@@ -196,6 +196,17 @@ TEST(EyerMath, ColorSpace)
     out.PrintInfo();
 }
 
+TEST(EyerMath, EnterPolation)
+{
+    Eyer::EectorF3 start(0.0, 0.0, 0.0);
+    Eyer::EectorF3 end(1.0, 1.0, 1.0);
+
+    Eyer::EnterPolationF polation(start, end, 0, 1000);
+
+    Eyer::EectorF3 res = polation.Get(600);
+    res.PrintInfo();
+}
+
 int main(int argc,char **argv){
     eyer_log_thread(0);
 
