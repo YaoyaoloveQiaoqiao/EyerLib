@@ -6,7 +6,14 @@ add_library(
         EyerMath.hpp
         Eatrix.hpp
         Eatrix.cpp
-        Eatrix4x4.hpp Eath.cpp Eath.hpp Eatrix3x1.hpp)
+        Eatrix4x4.hpp
+        Eath.cpp
+        Eath.hpp
+        Eatrix3x1.hpp
+        Eatrix3x3.hpp
+        EnterPolation.cpp
+        EnterPolation.hpp
+)
 
 set(head_files
         EyerMath.hpp
