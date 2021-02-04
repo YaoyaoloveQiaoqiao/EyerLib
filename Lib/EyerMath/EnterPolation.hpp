@@ -23,6 +23,13 @@ namespace Eyer
 
         Eatrix<T> Get(long long time)
         {
+            if(time <= start){
+                time = start;
+            }
+            if(time >= end){
+                time = end;
+            }
+
             double r = (time - start) * 1.0 / (end - start);
             Eatrix<T> res = a;
 
