@@ -207,6 +207,18 @@ TEST(EyerMath, EnterPolation)
     res.PrintInfo();
 }
 
+
+TEST(EyerMath, Matrix4x4_rotato)
+{
+    Eyer::EatrixF4x4 matRotato;
+    matRotato.SetRotate(1.0, 0.0, 0.0, Eyer::Eath::DegreesToRadians(45.0));
+
+    glm::mat4 r = glm::mat4(1.0f);;
+    r = glm::rotate(r, glm::radians(45.0f), glm::vec3(1.0, 0.0, 0.0));
+
+    cmpMat(~matRotato, r);
+}
+
 int main(int argc,char **argv){
     eyer_log_thread(0);
 
