@@ -24,7 +24,7 @@ namespace Eyer
         int runBefore[16] = {0};
 
 
-        int luma_pred_mode = 0;
+        int luma_pred_mode = -1;
     };
 }
 

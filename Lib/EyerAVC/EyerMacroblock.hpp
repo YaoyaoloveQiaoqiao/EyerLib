@@ -28,6 +28,7 @@ namespace Eyer
 
     private:
         int MbPred       (EyerBitStream & bs);
+
         int Residual     (EyerBitStream & bs, int startIdx, int endIdx);
 
         int ResidualLuma (EyerBitStream & bs, int startIdx, int endIdx);
@@ -38,12 +39,6 @@ namespace Eyer
 
         int GetTopLeftBlock(EyerCoeff4x4Block ** top, EyerCoeff4x4Block ** left, int i8x8, int i4x4, RESIDUAL_TYPE & type);
 
-        int get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength);
-
-        int get_total_zeros(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx);
-        int get_total_zeros_chrome_dc(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx);
-
-        int get_run_before(EyerBitStream & bs, int & runBefore, int runBefore_vlcIdx);
     private:
         EyerSPS sps;
         EyerPPS pps;
@@ -71,8 +66,8 @@ namespace Eyer
         EyerCoeff4x4Block chromaCrResidualAC[4][4];
         EyerCoeff4x4Block chromaCbResidualAC[4][4];
 
-
         int swap(int & x, int & y);
+        int MIN(int a, int b);
     };
 }
 
