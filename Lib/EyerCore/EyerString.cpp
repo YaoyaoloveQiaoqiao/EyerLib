@@ -36,7 +36,7 @@ namespace Eyer {
         memcpy(str, _str, _strLen);
     }
 
-    EyerString & EyerString::operator = (const EyerString & s)
+    const EyerString & EyerString::operator = (const EyerString & s)
     {
         if(this == &s){
             return *this;
@@ -129,6 +129,13 @@ namespace Eyer {
         return outStr;
     }
 
+    EyerString EyerString::operator += (const EyerString & s)
+    {
+        EyerString outStr;
+        outStr = *this + s;
+        return outStr;
+    }
+
     bool EyerString::IsEmpty() const
     {
         if(str == nullptr){
@@ -185,6 +192,15 @@ namespace Eyer {
         }
 
         return splitVec.size();
+    }
+
+    EyerString EyerString::Number(float num, EyerString format)
+    {
+        char str[1024];
+
+        sprintf(str, format.str, num);
+
+        return str;
     }
 
     EyerString EyerString::Number(int num, EyerString format)

@@ -136,11 +136,11 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%smajor_brand: %c%c%c%c\n", levelStr.str, major_brand[0], major_brand[1], major_brand[2], major_brand[3]);
-        printf("%sminor_version: %d\n", levelStr.str, minor_version);
+        EyerLog("%smajor_brand: %c%c%c%c\n", levelStr.str, major_brand[0], major_brand[1], major_brand[2], major_brand[3]);
+        EyerLog("%sminor_version: %d\n", levelStr.str, minor_version);
 
         for(int i=0;i<compatible_brands_len;i++){
-            printf("%s%c%c%c%c\n", levelStr.str, compatible_brands[i][0], compatible_brands[i][1], compatible_brands[i][2],compatible_brands[i][3]);
+            EyerLog("%s%c%c%c%c\n", levelStr.str, compatible_brands[i][0], compatible_brands[i][1], compatible_brands[i][2],compatible_brands[i][3]);
         }
 
         return 0;
@@ -161,7 +161,6 @@ namespace Eyer
 
         type = BoxType::FTYP;
         size = Serialize().GetLen();
-        largesize = 0;
 
         return 0;
     }

@@ -3,44 +3,46 @@ include_directories (./)
 include_directories (../EyerAV)
 
 add_library(
-    EyerAV
-    EyerAVPacket.cpp
-    EyerAVReader.cpp
-    EyerAVDecoder.cpp
-    EyerAVStream.cpp
-    EyerAVFrame.cpp
-    EyerAVFrameUtil.cpp
-    EyerAVEncoder.cpp
-    EyerAVWriter.cpp
+        EyerAV
+        EyerAVPacket.cpp
+        EyerAVReader.cpp
+        EyerAVDecoder.cpp
+        EyerAVStream.cpp
+        EyerAVFrame.cpp
+        EyerAVFrameUtil.cpp
+        EyerAVEncoder.cpp
+        EyerAVWriter.cpp
 
-    EyerAV.hpp
-    EyerAVDecoderPrivate.hpp
-    EyerAVEncoderPrivate.hpp
-    EyerAVFramePrivate.hpp
-    EyerAVPacketPrivate.hpp
-    EyerAVReaderPrivate.hpp
-    EyerAVStreamPrivate.hpp
-    EyerAVWriterPrivate.hpp
-    EyerAVBitmap.cpp
-    EyerAVRational.cpp
-    EyerAVAudioFrameUtil.cpp
-    EyerAVFrameWeight.cpp
-    EyerAVPacketQueue.cpp
-    EyerAVPacketQueue.hpp
-    EyerAVFrameQueue.cpp
-    EyerAVFrameQueue.hpp
-    EyerAVQueue.cpp
-    EyerAVQueue.hpp
-    EyerAVQueueManager.hpp
-    EyerAVTool.cpp
+        EyerAV.hpp
+        EyerAVDecoderPrivate.hpp
+        EyerAVEncoderPrivate.hpp
+        EyerAVFramePrivate.hpp
+        EyerAVPacketPrivate.hpp
+        EyerAVReaderPrivate.hpp
+        EyerAVStreamPrivate.hpp
+        EyerAVWriterPrivate.hpp
+        EyerAVBitmap.cpp
+        EyerAVRational.cpp
+        EyerAVAudioFrameUtil.cpp
+        EyerAVFrameWeight.cpp
+        EyerAVPacketQueue.cpp
+        EyerAVPacketQueue.hpp
+        EyerAVFrameQueue.cpp
+        EyerAVFrameQueue.hpp
+        EyerAVQueue.cpp
+        EyerAVQueue.hpp
+        EyerAVQueueManager.hpp
+        EyerAVTool.cpp
 
-    AVUtil/EyerWandResource.cpp
-    AVUtil/EyerWandVideoResource.cpp
-    AVUtil/EyerVideoDecoderLine.cpp
-    EyerAVBitstreamFilter.cpp
-    EyerAVBitstreamFilter.hpp
-    EyerAVBitstreamFilterPrivate.hpp
-        ../EyerLua/EyerLua.hpp ../EyerLuaTest/Main.cpp ../EyerLua/A.cpp ../EyerLua/A.hpp)
+        AVUtil/EyerWandResource.cpp
+        AVUtil/EyerWandVideoResource.cpp
+        AVUtil/EyerVideoDecoderLine.cpp
+        EyerAVBitstreamFilter.cpp
+        EyerAVBitstreamFilter.hpp
+        EyerAVBitstreamFilterPrivate.hpp
+        AnnexB_to_avcC.cpp
+        AnnexB_to_avcC.hpp
+        EyerPureColorCheck.cpp EyerPureColorCheck.h EyerPureColorBlock.cpp EyerPureColorBlock.hpp ../EyerMathTest/Main.cpp)
 
 target_link_libraries (EyerAV EyerCore)
 

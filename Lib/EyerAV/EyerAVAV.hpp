@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include "EyerDASH/EyerDASH.hpp"
 
 namespace Eyer
 {
@@ -45,7 +46,9 @@ namespace Eyer
 
         Eyer_AV_PIX_FMT_YUVJ420P = 107,
 
-        Eyer_AV_PIX_FMT_RGBA = 201
+        Eyer_AV_PIX_FMT_RGBA = 201,
+
+        Eyer_AV_PIX_FMT_RGB8 = 202
     };
 
     enum EyerAVStreamType{
@@ -79,6 +82,8 @@ namespace Eyer
     public:
         EyerAVPacket();
         ~EyerAVPacket();
+        EyerAVPacket(const EyerAVPacket & avpacket);
+        EyerAVPacket & operator = (const EyerAVPacket & avpacket);
 
         int GetStreamId();
 
@@ -99,6 +104,8 @@ namespace Eyer
 
         int GetSize();
         unsigned char * GetDataPtr();
+
+        int SetDataPtr(uint8_t * data);
     };
 
     enum EyerAVAudioDateType
@@ -192,13 +199,16 @@ namespace Eyer
     public:
         EyerAVReaderPrivate * piml = nullptr;
     public:
-        EyerAVReader(EyerString _path);
+        EyerAVReader(EyerString _path, EyerDASHReader * dashReader = nullptr);
         ~EyerAVReader();
 
         int Open();
         int Close();
 
         double GetDuration();
+
+        int SetDiscardStream(int streamId);
+        int SetUnDiscardStream(int streamId);
 
         int Seek(double time);
         int SeekFrame(int streamIndex, int64_t timestamp);
@@ -286,7 +296,8 @@ namespace Eyer
     {
         CODEC_ID_UNKNOW = 0,
         CODEC_ID_H264 = 1,
-        CODEC_ID_AAC = 2
+        CODEC_ID_AAC = 2,
+        CODEC_ID_GIF = 3,
     };
 
     class EncoderParam

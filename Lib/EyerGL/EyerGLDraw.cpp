@@ -49,7 +49,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerGLDraw::PutMatrix4fv(EyerString uniform, EyerMat4x4 & mat)
+    int EyerGLDraw::PutMatrix4fv(EyerString uniform, EatrixF4x4 & mat)
     {
         program->UseProgram();
         program->PutMatrix4fv(uniform, mat);
@@ -76,7 +76,7 @@ namespace Eyer
         return 0;
     }
 
-    int EyerGLDraw::Draw()
+    int EyerGLDraw::Draw(EyerGLDrawType drawType)
     {
         if(program == nullptr){
             return -1;
@@ -88,7 +88,7 @@ namespace Eyer
 
         program->UseProgram();
 
-        vao->DrawVAO();
+        vao->DrawVAO(drawType);
 
 #ifdef QT_EYER_PLAYER
         ctx->glFinish();

@@ -8,5 +8,6 @@
 #include "EyerSPS.hpp"
 #include "EyerPPS.hpp"
 #include "EyerSLICE.hpp"
+#include "SLICEType.hpp"
 
 #endif //EYERLIB_EYERAVC_HPP

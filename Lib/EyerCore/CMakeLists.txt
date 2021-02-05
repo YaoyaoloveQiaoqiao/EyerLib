@@ -11,7 +11,6 @@ add_library(
         EyerLog.cpp
         EyerMath.hpp
         EyerString.cpp
-
         EyerMat.cpp
         EyerMat4x4.cpp
         EyerMat4x1.cpp
@@ -19,10 +18,8 @@ add_library(
         EyerMat2x1.cpp
         EyerRand.cpp
         EyerTime.cpp
-
         EyerLRUMap.hpp
         EyerLockQueue.hpp
-
         EyerTime.hpp
         EyerBuffer.cpp
         EyerBuffer.hpp
@@ -36,7 +33,29 @@ add_library(
         EyerBufferMut.hpp
         EyerMD5.cpp
         EyerMD5.hpp
-)
+        EyerSockaddr.cpp
+        EyerSockaddr.hpp
+        EyerLogThread.cpp
+        EyerLogThread.hpp
+        EyerLogBean.cpp
+        EyerLogBean.hpp
+        EyerLogParam.cpp
+        EyerLogParam.hpp
+        BLOCK_TIME.cpp
+        BLOCK_TIME.hpp
+        EyerTable.cpp
+        EyerTable.hpp
+        EyerRand.hpp
+        EyerObserverQueue.hpp
+        EyerObserver.cpp
+        EyerObserver.hpp
+        EyerSubject.cpp
+        EyerSubject.hpp
+        EyerObserverQueue.h
+        EyerObserverQueue_C.cpp
+        EyerBuffer.h
+        EyerBuffer_C.cpp
+        eyer_log_thread_flag.hpp)
 
 set(head_files 
         EyerString.hpp
@@ -56,6 +75,15 @@ set(head_files
         EyerURLUtil.hpp
         EyerUtil.hpp
         EyerMD5.hpp
+        EyerSockaddr.hpp
+        BLOCK_TIME.hpp
+        EyerLogParam.hpp
+        EyerLogBean.hpp
+        EyerLogThread.hpp
+        EyerTable.hpp
+        EyerRand.hpp
+        EyerObserverQueue.h
+        EyerBuffer.h
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCore)

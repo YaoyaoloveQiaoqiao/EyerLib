@@ -232,19 +232,19 @@ namespace Eyer
 
             float bearingYScale = texture->bearingY * 1.0 / height * 2.0;
 
-            Eyer::EyerMat4x4 matScale;
+            Eyer::EatrixF4x4 matScale;
             matScale.SetScale(widthScale, heightScale, 1.0);
 
             float posX = positionX / width * 2.0 - 1.0;
             float posY = -(positionY / height * 2.0 - 1.0);
 
-            Eyer::EyerMat4x4 matTrans;
+            Eyer::EatrixF4x4 matTrans;
             matTrans.SetTrans(posX + widthScale + (x * 1.0 / width * 2.0), posY - heightScale + bearingYScale, 0.0);
 
             x += texture->width;
             x += texture->advance / 64 - texture->width - texture->bearingX;
 
-            Eyer::EyerMat4x4 mat = (matTrans * matScale);
+            Eyer::EatrixF4x4 mat = (matTrans * matScale);
 
             // EyerLog("Render: %c %d %d\n", c, texture->width, texture->height);
 

@@ -8,6 +8,11 @@ namespace Eyer
     SLICEType SLICEType::SLICE_TYPE_SP(3, "SLICE_TYPE_SP");
     SLICEType SLICEType::SLICE_TYPE_SI(4, "SLICE_TYPE_SI");
 
+    SLICEType::SLICEType() : EyerEnum(0, "SLICE_TYPE_P")
+    {
+
+    }
+
     SLICEType::SLICEType(int _val, const EyerString & _name) : EyerEnum(_val, _name)
     {
 

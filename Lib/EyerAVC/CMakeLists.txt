@@ -28,7 +28,29 @@ add_library(
         EyerPPS.hpp
         EyerSLICE.cpp
         EyerSLICE.hpp
-        SLICEType.cpp SLICEType.hpp)
+        SLICEType.cpp
+        SLICEType.hpp
+        EyerSLICEHeader.cpp
+        EyerSLICEHeader.hpp
+        EyerSLICEBody.cpp
+        EyerSLICEBody.hpp
+        I_MB_TYPE.cpp
+        I_MB_TYPE.hpp
+        MB_PART_PRED_MODE.cpp
+        MB_PART_PRED_MODE.hpp
+        MB_TYPE.cpp
+        MB_TYPE.hpp
+        EyerMacroblock.cpp
+        EyerMacroblock.hpp
+        EyerCoeff4x4Block.cpp
+        EyerCoeff4x4Block.hpp
+        EyerCAVLC.cpp
+        EyerCAVLC.hpp
+        AVCTable.hpp
+        AVCTable.cpp
+        RESIDUAL_TYPE.cpp
+        RESIDUAL_TYPE.hpp
+)
 
 target_link_libraries (
         EyerAVC
@@ -49,6 +71,15 @@ set(head_files
         EyerSPS.hpp
         EyerPPS.hpp
         EyerSLICE.hpp
+        SLICEType.hpp
+        EyerSLICEHeader.hpp
+        EyerSLICEBody.hpp
+        I_MB_TYPE.hpp
+        MB_PART_PRED_MODE.hpp
+        MB_TYPE.hpp
+        EyerMacroblock.hpp
+        EyerCoeff4x4Block.hpp
+        RESIDUAL_TYPE.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAVC)

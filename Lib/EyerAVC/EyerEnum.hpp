@@ -9,7 +9,7 @@ namespace Eyer
     public:
         EyerEnum();
         EyerEnum(int _val, const EyerString & _name);
-        ~EyerEnum();
+        virtual ~EyerEnum();
 
         EyerEnum & operator = (const EyerEnum & eyerEnum);
         bool operator == (const EyerEnum & eyerEnum);

@@ -79,14 +79,14 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%sdata_reference_index: %d\n", levelStr.str, data_reference_index);
-        printf("%swidth: %d\n", levelStr.str, width);
-        printf("%sheight: %d\n", levelStr.str, height);
-        printf("%shorizresolution: %d\n", levelStr.str, horizresolution);
-        printf("%svertresolution: %d\n", levelStr.str, vertresolution);
-        printf("%sframe_count: %d\n", levelStr.str, frame_count);
-        printf("%scompressorname: %s\n", levelStr.str, compressorname.str);
-        printf("%sdepth: %d\n", levelStr.str, depth);
+        EyerLog("%sdata_reference_index: %d\n", levelStr.str, data_reference_index);
+        EyerLog("%swidth: %d\n", levelStr.str, width);
+        EyerLog("%sheight: %d\n", levelStr.str, height);
+        EyerLog("%shorizresolution: %d\n", levelStr.str, horizresolution);
+        EyerLog("%svertresolution: %d\n", levelStr.str, vertresolution);
+        EyerLog("%sframe_count: %d\n", levelStr.str, frame_count);
+        EyerLog("%scompressorname: %s\n", levelStr.str, compressorname.str);
+        EyerLog("%sdepth: %d\n", levelStr.str, depth);
 
         avcc.PrintInfo(level + 1);
 

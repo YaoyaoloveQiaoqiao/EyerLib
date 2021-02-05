@@ -66,12 +66,12 @@ namespace Eyer
         ~EyerGLMVPTextureDraw();
 
         int SetTexture(EyerGLTexture * texture);
-        int SetMVP(EyerMat4x4 & mvp);
+        int SetMVP(EatrixF4x4 & mvp);
 
         virtual int Draw();
 
     private:
-        EyerMat4x4 mvp;
+        EatrixF4x4 mvp;
 
         EyerGLTexture * texture = nullptr;
 
@@ -92,7 +92,7 @@ namespace Eyer
         int SetUTexture(EyerGLTexture * uTex);
         int SetVTexture(EyerGLTexture * vTex);
 
-        int SetMVP(EyerMat4x4 & mvp);
+        int SetMVP(EatrixF4x4 & mvp);
 
         virtual int Draw();
 
@@ -104,7 +104,7 @@ namespace Eyer
         EyerGLTexture * uTex = nullptr;
         EyerGLTexture * vTex = nullptr;
 
-        EyerMat4x4 * mvp = nullptr;
+        EatrixF4x4 * mvp = nullptr;
 
         int videoW = 0;
         int videoH = 0;

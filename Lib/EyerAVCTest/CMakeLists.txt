@@ -5,8 +5,11 @@ add_executable(
 
 include_directories (../)
 
-target_link_libraries (EyerAVCTest EyerCore)
+
 target_link_libraries (EyerAVCTest EyerAVC)
+target_link_libraries (EyerAVCTest EyerCore)
+target_link_libraries (EyerAVCTest EyerThread)
+target_link_libraries (EyerAVCTest EyerCodecCommon)
 target_link_libraries (EyerAVCTest gtest)
 
 file(COPY
@@ -26,7 +29,30 @@ file(COPY
         DESTINATION
         ${CMAKE_CURRENT_BINARY_DIR}/
         )
+file(COPY
+        ${CMAKE_CURRENT_SOURCE_DIR}/demo_video_176x144_base_line.h264
+        DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}/
+        )
 
+
+file(COPY
+        ${CMAKE_CURRENT_SOURCE_DIR}/a_1.h264
+        DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}/
+        )
+
+file(COPY
+        ${CMAKE_CURRENT_SOURCE_DIR}/a_2.h264
+        DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}/
+        )
+
+file(COPY
+        ${CMAKE_CURRENT_SOURCE_DIR}/a_3.h264
+        DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}/
+        )
 
 INSTALL(
         TARGETS EyerAVCTest

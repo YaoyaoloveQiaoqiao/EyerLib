@@ -14,5 +14,11 @@
 #include "EyerURLUtil.hpp"
 #include "EyerUtil.hpp"
 #include "EyerBufferMut.hpp"
+#include "EyerSockaddr.hpp"
+#include "BLOCK_TIME.hpp"
+#include "EyerTable.hpp"
+#include "EyerRand.hpp"
+
+#include "EyerLogThread.hpp"
 
 #endif

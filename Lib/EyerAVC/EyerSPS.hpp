@@ -27,11 +27,11 @@ namespace Eyer
     public:
         int aspect_ratio_info_present_flag;
         int aspect_ratio_idc;
-        int sar_width;
-        int sar_height;
-        int overscan_info_present_flag;
-        int overscan_appropriate_flag;
-        int video_signal_type_present_flag;
+        int sar_width = 0;
+        int sar_height = 0;
+        int overscan_info_present_flag = 0;
+        int overscan_appropriate_flag = 0;
+        int video_signal_type_present_flag = 0;
         int video_format;
         int video_full_range_flag;
         int colour_description_present_flag;
@@ -82,8 +82,14 @@ namespace Eyer
         int level_idc = 0;
         int seq_parameter_set_id = 0;
 
-        int chroma_format_idc = 0;
-        int residual_colour_transform_flag = 0;
+        // 当 chroma_format_idc不存在时，应推断其值为 1（4：2：0的色度格式）。
+        int chroma_format_idc = 1;
+        int separate_colour_plance_flag = 0;
+
+        int ChromaArrayType = 0;
+        int SubWidthC = 0;
+        int SubHeightC = 0;
+
         int bit_depth_luma_minus8 = 0;
         int bit_depth_chroma_minus8 = 0;
         int qpprime_y_zero_transform_bypass_flag = 0;
@@ -132,7 +138,7 @@ namespace Eyer
         EyerSPSVUI vui;
 
         int ReadScalingList(EyerBitStream & bs, int * scalingList, int sizeOfScalingList, int * useDefaultScalingMatrixFlag);
-        int ReadVuiParameters(EyerBitStream & bs);
+        int ReadVuiParameters(EyerBitStream & bs, EyerSyntax & syntax, bool isVui);
         int ReadHrdParameters(EyerHRD & hrd, EyerBitStream & bs);
     };
 }

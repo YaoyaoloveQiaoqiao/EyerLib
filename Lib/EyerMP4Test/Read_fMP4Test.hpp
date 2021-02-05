@@ -10,7 +10,7 @@
 
 TEST(EyerMP4, EyerReadfMP4)
 {
-    printf("=======================Read fMP4=======================\n");
+    EyerLog("=======================Read fMP4=======================\n");
     // FILE * fp = fopen("/Users/lichi/annie/xiaomai.mp4", "rb");
     FILE * fp = fopen("./xiaomai_dashinit.mp4", "rb");
 
@@ -31,9 +31,15 @@ TEST(EyerMP4, EyerReadfMP4)
     box.ParseSubBox(buffer);
     box.PrintInfo();
 
+    Eyer::MP4Box * moovBox = box.GetSubBoxPtr(Eyer::BoxType::MOOV);
+
+    Eyer::MP4Box moovbox2 = *moovBox;
+
     free(data);
 
     fclose(fp);
+
+    eyer_log_clear();
 }
 
 

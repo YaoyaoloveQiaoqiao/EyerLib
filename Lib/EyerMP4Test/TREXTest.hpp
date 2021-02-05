@@ -10,7 +10,7 @@
 
 TEST(EyerMP4, MP4BoxTREX)
 {
-    printf("=======================TREX=======================\n");
+    EyerLog("=======================TREX=======================\n");
     Eyer::MP4BoxTREX trex;
     trex.SetDefaultData();
     trex.PrintInfo();
@@ -23,6 +23,8 @@ TEST(EyerMP4, MP4BoxTREX)
     trex2.PrintInfo();
 
     ASSERT_EQ(trex, trex2) << "HDLR Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_TREXTEST_HPP

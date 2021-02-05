@@ -8,7 +8,7 @@
 
 TEST(EyerMP4, MP4BoxSTCO)
 {
-    printf("=======================STCO=======================\n");
+    EyerLog("=======================STCO=======================\n");
     Eyer::MP4BoxSTCO stco;
     stco.SetDefaultData();
     stco.PrintInfo();
@@ -21,6 +21,8 @@ TEST(EyerMP4, MP4BoxSTCO)
     stco2.PrintInfo();
 
     ASSERT_EQ(stco, stco2) << "STCO Error";
+
+    eyer_log_clear();
 }
 
 #endif //EYERLIB_STCOTEST_HPP

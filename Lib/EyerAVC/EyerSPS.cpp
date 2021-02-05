@@ -6,7 +6,7 @@ namespace Eyer
 {
     EyerSPS::EyerSPS()
     {
-
+        memset(&vui, 0, sizeof(vui));
     }
 
     EyerSPS::~EyerSPS()
@@ -31,41 +31,35 @@ namespace Eyer
         level_idc = bs.bs_read_u8();
         seq_parameter_set_id = bs.bs_read_ue();
 
-        fieldList.push_back(new EyerField("profile_idc",                    profile_idc));
-        fieldList.push_back(new EyerField("constraint_set0_flag",           constraint_set0_flag));
-        fieldList.push_back(new EyerField("constraint_set1_flag",           constraint_set1_flag));
-        fieldList.push_back(new EyerField("constraint_set2_flag",           constraint_set2_flag));
-        fieldList.push_back(new EyerField("constraint_set3_flag",           constraint_set3_flag));
-        fieldList.push_back(new EyerField("constraint_set4_flag",           constraint_set4_flag));
-        fieldList.push_back(new EyerField("constraint_set5_flag",           constraint_set5_flag));
-        fieldList.push_back(new EyerField("level_idc",                      level_idc));
-        fieldList.push_back(new EyerField("seq_parameter_set_id",           seq_parameter_set_id));
+        // ===================== Syntax Start =====================
+        rootSyntax.PutValid("profile_idc",                      profile_idc);
+        rootSyntax.PutValid("constraint_set0_flag",             constraint_set0_flag);
+        rootSyntax.PutValid("constraint_set1_flag",             constraint_set1_flag);
+        rootSyntax.PutValid("constraint_set2_flag",             constraint_set2_flag);
+        rootSyntax.PutValid("constraint_set3_flag",             constraint_set3_flag);
+        rootSyntax.PutValid("constraint_set4_flag",             constraint_set4_flag);
+        rootSyntax.PutValid("constraint_set5_flag",             constraint_set5_flag);
+        rootSyntax.PutValid("reserved_zero_2bits",              0);
+        rootSyntax.PutValid("level_idc",                        level_idc);
+        rootSyntax.PutValid("seq_parameter_set_id",             seq_parameter_set_id);
+        // ===================== Syntax End =====================
 
-
-        if( profile_idc == 100      || profile_idc == 110       ||
-            profile_idc == 122      || profile_idc == 244       ||
-            profile_idc == 44       || profile_idc == 83        ||
-            profile_idc == 86       || profile_idc == 118       ||
-            profile_idc == 128      || profile_idc == 138       ||
-            profile_idc == 139      || profile_idc == 134
-           )
+        bool isHigh = (profile_idc == 100      || profile_idc == 110       ||
+                  profile_idc == 122      || profile_idc == 244       || profile_idc == 44     ||
+                  profile_idc == 83       || profile_idc == 86        || profile_idc == 118    ||
+                  profile_idc == 128      || profile_idc == 138       || profile_idc == 139    ||
+                  profile_idc == 134      || profile_idc == 135);
+        if(isHigh)
         {
-            // TODO Heigh Profile
             chroma_format_idc = bs.bs_read_ue();
-            fieldList.push_back(new EyerField("chroma_format_idc",                    chroma_format_idc));
+
             if(chroma_format_idc == 3) {
-                residual_colour_transform_flag = bs.bs_read_u1();
-                fieldList.push_back(new EyerField("residual_colour_transform_flag",   residual_colour_transform_flag));
+                separate_colour_plance_flag = bs.bs_read_u1();
             }
             bit_depth_luma_minus8                   = bs.bs_read_ue();
             bit_depth_chroma_minus8                 = bs.bs_read_ue();
             qpprime_y_zero_transform_bypass_flag    = bs.bs_read_u1();
             seq_scaling_matrix_present_flag         = bs.bs_read_u1();
-
-            fieldList.push_back(new EyerField("bit_depth_luma_minus8",                      bit_depth_luma_minus8));
-            fieldList.push_back(new EyerField("bit_depth_chroma_minus8",                    bit_depth_chroma_minus8));
-            fieldList.push_back(new EyerField("qpprime_y_zero_transform_bypass_flag",       qpprime_y_zero_transform_bypass_flag));
-            fieldList.push_back(new EyerField("seq_scaling_matrix_present_flag",            seq_scaling_matrix_present_flag));
 
             if(seq_scaling_matrix_present_flag) {
                 for(int i=0; i<((chroma_format_idc != 3) ? 8 : 12); i++ ){
@@ -81,17 +75,69 @@ namespace Eyer
                 }
             }
         }
+        // ===================== Syntax Start =====================
+        EyerString if_profile_idc_str = "if( profile_idc == 100 || profile_idc == 110 ||\n"
+                                        "    profile_idc == 122 || profile_idc == 244 || profile_idc == 44  ||\n"
+                                        "    profile_idc == 83  || profile_idc == 86  || profile_idc == 118 ||\n"
+                                        "    profile_idc == 128 || profile_idc == 138 || profile_idc == 139 ||\n"
+                                        "    profile_idc == 134 || profile_idc == 135\n"
+                                        ")";
+        EyerSyntax if_profile_idcSyntax(true, if_profile_idc_str, rootSyntax.GetLevel() + 1);
+        {
+            if_profile_idcSyntax.Put(isHigh, "chroma_format_idc", chroma_format_idc);
+            bool is_chroma_format_idc_equals_3 = (chroma_format_idc == 3);
+
+            EyerSyntax if_chroma_format_idc_Syntax(isHigh, "if(chroma_format_idc == 3)", if_profile_idcSyntax.GetLevel() + 1);
+            {
+                if_chroma_format_idc_Syntax.Put(isHigh && is_chroma_format_idc_equals_3, "separate_colour_plance_flag", separate_colour_plance_flag);
+            }
+            if_profile_idcSyntax.Put(if_chroma_format_idc_Syntax);
+
+            if_profile_idcSyntax.Put(isHigh, "bit_depth_luma_minus8",                   bit_depth_luma_minus8);
+            if_profile_idcSyntax.Put(isHigh, "bit_depth_chroma_minus8",                 bit_depth_chroma_minus8);
+            if_profile_idcSyntax.Put(isHigh, "qpprime_y_zero_transform_bypass_flag",    qpprime_y_zero_transform_bypass_flag);
+            if_profile_idcSyntax.Put(isHigh, "seq_scaling_matrix_present_flag",         seq_scaling_matrix_present_flag);
+            // TODO if(seq_scaling_matrix_present_flag) {
+        }
+        rootSyntax.Put(if_profile_idcSyntax);
+        // ===================== Syntax End =====================
+
+
+        if (separate_colour_plance_flag == 0){
+            ChromaArrayType = chroma_format_idc;
+        }
+        else{
+            ChromaArrayType = 0;
+        }
+
+        if (chroma_format_idc == 1) {
+            SubWidthC = 2;
+            SubHeightC = 2;
+        }
+        if (chroma_format_idc == 2) {
+            SubWidthC = 2;
+            SubHeightC = 1;
+        }
+        if (chroma_format_idc == 3) {
+            SubWidthC = 1;
+            SubHeightC = 1;
+        }
+
+
+
 
         log2_max_frame_num_minus4               = bs.bs_read_ue();
         pic_order_cnt_type                      = bs.bs_read_ue();
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "log2_max_frame_num_minus4",       log2_max_frame_num_minus4);
+        rootSyntax.Put(true, "pic_order_cnt_type",              pic_order_cnt_type);
+        // ===================== Syntax End =====================
 
-        fieldList.push_back(new EyerField("log2_max_frame_num_minus4",              log2_max_frame_num_minus4));
-        fieldList.push_back(new EyerField("pic_order_cnt_type",                     pic_order_cnt_type));
+
 
 
         if(pic_order_cnt_type == 0) {
             log2_max_pic_order_cnt_lsb_minus4 = bs.bs_read_ue();
-            fieldList.push_back(new EyerField("log2_max_pic_order_cnt_lsb_minus4", log2_max_pic_order_cnt_lsb_minus4, nullptr, 1));
         }
         else if(pic_order_cnt_type == 1){
             delta_pic_order_always_zero_flag                = bs.bs_read_u1();
@@ -99,59 +145,104 @@ namespace Eyer
             offset_for_top_to_bottom_field                  = bs.bs_read_se();
             num_ref_frames_in_pic_order_cnt_cycle           = bs.bs_read_ue();
 
-            fieldList.push_back(new EyerField("delta_pic_order_always_zero_flag",       delta_pic_order_always_zero_flag,       nullptr, 1));
-            fieldList.push_back(new EyerField("offset_for_non_ref_pic",                 offset_for_non_ref_pic,                 nullptr, 1));
-            fieldList.push_back(new EyerField("offset_for_top_to_bottom_field",         offset_for_top_to_bottom_field,         nullptr, 1));
-            fieldList.push_back(new EyerField("num_ref_frames_in_pic_order_cnt_cycle",  num_ref_frames_in_pic_order_cnt_cycle,  nullptr, 1));
-
             for(int i=0; i<num_ref_frames_in_pic_order_cnt_cycle; i++) {
                 offset_for_ref_frame[i] = bs.bs_read_se();
-                fieldList.push_back(new EyerField(EyerString("offset_for_ref_frame[") + EyerString::Number(i) + "]",   offset_for_ref_frame[i], nullptr, 2));
             }
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_pic_order_cnt_type_A_Syntax(true, "if(pic_order_cnt_type == 0)", rootSyntax.GetLevel() + 1);
+        {
+            if_pic_order_cnt_type_A_Syntax.Put(pic_order_cnt_type == 0, "log2_max_pic_order_cnt_lsb_minus4", log2_max_pic_order_cnt_lsb_minus4);
+        }
+        rootSyntax.Put(if_pic_order_cnt_type_A_Syntax);
+        EyerSyntax if_pic_order_cnt_type_B_Syntax(true, "else if(pic_order_cnt_type == 1)", rootSyntax.GetLevel() + 1);
+        {
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "delta_pic_order_always_zero_flag",         delta_pic_order_always_zero_flag);
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "offset_for_non_ref_pic",                   offset_for_non_ref_pic);
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "offset_for_top_to_bottom_field",           offset_for_top_to_bottom_field);
+            if_pic_order_cnt_type_B_Syntax.Put(pic_order_cnt_type == 1, "num_ref_frames_in_pic_order_cnt_cycle",    num_ref_frames_in_pic_order_cnt_cycle);
+
+            EyerSyntax for_num_ref_frames_in_pic_order_cnt_cycle(pic_order_cnt_type == 1, "for(int i=0; i<num_ref_frames_in_pic_order_cnt_cycle; i++)", if_pic_order_cnt_type_B_Syntax.GetLevel() + 1);
+            for(int i=0; i<num_ref_frames_in_pic_order_cnt_cycle; i++) {
+                for_num_ref_frames_in_pic_order_cnt_cycle.Put(pic_order_cnt_type == 1, EyerString() + "offset_for_ref_frame[" + EyerString::Number(i) + "]", offset_for_ref_frame[i]);
+            }
+            if_pic_order_cnt_type_B_Syntax.Put(for_num_ref_frames_in_pic_order_cnt_cycle);
+        }
+        rootSyntax.Put(if_pic_order_cnt_type_B_Syntax);
+        // ===================== Syntax End =====================
+
+
 
         num_ref_frames                              = bs.bs_read_ue();
         gaps_in_frame_num_value_allowed_flag        = bs.bs_read_u1();
         pic_width_in_mbs_minus1                     = bs.bs_read_ue();
         pic_height_in_map_units_minus1              = bs.bs_read_ue();
         frame_mbs_only_flag                         = bs.bs_read_u1();
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "num_ref_frames",                              num_ref_frames);
+        rootSyntax.Put(true, "gaps_in_frame_num_value_allowed_flag",        gaps_in_frame_num_value_allowed_flag);
+        rootSyntax.Put(true, "pic_width_in_mbs_minus1",                     pic_width_in_mbs_minus1);
+        rootSyntax.Put(true, "pic_height_in_map_units_minus1",              pic_height_in_map_units_minus1);
+        rootSyntax.Put(true, "frame_mbs_only_flag",                         frame_mbs_only_flag);
+        // ===================== Syntax End =====================
 
-        fieldList.push_back(new EyerField("num_ref_frames",                             num_ref_frames));
-        fieldList.push_back(new EyerField("gaps_in_frame_num_value_allowed_flag",       gaps_in_frame_num_value_allowed_flag));
-        fieldList.push_back(new EyerField("pic_width_in_mbs_minus1",                    pic_width_in_mbs_minus1));
-        fieldList.push_back(new EyerField("pic_height_in_map_units_minus1",             pic_height_in_map_units_minus1));
-        fieldList.push_back(new EyerField("frame_mbs_only_flag",                        frame_mbs_only_flag));
+
+
 
         if(!frame_mbs_only_flag) {
             mb_adaptive_frame_field_flag = bs.bs_read_u1();
-            fieldList.push_back(new EyerField("mb_adaptive_frame_field_flag",       mb_adaptive_frame_field_flag, nullptr, 1));
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_frame_mbs_only_flag_Syntax(true, "if(!frame_mbs_only_flag)", rootSyntax.GetLevel() + 1);
+        {
+            if_frame_mbs_only_flag_Syntax.Put(!frame_mbs_only_flag, "mb_adaptive_frame_field_flag", mb_adaptive_frame_field_flag);
+        }
+        rootSyntax.Put(if_frame_mbs_only_flag_Syntax);
+        // ===================== Syntax End =====================
+
 
         direct_8x8_inference_flag       = bs.bs_read_u1();
         frame_cropping_flag             = bs.bs_read_u1();
-
-        fieldList.push_back(new EyerField("direct_8x8_inference_flag",              direct_8x8_inference_flag));
-        fieldList.push_back(new EyerField("frame_cropping_flag",                    frame_cropping_flag));
-
         if(frame_cropping_flag) {
             frame_crop_left_offset          = bs.bs_read_ue();
             frame_crop_right_offset         = bs.bs_read_ue();
             frame_crop_top_offset           = bs.bs_read_ue();
             frame_crop_bottom_offset        = bs.bs_read_ue();
-
-            fieldList.push_back(new EyerField("frame_crop_left_offset",         frame_crop_left_offset,     nullptr, 1));
-            fieldList.push_back(new EyerField("frame_crop_right_offset",        frame_crop_right_offset,    nullptr, 1));
-            fieldList.push_back(new EyerField("frame_crop_top_offset",          frame_crop_top_offset,      nullptr, 1));
-            fieldList.push_back(new EyerField("frame_crop_bottom_offset",       frame_crop_bottom_offset,   nullptr, 1));
         }
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "direct_8x8_inference_flag",   direct_8x8_inference_flag);
+        rootSyntax.Put(true, "frame_cropping_flag",         frame_cropping_flag);
+        EyerSyntax if_frame_cropping_flag_Syntax(true, "if(frame_cropping_flag)", rootSyntax.GetLevel() + 1);
+        {
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_left_offset",   frame_crop_left_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_right_offset",  frame_crop_right_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_top_offset",    frame_crop_top_offset);
+            if_frame_cropping_flag_Syntax.Put(frame_cropping_flag,   "frame_crop_bottom_offset", frame_crop_left_offset);
+        }
+        rootSyntax.Put(if_frame_cropping_flag_Syntax);
+        // ===================== Syntax End =====================
+
+
+
 
         vui_parameters_present_flag         = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("vui_parameters_present_flag",        vui_parameters_present_flag));
+        // ===================== Syntax Start =====================
+        rootSyntax.Put(true, "vui_parameters_present_flag",   vui_parameters_present_flag);
+        // ===================== Syntax End =====================
+
+
 
 
         if(vui_parameters_present_flag){
-            ReadVuiParameters(bs);
+
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_vui_parameters_present_flag_Syntax(true, "if(vui_parameters_present_flag)", rootSyntax.GetLevel() + 1);
+        ReadVuiParameters(bs, if_vui_parameters_present_flag_Syntax, vui_parameters_present_flag);
+        rootSyntax.Put(if_vui_parameters_present_flag_Syntax);
+        // ===================== Syntax End =====================
+
+
 
         valid = true;
 
@@ -186,91 +277,150 @@ namespace Eyer
         return 0;
     }
 
-    int EyerSPS::ReadVuiParameters(EyerBitStream & bs)
+    int EyerSPS::ReadVuiParameters(EyerBitStream & bs, EyerSyntax & syntax, bool isVui)
     {
         int vuilevel = 1;
 
         int SAR_Extended = 255;
         vui.aspect_ratio_info_present_flag = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("aspect_ratio_info_present_flag", vui.aspect_ratio_info_present_flag, nullptr, vuilevel));
-        if(vui.aspect_ratio_info_present_flag ) {
+        if(vui.aspect_ratio_info_present_flag) {
             vui.aspect_ratio_idc = bs.bs_read_u8();
-            fieldList.push_back(new EyerField("aspect_ratio_idc", vui.aspect_ratio_idc, nullptr, vuilevel + 1));
             if(vui.aspect_ratio_idc == SAR_Extended){
                 vui.sar_width      = bs.bs_read_u(16);
                 vui.sar_height     = bs.bs_read_u(16);
-                fieldList.push_back(new EyerField("sar_width", vui.sar_width, nullptr, vuilevel + 2));
-                fieldList.push_back(new EyerField("sar_height", vui.sar_height, nullptr, vuilevel + 2));
             }
         }
 
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "aspect_ratio_info_present_flag", vui.aspect_ratio_info_present_flag);
+        EyerSyntax if_aspect_ratio_info_present_flag_Syntax(isVui, "if(aspect_ratio_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_aspect_ratio_info_present_flag_Syntax.Put(isVui && vui.aspect_ratio_info_present_flag, "aspect_ratio_idc", vui.aspect_ratio_idc);
+            EyerSyntax if_aspect_ratio_idc_Syntax(isVui && vui.aspect_ratio_info_present_flag, "if(vui.aspect_ratio_idc == SAR_Extended)", if_aspect_ratio_info_present_flag_Syntax.GetLevel() + 1);
+            {
+                if_aspect_ratio_idc_Syntax.Put(isVui && vui.aspect_ratio_info_present_flag && vui.aspect_ratio_idc == SAR_Extended, "sar_width", vui.sar_width);
+                if_aspect_ratio_idc_Syntax.Put(isVui && vui.aspect_ratio_info_present_flag && vui.aspect_ratio_idc == SAR_Extended, "sar_height", vui.sar_height);
+            }
+            if_aspect_ratio_info_present_flag_Syntax.Put(if_aspect_ratio_idc_Syntax);
+        }
+        syntax.Put(if_aspect_ratio_info_present_flag_Syntax);
+        // ===================== Syntax End =====================
+
+
         vui.overscan_info_present_flag = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("overscan_info_present_flag", vui.overscan_info_present_flag, nullptr, vuilevel));
         if(vui.overscan_info_present_flag) {
             vui.overscan_appropriate_flag = bs.bs_read_u1();
-            fieldList.push_back(new EyerField("overscan_appropriate_flag", vui.overscan_appropriate_flag, nullptr, vuilevel + 1));
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "overscan_info_present_flag", vui.overscan_info_present_flag);
+        EyerSyntax if_overscan_info_present_flag_Syntax(isVui, "if(overscan_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_overscan_info_present_flag_Syntax.Put(isVui && vui.overscan_info_present_flag, "overscan_appropriate_flag", vui.overscan_appropriate_flag);
+        }
+        syntax.Put(if_overscan_info_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         vui.video_signal_type_present_flag = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("video_signal_type_present_flag", vui.video_signal_type_present_flag, nullptr, vuilevel));
         if(vui.video_signal_type_present_flag) {
             vui.video_format                            = bs.bs_read_u(3);
             vui.video_full_range_flag                   = bs.bs_read_u1();
             vui.colour_description_present_flag         = bs.bs_read_u1();
-            fieldList.push_back(new EyerField("video_format",                           vui.video_format,                       nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("video_full_range_flag",                  vui.video_full_range_flag,              nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("colour_description_present_flag",        vui.colour_description_present_flag,    nullptr, vuilevel + 1));
             if(vui.colour_description_present_flag) {
                 vui.colour_primaries                    = bs.bs_read_u8();
                 vui.transfer_characteristics            = bs.bs_read_u8();
                 vui.matrix_coefficients                 = bs.bs_read_u8();
-                fieldList.push_back(new EyerField("colour_primaries",           vui.colour_primaries,           nullptr, vuilevel + 2));
-                fieldList.push_back(new EyerField("transfer_characteristics",   vui.transfer_characteristics,   nullptr, vuilevel + 2));
-                fieldList.push_back(new EyerField("matrix_coefficients",        vui.matrix_coefficients,        nullptr, vuilevel + 2));
             }
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "video_signal_type_present_flag", vui.video_signal_type_present_flag);
+        EyerSyntax if_video_signal_type_present_flag_Syntax(isVui, "if(overscan_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_video_signal_type_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag, "video_format", vui.video_format);
+            if_video_signal_type_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag, "video_full_range_flag", vui.video_full_range_flag);
+            if_video_signal_type_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag, "colour_description_present_flag", vui.colour_description_present_flag);
+            EyerSyntax if_colour_description_present_flag_Syntax(isVui && vui.video_signal_type_present_flag, "if(overscan_info_present_flag)", if_video_signal_type_present_flag_Syntax.GetLevel() + 1);
+            {
+                if_colour_description_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag && vui.colour_description_present_flag, "colour_primaries", vui.colour_primaries);
+                if_colour_description_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag && vui.colour_description_present_flag, "transfer_characteristics", vui.transfer_characteristics);
+                if_colour_description_present_flag_Syntax.Put(isVui && vui.video_signal_type_present_flag && vui.colour_description_present_flag, "matrix_coefficients", vui.matrix_coefficients);
+            }
+            if_video_signal_type_present_flag_Syntax.Put(if_colour_description_present_flag_Syntax);
+        }
+        syntax.Put(if_video_signal_type_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         vui.chroma_loc_info_present_flag                = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("chroma_loc_info_present_flag", vui.chroma_loc_info_present_flag, nullptr, vuilevel));
         if(vui.chroma_loc_info_present_flag) {
             vui.chroma_sample_loc_type_top_field        = bs.bs_read_ue();
             vui.chroma_sample_loc_type_bottom_field     = bs.bs_read_ue();
-            fieldList.push_back(new EyerField("chroma_sample_loc_type_top_field",       vui.chroma_sample_loc_type_top_field, nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("chroma_sample_loc_type_bottom_field",    vui.chroma_sample_loc_type_bottom_field, nullptr, vuilevel + 1));
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "chroma_loc_info_present_flag", vui.chroma_loc_info_present_flag);
+        EyerSyntax if_chroma_loc_info_present_flag_Syntax(isVui, "if(chroma_loc_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_chroma_loc_info_present_flag_Syntax.Put(isVui && vui.chroma_loc_info_present_flag, "chroma_sample_loc_type_top_field", vui.chroma_sample_loc_type_top_field);
+            if_chroma_loc_info_present_flag_Syntax.Put(isVui && vui.chroma_loc_info_present_flag, "chroma_sample_loc_type_bottom_field", vui.chroma_sample_loc_type_bottom_field);
+        }
+        syntax.Put(if_chroma_loc_info_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         vui.timing_info_present_flag = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("timing_info_present_flag", vui.timing_info_present_flag, nullptr, vuilevel));
         if(vui.timing_info_present_flag) {
             vui.num_units_in_tick                       = bs.bs_read_u(32);
             vui.time_scale                              = bs.bs_read_u(32);
             vui.fixed_frame_rate_flag                   = bs.bs_read_u1();
-            fieldList.push_back(new EyerField("num_units_in_tick",          vui.num_units_in_tick,      nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("time_scale",                 vui.time_scale,             nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("fixed_frame_rate_flag",      vui.fixed_frame_rate_flag,  nullptr, vuilevel + 1));
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "timing_info_present_flag", vui.timing_info_present_flag);
+        EyerSyntax if_timing_info_present_flag_Syntax(isVui, "if(timing_info_present_flag)", syntax.GetLevel() + 1);
+        {
+            if_timing_info_present_flag_Syntax.Put(isVui && vui.timing_info_present_flag, "num_units_in_tick",      vui.num_units_in_tick);
+            if_timing_info_present_flag_Syntax.Put(isVui && vui.timing_info_present_flag, "time_scale",             vui.time_scale);
+            if_timing_info_present_flag_Syntax.Put(isVui && vui.timing_info_present_flag, "fixed_frame_rate_flag",  vui.fixed_frame_rate_flag);
+        }
+        syntax.Put(if_timing_info_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         vui.nal_hrd_parameters_present_flag = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("nal_hrd_parameters_present_flag", vui.nal_hrd_parameters_present_flag, nullptr, vuilevel));
         if(vui.nal_hrd_parameters_present_flag) {
             ReadHrdParameters(vui.hrd_nal, bs);
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "nal_hrd_parameters_present_flag", vui.nal_hrd_parameters_present_flag);
+        EyerSyntax if_nal_hrd_parameters_present_flag_Syntax(isVui, "if(nal_hrd_parameters_present_flag)", syntax.GetLevel() + 1);
+        {
+
+        }
+        syntax.Put(if_nal_hrd_parameters_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         vui.vcl_hrd_parameters_present_flag = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("vcl_hrd_parameters_present_flag", vui.vcl_hrd_parameters_present_flag, nullptr, vuilevel));
         if(vui.vcl_hrd_parameters_present_flag) {
             ReadHrdParameters(vui.hrd_vcl, bs);
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "vcl_hrd_parameters_present_flag", vui.vcl_hrd_parameters_present_flag);
+        EyerSyntax if_vcl_hrd_parameters_present_flag_Syntax(isVui, "if(vcl_hrd_parameters_present_flag)", syntax.GetLevel() + 1);
+        {
+
+        }
+        syntax.Put(if_vcl_hrd_parameters_present_flag_Syntax);
+        // ===================== Syntax End =====================
 
         if(vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag) {
             vui.low_delay_hrd_flag = bs.bs_read_u1();
-            fieldList.push_back(new EyerField("low_delay_hrd_flag", vui.low_delay_hrd_flag, nullptr, vuilevel + 1));
         }
+        // ===================== Syntax Start =====================
+        EyerSyntax if_nal_hrd_vcl_hrd_Syntax(isVui, "if(nal_hrd_parameters_present_flag || vcl_hrd_parameters_present_flag)", syntax.GetLevel() + 1);
+        {
+            bool isHRD = vui.nal_hrd_parameters_present_flag || vui.vcl_hrd_parameters_present_flag;
+            if_nal_hrd_vcl_hrd_Syntax.Put(isVui && isHRD, "low_delay_hrd_flag", vui.low_delay_hrd_flag);
+        }
+        syntax.Put(if_nal_hrd_vcl_hrd_Syntax);
+        // ===================== Syntax End =====================
 
         vui.pic_struct_present_flag         = bs.bs_read_u1();
         vui.bitstream_restriction_flag      = bs.bs_read_u1();
-        fieldList.push_back(new EyerField("pic_struct_present_flag",        vui.pic_struct_present_flag,    nullptr, vuilevel));
-        fieldList.push_back(new EyerField("bitstream_restriction_flag",     vui.bitstream_restriction_flag, nullptr, vuilevel));
 
         if(vui.bitstream_restriction_flag) {
             vui.motion_vectors_over_pic_boundaries_flag     = bs.bs_read_u1();
@@ -280,15 +430,23 @@ namespace Eyer
             vui.log2_max_mv_length_vertical                 = bs.bs_read_ue();
             vui.num_reorder_frames                          = bs.bs_read_ue();
             vui.max_dec_frame_buffering                     = bs.bs_read_ue();
-
-            fieldList.push_back(new EyerField("motion_vectors_over_pic_boundaries_flag",        vui.motion_vectors_over_pic_boundaries_flag,        nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("max_bytes_per_pic_denom",                        vui.max_bytes_per_pic_denom,                        nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("max_bits_per_mb_denom",                          vui.max_bits_per_mb_denom,                          nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("log2_max_mv_length_horizontal",                  vui.log2_max_mv_length_horizontal,                  nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("log2_max_mv_length_vertical",                    vui.log2_max_mv_length_vertical,                    nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("num_reorder_frames",                             vui.num_reorder_frames,                             nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("max_dec_frame_buffering",                        vui.max_dec_frame_buffering,                        nullptr, vuilevel + 1));
         }
+        // ===================== Syntax Start =====================
+        syntax.Put(isVui, "pic_struct_present_flag", vui.pic_struct_present_flag);
+        syntax.Put(isVui, "bitstream_restriction_flag", vui.bitstream_restriction_flag);
+
+        EyerSyntax if_bitstream_restriction_flag_Syntax(isVui, "if(vui.bitstream_restriction_flag)", syntax.GetLevel() + 1);
+        {
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "motion_vectors_over_pic_boundaries_flag", vui.motion_vectors_over_pic_boundaries_flag);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "max_bytes_per_pic_denom", vui.max_bytes_per_pic_denom);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "max_bits_per_mb_denom", vui.max_bits_per_mb_denom);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "log2_max_mv_length_horizontal", vui.log2_max_mv_length_horizontal);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "log2_max_mv_length_vertical", vui.log2_max_mv_length_vertical);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "num_reorder_frames", vui.num_reorder_frames);
+            if_bitstream_restriction_flag_Syntax.Put(isVui && vui.bitstream_restriction_flag, "max_dec_frame_buffering", vui.max_dec_frame_buffering);
+        }
+        syntax.Put(if_bitstream_restriction_flag_Syntax);
+        // ===================== Syntax End =====================
 
         return 0;
     }
@@ -301,28 +459,16 @@ namespace Eyer
         hrd.bit_rate_scale = bs.bs_read_u(4);
         hrd.cpb_size_scale = bs.bs_read_u(4);
 
-        fieldList.push_back(new EyerField("cpb_cnt_minus1",        hrd.cpb_cnt_minus1,        nullptr, vuilevel + 0));
-        fieldList.push_back(new EyerField("bit_rate_scale",        hrd.bit_rate_scale,        nullptr, vuilevel + 0));
-        fieldList.push_back(new EyerField("cpb_size_scale",        hrd.cpb_size_scale,        nullptr, vuilevel + 0));
-
         for(int SchedSelIdx = 0; SchedSelIdx <= hrd.cpb_cnt_minus1; SchedSelIdx++) {
             hrd.bit_rate_value_minus1[SchedSelIdx]        = bs.bs_read_ue();
             hrd.cpb_size_value_minus1[SchedSelIdx]        = bs.bs_read_ue();
             hrd.cbr_flag[SchedSelIdx]                     = bs.bs_read_u1();
-
-            fieldList.push_back(new EyerField("bit_rate_value_minus1[SchedSelIdx]",        hrd.bit_rate_value_minus1[SchedSelIdx],          nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("cpb_size_value_minus1[SchedSelIdx]",        hrd.cpb_size_value_minus1[SchedSelIdx],          nullptr, vuilevel + 1));
-            fieldList.push_back(new EyerField("cbr_flag[SchedSelIdx] ",                    hrd.cbr_flag[SchedSelIdx] ,                      nullptr, vuilevel + 1));
         }
         hrd.initial_cpb_removal_delay_length_minus1     = bs.bs_read_u(5);
         hrd.cpb_removal_delay_length_minus1             = bs.bs_read_u(5);
         hrd.dpb_output_delay_length_minus1              = bs.bs_read_u(5);
         hrd.time_offset_length                          = bs.bs_read_u(5);
 
-        fieldList.push_back(new EyerField("initial_cpb_removal_delay_length_minus1",        hrd.initial_cpb_removal_delay_length_minus1,                nullptr, vuilevel + 0));
-        fieldList.push_back(new EyerField("cpb_removal_delay_length_minus1",                hrd.cpb_removal_delay_length_minus1,                        nullptr, vuilevel + 0));
-        fieldList.push_back(new EyerField("dpb_output_delay_length_minus1",                 hrd.dpb_output_delay_length_minus1 ,                        nullptr, vuilevel + 0));
-        fieldList.push_back(new EyerField("time_offset_length",                             hrd.time_offset_length ,                                    nullptr, vuilevel + 0));
         return 0;
     }
 }

@@ -1,5 +1,6 @@
 #include "BoxType.hpp"
 #include <stdio.h>
+#include "EyerCore/EyerCore.hpp"
 
 namespace Eyer
 {
@@ -204,7 +205,7 @@ namespace Eyer
 
     int BoxType::PrintInfo()
     {
-        printf("%c%c%c%c\n", a, b, c, d);
+        EyerLog("%c%c%c%c\n", a, b, c, d);
         return 0;
     }
 }

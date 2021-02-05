@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <curl/curl.h>
 
-#include "EyerNet/EyerNet.hpp"
+#include "EyerHttp/EyerHttp.hpp"
 #include "EyerDASH/EyerDASH.hpp"
 
 TEST(EyerDashTest, EyerAdaptationSet){

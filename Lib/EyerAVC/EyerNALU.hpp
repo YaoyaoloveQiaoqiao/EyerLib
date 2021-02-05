@@ -3,6 +3,7 @@
 
 #include "EyerNALUData.hpp"
 #include "EyerField.hpp"
+#include "EyerCodecCommon/EyerCodecCommon.hpp"
 
 namespace Eyer
 {
@@ -10,7 +11,7 @@ namespace Eyer
     public:
         EyerNALU();
         EyerNALU(const EyerNALU & nalu);
-        ~EyerNALU();
+        virtual ~EyerNALU();
 
         EyerNALU & operator = (const EyerNALU & nalu);
 
@@ -21,11 +22,16 @@ namespace Eyer
         int PrintInfo();
 
         bool isValid();
+
+        NALUType & GetNALUType();
+
+    public:
+        EyerSyntax rootSyntax;
     protected:
         EyerNALUData naluData;
-        std::vector<EyerField *> fieldList;
 
         bool valid = false;
+        int intlog2(int x);
     };
 }
 

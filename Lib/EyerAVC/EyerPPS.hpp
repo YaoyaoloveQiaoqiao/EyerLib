@@ -41,7 +41,9 @@ namespace Eyer
         int redundant_pic_cnt_present_flag = 0;
 
 
-        int intlog2(int x);
+        //Fidelity Range Extensions Stuff
+        int transform_8x8_mode_flag = 0;
+        int pic_scaling_matrix_present_flag = 0;
     };
 }
 

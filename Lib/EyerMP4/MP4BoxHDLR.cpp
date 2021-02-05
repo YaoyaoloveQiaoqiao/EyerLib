@@ -103,8 +103,8 @@ namespace Eyer
         }
         levelStr = levelStr + "\t";
 
-        printf("%shandle_type: %c%c%c%c\n", levelStr.str, handle_type_a, handle_type_b, handle_type_c, handle_type_d);
-        printf("%sstr: %s\n", levelStr.str, str.str);
+        EyerLog("%shandle_type: %c%c%c%c\n", levelStr.str, handle_type_a, handle_type_b, handle_type_c, handle_type_d);
+        EyerLog("%sstr: %s\n", levelStr.str, str.str);
 
         return 0;
     }

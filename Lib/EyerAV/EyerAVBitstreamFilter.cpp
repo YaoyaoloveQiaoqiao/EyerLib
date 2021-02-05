@@ -10,7 +10,11 @@ namespace Eyer {
         void *state = NULL;
 
         const AVBitStreamFilter * bsf = nullptr;
-        while (bsf = av_bsf_next(&state)) {
+        while (1) {
+            bsf = av_bsf_next(&state);
+            if(bsf == nullptr){
+                break;
+            }
             EyerLog("%s\n", bsf->name);
         }
 
@@ -21,8 +25,14 @@ namespace Eyer {
     {
         piml = new EyerAVBitstreamFilterPrivate();
 
-        const AVBitStreamFilter *bsf = av_bsf_get_by_name("h264_mp4toannexb");
-        int ret = av_bsf_alloc(bsf, &piml->ctx);
+        if(type == EyerAVBitstreamFilterType::h264_mp4toannexb){
+            const AVBitStreamFilter * bsf = av_bsf_get_by_name("h264_mp4toannexb");
+            int ret = av_bsf_alloc(bsf, &piml->ctx);
+        }
+        if(type == EyerAVBitstreamFilterType::hevc_mp4toannexb){
+            const AVBitStreamFilter * bsf = av_bsf_get_by_name("hevc_mp4toannexb");
+            int ret = av_bsf_alloc(bsf, &piml->ctx);
+        }
 
         avcodec_parameters_copy(piml->ctx->par_in, stream.piml->codecpar);
         av_bsf_init(piml->ctx);
