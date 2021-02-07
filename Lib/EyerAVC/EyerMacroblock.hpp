@@ -17,7 +17,7 @@ namespace Eyer
     class EyerMacroblock {
     public:
         EyerMacroblock();
-        EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD);
+        EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD, EyerMacroblock * _mbAddrF);
         ~EyerMacroblock();
 
         int Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader);
@@ -51,6 +51,7 @@ namespace Eyer
         EyerMacroblock * mbAddrB = nullptr;
         EyerMacroblock * mbAddrC = nullptr;
         EyerMacroblock * mbAddrD = nullptr;
+        EyerMacroblock * mbAddrF = nullptr;
 
         int mbIndex = 0;
 

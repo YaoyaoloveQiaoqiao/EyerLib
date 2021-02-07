@@ -19,9 +19,10 @@ namespace Eyer
         mbAddrB = nullptr;
         mbAddrC = nullptr;
         mbAddrD = nullptr;
+        mbAddrF = nullptr;
     }
 
-    EyerMacroblock::EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD)
+    EyerMacroblock::EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD, EyerMacroblock * _mbAddrF)
     {
         mbIndex = _mbIndex;
         if(_mbAddrA != nullptr){
@@ -35,6 +36,9 @@ namespace Eyer
         }
         if(_mbAddrD != nullptr){
             mbAddrD = new EyerMacroblock(*_mbAddrD);
+        }
+        if(_mbAddrF != nullptr){
+            mbAddrF = new EyerMacroblock(*_mbAddrF);
         }
     }
 
@@ -55,6 +59,10 @@ namespace Eyer
         if(mbAddrD != nullptr){
             delete mbAddrD;
             mbAddrD = nullptr;
+        }
+        if(mbAddrF != nullptr){
+            delete mbAddrF;
+            mbAddrF = nullptr;
         }
     }
 
@@ -192,7 +200,6 @@ namespace Eyer
     int EyerMacroblock::Residual(EyerBitStream & bs, int startIdx, int endIdx)
     {
         ResidualLuma(bs, startIdx, endIdx);
-
 
         EyerLog("\t===========================Residual Chroma===========================\n");
         if(sps.ChromaArrayType == 1 || sps.ChromaArrayType == 2) {
@@ -617,6 +624,12 @@ namespace Eyer
     {
         if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_4x4){
             // LUMA
+            for(int luma4x4BlkIdx=0; luma4x4BlkIdx<16; luma4x4BlkIdx++) {
+                //转换序号到 8x8 4x4
+                int i8x8 = luma4x4BlkIdx / 4;
+                int i4x4 = luma4x4BlkIdx % 4;
+            }
+
             for(int i8x8 = 0; i8x8 < 4; i8x8++){
                 for (int i4x4 = 0; i4x4 < 4; i4x4++) {
                     lumaResidual[i8x8][i4x4].Decode();
@@ -680,7 +693,25 @@ namespace Eyer
 
         // Get C
         if(blockX >= 0 && blockX < 3){
-
+            if(blockY > 0){
+                *c = findBlock(blockX + 1, blockY - 1, type);
+            }
+            else if(blockY == 0){
+                if(mbAddrB != nullptr){
+                    *c = mbAddrB->findBlock(blockX + 1, 3, type);
+                }
+            }
+        }
+        else if(blockX == 3){
+            if(blockY > 0){
+                // TODO F Block
+                // mbAddrF
+            }
+            else if(blockY == 0){
+                if(mbAddrC != nullptr){
+                    *c = mbAddrC->findBlock(0, 3, type);
+                }
+            }
         }
 
         // Get D

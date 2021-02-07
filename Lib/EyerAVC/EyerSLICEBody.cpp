@@ -98,7 +98,12 @@ namespace Eyer
                 EyerMacroblock * mbAddrD = nullptr;
                 mbTable.Get(mbAddrD, mbAddrD_X, mbAddrD_Y);
 
-                EyerMacroblock * block = new EyerMacroblock(CurrMbAddr, mbAddrA, mbAddrB, mbAddrC, mbAddrD);
+                int mbAddrF_X = x + 1;
+                int mbAddrF_Y = y - 1;
+                EyerMacroblock * mbAddrF = nullptr;
+                mbTable.Get(mbAddrF, mbAddrF_X, mbAddrF_Y);
+
+                EyerMacroblock * block = new EyerMacroblock(CurrMbAddr, mbAddrA, mbAddrB, mbAddrC, mbAddrD, mbAddrF);
                 block->Parse(bs, sps, pps, sliceHeader);
                 block->Decode();
                 mbTable.Set(x, y, block);
