@@ -21,6 +21,7 @@ namespace Eyer
         ~EyerMacroblock();
 
         int Parse(EyerBitStream & bs, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader);
+        int Decode();
 
         EyerCoeff4x4Block * findBlock(int blockX, int blockY, RESIDUAL_TYPE & type);
 
@@ -38,6 +39,8 @@ namespace Eyer
         int GetNumberCurrent(int i8x8, int i4x4, RESIDUAL_TYPE & type);
 
         int GetTopLeftBlock(EyerCoeff4x4Block ** top, EyerCoeff4x4Block ** left, int i8x8, int i4x4, RESIDUAL_TYPE & type);
+
+        int GetABCDBlock (EyerCoeff4x4Block ** a, EyerCoeff4x4Block ** b, EyerCoeff4x4Block ** c, EyerCoeff4x4Block ** d, int i8x8, int i4x4, RESIDUAL_TYPE & type);
 
     private:
         EyerSPS sps;
@@ -58,6 +61,7 @@ namespace Eyer
         uint32_t CodedBlockPatternChroma = 0;
 
         uint32_t intra_chroma_pred_mode = 0;
+
 
         EyerCoeff4x4Block lumaResidual[4][4];
 

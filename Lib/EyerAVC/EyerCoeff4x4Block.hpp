@@ -11,6 +11,8 @@ namespace Eyer
         EyerCoeff4x4Block();
         ~EyerCoeff4x4Block();
 
+        int Decode();
+
         bool emptyBlock = false;
 
         int totleCoeff = 0;

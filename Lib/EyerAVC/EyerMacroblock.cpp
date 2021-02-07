@@ -144,8 +144,6 @@ namespace Eyer
                     EyerCoeff4x4Block * left = nullptr;
                     GetTopLeftBlock(&top, &left, i8x8, i4x4, RESIDUAL_TYPE::LUMA);
 
-                    int pred_mode = 0;
-
                     int upIntraPredMode = -1;
                     if(top != nullptr){
                         upIntraPredMode = top->luma_pred_mode;
@@ -612,5 +610,100 @@ namespace Eyer
             return b;
         }
         return a;
+    }
+
+
+    int EyerMacroblock::Decode()
+    {
+        if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_4x4){
+            // LUMA
+            for(int i8x8 = 0; i8x8 < 4; i8x8++){
+                for (int i4x4 = 0; i4x4 < 4; i4x4++) {
+                    lumaResidual[i8x8][i4x4].Decode();
+                }
+            }
+            // CHROMA
+        }
+
+        if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+
+        }
+        return 0;
+    }
+
+    int EyerMacroblock::GetABCDBlock (EyerCoeff4x4Block ** a, EyerCoeff4x4Block ** b, EyerCoeff4x4Block ** c, EyerCoeff4x4Block ** d, int i8x8, int i4x4, RESIDUAL_TYPE & type)
+    {
+        /*
+         ***************
+         *  D  B  C
+         *  A  E
+         ***************
+         */
+
+        // TODO 422 444
+        int blockX = i8x8 % 2 * 2 + i4x4 % 2;
+        int blockY = i8x8 / 2 * 2 + i4x4 / 2;
+
+        // Get A
+        if(blockX > 0){
+            // 宏块内查找
+            *a = findBlock(blockX - 1, blockY, type);
+        }
+        else{
+            // 宏块外查找
+            if(mbAddrA != nullptr){
+                if(type == RESIDUAL_TYPE::LUMA){
+                    *a = mbAddrA->findBlock(3, blockY, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    *a = mbAddrA->findBlock(1, blockY, type);
+                }
+            }
+        }
+
+        // Get B
+        if(blockY > 0){
+            // 宏块内查找
+            *b = findBlock(blockX, blockY - 1, type);
+        }
+        else{
+            // 宏块外查找
+            if(mbAddrB != nullptr){
+                if(type == RESIDUAL_TYPE::LUMA){
+                    *b = mbAddrB->findBlock(blockX, 3, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    *b = mbAddrB->findBlock(blockX, 1, type);
+                }
+            }
+        }
+
+        // Get C
+        if(blockX >= 0 && blockX < 3){
+
+        }
+
+        // Get D
+        if(blockY > 0 && blockX > 0){
+            // 宏块内查找
+            *d = findBlock(blockX - 1, blockY - 1, type);
+        }
+        else if(blockY > 0 && blockX == 0){
+            if(mbAddrA != nullptr){
+                *d = mbAddrA->findBlock(3, blockY - 1, type);
+            }
+        }
+        else if(blockX > 0 && blockY == 0){
+            if(mbAddrB != nullptr){
+                *d = mbAddrB->findBlock(blockX - 1, 3, type);
+            }
+        }
+        else if(blockX == 0 && blockY == 0){
+            if(mbAddrD != nullptr){
+                *d = mbAddrD->findBlock(3, 3, type);
+            }
+        }
+
+        return 0;
     }
 }
