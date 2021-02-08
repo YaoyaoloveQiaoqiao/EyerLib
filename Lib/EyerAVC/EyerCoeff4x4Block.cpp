@@ -11,4 +11,9 @@ namespace Eyer
     {
 
     }
+
+    int EyerCoeff4x4Block::Decode()
+    {
+        return 0;
+    }
 }

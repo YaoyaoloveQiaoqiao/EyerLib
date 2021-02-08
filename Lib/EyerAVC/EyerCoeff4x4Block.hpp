@@ -11,6 +11,8 @@ namespace Eyer
         EyerCoeff4x4Block();
         ~EyerCoeff4x4Block();
 
+        int Decode();
+
         bool emptyBlock = false;
 
         int totleCoeff = 0;
@@ -24,7 +26,7 @@ namespace Eyer
         int runBefore[16] = {0};
 
 
-        int luma_pred_mode = 0;
+        int luma_pred_mode = -1;
     };
 }
 

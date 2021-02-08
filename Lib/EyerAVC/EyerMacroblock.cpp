@@ -19,9 +19,10 @@ namespace Eyer
         mbAddrB = nullptr;
         mbAddrC = nullptr;
         mbAddrD = nullptr;
+        mbAddrF = nullptr;
     }
 
-    EyerMacroblock::EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD)
+    EyerMacroblock::EyerMacroblock(int _mbIndex, EyerMacroblock * _mbAddrA, EyerMacroblock * _mbAddrB, EyerMacroblock * _mbAddrC, EyerMacroblock * _mbAddrD, EyerMacroblock * _mbAddrF)
     {
         mbIndex = _mbIndex;
         if(_mbAddrA != nullptr){
@@ -35,6 +36,9 @@ namespace Eyer
         }
         if(_mbAddrD != nullptr){
             mbAddrD = new EyerMacroblock(*_mbAddrD);
+        }
+        if(_mbAddrF != nullptr){
+            mbAddrF = new EyerMacroblock(*_mbAddrF);
         }
     }
 
@@ -55,6 +59,10 @@ namespace Eyer
         if(mbAddrD != nullptr){
             delete mbAddrD;
             mbAddrD = nullptr;
+        }
+        if(mbAddrF != nullptr){
+            delete mbAddrF;
+            mbAddrF = nullptr;
         }
     }
 
@@ -140,30 +148,29 @@ namespace Eyer
                     EyerLog("\t\t\t转换序号 luma4x4BlkIdx: %d, i8x8: %d, i4x4: %d\n", luma4x4BlkIdx, i8x8, i4x4);
 
                     // 获取模式
-                    EyerLog("\t\t\t\t获取相邻块的预测值\n");
                     EyerCoeff4x4Block * top = nullptr;
                     EyerCoeff4x4Block * left = nullptr;
                     GetTopLeftBlock(&top, &left, i8x8, i4x4, RESIDUAL_TYPE::LUMA);
 
-                    int pred_mode = 0;
+                    int upIntraPredMode = -1;
                     if(top != nullptr){
-
+                        upIntraPredMode = top->luma_pred_mode;
                     }
+                    int leftIntraPredMode = -1;
                     if(left != nullptr){
-
+                        leftIntraPredMode = left->luma_pred_mode;
                     }
 
+                    int mostProbableIntraPredMode  = (upIntraPredMode < 0 || leftIntraPredMode < 0) ? 2 : upIntraPredMode < leftIntraPredMode ? upIntraPredMode : leftIntraPredMode;
+                    EyerLog("\t\t\t\tupIntraPredMode: %d, leftIntraPredMode: %d, mostProbableIntraPredMode: %d\n", upIntraPredMode, leftIntraPredMode, mostProbableIntraPredMode);
+
+                    rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] = -1;
                     prev_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u1();
-                    EyerLog("\t\t\t\tprev_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
                     if(!prev_intra4x4_pred_mode_flag[luma4x4BlkIdx]){
-                        EyerLog("\t\t\t\t\t不能采用预测的模式\n");
                         rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] = bs.bs_read_u(3);
-                        EyerLog("\t\t\t\t\trem_intra4x4_pred_mode_flag[%d]: %d\n", luma4x4BlkIdx, rem_intra4x4_pred_mode_flag[luma4x4BlkIdx]);
                     }
-                    else{
-                        EyerLog("\t\t\t\t\t请采用预测的模式\n");
-                        lumaResidual[i8x8][i4x4].luma_pred_mode = pred_mode;
-                    }
+                    lumaResidual[i8x8][i4x4].luma_pred_mode = ((rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] == -1) ? mostProbableIntraPredMode : rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] + (rem_intra4x4_pred_mode_flag[luma4x4BlkIdx] >= mostProbableIntraPredMode));
+                    EyerLog("\t\t\t\t\t最终预测模式是：%d\n", lumaResidual[i8x8][i4x4].luma_pred_mode);
                 }
             }
 
@@ -193,7 +200,6 @@ namespace Eyer
     int EyerMacroblock::Residual(EyerBitStream & bs, int startIdx, int endIdx)
     {
         ResidualLuma(bs, startIdx, endIdx);
-
 
         EyerLog("\t===========================Residual Chroma===========================\n");
         if(sps.ChromaArrayType == 1 || sps.ChromaArrayType == 2) {
@@ -341,7 +347,8 @@ namespace Eyer
             for(int k=0; k<totleCoeff - trailingOnes; k++) {
                 // Get levels
                 int levelVal = 0;
-                get_coeff_level(bs, levelVal, k, trailingOnes, suffixLength);
+                cavlc.Get_Coeff_Level(bs, levelVal, k, trailingOnes, suffixLength);
+
                 if(suffixLength == 0){
                     suffixLength = 1;
                 }
@@ -358,9 +365,9 @@ namespace Eyer
             int totleZeros = 0;
             if(totleCoeff < maxNumCoeff) {
                 if(isChromaDC){
-                    get_total_zeros_chrome_dc(bs, totleZeros, totleCoeff - 1);
+                    cavlc.Get_Total_Zeros_Chrome_DC(bs, totleZeros, totleCoeff - 1);
                 }else{
-                    get_total_zeros(bs, totleZeros, totleCoeff - 1);
+                    cavlc.Get_Total_Zeros(bs, totleZeros, totleCoeff - 1);
                 }
             }
             else{
@@ -378,7 +385,7 @@ namespace Eyer
             if(zerosLeft > 0 && i > 0){
                 do{
                     runBeforeVlcIdx = (zerosLeft - 1 < 6) ? zerosLeft - 1 : 6;
-                    get_run_before(bs, run, runBeforeVlcIdx);
+                    cavlc.Get_Run_Before(bs, run, runBeforeVlcIdx);
 
                     EyerLog("\t\t\t\t\tRun Before: %d\n", run);
                     coeff4x4Block.runBefore[i] = run;
@@ -596,190 +603,138 @@ namespace Eyer
         return &lumaResidual[i8x8][i4x4];
     }
 
-    int EyerMacroblock::get_coeff_level(EyerBitStream & bs, int &level, int levelIdx, int trailingOnes, int suffixLength)
-    {
-        // 或者 level_prefix
-        int level_prefix = 0;
-        while(bs.bs_read_u1() == 0){
-            level_prefix++;
-        }
-
-        // 获取 levelSuffixSize
-        int levelSuffixSize = 0;
-        if(level_prefix == 14 && suffixLength == 0){
-            levelSuffixSize = 4;
-        }
-        else if(level_prefix >= 15){
-            levelSuffixSize = level_prefix - 3;
-        }
-        else{
-            levelSuffixSize = suffixLength;
-        }
-
-        // 计算 levelCode
-        int levelCode = (std::min(15, level_prefix) << suffixLength);
-        if(suffixLength > 0 || level_prefix >= 14){
-            // 获取 level_suffix
-            int level_suffix = 0;
-            if(levelSuffixSize > 0){
-                level_suffix = bs.bs_read_u(levelSuffixSize);
-            }
-            else{
-                level_suffix = 0;
-            }
-
-            levelCode += level_suffix;
-        }
-
-        if(level_prefix >= 15 && suffixLength == 0){
-            levelCode += 15;
-        }
-        if(level_prefix >= 16){
-            levelCode += (1 << (level_prefix - 3)) - 4096;
-        }
-
-        // if(i == trailingOnes && trailingOnes < 3){
-        if(levelIdx == 0 && trailingOnes < 3){
-            levelCode += 2;
-        }
-
-        if (levelCode % 2 == 0) {
-            level = (levelCode + 2) >> 1;
-        }
-        else {
-            level = (-levelCode - 1) >> 1;
-        }
-
-        return 0;
-    }
-
-
-    int EyerMacroblock::get_total_zeros(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx)
-    {
-        int totalZerosTable_Length[15][16] =
-            {
-                { 1,3,3,4,4,5,5,6,6,7,7,8,8,9,9,9 },
-                { 3,3,3,3,3,4,4,4,4,5,5,6,6,6,6 },
-                { 4,3,3,3,4,4,3,3,4,5,5,6,5,6 },
-                { 5,3,4,4,3,3,3,4,3,4,5,5,5 },
-                { 4,4,4,3,3,3,3,3,4,5,4,5 },
-                { 6,5,3,3,3,3,3,3,4,3,6 },
-                { 6,5,3,3,3,2,3,4,3,6 },
-                { 6,4,5,3,2,2,3,3,6 },
-                { 6,6,4,2,2,3,2,5 },
-                { 5,5,3,2,2,2,4 },
-                { 4,4,3,3,1,3 },
-                { 4,4,2,1,3 },
-                { 3,3,1,2 },
-                { 2,2,1 },
-                { 1,1 }
-            };
-
-        int totalZerosTable_Code[15][16] =
-            {
-                { 1,3,2,3,2,3,2,3,2,3,2,3,2,3,2,1 },
-                { 7,6,5,4,3,5,4,3,2,3,2,3,2,1,0 },
-                { 5,7,6,5,4,3,4,3,2,3,2,1,1,0 },
-                { 3,7,5,4,6,5,4,3,3,2,2,1,0 },
-                { 5,4,3,7,6,5,4,3,2,1,1,0 },
-                { 1,1,7,6,5,4,3,2,1,1,0 },
-                { 1,1,5,4,3,3,2,1,1,0 },
-                { 1,1,1,3,3,2,2,1,0 },
-                { 1,0,1,3,2,1,1,1, },
-                { 1,0,1,3,2,1,1, },
-                { 0,1,1,2,1,3 },
-                { 0,1,1,1,1 },
-                { 0,1,1,1 },
-                { 0,1,1 },
-                { 0,1 }
-            };
-
-        int err = 0;
-        int idx2 = 0;
-        int idx1 = 0;
-        int *lengthTable = &totalZerosTable_Length[totalZeros_vlcIdx][0];
-        int *codeTable = &totalZerosTable_Code[totalZeros_vlcIdx][0];
-        err = AVCTable::SearchForValueIn2DTable(bs, totalZeros, idx1, idx2, lengthTable, codeTable, 16, 1);
-        if (err < 0) {
-            return err;
-        }
-
-        return err;
-    }
-
-    int EyerMacroblock::get_total_zeros_chrome_dc(EyerBitStream & bs, int & totalZeros, int totalZeros_vlcIdx)
-    {
-        int totalZerosTableChromaDC_Length[3][4] =
-            {
-                { 1, 2, 3, 3, },
-                { 1, 2, 2, 0, },
-                { 1, 1, 0, 0, }
-            };
-
-        int totalZerosTableChromaDC_Code[3][4] =
-            {
-                { 1, 1, 1, 0, },
-                { 1, 1, 0, 0, },
-                { 1, 0, 0, 0, }
-            };
-
-        int err = 0;
-        int idx2 = 0;
-        int idx1 = 0;
-        int *lengthTable = &totalZerosTableChromaDC_Length[totalZeros_vlcIdx][0];
-        int *codeTable = &totalZerosTableChromaDC_Code[totalZeros_vlcIdx][0];
-        err = AVCTable::SearchForValueIn2DTable(bs, totalZeros, idx1, idx2, lengthTable, codeTable, 16, 1);
-        if (err < 0) {
-            return err;
-        }
-
-        return err;
-    }
-
-
-    int EyerMacroblock::get_run_before(EyerBitStream & bs, int & runBefore, int runBefore_vlcIdx)
-    {
-        int runBeforeTable_Length[15][16] =
-            {
-                { 1,1 },
-                { 1,2,2 },
-                { 2,2,2,2 },
-                { 2,2,2,3,3 },
-                { 2,2,3,3,3,3 },
-                { 2,3,3,3,3,3,3 },
-                { 3,3,3,3,3,3,3,4,5,6,7,8,9,10,11 }
-            };
-
-        int runBeforeTable_Code[15][16] =
-            {
-                { 1,0 },
-                { 1,1,0 },
-                { 3,2,1,0 },
-                { 3,2,1,1,0 },
-                { 3,2,3,2,1,0 },
-                { 3,0,1,3,2,5,4 },
-                { 7,6,5,4,3,2,1,1,1,1,1,1,1,1,1 }
-            };
-
-
-        int idx1 = 0;
-        int idx2 = 0, err = 0;
-        int *lengthTable = &runBeforeTable_Length[runBefore_vlcIdx][0];
-        int *codeTable = &runBeforeTable_Code[runBefore_vlcIdx][0];
-        err = AVCTable::SearchForValueIn2DTable(bs, runBefore, idx1, idx2, lengthTable, codeTable, 16, 1);
-        if (err < 0)
-        {
-            return err;
-        }
-
-        return 0;
-    }
-
     int EyerMacroblock::swap(int & x, int & y)
     {
         int c = x;
         x = y;
         y = c;
+        return 0;
+    }
+
+    int EyerMacroblock::MIN(int a, int b)
+    {
+        if(a > b){
+            return b;
+        }
+        return a;
+    }
+
+
+    int EyerMacroblock::Decode()
+    {
+        if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_4x4){
+            // LUMA
+            for(int luma4x4BlkIdx=0; luma4x4BlkIdx<16; luma4x4BlkIdx++) {
+                //转换序号到 8x8 4x4
+                int i8x8 = luma4x4BlkIdx / 4;
+                int i4x4 = luma4x4BlkIdx % 4;
+            }
+
+            for(int i8x8 = 0; i8x8 < 4; i8x8++){
+                for (int i4x4 = 0; i4x4 < 4; i4x4++) {
+                    lumaResidual[i8x8][i4x4].Decode();
+                }
+            }
+            // CHROMA
+        }
+
+        if(mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
+
+        }
+        return 0;
+    }
+
+    int EyerMacroblock::GetABCDBlock (EyerCoeff4x4Block ** a, EyerCoeff4x4Block ** b, EyerCoeff4x4Block ** c, EyerCoeff4x4Block ** d, int i8x8, int i4x4, RESIDUAL_TYPE & type)
+    {
+        /*
+         ***************
+         *  D  B  C
+         *  A  E
+         ***************
+         */
+
+        // TODO 422 444
+        int blockX = i8x8 % 2 * 2 + i4x4 % 2;
+        int blockY = i8x8 / 2 * 2 + i4x4 / 2;
+
+        // Get A
+        if(blockX > 0){
+            // 宏块内查找
+            *a = findBlock(blockX - 1, blockY, type);
+        }
+        else{
+            // 宏块外查找
+            if(mbAddrA != nullptr){
+                if(type == RESIDUAL_TYPE::LUMA){
+                    *a = mbAddrA->findBlock(3, blockY, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    *a = mbAddrA->findBlock(1, blockY, type);
+                }
+            }
+        }
+
+        // Get B
+        if(blockY > 0){
+            // 宏块内查找
+            *b = findBlock(blockX, blockY - 1, type);
+        }
+        else{
+            // 宏块外查找
+            if(mbAddrB != nullptr){
+                if(type == RESIDUAL_TYPE::LUMA){
+                    *b = mbAddrB->findBlock(blockX, 3, type);
+                }
+                if(type == RESIDUAL_TYPE::CHROMA_CB || type == RESIDUAL_TYPE::CHROMA_CR){
+                    *b = mbAddrB->findBlock(blockX, 1, type);
+                }
+            }
+        }
+
+        // Get C
+        if(blockX >= 0 && blockX < 3){
+            if(blockY > 0){
+                *c = findBlock(blockX + 1, blockY - 1, type);
+            }
+            else if(blockY == 0){
+                if(mbAddrB != nullptr){
+                    *c = mbAddrB->findBlock(blockX + 1, 3, type);
+                }
+            }
+        }
+        else if(blockX == 3){
+            if(blockY > 0){
+                // TODO F Block
+                // mbAddrF
+            }
+            else if(blockY == 0){
+                if(mbAddrC != nullptr){
+                    *c = mbAddrC->findBlock(0, 3, type);
+                }
+            }
+        }
+
+        // Get D
+        if(blockY > 0 && blockX > 0){
+            // 宏块内查找
+            *d = findBlock(blockX - 1, blockY - 1, type);
+        }
+        else if(blockY > 0 && blockX == 0){
+            if(mbAddrA != nullptr){
+                *d = mbAddrA->findBlock(3, blockY - 1, type);
+            }
+        }
+        else if(blockX > 0 && blockY == 0){
+            if(mbAddrB != nullptr){
+                *d = mbAddrB->findBlock(blockX - 1, 3, type);
+            }
+        }
+        else if(blockX == 0 && blockY == 0){
+            if(mbAddrD != nullptr){
+                *d = mbAddrD->findBlock(3, 3, type);
+            }
+        }
+
         return 0;
     }
 }

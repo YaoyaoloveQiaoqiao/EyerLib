@@ -13,7 +13,7 @@ add_library(
         Eatrix3x3.hpp
         EnterPolation.cpp
         EnterPolation.hpp
-)
+        Eatrix4x1.hpp)
 
 set(head_files
         EyerMath.hpp

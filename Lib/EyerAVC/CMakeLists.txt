@@ -50,6 +50,8 @@ add_library(
         AVCTable.cpp
         RESIDUAL_TYPE.cpp
         RESIDUAL_TYPE.hpp
+        EyerNeighbourSamples.cpp
+        EyerNeighbourSamples.hpp
 )
 
 target_link_libraries (
