@@ -1,11 +1,11 @@
 #ifndef EYERLIB_EYERMACROBLOCK_HPP
 #define EYERLIB_EYERMACROBLOCK_HPP
 
+#include "Sample.hpp"
 #include "EyerBitStream.hpp"
 #include "EyerSPS.hpp"
 #include "EyerPPS.hpp"
 #include "EyerSLICEHeader.hpp"
-
 #include "MB_TYPE.hpp"
 #include "EyerCoeff4x4Block.hpp"
 #include "RESIDUAL_TYPE.hpp"
@@ -24,8 +24,6 @@ namespace Eyer
         int Decode();
 
         EyerCoeff4x4Block * findBlock(int blockX, int blockY, RESIDUAL_TYPE & type);
-
-        int RestoreCoeffMatrix();
 
     private:
         int MbPred       (EyerBitStream & bs);
@@ -73,6 +71,11 @@ namespace Eyer
 
         int swap(int & x, int & y);
         int MIN(int a, int b);
+
+        int GetSample(int x, int y, Sample & sample);
+
+    public:
+        EyerTable<Sample> predTable;
     };
 }
 

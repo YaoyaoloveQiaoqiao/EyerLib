@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include "EyerCore/EyerCore.hpp"
+#include "EyerNeighbourSamples.hpp"
 
 namespace Eyer
 {
@@ -11,7 +13,9 @@ namespace Eyer
         EyerCoeff4x4Block();
         ~EyerCoeff4x4Block();
 
-        int Decode();
+        int Restore();
+
+        int Decode(EyerNeighbourSamples & neighbourSamples, EyerTable<Sample> & res);
 
         bool emptyBlock = false;
 
@@ -27,6 +31,10 @@ namespace Eyer
 
 
         int luma_pred_mode = -1;
+
+
+
+        int SWAP(int & x, int & y);
     };
 }
 

@@ -12,33 +12,62 @@ namespace Eyer
 
     }
 
-    int EyerNeighbourSamples::Init()
-    {
-        return 0;
-    }
+    int EyerNeighbourSamples::Init(
+             Sample & _Q,
 
-    int EyerNeighbourSamples::Get(int x, int y)
+             Sample & _A,
+             Sample & _B,
+             Sample & _C,
+             Sample & _D,
+
+             Sample & _E,
+             Sample & _F,
+             Sample & _G,
+             Sample & _H,
+
+             Sample & _I,
+             Sample & _J,
+             Sample & _K,
+             Sample & _L
+    )
     {
+        Q = _Q;
+
+        A = _A;
+        B = _B;
+        C = _C;
+        D = _D;
+
+        E = _E;
+        F = _F;
+        G = _G;
+        H = _H;
+
+        I = _I;
+        J = _J;
+        K = _K;
+        L = _L;
+
         return 0;
     }
 
     bool EyerNeighbourSamples::AvailableUp()
     {
-        return availableUp;
+        return A.available;
     }
 
     bool EyerNeighbourSamples::AvailableLeft()
     {
-        return availableLeft;
+        return I.available;
     }
 
     bool EyerNeighbourSamples::AvailableUpLeft()
     {
-        return availableUpLeft;
+        return Q.available;
     }
 
     bool EyerNeighbourSamples::AvailableUpRight()
     {
-        return availableUpRight;
+        return E.available;
     }
 }

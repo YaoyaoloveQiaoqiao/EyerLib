@@ -8,6 +8,11 @@ namespace Eyer
     template <typename T>
     class EyerTable {
     public:
+        EyerTable() : EyerTable(0, 0)
+        {
+
+        }
+
         EyerTable(int _w, int _h)
         {
             Resize(_w, _h);
