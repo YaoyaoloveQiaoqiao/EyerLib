@@ -184,7 +184,7 @@ void transpose(double *mtx, int m, int n)
 /*****************矩阵原地转置END********************/
 
 //LUP求逆(将每列b求出的各列x进行组装)
-double * LUP_solve_inverse(const Eyer::EatrixF & A)
+double * LUP_solve_inverse(double A[N*N])
 {
     //创建矩阵A的副本，注意不能直接用A计算，因为LUP分解算法已将其改变
     double *A_mirror = new double[N*N]();
