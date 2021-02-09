@@ -2,9 +2,9 @@
 
 namespace Eyer
 {
-    EyerCoeff4x4Block::EyerCoeff4x4Block()
+    EyerCoeff4x4Block::EyerCoeff4x4Block(int _qp)
     {
-
+        qp = _qp;
     }
 
     EyerCoeff4x4Block::~EyerCoeff4x4Block()
@@ -68,8 +68,13 @@ namespace Eyer
             EyerLog("\t\t\t\t\t%s\n", line.str);
         }
 
+        // 获取 QP
 
+        // 反量化
+        int qp_per = qp / 6;
+        int qp_rem = qp % 6;
 
+        EyerLog("\t\t\t\tqp_per: %d, qp_rem: %d\n", qp_per, qp_rem);
 
         // 水平变换
         int temp1[4] = {0};
@@ -158,6 +163,11 @@ namespace Eyer
         return 0;
     }
 
+    int EyerCoeff4x4Block::SetQP(int _qp)
+    {
+        qp = _qp;
+        return 0;
+    }
 
     int EyerCoeff4x4Block::SWAP(int & x, int & y)
     {

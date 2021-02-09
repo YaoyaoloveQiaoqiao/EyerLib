@@ -53,6 +53,8 @@ namespace Eyer
 
         int mbIndex = 0;
 
+        int qp = 0;
+
         uint8_t transform_size_8x8_flag = 0;
 
         MB_TYPE mbType = MB_TYPE::I_NxN;

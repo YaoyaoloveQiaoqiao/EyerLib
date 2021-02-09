@@ -10,12 +10,16 @@ namespace Eyer
 {
     class EyerCoeff4x4Block {
     public:
-        EyerCoeff4x4Block();
+        EyerCoeff4x4Block(int _qp = 0);
         ~EyerCoeff4x4Block();
 
         int Restore();
 
         int Decode(EyerNeighbourSamples & neighbourSamples, EyerTable<Sample> & res);
+
+        int SetQP(int _qp);
+
+        int qp = 0;
 
         bool emptyBlock = false;
 

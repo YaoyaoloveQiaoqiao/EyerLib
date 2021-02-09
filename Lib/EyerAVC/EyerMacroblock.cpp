@@ -123,8 +123,23 @@ namespace Eyer
             }
 
             if(CodedBlockPatternLuma > 0 || CodedBlockPatternChroma > 0 || mbType.MbPartPredMode() == MB_PART_PRED_MODE::Intra_16x16){
-                int32_t mb_qp_delta = bs.bs_read_se();
+                int mb_qp_delta = bs.bs_read_se();
+
+                qp = pps.pic_init_qp_minus26 + 26 + sliceHeader.sh.slice_qp_delta + mb_qp_delta;
+                EyerLog("\tpic_init_qp_minus26: %d\n", pps.pic_init_qp_minus26);
+                EyerLog("\tslice_qp_delta: %d\n", sliceHeader.sh.slice_qp_delta);
                 EyerLog("\tmb_qp_delta: %d\n", mb_qp_delta);
+                EyerLog("\tQP: %d\n", qp);
+
+                for(int luma4x4BlkIdx=0; luma4x4BlkIdx<16; luma4x4BlkIdx++) {
+                    //转换序号到 8x8 4x4
+                    int i8x8 = luma4x4BlkIdx / 4;
+                    int i4x4 = luma4x4BlkIdx % 4;
+
+                    lumaResidual[i8x8][i4x4].SetQP(qp);
+                }
+
+                EyerLog("\tqp: %d\n", qp);
                 Residual(bs, 0, 15);
             }
         }
@@ -287,6 +302,8 @@ namespace Eyer
                             EyerLog("\t\tLUMA 4x4\n");
                             int nC = GetNumberCurrent(i8x8, i4x4, RESIDUAL_TYPE::LUMA);
                             ResidualBlockCavlc(bs, lumaResidual[i8x8][i4x4], nC, startIdx, endIdx, 16);
+
+
                             lumaResidual[i8x8][i4x4].Restore();
                         }
                     }
