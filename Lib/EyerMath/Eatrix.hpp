@@ -176,46 +176,91 @@ namespace Eyer
         */
         Eatrix<float> Inverse ()
         {
-            //创建矩阵A的副本，注意不能直接用A计算，因为LUP分解算法已将其改变
-            Eatrix<float> mat_mirror(N, N);
-            Eatrix<float> inv_mat(N, N);//最终的逆矩阵（还需要转置）
-            float *inv_A_each = new float[N]();//矩阵逆的各列
-            //float *B = new float[N*N]();
-            float *b = new float[N]();//b阵为B阵的列矩阵分量
+            Eatrix<float> left(row, col);
+            Eatrix<float> up(row, col);
+            Eatrix<int> p(row, col);
 
-            for(int i=0;i<N;i++)
-            {
-                Eatrix<float> L(N, N);
-                Eatrix<float> U(N, N);
+            int position[9];
 
-                int *P=new int[N]();
+            /*float *x;
+            x = lupSolve(left, up, position, b);
+            for (int i = 0; i < 3; i++)
+                printf("%f ", x[i]);*/
 
-                //构造单位阵的每一列
-                for(int i=0;i<N;i++)
-                {
-                    b[i]=0;
-                }
-                b[i]=1;
+            LUP_Descomposition(left, up, p);
 
-                //每次都需要重新将A复制一份
-                mat_mirror = mat;
+            //得到position，和得到单位矩阵额e[n][n]
+            int n = GetMatLen();
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    if (p.Get(i, j) == 1)
+                        position[i] = j;
+            float e[row][col];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    if (i == j)
+                        e[i][j] = 1;
+                    else
+                        e[i][j] = 0;
 
-                LUP_Descomposition(mat_mirror,L,U,P);
-
-                inv_A_each=LUP_Solve (L,U,P,b);
-                memcpy(inv_A+i*N,inv_A_each,N*sizeof(float));//将各列拼接起来
+            //构造逆矩阵
+            Eatrix<float> result(row,col);
+            for (int i = 0; i < n; i++) {
+                float *x = NULL;
+                x = LUP_Solve(left, up, position, e[i]);
+                for (int j = 0; j < n; j++)
+                    result.Set(j, i, x[j]);
             }
-            inv_A = ~inv_A;           //由于现在根据每列b算出的x按行存储，因此需转置
-            return inv_A;
 
-
-            Eatrix<float> res(row, col);
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < col; j++) {
-                    res.mat[i][j] = mat[j][i];
-                }
+            //打印result数组
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++)
+                    printf("%f ", result.Get(i, j));
+                printf("\n");
             }
-            return res;
+
+            return result;
+
+//            //创建矩阵A的副本，注意不能直接用A计算，因为LUP分解算法已将其改变
+//            Eatrix<float> mat_mirror(N, N);
+//            Eatrix<float> inv_mat(N, N);//最终的逆矩阵（还需要转置）
+//            float *inv_A_each = new float[N]();//矩阵逆的各列
+//            //float *B = new float[N*N]();
+//            float *b = new float[N]();//b阵为B阵的列矩阵分量
+//
+//            for(int i=0;i<N;i++)
+//            {
+//                Eatrix<float> L(N, N);
+//                Eatrix<float> U(N, N);
+//
+//                int *P=new int[N]();
+//
+//                //构造单位阵的每一列
+//                for(int i=0;i<N;i++)
+//                {
+//                    b[i]=0;
+//                }
+//                b[i]=1;
+//
+//                //每次都需要重新将A复制一份
+//                mat_mirror = mat;
+//
+//                LUP_Descomposition(mat_mirror,L,U,P);
+//
+//                inv_A_each=LUP_Solve (L,U,P,b);
+//                memcpy(inv_A+i*N,inv_A_each,N*sizeof(float));//将各列拼接起来
+//            }
+//            inv_A = ~inv_A;           //由于现在根据每列b算出的x按行存储，因此需转置
+//            return inv_A;
+//
+//
+//            Eatrix<float> res(row, col);
+//            for (int i = 0; i < row; i++) {
+//                for (int j = 0; j < col; j++) {
+//                    res.mat[i][j] = mat[j][i];
+//                }
+//            }
+//            return res;
         }
 
 
@@ -308,8 +353,8 @@ namespace Eyer
         //逆矩阵  LUP分解
         void LUP_Descomposition(Eatrix<float> & left,Eatrix<float> & up, Eatrix<int> & p)
         {
-            int n =GetMatLen();
-            int position[100] = {0};
+            int n = GetMatLen();
+            int position[row];
 
             //初始化position数组
             for (int i = 0; i < n; i++) {
@@ -317,17 +362,17 @@ namespace Eyer
             }
 
             //定义矩阵a， 并且赋值
-            Eatrix<int> a(row, col);
+            Eatrix<float> a(row, col);
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
-                    a.Set(i, j, mat->Get(i,j));
+                    a.Set(i, j, mat[i][j]);
 
             for (int k = 0; k < n; k++) {
-                double max_row_data = -100000;
+                float max_row_data = -1;
                 int max_row = k;
                 for (int i = k; i < n; i++) {
-                    if (abs(a[i][k]) > max_row_data) {
-                        max_row_data = abs(a[i][k]);
+                    if (abs(a.Get(i, k)) > max_row_data) {
+                        max_row_data = abs(a.Get(i, k));
                         max_row = i;
                     }
                 }
@@ -343,16 +388,19 @@ namespace Eyer
                 position[max_row] = tmp;
 
                 for (int i = 0; i < n; i++) {
-                    double tmp = 0;
-                    tmp = a[k][i];
-                    a[k][i] = a[max_row][i];
-                    a[max_row][i] = tmp;
+                    float tmp = 0;
+                    tmp = a.Get(k, i);
+                    a.Set(k, i, a.Get(max_row, i));
+                    a.Set(max_row, i, tmp);
                 }
 
                 for (int i = k+1; i < n; i++) {
-                    a[i][k] /= a[k][k];
-                    for (int j = k+1; j < n; j++)
-                        a[i][j] -= a[i][k]*a[k][j];
+                    float tmp = a.Get(i, k) / a.Get(k, k);
+                    a.Set(i, k, tmp);
+                    for (int j = k+1; j < n; j++){
+                        float tmp = a.Get(i, j) - a.Get(i, k) * a.Get(k, j);
+                        a.Set(i, j, tmp);
+                    }
                 }
             }
 
@@ -380,39 +428,35 @@ namespace Eyer
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++) {
                     if (i <= j)
-                        up[i][j] = a[i][j];
+                        up.Set(i, j, a.Get(i, j));
                     else
-                        up[i][j] = 0;
+                        up.Set(i, j, 0);
                 }
 
         }
 
         //逆矩阵  LUP求解方程
-        float * LUP_Solve(Eatrix<float> & L,Eatrix<float> & U,int P[N],float b[N])
+        float * LUP_Solve(Eatrix<float> & left,Eatrix<float> & up,int *position, float *b)
         {
-            float *x=new float[N]();
-            float *y=new float[N]();
+            int n = GetMatLen();
+            float x[9] = {0};
+            float y[9] = {0};
 
-            //正向替换
-            for(int i = 0;i < N;i++)
-            {
-                y[i] = b[P[i]];
-                for(int j = 0;j < i;j++)
-                {
-                    y[i] = y[i] - L[i*N+j]*y[j];
-                }
+            for (int i = 0; i < n; i++) {
+                float partSum = 0;
+                for (int j = 0; j <= i-1; j++)
+                    partSum += left.Get(i, j) * y[j];
+                y[i] = b[position[i]] - partSum;
             }
-            //反向替换
-            for(int i = N-1;i >= 0; i--)
-            {
-                x[i]=y[i];
-                for(int j = N-1;j > i;j--)
-                {
-                    x[i] = x[i] - U[i*N+j]*x[j];
-                }
-                x[i] /= U[i*N+i];
+
+            for (int i = n-1; i >= 0; i--) {
+                float partSum = 0;
+                for (int j = i+1; j <= n-1; j++)
+                    partSum += up.Get(i, j) * x[j];
+                x[i] = (y[i] - partSum) / up.Get(i, i);
             }
             return x;
+
         }
 
     };
