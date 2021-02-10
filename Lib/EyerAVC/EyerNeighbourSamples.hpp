@@ -34,7 +34,7 @@ namespace Eyer
         bool AvailableUpLeft();
         bool AvailableUpRight();
 
-    private:
+    public:
         Sample Q;
 
         Sample A;

@@ -571,6 +571,24 @@ namespace Eyer
 
                 EyerTable<Sample> res;
                 lumaResidual[i8x8][i4x4].Decode(neighbourSamples, res);
+                for(int yy=0; yy<4; yy++){
+                    for(int xx=0; xx<4; xx++){
+                        Sample sample;
+                        res.Get(sample, xx, yy);
+                        predTable.Set(x + xx, y + yy, sample);
+                    }
+                }
+            }
+
+            EyerLog("============================\n");
+            for(int yy=0; yy<16; yy++) {
+                EyerString log;
+                for (int xx = 0; xx < 16; xx++) {
+                    Sample sample;
+                    predTable.Get(sample, xx, yy);
+                    log = log + EyerString::Number(sample.sample, " %3d ");
+                }
+                EyerLog("%s\n", log.str);
             }
 
             // CHROMA
