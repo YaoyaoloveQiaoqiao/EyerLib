@@ -224,27 +224,68 @@ double * LUP_solve_inverse(double A[N*N])
 
 const int n=3;//逆矩阵阶数，求不同阶数矩阵请修改n的值
 
-void out(Eyer::EatrixF3x3 mat, const char* s)
+/*void out(double matrix[][n], const char* s)
 {
     cout << s << endl;
-    for (int i = 0; i < 3; i++) {
-        Eyer::EyerString str = "";
-        for (int j = 0; j < 3; j++){
-            str = str + Eyer::EyerString::Number(mat.Get(i, j), " %.4f ");
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+            fabs(*(*(matrix + i) + j))<1e-10? cout << 0 << '\t':cout << *(*(matrix + i) + j) << '\t';
+        cout << endl;
+    }
+    cout << endl;
+}*/
+
+void out(    Eyer::EatrixF3x3 matrix, const char* s)
+{
+    cout << s << endl;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++){
+            cout << matrix.Get(i, j) << '\t';
         }
-        EyerLog("%s\n", str.str);
+            //fabs(*(*(matrix + i) + j))<1e-10? cout << 0 << '\t':cout << *(*(matrix + i) + j) << '\t';
+        cout << endl;
     }
     cout << endl;
 }
 
-void product(Eyer::EatrixF3x3 a, Eyer::EatrixF3x3 b, Eyer::EatrixF3x3 matrix_result)
+void out(    double matrix1[n][n], const char* s)
 {
+    cout << s << endl;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++){
+            cout << matrix1[i][j] << '\t';
+        }
+        //fabs(*(*(matrix + i) + j))<1e-10? cout << 0 << '\t':cout << *(*(matrix + i) + j) << '\t';
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void product(double matrix1[n][n], double matrix2[n][n], Eyer::EatrixF3x3 & matrix_result)
+{
+    out(matrix1, "matrix1:");
+    out(matrix2, "matrix2:");
+
+    for (int i = 0; i < matrix_result.row; i++) {
+        for (int j = 0; j < matrix_result.col; j++) {
+            matrix_result.mat[i][j] = 0.0f;
+        }
+    }
+
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             for (int k = 0; k < n; k++){
-                float tmp = matrix_result.Get(i, j) + (a.Get(i, k) * b.Get(k, j));
+                double tmp = matrix_result.Get(i, j) + matrix1[i][k] * matrix2[k][j];
                 matrix_result.Set(i, j, tmp);
+                //matrix_result[i][j] = tmp;
             }
+
+                //matrix_result.Set(i, j, matrix_result.Get(i, j) + matrix1[i][k] * matrix2[k][j]);
+
+
 }
 
 TEST(EyerColorSpace, init)
@@ -258,106 +299,112 @@ TEST(EyerColorSpace, init)
     a.SetData(yuv2020_rgb2020, 9);
 
     Eyer::EatrixF3x3 inv_a;
-
-    void out(Eyer::EatrixF3x3 a, const char* s);
-    void product(Eyer::EatrixF3x3 a, Eyer::EatrixF3x3 b, Eyer::EatrixF3x3 matrix_result);
+    //double inv_a[n][n];
+    //memset(inv_a, 0, n * n * sizeof(double));
 
     //初始化
-    Eyer::EatrixF3x3 l;
-    Eyer::EatrixF3x3 u;
-    Eyer::EatrixF3x3 c;
-    Eyer::EatrixF3x3 ad_l;
-    Eyer::EatrixF3x3 ad_u;
+    double l[n][n], u[n][n], c[n][n], ad_l[n][n], ad_u[n][n];
+    memset(l, 0, n * n * sizeof(double));
+    memset(u, 0, n * n * sizeof(double));
+    memset(c, 0, n * n * sizeof(double));
+    memset(ad_l, 0, n * n * sizeof(double));
+    memset(ad_u, 0, n * n * sizeof(double));
+
 
     //LU分解
     for (int i = 0; i < n; i++)
-        l.Set(i, i, 1);
+        l[i][i] = 1;
     for (int i = 0; i < n - 1; i++)
     {
         for (int j = i; j < n; j++)
         {
-            float tem = 0;
+            double tem = 0;
             for (int k = 0; k < i; k++)
-                tem += l.Get(i, k) * u.Get(k, j);
-            u.Set(i, j, a.Get(i, j) - tem);
+                tem += l[i][k] * u[k][j];
+            u[i][j] = a.Get(i, j) - tem;
         }
         for (int j = i + 1; j < n; j++)
         {
-            float tem = 0;
+            double tem = 0;
             for (int k = 0; k < i; k++)
-                tem += l.Get(j, k) * u.Get(k, i);
-            l.Set(j, i, (a.Get(j, i) - tem) / u.Get(i, i));
+                tem += l[j][k] * u[k][i];
+            l[j][i] = (a.Get(j, i) - tem) / u[i][i];
         }
     }
-    u.Set(n - 1, n - 1, a.Get(n-1, n-1));
-    for (int i = 0; i < n - 1; i++){
-        float tem = u.Get(n - 1, n - 1) - (l.Get(n - 1, i) * u.Get(i, n - 1));
-        u.Set(n - 1, n - 1, tem);
-    }
+    u[n - 1][n - 1] = a.Get(n - 1, n - 1);
+    for (int i = 0; i < n - 1; i++)
+        u[n - 1][n - 1] -= l[n - 1][i] * u[i][n - 1];
+    //矩阵L
+    //out(l, "矩阵L");
+    //矩阵U
+    //out(u, "矩阵U");
+    //L*U
+    //product(l,u, c);
+    //out(c, "矩阵L*U");
+
 
     //U的逆矩阵
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            if (i > j) ad_u.Set(i, j, 0);
+            if (i > j) ad_u[i][j] = 0;
             else if (i == j)
             {
-                ad_u.Set(i, j, 1);
+                ad_u[i][j] = 1;
                 for (int k = 0; k < n; k++)
-                    if (k != j){
-                        float tem = ad_u.Get(i, j) * u.Get(k, k);
-                        ad_u.Set(i, j, tem);
-                    }
+                    if (k != j)
+                        ad_u[i][j] *= u[k][k];
             }
             else if (j - i == 1)
             {
-                float tem = ad_u.Get(i, j) - u.Get(i, j);
-                ad_u.Set(i, j, tem);
+                ad_u[i][j] = -u[i][j];
                 for (int k = 0; k < n; k++)
-                    if (k != i && k != j){
-                        float tem = ad_u.Get(i, j) * u.Get(k, k);
-                        ad_u.Set(i, j, tem);
-                    }
+                    if (k != i && k != j)
+                        ad_u[i][j] *= u[k][k];
             }
             else if (j - i >= 2)
             {
-                float deltas_aii = 1;
+                double deltas_aii = 1;
                 for (int k = 0; k < n; k++)
                     if (k < i || k > j)
-                        deltas_aii *= u.Get(k, k);
+                        deltas_aii *= u[k][k];
                 int permutation[n];
                 for (int t = 0; t < j - i; t++) permutation[t] = i + t + 1;
-                float sum = 0;
+                double sum = 0;
                 do
                 {
                     int cnt = 0;
                     for (int t2 = 0; t2 < j - i; t2++)
                         for (int t3 = t2; t3 < j - i; t3++)
                             if (permutation[t3] < permutation[t2]) cnt++;
-                    float mul = 1;
+                    double mul = 1;
                     for (int t1 = i; t1 < j; t1++)
-                        mul *= u.Get(t1, permutation[t1 - i]);
+                        mul *= u[t1][permutation[t1 - i]];
                     if ((j - i + 1) % 2 == 0)mul *= -1;
                     if (cnt % 2 == 0) sum += mul;
                     else sum -= mul;
                 } while (next_permutation(permutation, permutation + j - i));
-                ad_u.Set(i, j, sum * deltas_aii);
+                ad_u[i][j] = sum * deltas_aii;
             }
         }
     }
-    float det_u = 1;
-    for (int k = 0; k < n; k++) det_u *= u.Get(k, k);
+    double det_u = 1;
+    for (int k = 0; k < n; k++) det_u *= u[k][k];
     if (det_u < 1e-16)
     {
         printf("矩阵不可逆，请检查输入！\n");
         return;
     }
     for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++){
-            float tem = ad_u.Get(i, j) / det_u;
-            ad_u.Set(i, j, tem);
-        }
+        for (int j = 0; j < n; j++)
+            ad_u[i][j] /= det_u;
+    //inv_U
+    //out(ad_u, "inv_U");
+    //U*U-1
+    //memset(c, 0, n*n * sizeof(double));
+    //product(u, ad_u, c);
+    //out(c, "矩阵U*U-1");
 
 
     //l的逆矩阵
@@ -365,136 +412,86 @@ TEST(EyerColorSpace, init)
     {
         for (int j = 0; j < n; j++)
         {
-            if (i < j) ad_l.Set(i, j, 0);
+            if (i < j) ad_l[i][j] = 0;
             else if (i == j)
             {
-                ad_l.Set(i, j, 1);
+                ad_l[i][j] = 1;
                 for (int k = 0; k < n; k++)
-                    if (k != j){
-                        float tem = ad_l.Get(i, j) * l.Get(k, k);
-                        ad_l.Set(i, j, tem);
-                    }
+                    if (k != j)
+                        ad_l[i][j] *= l[k][k];
             }
             else if (i - j == 1)
             {
-                ad_l.Set(i, j, -l.Get(i, j));
+                ad_l[i][j] = -l[i][j];
                 for (int k = 0; k < n; k++)
-                    if (k != i && k != j){
-                        float tem = ad_l.Get(i, j) * l.Get(k, k);
-                        ad_l.Set(i, j, tem);
-                    }
+                    if (k != i && k != j)
+                        ad_l[i][j] *= l[k][k];
             }
             else if (i - j >= 2)
             {
-                float deltas_aii = 1;
+                double deltas_aii = 1;
                 for (int k = 0; k < n; k++)
                     if (k < i || k > j)
-                        deltas_aii *= l.Get(i, i);
+                        deltas_aii *= l[i][i];
                 int permutation[n];
                 for (int t = 0; t < i - j; t++) permutation[t] = j + t + 1;
-                float sum = 0;
+                double sum = 0;
                 do
                 {
                     int cnt = 0;
                     for (int t2 = 0; t2 < i - j; t2++)
                         for (int t3 = t2; t3 < i - j; t3++)
                             if (permutation[t3] < permutation[t2]) cnt++;
-                    float mul = 1;
+                    double mul = 1;
                     for (int t1 = j; t1 < i; t1++)
-                        mul *= l.Get(permutation[t1 - j], t1);
+                        mul *= l[permutation[t1 - j]][t1];
                     if ((i - j + 1) % 2 == 0)mul *= -1;
                     if (cnt % 2 == 0) sum += mul;
                     else sum -= mul;
                 } while (next_permutation(permutation, permutation + i - j));
-                ad_l.Set(i, j, sum * deltas_aii);
+                ad_l[i][j] = sum * deltas_aii;
             }
         }
     }
-    float det_l = 1;
-    for (int k = 0; k < n; k++) det_l *= l.Get(k, k);
+    double det_l = 1;
+    for (int k = 0; k < n; k++) det_l *= l[k][k];
     if (det_u < 1e-16)
     {
         printf("矩阵不可逆，请检查输入！\n");
         return;
     }
     for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++){
-            float tem = ad_l.Get(i, j) / det_l;
-            ad_l.Set(i, j, tem);
-        }
+        for (int j = 0; j < n; j++)
+            ad_l[i][j] /= det_l;
     //矩阵inv_L
     //out(ad_l, "矩阵inv_L=");
     //L*L-1
-    //memset(c, 0, n*n * sizeof(float));
+    //memset(c, 0, n*n * sizeof(double));
     //product(l, ad_l, c);
     //out(c, "矩阵L*inv_L=");
 
 
     //矩阵a
     //out(a, "矩阵a=");
-    EyerLog("矩阵a:\n");
-    a.PrintInfo();
+    //EyerLog("矩阵a=\n");
+    //a.PrintInfo();
     //inv_a
     product(ad_u, ad_l, inv_a);
     out(inv_a, "逆矩阵inv_a=");
-    //EyerLog("逆矩阵inv_a:\n");
+    //EyerLog("逆矩阵inv_a=\n");
     //inv_a.PrintInfo();
 
     //验证a*inv_a
-//    product(a, inv_a, c);
-//    EyerLog("矩阵a*inv_a:\n");
-//    c.PrintInfo();
+    //memset(c, 0, n * n * sizeof(double));
+    //product(a, inv_a, c);
+
+    //out(c, "矩阵a*inv_a=");
+   //EyerLog("矩阵a*inv_a=\n");
+    //(a * inv_a).PrintInfo();
 
 
-    //mat_xyz_rgb709.PrintInfo();
-    /*double *A = new double[N*N]();
-
-    srand((unsigned)time(0));
-    for(int i=0; i<N ;i++)
-    {
-        for(int j=0; j<N;j++)
-        {
-            A[i*N+j]=rand()%100 *0.01;
-        }
-    }
-
-
-    double *E_test = new double[N*N]();
-    double *invOfA = new double[N*N]();
-    invOfA=LUP_solve_inverse(A);
-
-    E_test=mul(A,invOfA);    //验证精确度
-
-    cout<< "矩阵A:" <<endl;
-    for(int i=0;i<N;i++)
-    {
-        for(int j=0;j<N;j++)
-        {
-            cout<< A[i*N+j]<< " " ;
-        }
-        cout<<endl;
-    }
-
-    cout<< "inv_A:" <<endl;
-    for(int i=0;i<N;i++)
-    {
-        for(int j=0;j<N;j++)
-        {
-            cout<< invOfA[i*N+j]<< " " ;
-        }
-        cout<<endl;
-    }
-
-    cout<< "E_test:" <<endl;
-    for(int i=0;i<N;i++)
-    {
-        for(int j=0;j<N;j++)
-        {
-            cout<< E_test[i*N+j]<< " " ;
-        }
-        cout<<endl;
-    }*/
 }
+
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
