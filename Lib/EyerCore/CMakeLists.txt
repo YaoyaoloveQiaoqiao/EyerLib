@@ -86,6 +86,7 @@ set(head_files
         EyerObserverQueue.h
         EyerObserverQueue.hpp
         EyerBuffer.h
+        EyerSubject.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerCore)
