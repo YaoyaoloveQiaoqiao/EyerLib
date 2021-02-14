@@ -26,6 +26,14 @@ add_library(
 set(head_files
         EyerDASH.hpp
         EyerMPD.hpp
+        MP4Buffer.hpp
+        EyerSegmentTemplate.hpp
+        EyerRepresentation.hpp
+        EyerDASHStreamReaderThread.hpp
+        EyerDASHStream.hpp
+        EyerDASHReaderThread.hpp
+        EyerDASHReader.hpp
+        EyerAdaptationSet.hpp
         )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerDASH)
