@@ -42,7 +42,11 @@ add_library(
         EyerAVBitstreamFilterPrivate.hpp
         AnnexB_to_avcC.cpp
         AnnexB_to_avcC.hpp
-        EyerPureColorCheck.cpp EyerPureColorCheck.h EyerPureColorBlock.cpp EyerPureColorBlock.hpp ../EyerMathTest/Main.cpp)
+        EyerPureColorCheck.cpp
+        EyerPureColorCheck.h
+        EyerPureColorBlock.cpp
+        EyerPureColorBlock.hpp
+)
 
 target_link_libraries (EyerAV EyerCore)
 
@@ -122,21 +126,24 @@ ELSE ()
 ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 set(head_files
-    EyerAV.hpp
-    EyerAVAV.hpp
-    EyerAVPacketQueue.hpp
-    EyerAVFrameQueue.hpp
-    EyerAVQueue.hpp
-    EyerAVQueueManager.hpp
-    EyerAVBitstreamFilter.hpp
+        EyerAV.hpp
+        EyerAVAV.hpp
+        EyerAVPacketQueue.hpp
+        EyerAVFrameQueue.hpp
+        EyerAVQueue.hpp
+        EyerAVQueueManager.hpp
+        EyerAVBitstreamFilter.hpp
+        AnnexB_to_avcC.hpp
+        EyerPureColorCheck.h
+        EyerPureColorBlock.hpp
 )
 
 INSTALL(FILES ${head_files} DESTINATION include/EyerAV)
 INSTALL(FILES AVUtil/AVUtil.hpp DESTINATION include/EyerAV/AVUtil)
 INSTALL(
-    TARGETS EyerAV
-    RUNTIME DESTINATION bin        
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
+        TARGETS EyerAV
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
     )
 
