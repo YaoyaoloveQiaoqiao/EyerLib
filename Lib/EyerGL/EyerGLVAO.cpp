@@ -47,7 +47,18 @@ namespace Eyer
 
 #ifdef QT_EYER_PLAYER
         ctx->glBindVertexArray(VAOId);
-        ctx->glDrawElements(GL_TRIANGLES, DrawTime, GL_UNSIGNED_INT, 0);
+        if(drawType == EyerGLDrawType::TRIANGLES){
+            ctx->glDrawElements(GL_TRIANGLES, DrawTime, GL_UNSIGNED_INT, 0);
+        }
+        else if(drawType == EyerGLDrawType::LINE_LOOP){
+            ctx->glDrawElements(GL_LINE_LOOP, DrawTime, GL_UNSIGNED_INT, 0);
+        }
+        else if(drawType == EyerGLDrawType::LINE){
+            // glDrawElements(GL_LINE, DrawTime, GL_UNSIGNED_INT, 0);
+        }
+        else if(drawType == EyerGLDrawType::POINT){
+            ctx->glDrawElements(GL_TRIANGLES, DrawTime, GL_UNSIGNED_INT, 0);
+        }
         ctx->glBindVertexArray(0);
 #else
         glBindVertexArray(VAOId);
