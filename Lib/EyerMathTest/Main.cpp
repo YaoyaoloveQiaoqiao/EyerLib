@@ -207,6 +207,21 @@ TEST(EyerMath, EnterPolation)
     res.PrintInfo();
 }
 
+TEST(EyerMath, inverse)
+{
+    float yuv2020_rgb2020[] = {
+            1.0000, -0.0000, 1.4746,
+            1.0000, -0.1645, -0.5713,
+            1.0000, 1.8814, -0.0001
+    };
+
+    Eyer::Eatrix<float> a(3, 3);
+    a.SetData(yuv2020_rgb2020, 9);
+
+    Eyer::Eatrix<float> inv_mat = a.Inverse();
+    inv_mat.PrintInfo();
+}
+
 int main(int argc,char **argv){
     eyer_log_thread(0);
 

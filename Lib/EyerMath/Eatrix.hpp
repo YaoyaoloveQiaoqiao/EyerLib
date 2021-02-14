@@ -2,7 +2,8 @@
 #define EYERLIB_EATRIX_HPP
 
 #include "EyerCore/EyerCore.hpp"
-#define N 3
+#include<cmath>
+#include<algorithm>
 
 namespace Eyer
 {
@@ -176,91 +177,169 @@ namespace Eyer
         */
         Eatrix<float> Inverse ()
         {
-            Eatrix<float> left(row, col);
-            Eatrix<float> up(row, col);
-            Eatrix<int> p(row, col);
+            Eatrix<float> inv_matrix(row, col);
 
-            int position[9];
+            //初始化
+            Eatrix<float> l(row, col);
+            Eatrix<float> u(row, col);
+            Eatrix<float> c(row, col);
+            Eatrix<float> ad_l(row, col);
+            Eatrix<float> ad_u(row, col);
 
-            /*float *x;
-            x = lupSolve(left, up, position, b);
-            for (int i = 0; i < 3; i++)
-                printf("%f ", x[i]);*/
-
-            LUP_Descomposition(left, up, p);
-
-            //得到position，和得到单位矩阵额e[n][n]
-            int n = GetMatLen();
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    if (p.Get(i, j) == 1)
-                        position[i] = j;
-            float e[row][col];
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    if (i == j)
-                        e[i][j] = 1;
-                    else
-                        e[i][j] = 0;
-
-            //构造逆矩阵
-            Eatrix<float> result(row,col);
-            for (int i = 0; i < n; i++) {
-                float *x = NULL;
-                x = LUP_Solve(left, up, position, e[i]);
-                for (int j = 0; j < n; j++)
-                    result.Set(j, i, x[j]);
+            //LU分解
+            for (int i = 0; i < row - 1; i++)
+            {
+                for (int j = i; j < row; j++)
+                {
+                    float tem = 0;
+                    for (int k = 0; k < i; k++)
+                        tem += l.Get(i, k) * u.Get(k, j);
+                    u.Set(i, j, Get(i, j) - tem);
+                }
+                for (int j = i + 1; j < row; j++)
+                {
+                    float tem = 0;
+                    for (int k = 0; k < i; k++)
+                        tem += l.Get(j, k) * u.Get(k, i);
+                    l.Set(j, i, (Get(j, i) - tem) / u.Get(i, i));
+                }
+            }
+            u.Set(row - 1, row - 1, Get(row - 1, row - 1));
+            for (int i = 0; i < row - 1; i++){
+                float tem = u.Get(row - 1, row - 1) - (l.Get(row - 1, i) * u.Get(i, row - 1));
+                u.Set(row - 1, row - 1, tem);
             }
 
-            //打印result数组
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
-                    printf("%f ", result.Get(i, j));
-                printf("\n");
+            //U的逆矩阵
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < row; j++)
+                {
+                    if (i > j) ad_u.Set(i, j, 0);
+                    else if (i == j)
+                    {
+                        ad_u.Set(i, j, 1);
+                        for (int k = 0; k < row; k++)
+                            if (k != j){
+                                float tem = ad_u.Get(i, j) * u.Get(k, k);
+                                ad_u.Set(i, j, tem);
+                            }
+                    }
+                    else if (j - i == 1)
+                    {
+                        float tem = ad_u.Get(i, j) - u.Get(i, j);
+                        ad_u.Set(i, j, tem);
+                        for (int k = 0; k < row; k++)
+                            if (k != i && k != j){
+                                float tem = ad_u.Get(i, j) * u.Get(k, k);
+                                ad_u.Set(i, j, tem);
+                            }
+                    }
+                    else if (j - i >= 2)
+                    {
+                        float deltas_aii = 1;
+                        for (int k = 0; k < row; k++)
+                            if (k < i || k > j)
+                                deltas_aii *= u.Get(k, k);
+                        int permutation[row];
+                        for (int t = 0; t < j - i; t++) permutation[t] = i + t + 1;
+                        float sum = 0;
+                        do
+                        {
+                            int cnt = 0;
+                            for (int t2 = 0; t2 < j - i; t2++)
+                                for (int t3 = t2; t3 < j - i; t3++)
+                                    if (permutation[t3] < permutation[t2]) cnt++;
+                            float mul = 1;
+                            for (int t1 = i; t1 < j; t1++)
+                                mul *= u.Get(t1, permutation[t1 - i]);
+                            if ((j - i + 1) % 2 == 0)mul *= -1;
+                            if (cnt % 2 == 0) sum += mul;
+                            else sum -= mul;
+                        } while (std::next_permutation(permutation, permutation + j - i));
+                        ad_u.Set(i, j, sum * deltas_aii);
+                    }
+                }
             }
+            float det_u = 1;
+            for (int k = 0; k < row; k++) det_u *= u.Get(k, k);
+            if (det_u < 1e-16)
+            {
+                printf("矩阵不可逆，请检查输入！\n");
+                return inv_matrix;
+            }
+            for (int i = 0; i < row; i++)
+                for (int j = 0; j < row; j++){
+                    float tem = ad_u.Get(i, j) / det_u;
+                    ad_u.Set(i, j, tem);
+                }
 
-            return result;
 
-//            //创建矩阵A的副本，注意不能直接用A计算，因为LUP分解算法已将其改变
-//            Eatrix<float> mat_mirror(N, N);
-//            Eatrix<float> inv_mat(N, N);//最终的逆矩阵（还需要转置）
-//            float *inv_A_each = new float[N]();//矩阵逆的各列
-//            //float *B = new float[N*N]();
-//            float *b = new float[N]();//b阵为B阵的列矩阵分量
-//
-//            for(int i=0;i<N;i++)
-//            {
-//                Eatrix<float> L(N, N);
-//                Eatrix<float> U(N, N);
-//
-//                int *P=new int[N]();
-//
-//                //构造单位阵的每一列
-//                for(int i=0;i<N;i++)
-//                {
-//                    b[i]=0;
-//                }
-//                b[i]=1;
-//
-//                //每次都需要重新将A复制一份
-//                mat_mirror = mat;
-//
-//                LUP_Descomposition(mat_mirror,L,U,P);
-//
-//                inv_A_each=LUP_Solve (L,U,P,b);
-//                memcpy(inv_A+i*N,inv_A_each,N*sizeof(float));//将各列拼接起来
-//            }
-//            inv_A = ~inv_A;           //由于现在根据每列b算出的x按行存储，因此需转置
-//            return inv_A;
-//
-//
-//            Eatrix<float> res(row, col);
-//            for (int i = 0; i < row; i++) {
-//                for (int j = 0; j < col; j++) {
-//                    res.mat[i][j] = mat[j][i];
-//                }
-//            }
-//            return res;
+            //l的逆矩阵
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < row; j++)
+                {
+                    if (i < j) ad_l.Set(i, j, 0);
+                    else if (i == j)
+                    {
+                        ad_l.Set(i, j, 1);
+                        for (int k = 0; k < row; k++)
+                            if (k != j){
+                                float tem = ad_l.Get(i, j) * l.Get(k, k);
+                                ad_l.Set(i, j, tem);
+                            }
+                    }
+                    else if (i - j == 1)
+                    {
+                        ad_l.Set(i, j, -l.Get(i, j));
+                        for (int k = 0; k < row; k++)
+                            if (k != i && k != j){
+                                float tem = ad_l.Get(i, j) * l.Get(k, k);
+                                ad_l.Set(i, j, tem);
+                            }
+                    }
+                    else if (i - j >= 2)
+                    {
+                        float deltas_aii = 1;
+                        for (int k = 0; k < row; k++)
+                            if (k < i || k > j)
+                                deltas_aii *= l.Get(i, i);
+                        int permutation[row];
+                        for (int t = 0; t < i - j; t++) permutation[t] = j + t + 1;
+                        float sum = 0;
+                        do
+                        {
+                            int cnt = 0;
+                            for (int t2 = 0; t2 < i - j; t2++)
+                                for (int t3 = t2; t3 < i - j; t3++)
+                                    if (permutation[t3] < permutation[t2]) cnt++;
+                            float mul = 1;
+                            for (int t1 = j; t1 < i; t1++)
+                                mul *= l.Get(permutation[t1 - j], t1);
+                            if ((i - j + 1) % 2 == 0)mul *= -1;
+                            if (cnt % 2 == 0) sum += mul;
+                            else sum -= mul;
+                        } while (std::next_permutation(permutation, permutation + i - j));
+                        ad_l.Set(i, j, sum * deltas_aii);
+                    }
+                }
+            }
+            float det_l = 1;
+            for (int k = 0; k < row; k++) det_l *= l.Get(k, k);
+            if (det_u < 1e-16)
+            {
+                printf("矩阵不可逆，请检查输入！\n");
+                return inv_matrix;
+            }
+            for (int i = 0; i < row; i++)
+                for (int j = 0; j < row; j++){
+                    float tem = ad_l.Get(i, j) / det_l;
+                    ad_l.Set(i, j, tem);
+                }
+
+            inv_matrix = ad_u * ad_l;
+            return inv_matrix;
         }
 
 
@@ -349,116 +428,6 @@ namespace Eyer
                 mat = nullptr;
             }
         }
-
-        //逆矩阵  LUP分解
-        void LUP_Descomposition(Eatrix<float> & left,Eatrix<float> & up, Eatrix<int> & p)
-        {
-            int n = GetMatLen();
-            int position[row];
-
-            //初始化position数组
-            for (int i = 0; i < n; i++) {
-                position[i] = i;
-            }
-
-            //定义矩阵a， 并且赋值
-            Eatrix<float> a(row, col);
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    a.Set(i, j, mat[i][j]);
-
-            for (int k = 0; k < n; k++) {
-                float max_row_data = -1;
-                int max_row = k;
-                for (int i = k; i < n; i++) {
-                    if (abs(a.Get(i, k)) > max_row_data) {
-                        max_row_data = abs(a.Get(i, k));
-                        max_row = i;
-                    }
-                }
-
-                if (max_row_data == 0) {
-                    printf("this Matrix is singular!");
-                    return;
-                }
-
-                int tmp = 0;
-                tmp = position[k];
-                position[k] = position[max_row];
-                position[max_row] = tmp;
-
-                for (int i = 0; i < n; i++) {
-                    float tmp = 0;
-                    tmp = a.Get(k, i);
-                    a.Set(k, i, a.Get(max_row, i));
-                    a.Set(max_row, i, tmp);
-                }
-
-                for (int i = k+1; i < n; i++) {
-                    float tmp = a.Get(i, k) / a.Get(k, k);
-                    a.Set(i, k, tmp);
-                    for (int j = k+1; j < n; j++){
-                        float tmp = a.Get(i, j) - a.Get(i, k) * a.Get(k, j);
-                        a.Set(i, j, tmp);
-                    }
-                }
-            }
-
-            //给矩阵P赋值
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++) {
-                    if (j == position[i])
-                        p.Set(i, j, 1);
-                    else
-                        p.Set(i, j, 0);
-                }
-
-            //给矩阵left赋值
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++) {
-                    if (i == j)
-                        left.Set(i, j, 1);
-                    else if (i > j)
-                        left.Set(i, j, a.Get(i, j));
-                    else
-                        left.Set(i, j, 0);
-                }
-
-            //给矩阵up赋值
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++) {
-                    if (i <= j)
-                        up.Set(i, j, a.Get(i, j));
-                    else
-                        up.Set(i, j, 0);
-                }
-
-        }
-
-        //逆矩阵  LUP求解方程
-        float * LUP_Solve(Eatrix<float> & left,Eatrix<float> & up,int *position, float *b)
-        {
-            int n = GetMatLen();
-            float x[9] = {0};
-            float y[9] = {0};
-
-            for (int i = 0; i < n; i++) {
-                float partSum = 0;
-                for (int j = 0; j <= i-1; j++)
-                    partSum += left.Get(i, j) * y[j];
-                y[i] = b[position[i]] - partSum;
-            }
-
-            for (int i = n-1; i >= 0; i--) {
-                float partSum = 0;
-                for (int j = i+1; j <= n-1; j++)
-                    partSum += up.Get(i, j) * x[j];
-                x[i] = (y[i] - partSum) / up.Get(i, i);
-            }
-            return x;
-
-        }
-
     };
 }
 

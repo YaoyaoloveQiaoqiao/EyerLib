@@ -174,49 +174,7 @@ namespace Eyer {
 
     void Matrix::inverse()
     {
-        double left[100][100] = {{1, 0, 0}, {0.2, 1, 0}, {0.6, 0.5, 1}};
-        double up[100][100] = {{5, 6, 3}, {0, 0.8, -0.6}, {0, 0, 2.5}};
-        int position[100] = {2, 0, 1};
-        int p[100][100] = {0};
 
-        /*double *x;
-        x = lupSolve(left, up, position, b);
-        for (int i = 0; i < 3; i++)
-            printf("%f ", x[i]);*/
-
-        lupDecomposition(p, left, up);
-
-        //得到position，和得到单位矩阵额e[n][n]
-        int n = get_size();
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                if (p[i][j] == 1)
-                    position[i] = j;
-        double e[100][100] = {0};
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                if (i == j)
-                    e[i][j] = 1;
-                else
-                    e[i][j] = 0;
-
-        //构造逆矩阵
-        double result[100][100] = {0};
-        for (int i = 0; i < n; i++) {
-            double *x = NULL;
-            x = lupSolve(left, up, position, e[i]);
-            for (int j = 0; j < n; j++)
-                result[j][i] = x[j];
-        }
-
-        //打印result数组
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++)
-                printf("%f ", result[i][j]);
-            printf("\n");
-        }
-
-        return;
     }
 
 }
