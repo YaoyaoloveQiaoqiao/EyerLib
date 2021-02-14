@@ -52,6 +52,8 @@ add_library(
         RESIDUAL_TYPE.hpp
         EyerNeighbourSamples.cpp
         EyerNeighbourSamples.hpp
+        Sample.cpp
+        Sample.hpp
 )
 
 target_link_libraries (

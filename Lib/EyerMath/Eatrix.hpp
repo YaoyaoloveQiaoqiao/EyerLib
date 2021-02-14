@@ -71,7 +71,7 @@ namespace Eyer
          * @param m
          * @return
          */
-        const Eatrix operator + (const Eatrix & m) {
+        Eatrix operator + (const Eatrix & m) {
             Eatrix res(m.row, m.col);
             if (row == m.row && col == m.col) {
                 for (int i = 0; i < row; i++) {
@@ -91,7 +91,7 @@ namespace Eyer
          * @param m
          * @return
          */
-        const Eatrix operator - (const Eatrix & m)
+        Eatrix operator - (const Eatrix & m)
         {
             Eatrix res(m.row, m.col);
             if (row == m.row && col == m.col) {
@@ -141,7 +141,7 @@ namespace Eyer
          * @param a
          * @return
          */
-        const Eatrix operator * (const float a)
+        Eatrix operator * (const float a)
         {
             Eatrix res(row, col);
             for (int i = 0; i < row; i++) {

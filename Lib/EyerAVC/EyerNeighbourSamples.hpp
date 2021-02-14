@@ -1,5 +1,7 @@
-#ifndef EYERLIB_EYERNEIGHBOURSAMPLES_HPP
-#define EYERLIB_EYERNEIGHBOURSAMPLES_HPP
+#ifndef EYERLIB_EYERNEIGHBOURSAMPLES_SSSS_HPP
+#define EYERLIB_EYERNEIGHBOURSAMPLES_SSSS_HPP
+
+#include "Sample.hpp"
 
 namespace Eyer
 {
@@ -9,21 +11,47 @@ namespace Eyer
         EyerNeighbourSamples();
         ~EyerNeighbourSamples();
 
-        int Init();
+        int Init(Sample & _Q,
 
-        int Get(int x, int y);
+                 Sample & _A,
+                 Sample & _B,
+                 Sample & _C,
+                 Sample & _D,
+
+                 Sample & _E,
+                 Sample & _F,
+                 Sample & _G,
+                 Sample & _H,
+
+                 Sample & _I,
+                 Sample & _J,
+                 Sample & _K,
+                 Sample & _L
+                 );
 
         bool AvailableUp();
         bool AvailableLeft();
         bool AvailableUpLeft();
         bool AvailableUpRight();
 
-    private:
-        bool availableUp = false;
-        bool availableLeft = false;
-        bool availableUpLeft = false;
-        bool availableUpRight = false;
+    public:
+        Sample Q;
+
+        Sample A;
+        Sample B;
+        Sample C;
+        Sample D;
+
+        Sample E;
+        Sample F;
+        Sample G;
+        Sample H;
+
+        Sample I;
+        Sample J;
+        Sample K;
+        Sample L;
     };
 }
 
-#endif //EYERLIB_EYERNEIGHBOURSAMPLES_HPP
+#endif //EYERLIB_EYERNEIGHBOURSAMPLES_SSSS_HPP
