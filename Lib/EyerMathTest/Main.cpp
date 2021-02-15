@@ -215,11 +215,29 @@ TEST(EyerMath, inverse)
             1.0000, 1.8814, -0.0001
     };
 
-    Eyer::Eatrix<float> a(3, 3);
-    a.SetData(yuv2020_rgb2020, 9);
+    float rgb2020_xyz[] = {
+            0.6370, 0.1446, 0.1689,
+            0.2627, 0.6780, 0.0593,
+            0,      0.0281, 1.0610
+    };
 
-    Eyer::Eatrix<float> inv_mat = a.Inverse();
+    float rgb709_xyz[] = {
+            0.4124, 0.3576, 0.1805,
+            0.2126, 0.7152, 0.0722,
+            0.0193, 0.1192, 0.9505
+    };
+
+    Eyer::Eatrix<float> mat(3, 3);
+    mat.SetData(rgb709_xyz, 9);
+
+
+    Eyer::Eatrix<float> inv_mat = !mat;
     inv_mat.PrintInfo();
+
+    Eyer::Eatrix<float> multiple_mat = mat * inv_mat;
+    multiple_mat.PrintInfo();
+
+
 }
 
 int main(int argc,char **argv){

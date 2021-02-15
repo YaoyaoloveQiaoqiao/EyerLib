@@ -172,33 +172,34 @@ namespace Eyer
 
         /**
         * float矩阵的逆矩阵
+         * 注意：目前只有3*3矩阵求逆测试通过
         * @param
         * @return
         */
-        Eatrix<float> Inverse ()
+        Eatrix operator ! ()
         {
-            Eatrix<float> inv_matrix(row, col);
+            Eatrix inv_matrix(row, col);
 
             //初始化
-            Eatrix<float> l(row, col);
-            Eatrix<float> u(row, col);
-            Eatrix<float> c(row, col);
-            Eatrix<float> ad_l(row, col);
-            Eatrix<float> ad_u(row, col);
+            Eatrix l(row, col);
+            Eatrix u(row, col);
+            Eatrix c(row, col);
+            Eatrix ad_l(row, col);
+            Eatrix ad_u(row, col);
 
             //LU分解
             for (int i = 0; i < row - 1; i++)
             {
                 for (int j = i; j < row; j++)
                 {
-                    float tem = 0;
+                     T tem = 0;
                     for (int k = 0; k < i; k++)
                         tem += l.Get(i, k) * u.Get(k, j);
                     u.Set(i, j, Get(i, j) - tem);
                 }
                 for (int j = i + 1; j < row; j++)
                 {
-                    float tem = 0;
+                     T tem = 0;
                     for (int k = 0; k < i; k++)
                         tem += l.Get(j, k) * u.Get(k, i);
                     l.Set(j, i, (Get(j, i) - tem) / u.Get(i, i));
@@ -206,7 +207,7 @@ namespace Eyer
             }
             u.Set(row - 1, row - 1, Get(row - 1, row - 1));
             for (int i = 0; i < row - 1; i++){
-                float tem = u.Get(row - 1, row - 1) - (l.Get(row - 1, i) * u.Get(i, row - 1));
+                 T tem = u.Get(row - 1, row - 1) - (l.Get(row - 1, i) * u.Get(i, row - 1));
                 u.Set(row - 1, row - 1, tem);
             }
 
@@ -221,36 +222,36 @@ namespace Eyer
                         ad_u.Set(i, j, 1);
                         for (int k = 0; k < row; k++)
                             if (k != j){
-                                float tem = ad_u.Get(i, j) * u.Get(k, k);
+                                 T tem = ad_u.Get(i, j) * u.Get(k, k);
                                 ad_u.Set(i, j, tem);
                             }
                     }
                     else if (j - i == 1)
                     {
-                        float tem = ad_u.Get(i, j) - u.Get(i, j);
+                         T tem = ad_u.Get(i, j) - u.Get(i, j);
                         ad_u.Set(i, j, tem);
                         for (int k = 0; k < row; k++)
                             if (k != i && k != j){
-                                float tem = ad_u.Get(i, j) * u.Get(k, k);
+                                 T tem = ad_u.Get(i, j) * u.Get(k, k);
                                 ad_u.Set(i, j, tem);
                             }
                     }
                     else if (j - i >= 2)
                     {
-                        float deltas_aii = 1;
+                         T deltas_aii = 1;
                         for (int k = 0; k < row; k++)
                             if (k < i || k > j)
                                 deltas_aii *= u.Get(k, k);
                         int permutation[row];
                         for (int t = 0; t < j - i; t++) permutation[t] = i + t + 1;
-                        float sum = 0;
+                         T sum = 0;
                         do
                         {
                             int cnt = 0;
                             for (int t2 = 0; t2 < j - i; t2++)
                                 for (int t3 = t2; t3 < j - i; t3++)
                                     if (permutation[t3] < permutation[t2]) cnt++;
-                            float mul = 1;
+                             T mul = 1;
                             for (int t1 = i; t1 < j; t1++)
                                 mul *= u.Get(t1, permutation[t1 - i]);
                             if ((j - i + 1) % 2 == 0)mul *= -1;
@@ -261,7 +262,7 @@ namespace Eyer
                     }
                 }
             }
-            float det_u = 1;
+             T det_u = 1;
             for (int k = 0; k < row; k++) det_u *= u.Get(k, k);
             if (det_u < 1e-16)
             {
@@ -270,7 +271,7 @@ namespace Eyer
             }
             for (int i = 0; i < row; i++)
                 for (int j = 0; j < row; j++){
-                    float tem = ad_u.Get(i, j) / det_u;
+                     T tem = ad_u.Get(i, j) / det_u;
                     ad_u.Set(i, j, tem);
                 }
 
@@ -286,7 +287,7 @@ namespace Eyer
                         ad_l.Set(i, j, 1);
                         for (int k = 0; k < row; k++)
                             if (k != j){
-                                float tem = ad_l.Get(i, j) * l.Get(k, k);
+                                 T tem = ad_l.Get(i, j) * l.Get(k, k);
                                 ad_l.Set(i, j, tem);
                             }
                     }
@@ -295,26 +296,26 @@ namespace Eyer
                         ad_l.Set(i, j, -l.Get(i, j));
                         for (int k = 0; k < row; k++)
                             if (k != i && k != j){
-                                float tem = ad_l.Get(i, j) * l.Get(k, k);
+                                 T tem = ad_l.Get(i, j) * l.Get(k, k);
                                 ad_l.Set(i, j, tem);
                             }
                     }
                     else if (i - j >= 2)
                     {
-                        float deltas_aii = 1;
+                         T deltas_aii = 1;
                         for (int k = 0; k < row; k++)
                             if (k < i || k > j)
                                 deltas_aii *= l.Get(i, i);
                         int permutation[row];
                         for (int t = 0; t < i - j; t++) permutation[t] = j + t + 1;
-                        float sum = 0;
+                         T sum = 0;
                         do
                         {
                             int cnt = 0;
                             for (int t2 = 0; t2 < i - j; t2++)
                                 for (int t3 = t2; t3 < i - j; t3++)
                                     if (permutation[t3] < permutation[t2]) cnt++;
-                            float mul = 1;
+                             T mul = 1;
                             for (int t1 = j; t1 < i; t1++)
                                 mul *= l.Get(permutation[t1 - j], t1);
                             if ((i - j + 1) % 2 == 0)mul *= -1;
@@ -325,7 +326,7 @@ namespace Eyer
                     }
                 }
             }
-            float det_l = 1;
+             T det_l = 1;
             for (int k = 0; k < row; k++) det_l *= l.Get(k, k);
             if (det_u < 1e-16)
             {
@@ -334,7 +335,7 @@ namespace Eyer
             }
             for (int i = 0; i < row; i++)
                 for (int j = 0; j < row; j++){
-                    float tem = ad_l.Get(i, j) / det_l;
+                     T tem = ad_l.Get(i, j) / det_l;
                     ad_l.Set(i, j, tem);
                 }
 

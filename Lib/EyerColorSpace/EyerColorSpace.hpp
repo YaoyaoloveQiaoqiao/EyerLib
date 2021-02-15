@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <EyerMath/EyerMath.hpp>
 
 namespace Eyer
 {
@@ -15,24 +16,41 @@ namespace Eyer
     public:
         EyerColorSpace();
         ~EyerColorSpace();
-        int Convert();
-    };
 
+        int AddEatrix(Eyer::Eatrix<float> & transformMat);
+        Eyer::EectorF3 Convert(Eyer::EectorF3 rgb);
 
-    class Matrix{
     public:
-        Matrix();
-        ~Matrix();
-        int get_size() const;
-        void inverse();
-        void show() const;
-        void initialize();
-        void lupDecomposition(int (*p)[100], double (*left)[100], double (*up)[100]);
+        Eyer::Eatrix<float> rgb2020_xyz_mat;
+        Eyer::Eatrix<float> rgb709_xyz_mat;
 
     private:
-        double data[100][100];
-        int rowsize, colsize;
-        double* lupSolve(double (*left)[100], double (*up)[100], int *position, double *b);
+        std::vector<Eyer::Eatrix<float>> transformEatrixVec;
+
     };
+
+    class A
+    {
+    public:
+        static A * instance;
+        static A * GetInstance();
+
+        Eyer::Eatrix<float> rgb2020_xyz_mat;
+        Eyer::Eatrix<float> rgb709_xyz_mat;
+    };
+
+    A * A::instance = nullptr;
+    A * A::GetInstance()
+    {
+        if(A::instance == nullptr){
+            A::instance = new A();
+            
+        }
+        return A::instance;
+    }
+
+    A::GetInstance()->rgb2020_xyz_mat
+
+
 }
 #endif //EYERLIB_EYERCOLORSPACE_H
