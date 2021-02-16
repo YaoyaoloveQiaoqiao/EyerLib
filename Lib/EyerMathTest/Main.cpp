@@ -207,6 +207,36 @@ TEST(EyerMath, EnterPolation)
     res.PrintInfo();
 }
 
+TEST(EyerMath, inverse)
+{
+    float yuv2020_rgb2020[] = {
+            1.0000, -0.0000, 1.4746,
+            1.0000, -0.1645, -0.5713,
+            1.0000, 1.8814, -0.0001
+    };
+
+    float rgb2020_xyz[] = {
+            0.6370, 0.1446, 0.1689,
+            0.2627, 0.6780, 0.0593,
+            0,      0.0281, 1.0610
+    };
+
+    float rgb709_xyz[] = {
+            0.4124, 0.3576, 0.1805,
+            0.2126, 0.7152, 0.0722,
+            0.0193, 0.1192, 0.9505
+    };
+
+    Eyer::Eatrix<float> mat(3, 3);
+    mat.SetData(rgb709_xyz, 9);
+
+
+    Eyer::Eatrix<float> inv_mat = !mat;
+    inv_mat.PrintInfo();
+
+    Eyer::Eatrix<float> multiple_mat = mat * inv_mat;
+    multiple_mat.PrintInfo();
+}
 
 TEST(EyerMath, Matrix4x4_rotato)
 {

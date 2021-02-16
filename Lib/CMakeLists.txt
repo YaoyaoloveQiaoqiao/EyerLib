@@ -131,6 +131,8 @@ ModuleTestOption("EyerSignal"       "EyerSignalTest"           EyerSignal)
 OPTION(EyerMath                     "option for EyerMath"             ON)
 ModuleTestOption("EyerMath"         "EyerMathTest"              EyerMath)
 
+OPTION(EyerColorSpace                     "option for EyerColorSpace"             ON)
+ModuleTestOption("EyerColorSpace"         "EyerColorSpaceTest"              EyerColorSpace)
 
 
 
