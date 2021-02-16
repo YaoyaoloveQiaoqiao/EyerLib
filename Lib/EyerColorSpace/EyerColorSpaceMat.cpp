@@ -29,4 +29,3 @@ namespace Eyer {
         return EyerColorSpaceMat::instance;
     }
 }
-//A::GetInstance()->rgb2020_xyz_mat
