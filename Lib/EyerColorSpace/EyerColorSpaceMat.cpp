@@ -1,6 +1,3 @@
-//
-// Created by chuchun on 2021/2/16.
-//
 #include "EyerColorSpace.hpp"
 
 namespace Eyer {
