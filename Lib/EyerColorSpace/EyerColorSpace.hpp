@@ -17,40 +17,25 @@ namespace Eyer
         EyerColorSpace();
         ~EyerColorSpace();
 
-        int AddEatrix(Eyer::Eatrix<float> & transformMat);
+        int AddEatrix(const Eyer::Eatrix<float> & transformMat);
         Eyer::EectorF3 Convert(Eyer::EectorF3 rgb);
-
-    public:
-        Eyer::Eatrix<float> rgb2020_xyz_mat;
-        Eyer::Eatrix<float> rgb709_xyz_mat;
 
     private:
         std::vector<Eyer::Eatrix<float>> transformEatrixVec;
 
     };
 
-    class A
+    class EyerColorSpaceMat
     {
+    private:
+        EyerColorSpaceMat();
     public:
-        static A * instance;
-        static A * GetInstance();
+        static EyerColorSpaceMat * instance;
+        static EyerColorSpaceMat * GetInstance();
 
         Eyer::Eatrix<float> rgb2020_xyz_mat;
         Eyer::Eatrix<float> rgb709_xyz_mat;
     };
-
-    A * A::instance = nullptr;
-    A * A::GetInstance()
-    {
-        if(A::instance == nullptr){
-            A::instance = new A();
-            
-        }
-        return A::instance;
-    }
-
-    A::GetInstance()->rgb2020_xyz_mat
-
 
 }
 #endif //EYERLIB_EYERCOLORSPACE_H

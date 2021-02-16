@@ -4,6 +4,7 @@ include_directories (./)
 add_library(
         EyerColorSpace
         EyerColorSpace.cpp
+        EyerColorSpaceMat.cpp
 )
 
 target_link_libraries (EyerColorSpace EyerCore)
