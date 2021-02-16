@@ -3,28 +3,40 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include "EyerCore/EyerCore.hpp"
+#include "EyerNeighbourSamples.hpp"
 
 namespace Eyer
 {
     class EyerCoeff4x4Block {
     public:
-        EyerCoeff4x4Block();
+        EyerCoeff4x4Block(int _qp = 0);
         ~EyerCoeff4x4Block();
+
+        int Restore();
+
+        int Decode(EyerNeighbourSamples & neighbourSamples, EyerTable<Sample> & res);
+
+        int SetQP(int _qp);
+        int qp = 0;
 
         bool emptyBlock = false;
 
         int totleCoeff = 0;
         int trailingOnes = 0;
-
         int trailingSign[3] = {0};
         int levels[16] = {0};
-
         int totleZeros = 0;
-
         int runBefore[16] = {0};
 
+        int luma_pred_mode = -1;
 
-        int luma_pred_mode = 0;
+        int coeffBuf[4][4] = {0};
+        int dequantBuf[4][4] = {0};
+
+        int residualBuf[4][4] = {0};
+
+        int SWAP(int & x, int & y);
     };
 }
 
