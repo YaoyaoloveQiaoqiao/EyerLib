@@ -14,8 +14,8 @@ extern "C"{
 
 int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
-    Eyer::EyerDASHReader * dashReader = (Eyer::EyerDASHReader * )opaque;
-    return dashReader->read_packet(buf, buf_size);
+    // Eyer::EyerDASHReader * dashReader = (Eyer::EyerDASHReader * )opaque;
+    // return dashReader->read_packet(buf, buf_size);
 }
 
 int64_t seek_func(void *opaque, int64_t offset, int whence)
