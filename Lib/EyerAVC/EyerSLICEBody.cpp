@@ -12,7 +12,6 @@ namespace Eyer
 
     EyerSLICEBody::~EyerSLICEBody()
     {
-
     }
 
     int EyerSLICEBody::Parse(EyerBitStream & bs, EyerSyntax & syntax, EyerSPS & _sps, EyerPPS & _pps, EyerSLICEHeader & _sliceHeader)
@@ -72,6 +71,13 @@ namespace Eyer
                 int x = CurrMbAddr % (sps.pic_width_in_mbs_minus1 + 1);
                 int y = CurrMbAddr / (sps.pic_width_in_mbs_minus1 + 1);
 
+                /*
+                 ***************
+                 *  D  B  C
+                 *  A  E
+                 ***************
+                 */
+
                 int mbAddrA_X = x - 1;
                 int mbAddrA_Y = y;
                 EyerMacroblock * mbAddrA = nullptr;
@@ -92,8 +98,14 @@ namespace Eyer
                 EyerMacroblock * mbAddrD = nullptr;
                 mbTable.Get(mbAddrD, mbAddrD_X, mbAddrD_Y);
 
-                EyerMacroblock * block = new EyerMacroblock(CurrMbAddr, mbAddrA, mbAddrB, mbAddrC, mbAddrD);
+                int mbAddrF_X = x + 1;
+                int mbAddrF_Y = y - 1;
+                EyerMacroblock * mbAddrF = nullptr;
+                mbTable.Get(mbAddrF, mbAddrF_X, mbAddrF_Y);
+
+                EyerMacroblock * block = new EyerMacroblock(CurrMbAddr, mbAddrA, mbAddrB, mbAddrC, mbAddrD, mbAddrF);
                 block->Parse(bs, sps, pps, sliceHeader);
+                block->Decode();
                 mbTable.Set(x, y, block);
             }
             if(!pps.entropy_coding_mode_flag){

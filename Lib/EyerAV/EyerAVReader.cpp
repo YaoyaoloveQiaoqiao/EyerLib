@@ -14,8 +14,8 @@ extern "C"{
 
 int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
-    Eyer::EyerDASHReader * dashReader = (Eyer::EyerDASHReader * )opaque;
-    return dashReader->read_packet(buf, buf_size);
+    // Eyer::EyerDASHReader * dashReader = (Eyer::EyerDASHReader * )opaque;
+    // return dashReader->read_packet(buf, buf_size);
 }
 
 int64_t seek_func(void *opaque, int64_t offset, int whence)
@@ -26,7 +26,7 @@ int64_t seek_func(void *opaque, int64_t offset, int whence)
 
 namespace Eyer
 {
-    EyerAVReader::EyerAVReader(EyerString _path, EyerDASHReader * dashReader)
+    EyerAVReader::EyerAVReader(EyerString _path)
     {
         piml = new EyerAVReaderPrivate();
         piml->path = _path;
@@ -36,7 +36,7 @@ namespace Eyer
 
         piml->formatCtx = avformat_alloc_context();
 
-
+        /*
         if(dashReader != nullptr){
             int nBufferSize = 1024 * 1024 * 2;
             unsigned char * pBuffer = new unsigned char[nBufferSize];
@@ -52,6 +52,7 @@ namespace Eyer
                                                      0);
             piml->formatCtx->pb = pIOCtx;
         }
+        */
     }
 
     EyerAVReader::~EyerAVReader()
