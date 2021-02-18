@@ -358,4 +358,15 @@ namespace Eyer {
     {
         return piml->isLastPacket;
     }
+
+
+    int EyerAVFrame::GetLineSize(int channel)
+    {
+        return piml->frame->linesize[channel];
+    }
+
+    uint8_t * EyerAVFrame::GetData(int channel)
+    {
+        return piml->frame->data[channel];
+    }
 }
