@@ -1,10 +1,12 @@
 #include <gtest/gtest.h>
 
-#include "EyerAV/EyerAV.hpp"
-#include "EyerDASH/EyerDASH.hpp"
+// #include "EyerAV/EyerAV.hpp"
+// #include "EyerDASH/EyerDASH.hpp"
 
 // #include "EyerAVPureColorCheck.hpp"
-#include "AVGif.hpp"
+// #include "AVGif.hpp"
+
+#include "EyerAVReadImage.h"
 
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
