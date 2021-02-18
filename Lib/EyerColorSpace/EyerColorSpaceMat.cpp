@@ -19,6 +19,23 @@ namespace Eyer {
         };
         rgb709_xyz_mat = Eyer::Eatrix<float>(3, 3);
         rgb709_xyz_mat.SetData(rgb709_xyz, 9);
+
+        float yuv601_rgb601_255[] = {
+                1, 0, 1.4017,
+                1, -0.3437, -0.7142,
+                1, 1.7722, 0
+        };
+        yuv601_rgb601_255_mat = Eyer::Eatrix<float>(3, 3);
+        yuv601_rgb601_255_mat.SetData(yuv601_rgb601_255, 9);
+
+        float yuv2020_rgb2020_255[] = {
+                1.0000, -0.0000, 1.4746,
+                1.0000, -0.1645, -0.5713,
+                1.0000, 1.8814, -0.0001
+        };
+        yuv2020_rgb2020_255_mat = Eyer::Eatrix<float>(3, 3);
+        yuv2020_rgb2020_255_mat.SetData(yuv2020_rgb2020_255, 9);
+
     }
 
     EyerColorSpaceMat *EyerColorSpaceMat::GetInstance() {
