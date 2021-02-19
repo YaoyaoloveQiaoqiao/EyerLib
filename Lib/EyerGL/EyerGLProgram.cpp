@@ -146,4 +146,26 @@ namespace Eyer
 
         return 0;
     }
+
+    int EyerGLProgram::PutMatrix3fv(EyerString key, EatrixF3x3 & _mat)
+    {
+#ifdef QT_EYER_PLAYER
+        GLuint location = ctx->glGetUniformLocation(programId, key.str);
+#else
+        GLuint location = glGetUniformLocation(programId, key.str);
+#endif
+
+        EatrixF3x3 mat = ~_mat;
+        int matLen = mat.GetMatLen();
+        float * m = (float *)malloc(matLen);
+        mat.GetMat(m);
+
+#ifdef QT_EYER_PLAYER
+        ctx->glUniformMatrix3fv(location, 1, GL_FALSE, m);
+#else
+        glUniformMatrix4fv(location, 1, GL_FALSE, m);
+#endif
+
+        free(m);
+    }
 }

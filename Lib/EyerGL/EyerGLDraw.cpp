@@ -56,6 +56,13 @@ namespace Eyer
         return 0;
     }
 
+    int EyerGLDraw::PutMatrix3fv(EyerString uniform, EatrixF3x3 & mat)
+    {
+        program->UseProgram();
+        program->PutMatrix3fv(uniform, mat);
+        return 0;
+    }
+
     int EyerGLDraw::PutUniform1f(EyerString uniform, float val)
     {
         program->UseProgram();
