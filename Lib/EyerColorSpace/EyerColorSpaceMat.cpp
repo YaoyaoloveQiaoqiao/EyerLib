@@ -43,7 +43,7 @@ namespace Eyer {
         if (EyerColorSpaceMat::instance == nullptr) {
             EyerColorSpaceMat::instance = new EyerColorSpaceMat();
         }
-        
+
         return EyerColorSpaceMat::instance;
     }
 }

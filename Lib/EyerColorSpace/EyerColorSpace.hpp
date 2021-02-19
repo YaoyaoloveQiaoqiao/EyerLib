@@ -16,6 +16,7 @@ namespace Eyer
         int AddEatrix(const Eyer::Eatrix<float> & transformMat);
         Eyer::EectorF3 Convert(Eyer::EectorF3 rgb);
 
+        int GetMat(Eyer::Eatrix<float> & mat);
     private:
         std::vector<Eyer::Eatrix<float>> transformEatrixVec;
 
