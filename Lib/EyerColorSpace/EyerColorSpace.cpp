@@ -25,4 +25,13 @@ namespace Eyer {
         return outRgb;
     }
 
+    int EyerColorSpace::GetMat(Eyer::Eatrix<float> & mat)
+    {
+        Eyer::Eatrix<float> m(3, 3);
+        for (int i = 0; i < transformEatrixVec.size(); i++) {
+            m = transformEatrixVec[i] * m;
+        }
+        mat = m;
+        return 0;
+    }
 }
