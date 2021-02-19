@@ -28,7 +28,7 @@ TEST(EyerAVFormat4, format4_read_frame){
     {
         Eyer::EyerAVPacket packet;
         int ret = reader.Read(&packet);
-        if(ret){
+        if(ret) {
             break;
         }
 

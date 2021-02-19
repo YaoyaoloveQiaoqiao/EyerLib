@@ -94,6 +94,7 @@ namespace Eyer
 
         int PutUniform1i(EyerString key, int value);
         int PutMatrix4fv(EyerString key, EatrixF4x4 & mat);
+        int PutMatrix3fv(EyerString key, EatrixF3x3 & mat);
         int PutUniform1f(EyerString key, float value);
     };
 
@@ -143,6 +144,7 @@ namespace Eyer
         int SetVAO(EyerGLVAO * vao);
         int PutTexture(EyerString uniform, EyerGLTexture * texture, int textureIndex = 0);
         int PutMatrix4fv(EyerString uniform, EatrixF4x4 & mat);
+        int PutMatrix3fv(EyerString uniform, EatrixF3x3 & mat);
         int PutUniform1f(EyerString uniform, float val);
         int PutUniform1i(EyerString uniform, int val);
 

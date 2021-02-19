@@ -177,6 +177,7 @@ namespace Eyer
         int SetAudioData(unsigned char * data, int dataLen, int nbSamples, int channel, EyerAVFormat format);
 
         int GetLineSize(int channel);
+        uint8_t * GetData(int channel);
 
         int SetVideoData420P(unsigned char * y, unsigned char * u, unsigned char * v, int width, int height);
 

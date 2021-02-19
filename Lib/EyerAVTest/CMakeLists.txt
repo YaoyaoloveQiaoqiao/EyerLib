@@ -12,7 +12,7 @@ add_executable(
         EyerAVBitmapTest.h
         EyerAVPureColorCheck.hpp
         AVGif.hpp
-)
+        EyerAVReadImage.h)
 
 include_directories (../)
 

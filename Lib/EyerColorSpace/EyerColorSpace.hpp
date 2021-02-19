@@ -16,6 +16,7 @@ namespace Eyer
         int AddEatrix(const Eyer::Eatrix<float> & transformMat);
         Eyer::EectorF3 Convert(Eyer::EectorF3 rgb);
 
+        int GetMat(Eyer::Eatrix<float> & mat);
     private:
         std::vector<Eyer::Eatrix<float>> transformEatrixVec;
 
@@ -34,6 +35,7 @@ namespace Eyer
 
         //yuv范围(0,255)  bt601和bt709的 yuv 转 rgb 矩阵一样
         Eyer::Eatrix<float> yuv601_rgb601_255_mat;
+        Eyer::Eatrix<float> yuv709_rgb709_255_mat;
         //yuv范围(0,255)
         Eyer::Eatrix<float> yuv2020_rgb2020_255_mat;
 
