@@ -13,6 +13,7 @@ TEST(EyerColorSpace, init)
     Eyer::EectorF3 rgb_out = colorSpace.Convert(rgb);
     rgb_out.PrintInfo();
 
+
 }
 
 int main(int argc,char **argv){
