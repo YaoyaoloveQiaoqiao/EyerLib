@@ -249,6 +249,14 @@ TEST(EyerMath, Matrix4x4_rotato)
     cmpMat(~matRotato, r);
 }
 
+
+TEST(EyerMath, Matrix4x4_Copy)
+{
+    EyerLog("=============================\n");
+
+    EyerLog("=============================\n");
+}
+
 int main(int argc,char **argv){
     eyer_log_thread(0);
 

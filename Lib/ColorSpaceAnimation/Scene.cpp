@@ -651,6 +651,7 @@ namespace Eyer
 
         double time = dTime / 1000.0;
 
+        time *= 2;
         time += 0;
 
         if(time < 0){
