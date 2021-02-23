@@ -4,6 +4,7 @@
 #include "Eatrix.hpp"
 #include <math.h>
 #include "Eatrix3x1.hpp"
+#include "Eath.hpp"
 
 /*
 #include <glm/glm.hpp>
@@ -86,11 +87,11 @@ namespace Eyer
             return 0;
         }
 
-        int SetOrtho(T l, T r, T t, T b, T near, T far)
+        int SetOrtho(T _l, T _r, T _t, T _b, T _near, T _far)
         {
-            Eatrix<T>::mat[0][0] = 2.0 / (r - l);                              Eatrix<T>::mat[0][1] = 0.0f;                               Eatrix<T>::mat[0][2] = 0.0f;                               Eatrix<T>::mat[0][3] = - (r + l) / (r - l);
-            Eatrix<T>::mat[1][0] = 0.0f;                                       Eatrix<T>::mat[1][1] = 2.0 / (t - b);                      Eatrix<T>::mat[1][2] = 0.0f;                               Eatrix<T>::mat[1][3] = - (t + b) / (t - b);
-            Eatrix<T>::mat[2][0] = 0.0f;                                       Eatrix<T>::mat[2][1] = 0.0f;                               Eatrix<T>::mat[2][2] = -2.0 / (far - near);                Eatrix<T>::mat[2][3] = - (far + near) / (far - near);
+            Eatrix<T>::mat[0][0] = 2.0 / (_r - _l);                            Eatrix<T>::mat[0][1] = 0.0f;                               Eatrix<T>::mat[0][2] = 0.0f;                               Eatrix<T>::mat[0][3] = - (_r + _l) / (_r - _l);
+            Eatrix<T>::mat[1][0] = 0.0f;                                       Eatrix<T>::mat[1][1] = 2.0 / (_t - _b);                    Eatrix<T>::mat[1][2] = 0.0f;                               Eatrix<T>::mat[1][3] = - (_t + _b) / (_t - _b);
+            Eatrix<T>::mat[2][0] = 0.0f;                                       Eatrix<T>::mat[2][1] = 0.0f;                               Eatrix<T>::mat[2][2] = -2.0 / (_far - _near);              Eatrix<T>::mat[2][3] = - (_far + _near) / (_far - _near);
             Eatrix<T>::mat[3][0] = 0.0f;                                       Eatrix<T>::mat[3][1] = 0.0f;                               Eatrix<T>::mat[3][2] = 0.0f;                               Eatrix<T>::mat[3][3] = 1.0f;
             return 0;
         }
@@ -103,12 +104,12 @@ namespace Eyer
             return 0;
         }
 
-        int SetPerspective(float fov, float aspect, float near, float far)
+        int SetPerspective(float _fov, float _aspect, float _near, float _far)
         {
-            Eatrix<T>::mat[0][0] = tan(M_PI / 2.0 - (fov / 2.0)) / aspect;     Eatrix<T>::mat[0][1] = 0.0f;                               Eatrix<T>::mat[0][2] = 0.0f;                               Eatrix<T>::mat[0][3] = 0.0f;
-            Eatrix<T>::mat[1][0] = 0.0f;                                       Eatrix<T>::mat[1][1] = tan(M_PI / 2.0 - (fov / 2.0));      Eatrix<T>::mat[1][2] = 0.0f;                               Eatrix<T>::mat[1][3] = 0.0f;
-            Eatrix<T>::mat[2][0] = 0.0f;                                       Eatrix<T>::mat[2][1] = 0.0f;                               Eatrix<T>::mat[2][2] = -((far + near) / (far - near));     Eatrix<T>::mat[2][3] = - ((2 * near * far) / (far - near));
-            Eatrix<T>::mat[3][0] = 0.0f;                                       Eatrix<T>::mat[3][1] = 0.0f;                               Eatrix<T>::mat[3][2] = -1.0f;                              Eatrix<T>::mat[3][3] = 0.0f;
+            Eatrix<T>::mat[0][0] = tan(EYER_PI / 2.0 - (_fov / 2.0)) / _aspect;   Eatrix<T>::mat[0][1] = 0.0f;                                     Eatrix<T>::mat[0][2] = 0.0f;                                   Eatrix<T>::mat[0][3] = 0.0f;
+            Eatrix<T>::mat[1][0] = 0.0f;                                              Eatrix<T>::mat[1][1] = tan(EYER_PI / 2.0 - (_fov / 2.0));    Eatrix<T>::mat[1][2] = 0.0f;                                   Eatrix<T>::mat[1][3] = 0.0f;
+            Eatrix<T>::mat[2][0] = 0.0f;                                              Eatrix<T>::mat[2][1] = 0.0f;                                     Eatrix<T>::mat[2][2] = -((_far + _near) / (_far - _near));     Eatrix<T>::mat[2][3] = - ((2 * _near * _far) / (_far - _near));
+            Eatrix<T>::mat[3][0] = 0.0f;                                              Eatrix<T>::mat[3][1] = 0.0f;                                     Eatrix<T>::mat[3][2] = -1.0f;                                  Eatrix<T>::mat[3][3] = 0.0f;
             return 0;
         }
 
