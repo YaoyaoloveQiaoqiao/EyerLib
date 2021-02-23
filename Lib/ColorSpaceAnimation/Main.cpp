@@ -5,13 +5,6 @@
 #include "Scene.hpp"
 
 int main(int argc,char **argv){
-
-    int a = 0;
-    int b = 0;
-    scanf("%d=%d", &a, &b);
-    printf("a: %d\n", a);
-    printf("b: %d\n", b);
-
     eyer_log_param(1, 1, 0, 0, 0);
 
     EyerLog("Hello World\n");

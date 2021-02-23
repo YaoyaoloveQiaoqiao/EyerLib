@@ -46,7 +46,7 @@ namespace Eyer
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_SAMPLES, 4);
 
-        window->window = glfwCreateWindow(width / 2, height / 2, title.str, NULL, NULL);
+        window->window = glfwCreateWindow(width, height, title.str, NULL, NULL);
         if (window->window == NULL) {
             glfwTerminate();
             return -1;

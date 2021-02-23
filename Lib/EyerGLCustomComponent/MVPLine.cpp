@@ -48,7 +48,7 @@ namespace Eyer
         draw->PutUniform1f("color_r", color.x());
         draw->PutUniform1f("color_g", color.y());
         draw->PutUniform1f("color_b", color.z());
-        draw->PutUniform1f("color_a", 0.3);
+        draw->PutUniform1f("color_a", color.w());
         draw->PutMatrix4fv("mvp", mvp);
         draw->Draw(EyerGLDrawType::LINE_LOOP);
         return 0;
