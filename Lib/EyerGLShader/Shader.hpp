@@ -38,6 +38,19 @@ namespace Eyer {
 
         static char * JULIA_VERTEX_SHADER;
         static char * JULIA_FRAGMENT_SHADER;
+
+
+
+
+
+        static char * MVP_PLANE_VERTEX_SHADER;
+        static char * MVP_PLANE_FRAGMENT_SHADER;
+
+        static char * MVP_GEOM_VERTEX_SHADER;
+        static char * MVP_GEOM_FRAGMENT_SHADER;
+
+        static char * IMAGE_PLANE_VERTEX_SHADER;
+        static char * IMAGE_PLANE_FRAGMENT_SHADER;
     };
 }
 

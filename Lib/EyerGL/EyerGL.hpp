@@ -200,14 +200,30 @@ namespace Eyer
     class EyerGLComponent
     {
     public:
-        int width = 0;
-        int height = 0;
+
     public:
         virtual ~EyerGLComponent();
 
         virtual int Draw() = 0;
 
         int Viewport(int w, int h);
+
+        int SetVP(EatrixF4x4 & _vpMat);
+
+        int SetModel(EectorF3 & _p, EectorF4 & _r, EectorF3 & _s);
+
+        int SetColor(EectorF4 & _color);
+
+    public:
+        int width = 0;
+        int height = 0;
+
+        EatrixF4x4 vpMat;
+        EatrixF4x4 modelMat;
+        EectorF3 p;
+        EectorF3 r;
+        EectorF3 s;
+        EectorF4 color;
     };
 
     class EyerGLRenderTask
