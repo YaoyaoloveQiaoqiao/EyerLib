@@ -15,7 +15,7 @@ jobs:
     - name: 3rdpart
       run: cd ../ && ls && git clone https://gitee.com/redknot/Eyer3rdpart
     - name: configure
-      run: cd Lib && mkdir build && cd build && cmake ../ -DEyerCore=ON -DEyerMP4=ON -DEyerAVC=ON -DEyerCAVLC=ON -DEyerThread=ON -DEyerRTP=OFF -DEyerPJSIP=OFF -DEyerGB28181=OFF -DEyerLua=OFF -DEyerSIP=OFF -DEyerNetwork=OFF -DEyerHttp=OFF -DEyerDASH=OFF -DEyerAV=OFF -DEyerCrop=OFF -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerYUV=OFF -DEyerGLWindow=OFF -DEyerType=OFF -DEyerGPUDomino=OFF -DEyerGLShader=OFF -DEyerImg=OFF -DEyerGLContext=OFF -DEyerVideoTweenAnimation=OFF -DEyerSignal=OFF -DAL_TEST=OFF
+      run: cd Lib && mkdir build && cd build && cmake ../ -DEyerCore=ON -DEyerMP4=ON -DEyerAVC=ON -DEyerCAVLC=ON -DEyerThread=ON -DEyerRTP=OFF -DEyerPJSIP=OFF -DEyerGB28181=OFF -DEyerLua=OFF -DEyerSIP=OFF -DEyerNetwork=OFF -DEyerHttp=OFF -DEyerDASH=OFF -DEyerAV=OFF -DEyerCrop=OFF -DEyerGLAD=OFF -DEyerGL=OFF -DEyerGLCustomComponent=OFF -DEyerGLRenderTask=OFF -DEyerYUV=OFF -DEyerGLWindow=OFF -DEyerType=OFF -DEyerGPUDomino=OFF -DEyerGLShader=OFF -DEyerImg=OFF -DEyerGLContext=OFF -DEyerVideoTweenAnimation=OFF -DEyerSignal=OFF -DAL_TEST=OFF -DColorSpaceAnimation=OFF
     - name: build
       run: cd Lib/build && make clean && make
     

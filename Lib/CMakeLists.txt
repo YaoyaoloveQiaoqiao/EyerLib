@@ -198,6 +198,10 @@ IF (AL_TEST)
     ADD_SUBDIRECTORY(EyerCVTest)
 ENDIF(AL_TEST)
 
-ADD_SUBDIRECTORY(ColorSpaceAnimation)
-ADD_SUBDIRECTORY(EyerVideoEditor)
-ADD_SUBDIRECTORY(EyerImage)
+
+OPTION(ColorSpaceAnimation     "option for ColorSpaceAnimation"     ON)
+IF (ColorSpaceAnimation)
+    ADD_SUBDIRECTORY(ColorSpaceAnimation)
+    ADD_SUBDIRECTORY(EyerVideoEditor)
+    ADD_SUBDIRECTORY(EyerImage)
+ENDIF(ColorSpaceAnimation)
