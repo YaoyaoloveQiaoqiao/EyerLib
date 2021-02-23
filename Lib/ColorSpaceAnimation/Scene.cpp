@@ -659,7 +659,8 @@ namespace Eyer
 
         int frame = time * fps;
 
-        scene.Render(frame);
+        scene.Render(frameIndex);
+        frameIndex++;
 
         return 0;
     }

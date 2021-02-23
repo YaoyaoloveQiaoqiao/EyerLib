@@ -25,8 +25,8 @@ namespace Eyer
 
         float degres = 0.0;
 
-        int statcky = 5;
-        int stlicex = 5;
+        int statcky = 15;
+        int stlicex = 15;
 
         float color_r = 1.0f;
         float color_g = 0.0f;

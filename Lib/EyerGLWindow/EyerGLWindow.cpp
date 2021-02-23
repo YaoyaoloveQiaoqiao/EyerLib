@@ -44,8 +44,9 @@ namespace Eyer
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
 
-        window->window = glfwCreateWindow(width, height, title.str, NULL, NULL);
+        window->window = glfwCreateWindow(width / 2, height / 2, title.str, NULL, NULL);
         if (window->window == NULL) {
             glfwTerminate();
             return -1;
@@ -57,6 +58,7 @@ namespace Eyer
         }
 
         glEnable(GL_BLEND);
+        glEnable(GL_MULTISAMPLE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 

@@ -30,10 +30,13 @@ target_link_libraries (ColorSpaceAnimation EyerGLCustomComponent)
 target_link_libraries (ColorSpaceAnimation EyerGL)
 target_link_libraries (ColorSpaceAnimation EyerImage)
 target_link_libraries (ColorSpaceAnimation EyerMath)
+target_link_libraries (ColorSpaceAnimation EyerAV)
 target_link_libraries (ColorSpaceAnimation EyerCore)
 target_link_libraries (ColorSpaceAnimation EyerThread)
 target_link_libraries (ColorSpaceAnimation EyerGLShader)
+target_link_libraries (ColorSpaceAnimation EyerYUV)
 
+target_link_libraries (ColorSpaceAnimation xml2)
 
 INSTALL(
         TARGETS ColorSpaceAnimation
