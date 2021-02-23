@@ -40,7 +40,6 @@ TEST(EyerType, EyerTypeMesh){
 
     while (!windows.ShouldClose()){
         windows.Clear();
-
         windows.Loop();
     }
 

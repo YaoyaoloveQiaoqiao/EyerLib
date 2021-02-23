@@ -45,7 +45,8 @@ namespace Eyer
         /*
          * 拷贝
          */
-        Eatrix(const Eatrix & m){
+        Eatrix(const Eatrix & m)
+        {
             *this = m;
         }
 
@@ -73,7 +74,8 @@ namespace Eyer
          * @param m
          * @return
          */
-        Eatrix operator + (const Eatrix & m) {
+        const Eatrix operator + (const Eatrix & m) const
+        {
             Eatrix res(m.row, m.col);
             if (row == m.row && col == m.col) {
                 for (int i = 0; i < row; i++) {
@@ -93,7 +95,7 @@ namespace Eyer
          * @param m
          * @return
          */
-        Eatrix operator - (const Eatrix & m)
+        const Eatrix operator - (const Eatrix & m) const
         {
             Eatrix res(m.row, m.col);
             if (row == m.row && col == m.col) {
@@ -114,7 +116,7 @@ namespace Eyer
          * @param m
          * @return
          */
-        Eatrix operator * (const Eatrix &m)
+        const Eatrix operator * (const Eatrix &m) const
         {
             Eatrix res(row, m.col);
             for (int i = 0; i < res.row; i++) {
@@ -122,10 +124,7 @@ namespace Eyer
                     res.mat[i][j] = 0.0f;
                 }
             }
-            if (m.row != col){
-
-            }
-            else {
+            if (m.row == col) {
                 for (int i = 0; i < res.row; i++) {
                     for (int j = 0; j < res.col; j++) {
                         for (int k = 0; k < res.row; k++) {
@@ -134,7 +133,6 @@ namespace Eyer
                     }
                 }
             }
-
             return res;
         }
 
@@ -143,7 +141,7 @@ namespace Eyer
          * @param a
          * @return
          */
-        Eatrix operator * (const float a)
+        const Eatrix operator * (const float a) const
         {
             Eatrix res(row, col);
             for (int i = 0; i < row; i++) {
@@ -159,7 +157,7 @@ namespace Eyer
          * @param
          * @return
          */
-        Eatrix operator ~ ()
+        const Eatrix operator ~ () const
         {
             Eatrix res(row, col);
             for (int i = 0; i < row; i++) {
@@ -364,7 +362,7 @@ namespace Eyer
             for (int i = 0; i < row; i++) {
                 EyerString str = "";
                 for (int j = 0; j < col; j++){
-                    str = str + EyerString::Number(mat[i][j], " %.4f ");
+                    str += EyerString::Number(mat[i][j], " %.4f ");
                 }
                 EyerLog("%s\n", str.str);
             }
