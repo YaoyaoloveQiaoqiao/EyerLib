@@ -181,6 +181,56 @@ TEST(CppTest, Cpp_Extends){
     }
 }
 
+
+class A
+{
+public:
+    A()
+    {
+        printf("A()\n");
+    }
+
+    A(const A & a)
+    {
+        printf("A(const A & a)\n");
+    }
+
+    A(A && a)
+    {
+        printf("A(A && a)\n");
+    }
+
+    ~A()
+    {
+        printf("~A()\n");
+    }
+
+    A & operator = (const A & a)
+    {
+        printf("A & operator = (const A & a)\n");
+        return *this;
+    }
+
+    A GetA()
+    {
+        A a1;
+        return a1;
+    }
+
+    A GetAA(A && aa)
+    {
+        A a;
+        return a;
+    }
+};
+
+TEST(CppTest, Cpp_CC){
+    A a;
+    A c = a.GetA();
+
+    a.GetAA(a.GetA());
+}
+
 int main(int argc,char **argv){
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

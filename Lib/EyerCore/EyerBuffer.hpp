@@ -35,6 +35,7 @@ namespace Eyer{
 
     private:
         unsigned char * buf = nullptr;
+        // unsigned char * bufPtr = nullptr;
         int bufLen = 0;
     };
 }
