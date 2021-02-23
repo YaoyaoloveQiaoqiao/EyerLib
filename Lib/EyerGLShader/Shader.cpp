@@ -366,7 +366,7 @@ namespace Eyer
                                                                     void main(){
                                                                         outCoor = coor;
                                                                         gl_Position = mvp * vec4(pos * 1.0, 1.0);
-                                                                        // gl_PointSize = 5.0;
+                                                                        gl_PointSize = 5.0;
                                                                     }
                                                             );
     char * EYER_GL_SHADER::MVP_GEOM_FRAGMENT_SHADER = (char *)SHADER(
