@@ -34,6 +34,7 @@ namespace Eyer
         Eyer::Eatrix<float> rgb709_xyz_mat;
         Eyer::Eatrix<float> sRGB_xyz_mat;
         Eyer::Eatrix<float> adobeRGB_xyz_mat;
+        Eyer::Eatrix<float> DCI_P3_xyz_mat;
 
         //yuv范围(0,255)  bt601和bt709的 yuv 转 rgb 矩阵一样
         Eyer::Eatrix<float> yuv601_rgb601_255_mat;

@@ -6,6 +6,7 @@
 TEST(EyerColorSpace, init)
 {
     Eyer::EyerColorSpace colorSpace;
+    colorSpace.AddEatrix(Eyer::EyerColorSpaceMat::GetInstance()->yuv2020_rgb2020_255_mat);
     colorSpace.AddEatrix(Eyer::EyerColorSpaceMat::GetInstance()->rgb2020_xyz_mat);
     colorSpace.AddEatrix(!Eyer::EyerColorSpaceMat::GetInstance()->rgb709_xyz_mat);
 
@@ -15,6 +16,10 @@ TEST(EyerColorSpace, init)
 
     Eyer::Eatrix<float> mat;
     colorSpace.GetMat(mat);
+
+    EyerLog("========\n");
+    mat.PrintInfo();
+    EyerLog("========\n");
 
     rgb_out = mat * rgb;
     rgb_out.PrintInfo();

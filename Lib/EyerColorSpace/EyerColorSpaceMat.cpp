@@ -54,6 +54,14 @@ namespace Eyer {
         adobeRGB_xyz_mat = Eyer::Eatrix<float>(3, 3);
         adobeRGB_xyz_mat.SetData(adobeRGB_xyz, 9);
 
+        float DCI_P3_xyz[] = {
+                0.4866, 0.2657, 0.1982,
+                0.2290, 0.6917, 0.0793,
+                0, 0.0451, 1.0439
+        };
+        DCI_P3_xyz_mat = Eyer::Eatrix<float>(3, 3);
+        DCI_P3_xyz_mat.SetData(DCI_P3_xyz, 9);
+
     }
 
     EyerColorSpaceMat *EyerColorSpaceMat::GetInstance() {
