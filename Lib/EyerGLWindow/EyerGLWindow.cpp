@@ -57,6 +57,7 @@ namespace Eyer
             return -1;
         }
 
+        glEnable(GL_ALPHA);
         glEnable(GL_BLEND);
         glEnable(GL_MULTISAMPLE);
         glEnable(GL_DEPTH_TEST);

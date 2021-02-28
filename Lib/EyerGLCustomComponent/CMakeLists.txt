@@ -33,7 +33,7 @@ add_library(
         MVPImagePlane.hpp
         MVPCoorLine.cpp
         MVPCoorLine.hpp
-)
+        MVPCustomG.cpp MVPCustomG.hpp)
 
 IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
         MESSAGE(STATUS "current platform: Linux")

@@ -10,6 +10,7 @@
 #include "MVPCoorLineSpirit.hpp"
 #include "MVPNormalizePlaneSpirit.hpp"
 #include "MVPLineSpirit.hpp"
+#include "MVPCustomSpirit.hpp"
 
 namespace Eyer
 {
@@ -47,6 +48,9 @@ namespace Eyer
         MVPCoorLineSpirit * Z = nullptr;
 
         MVPNormalizePlaneSpirit * normalizePlaneSpirit = nullptr;
+
+
+        MVPCustomSpirit * coloPlane = nullptr;
     };
 }
 
