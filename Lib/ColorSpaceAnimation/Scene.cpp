@@ -33,6 +33,53 @@ namespace Eyer
         Eyer::Eatrix<float> rgb_xyz_mat(3, 3);
         rgb_xyz_mat.SetData(xyz_rgb, 9);
 
+        // BT 709 Point
+        float bt709_xyz[] = {
+                0.4124, 0.3576, 0.1805,
+                0.2126, 0.7152, 0.0722,
+                0.0193, 0.1192, 0.9505
+        };
+
+        Eyer::Eatrix<float> bt709_xyz_mat(3, 3);
+        bt709_xyz_mat.SetData(bt709_xyz, 9);
+        bt709_xyz_mat.PrintInfo();
+
+        // BT 2020 Point
+        float bt2020_xyz[] = {
+                0.6370, 0.1446, 0.1689,
+                0.2627, 0.6780, 0.0593,
+                0, 0.0281, 1.0610
+        };
+
+        Eyer::Eatrix<float> bt2020_xyz_mat(3, 3);
+        bt2020_xyz_mat.SetData(bt2020_xyz, 9);
+        bt2020_xyz_mat.PrintInfo();
+
+
+        EectorF3 test_rgb_bt907(0.7, 0.3, 0.1);
+
+        EectorF3 test_rgb_xyz_bt709 = bt709_xyz_mat * test_rgb_bt907;
+        EyerLog("=====kkkkkkkkkkkkk=====\n");
+        test_rgb_xyz_bt709.PrintInfo();
+        EectorF3 test_rgb_bt2020 = (!bt2020_xyz_mat) * test_rgb_xyz_bt709;
+        test_rgb_bt2020.PrintInfo();
+        EyerLog("=====kkkkkkkkkkkkk=====\n");
+
+
+        EectorF3 test_rgb_bt907_x(0.0, 0.3, 0.1);
+        EectorF3 test_rgb_bt907_y(0.7, 0.0, 0.1);
+        EectorF3 test_rgb_bt907_z(0.7, 0.3, 0.0);
+
+        EectorF3 test_rgb_xyz = bt709_xyz_mat * test_rgb_bt907;
+        EectorF3 test_rgb_xyz_x = bt709_xyz_mat * test_rgb_bt907_x;
+        EectorF3 test_rgb_xyz_y = bt709_xyz_mat * test_rgb_bt907_y;
+        EectorF3 test_rgb_xyz_z = bt709_xyz_mat * test_rgb_bt907_z;
+
+        EectorF3 bt2020_test_rgb_xyz = bt2020_xyz_mat * test_rgb_bt907;
+        EectorF3 bt2020_test_rgb_xyz_x = bt2020_xyz_mat * test_rgb_bt907_x;
+        EectorF3 bt2020_test_rgb_xyz_y = bt2020_xyz_mat * test_rgb_bt907_y;
+        EectorF3 bt2020_test_rgb_xyz_z = bt2020_xyz_mat * test_rgb_bt907_z;
+
         int colorIndex = 24;
 
         int endFrame = 30 * 60 * 60;
@@ -292,7 +339,7 @@ namespace Eyer
 
             {
                 EyerKey key;
-                key.frame = 345 * fps;
+                key.frame = 350 * fps;
                 key.cameraTarget = EectorF3(0.33, 0.33, 0.0);
                 key.position = EectorF3(0.33, 0.33, 1.0);
                 camera->AddKey(key);
@@ -300,14 +347,486 @@ namespace Eyer
 
             {
                 EyerKey key;
-                key.frame = 350 * fps;
+                key.frame = 355 * fps;
                 key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
                 key.position = EectorF3(2.0, 2.0, 2.0);
                 camera->AddKey(key);
             }
 
+
+            {
+                EyerKey key;
+                key.frame = 370 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(2.0, 2.0, 2.0);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 380 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(0.0, 2.0, 3.4);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 385 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(0.0, 2.0, 3.4);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 395 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(2.0, 2.0, 2.0);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 405 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(3.4, 2.0, 0.0);
+                camera->AddKey(key);
+            }
+            // 看红色
+            {
+                EyerKey key;
+                key.frame = 410 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(3.4, 2.0, 0.0);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 415 * fps;
+                key.cameraTarget = EectorF3(0.4124, 0.2126, 0.0193);
+                key.position = EectorF3(1.0, 0.1, -1.0);
+                camera->AddKey(key);
+            }
+            // 看绿色
+            {
+                EyerKey key;
+                key.frame = 425 * fps;
+                key.cameraTarget = EectorF3(0.4124, 0.2126, 0.0193);
+                key.position = EectorF3(1.0, 0.1, -1.0);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 430 * fps;
+                key.cameraTarget = EectorF3(0.3576 , 0.7152, 0.1192);
+                key.position = EectorF3(0.0, 1.5, 0.0);
+                camera->AddKey(key);
+            }
+            // 看蓝色
+            {
+                EyerKey key;
+                key.frame = 440 * fps;
+                key.cameraTarget = EectorF3(0.3576 , 0.7152, 0.1192);
+                key.position = EectorF3(0.0, 1.5, 0.0);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 445 * fps;
+                key.cameraTarget = EectorF3(0.1805 , 0.0722, 0.9505);
+                key.position = EectorF3(0, 0, 2);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 460 * fps;
+                key.cameraTarget = EectorF3(0.1805 , 0.0722, 0.9505);
+                key.position = EectorF3(0, 0, 2);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 465 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 495 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 500 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(-1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 510 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(-1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 515 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 530 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 535 * fps;
+                key.cameraTarget = EectorF3(0.333, 0.333, 0.0);
+                key.position = EectorF3(0.333, 0.333, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 560 * fps;
+                key.cameraTarget = EectorF3(0.333, 0.333, 0.0);
+                key.position = EectorF3(0.333, 0.333, 1.5);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 565 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(1, 2, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 570 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(1, 2, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 580 * fps;
+                key.cameraTarget = EectorF3(0.0, 0.0, 0.0);
+                key.position = EectorF3(1, 2, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 590 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(1.5, 0.5, 0.8);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 600 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(1.5, 0.5, 0.8);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 610 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(-0.5, 0.5, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 620 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(-0.5, 0.5, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 630 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(0.2, 2, 0.2);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 640 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(0.2, 2, 0.2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 650 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(2, 2, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 690 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(2, 2, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 700 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(2, 0.5, 1);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 710 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(2, 0.5, 1);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 720 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(0.5, 0.5, 2);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 730 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(0.5, 0.5, 2);
+                camera->AddKey(key);
+            }
+            {
+                EyerKey key;
+                key.frame = 740 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(0.5, 2, 0.5);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 750 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(0.5, 2, 0.5);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = 760 * fps;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+
+            {
+                EyerKey key;
+                key.frame = endFrame;
+                key.cameraTarget = test_rgb_xyz;
+                key.position = EectorF3(1.5, 1.5, 1.5);
+                camera->AddKey(key);
+            }
+
             scene.SetCamera(camera);
         }
+
+        {
+            EyerKey baseKey;
+            baseKey.position = test_rgb_xyz;
+            baseKey.rotato = EectorF4(1.0, 0.0, 0.0, 0.0);
+            baseKey.scale = EectorF3(0.03, 0.03, 0.03);
+            baseKey.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+
+            SphereSpirit * p = new SphereSpirit();
+            {
+                EyerKey key = baseKey;
+                key.frame = 780 * fps;
+                p->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = endFrame;
+                p->AddKey(key);
+            }
+            scene.AddSpirit(p);
+        }
+        {
+            EyerKey baseKey;
+            baseKey.position = EectorF3(0, 0, 0);
+            baseKey.rotato = EectorF4(1.0, 0.0, 0.0, 0.0);
+            baseKey.scale = EectorF3(1.0, 1.0, 1.0);
+            baseKey.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+
+            EectorF3 test_rgb_xyzA = test_rgb_xyz;
+            test_rgb_xyzA.SetX(0);
+            EectorF3 test_rgb_xyzB = test_rgb_xyz;
+            test_rgb_xyzB.SetY(0);
+            EectorF3 test_rgb_xyzC = test_rgb_xyz;
+            test_rgb_xyzC.SetZ(0);
+
+            MVPLineSpirit * line1 = new MVPLineSpirit(test_rgb_xyz, test_rgb_xyzA);
+            MVPLineSpirit * line2 = new MVPLineSpirit(test_rgb_xyz, test_rgb_xyzB);
+            MVPLineSpirit * line3 = new MVPLineSpirit(test_rgb_xyz, test_rgb_xyzC);
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 780 * fps;
+                line1->AddKey(key);
+                line2->AddKey(key);
+                line3->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 790 * fps;
+                line1->AddKey(key);
+                line2->AddKey(key);
+                line3->AddKey(key);
+            }
+            scene.AddSpirit(line1);
+            scene.AddSpirit(line2);
+            scene.AddSpirit(line3);
+        }
+
+
+        {
+            EyerKey baseKey;
+            baseKey.position = EectorF3(0, 0, 0);
+            baseKey.rotato = EectorF4(1.0, 0.0, 0.0, 0.0);
+            baseKey.scale = EectorF3(1.0, 1.0, 1.0);
+            baseKey.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+////////////////////////
+            EectorF3 test_rgb_bt2020_x = test_rgb_bt2020;
+            test_rgb_bt2020_x.SetX(0.0);
+            EectorF3 test_rgb_bt2020_y = test_rgb_bt2020;
+            test_rgb_bt2020_y.SetY(0.0);
+            EectorF3 test_rgb_bt2020_z = test_rgb_bt2020;
+            test_rgb_bt2020_z.SetZ(0.0);
+
+            MVPLineSpirit * line1 = new MVPLineSpirit(bt2020_xyz_mat * test_rgb_bt2020, bt2020_xyz_mat * test_rgb_bt2020_x);
+            MVPLineSpirit * line2 = new MVPLineSpirit(bt2020_xyz_mat * test_rgb_bt2020, bt2020_xyz_mat * test_rgb_bt2020_y);
+            MVPLineSpirit * line3 = new MVPLineSpirit(bt2020_xyz_mat * test_rgb_bt2020, bt2020_xyz_mat * test_rgb_bt2020_z);
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 790 * fps;
+                line1->AddKey(key);
+                line2->AddKey(key);
+                line3->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = endFrame;
+                line1->AddKey(key);
+                line2->AddKey(key);
+                line3->AddKey(key);
+            }
+            scene.AddSpirit(line1);
+            scene.AddSpirit(line2);
+            scene.AddSpirit(line3);
+        }
+
+
+        {
+            EyerKey baseKey;
+            baseKey.position = test_rgb_xyz;
+            baseKey.rotato = EectorF4(1.0, 0.0, 0.0, 0.0);
+            baseKey.scale = EectorF3(0.03, 0.03, 0.03);
+            baseKey.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+
+            SphereSpirit * p = new SphereSpirit();
+            MVPLineSpirit * lineX = new MVPLineSpirit(test_rgb_xyz, test_rgb_xyz_x);
+            MVPLineSpirit * lineY = new MVPLineSpirit(test_rgb_xyz, test_rgb_xyz_y);
+            MVPLineSpirit * lineZ = new MVPLineSpirit(test_rgb_xyz, test_rgb_xyz_z);
+            {
+                EyerKey key = baseKey;
+                key.frame = 580.0 * fps;
+                p->AddKey(key);
+                key.position = EectorF3(0.0, 0.0, 0.0);
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+
+                lineX->AddKey(key);
+                lineY->AddKey(key);
+                lineZ->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 780 * fps;
+                p->AddKey(key);
+                key.position = EectorF3(0.0, 0.0, 0.0);
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+
+                lineX->AddKey(key);
+                lineY->AddKey(key);
+                lineZ->AddKey(key);
+            }
+            scene.AddSpirit(p);
+            scene.AddSpirit(lineX);
+            scene.AddSpirit(lineY);
+            scene.AddSpirit(lineZ);
+        }
+
+
+        {
+            EyerKey baseKey;
+            baseKey.position = bt2020_test_rgb_xyz;
+            baseKey.rotato = EectorF4(1.0, 0.0, 0.0, 0.0);
+            baseKey.scale = EectorF3(0.03, 0.03, 0.03);
+            baseKey.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+
+            SphereSpirit * p = new SphereSpirit();
+            MVPLineSpirit * lineX = new MVPLineSpirit(bt2020_test_rgb_xyz, bt2020_test_rgb_xyz_x);
+            MVPLineSpirit * lineY = new MVPLineSpirit(bt2020_test_rgb_xyz, bt2020_test_rgb_xyz_y);
+            MVPLineSpirit * lineZ = new MVPLineSpirit(bt2020_test_rgb_xyz, bt2020_test_rgb_xyz_z);
+            {
+                EyerKey key = baseKey;
+                key.frame = 680.0 * fps;
+                p->AddKey(key);
+                key.position = EectorF3(0.0, 0.0, 0.0);
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+
+                lineX->AddKey(key);
+                lineY->AddKey(key);
+                lineZ->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 770 * fps;
+                p->AddKey(key);
+                key.position = EectorF3(0.0, 0.0, 0.0);
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+
+                lineX->AddKey(key);
+                lineY->AddKey(key);
+                lineZ->AddKey(key);
+            }
+            scene.AddSpirit(p);
+            scene.AddSpirit(lineX);
+            scene.AddSpirit(lineY);
+            scene.AddSpirit(lineZ);
+        }
+
         {
             RGB_COOR = new CIE_RGB_COOR_EyerSpirit();
             {
@@ -489,6 +1008,52 @@ namespace Eyer
                     key.color = GetColor(i);
                     ss->AddKey(key);
                 }
+
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 55 * fps;
+                    key.position = rgb;
+                    key.color = GetColor(i);
+                    ss->AddKey(key);
+                }
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 56 * fps;
+                    key.position = rgb;
+                    key.color = GetColor(i);
+                    key.color.SetW(0.0);
+                    ss->AddKey(key);
+                }
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 57 * fps;
+                    key.position = rgb;
+                    key.color = GetColor(i);
+                    ss->AddKey(key);
+                }
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 58 * fps;
+                    key.position = rgb;
+                    key.color = GetColor(i);
+                    key.color.SetW(0.0);
+                    ss->AddKey(key);
+                }
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 59 * fps;
+                    key.position = rgb;
+                    key.color = GetColor(i);
+                    ss->AddKey(key);
+                }
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 60 * fps;
+                    key.position = rgb;
+                    key.color = GetColor(i);
+                    ss->AddKey(key);
+                }
+
                 {
                     EyerKey key = baseKey;
                     key.frame = 75 * fps;;
@@ -600,17 +1165,38 @@ namespace Eyer
                     ss->AddKey(key);
                 }
 
-                /*
                 {
                     EyerKey key = baseKey;
-                    key.frame = endFrame;
+                    key.frame = 535 * fps;
                     key.position = xyz_norm_xy;
                     key.color = GetColor(i);
+                    key.color.SetW(0.0);
                     float scale = 0.015;
                     key.scale = EectorF3(scale, scale, scale);
                     ss->AddKey(key);
                 }
-                 */
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 540 * fps;
+                    key.position = xyz_norm_xy;
+                    key.color = GetColor(i);
+                    key.color.SetW(1.0);
+                    float scale = 0.015;
+                    key.scale = EectorF3(scale, scale, scale);
+                    ss->AddKey(key);
+                }
+
+                {
+                    EyerKey key = baseKey;
+                    key.frame = 550 * fps;
+                    key.position = xyz_norm_xy;
+                    key.color = GetColor(i);
+                    key.color.SetW(0.0);
+                    float scale = 0.015;
+                    key.scale = EectorF3(scale, scale, scale);
+                    ss->AddKey(key);
+                }
+
                 scene.AddSpirit(ss);
 
 
@@ -952,23 +1538,32 @@ namespace Eyer
 
             {
                 EyerKey key = baseKey;
-                key.frame = 355.0 * fps;
+                key.frame = 480.0 * fps;
                 key.color = EectorF4(1.0, 1.0, 1.0, 0.0);
                 key.scale = EectorF3(0.0, 0.0, 0.0);
                 normalizePlaneSpirit->AddKey(key);
             }
-
             {
                 EyerKey key = baseKey;
-                key.frame = 360.0 * fps;
+                key.frame = 490.0 * fps;
                 key.color = EectorF4(1.0, 1.0, 1.0, 0.2);
+                key.scale = EectorF3(1.0, 1.0, 1.0);
                 normalizePlaneSpirit->AddKey(key);
             }
 
             {
                 EyerKey key = baseKey;
-                key.frame = endFrame;
+                key.frame = 520.0 * fps;
                 key.color = EectorF4(1.0, 1.0, 1.0, 0.2);
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                normalizePlaneSpirit->AddKey(key);
+            }
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 525.0 * fps;
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.0);
+                key.scale = EectorF3(1.0, 1.0, 1.0);
                 normalizePlaneSpirit->AddKey(key);
             }
 
@@ -1065,19 +1660,33 @@ namespace Eyer
                 key.color.SetW(0.0);
                 coloPlane->AddKey(key);
             }
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 535.0 * fps;
+                key.color.SetW(0.0);
+                coloPlane->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 540.0 * fps;
+                key.color.SetW(1.0);
+                coloPlane->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 545.0 * fps;
+                key.color.SetW(1.0);
+                coloPlane->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 550.0 * fps;
+                key.color.SetW(0.0);
+                coloPlane->AddKey(key);
+            }
             scene.AddSpirit(coloPlane);
         }
-
-        // BT 709 Point
-        float bt709_xyz[] = {
-                0.4124, 0.3576, 0.1805,
-                0.2126, 0.7152, 0.0722,
-                0.0193, 0.1192, 0.9505
-        };
-
-        Eyer::Eatrix<float> bt709_xyz_mat(3, 3);
-        bt709_xyz_mat.SetData(bt709_xyz, 9);
-        bt709_xyz_mat.PrintInfo();
 
         Eyer::EectorF3 bt709_red(1.0, 0.0, 0.0);
         Eyer::EectorF3 bt709_green(0.0, 1.0, 0.0);
@@ -1117,24 +1726,10 @@ namespace Eyer
             }
             {
                 EyerKey key = baseKey;
-                key.frame = 360 * fps;
+                key.frame = 350 * fps;
                 key.position = bt709_red_xyz;
                 key.position.SetZ(0.01);
-                red->AddKey(key);
-            }
-            {
-                EyerKey key = baseKey;
-                key.frame = 365 * fps;
-                key.position = bt709_red_xyz;
-                key.color = EectorF4(1.0, 0.0, 0.0, 1.0);
-                red->AddKey(key);
-            }
-
-            {
-                EyerKey key = baseKey;
-                key.frame = endFrame;
-                key.position = bt709_red_xyz;
-                key.color = EectorF4(1.0, 0.0, 0.0, 1.0);
+                // key.color = EectorF4(1.0, 0.0, 0.0, 1.0);
                 red->AddKey(key);
             }
             scene.AddSpirit(red);
@@ -1151,25 +1746,10 @@ namespace Eyer
             }
             {
                 EyerKey key = baseKey;
-                key.frame = 360 * fps;
+                key.frame = 350 * fps;
                 key.position = bt709_green_xyz;
                 key.position.SetZ(0.01);
-                green->AddKey(key);
-            }
-
-            {
-                EyerKey key = baseKey;
-                key.frame = 365 * fps;
-                key.position = bt709_green_xyz;
-                key.color = EectorF4(0.0, 1.0, 0.0, 1.0);
-                green->AddKey(key);
-            }
-
-            {
-                EyerKey key = baseKey;
-                key.frame = endFrame;
-                key.position = bt709_green_xyz;
-                key.color = EectorF4(0.0, 1.0, 0.0, 1.0);
+                // key.color = EectorF4(0.0, 1.0, 0.0, 1.0);
                 green->AddKey(key);
             }
             scene.AddSpirit(green);
@@ -1185,25 +1765,10 @@ namespace Eyer
             }
             {
                 EyerKey key = baseKey;
-                key.frame = 360 * fps;
+                key.frame = 350 * fps;
                 key.position = bt709_blue_xyz;
                 key.position.SetZ(0.01);
-                blue->AddKey(key);
-            }
-
-            {
-                EyerKey key = baseKey;
-                key.frame = 365 * fps;
-                key.position = bt709_blue_xyz;
-                key.color = EectorF4(0.0, 0.0, 1.0, 1.0);
-                blue->AddKey(key);
-            }
-
-            {
-                EyerKey key = baseKey;
-                key.frame = endFrame;
-                key.position = bt709_blue_xyz;
-                key.color = EectorF4(0.0, 0.0, 1.0, 1.0);
+                // key.color = EectorF4(0.0, 0.0, 1.0, 1.0);
                 blue->AddKey(key);
             }
             scene.AddSpirit(blue);
@@ -1243,6 +1808,624 @@ namespace Eyer
             scene.AddSpirit(lineC);
         }
 
+
+
+
+        Eyer::EectorF3 bt709_1_0_0(1.0, 0.0, 0.0);
+        Eyer::EectorF3 bt709_0_1_0(0.0, 1.0, 0.0);
+        Eyer::EectorF3 bt709_0_0_1(0.0, 0.0, 1.0);
+
+        Eyer::EectorF3 bt709_1_1_0(1.0, 1.0, 0.0);
+        Eyer::EectorF3 bt709_0_1_1(0.0, 1.0, 1.0);
+        Eyer::EectorF3 bt709_1_0_1(1.0, 0.0, 1.0);
+
+        Eyer::EectorF3 bt709_1_1_1(1.0, 1.0, 1.0);
+
+        Eyer::EectorF3 bt709_1_0_0_xyz = bt709_xyz_mat * bt709_1_0_0;// 红色
+        Eyer::EectorF3 bt709_0_1_0_xyz = bt709_xyz_mat * bt709_0_1_0;// 绿色
+        Eyer::EectorF3 bt709_0_0_1_xyz = bt709_xyz_mat * bt709_0_0_1;// 蓝色
+
+        Eyer::EectorF3 bt709_1_1_0_xyz = bt709_xyz_mat * bt709_1_1_0;// 黄色
+        Eyer::EectorF3 bt709_0_1_1_xyz = bt709_xyz_mat * bt709_0_1_1;// 甸色
+        Eyer::EectorF3 bt709_1_0_1_xyz = bt709_xyz_mat * bt709_1_0_1;// 紫色
+
+        Eyer::EectorF3 bt709_0_0_0_xyz(0.0, 0.0, 0.0); // 黑色
+        Eyer::EectorF3 bt709_1_1_1_xyz = bt709_xyz_mat * bt709_1_1_1;// 白色
+        {
+            EyerLog("==========xxxxxxxx=========\n");
+            bt709_1_0_0_xyz.PrintInfo();
+            bt709_0_1_0_xyz.PrintInfo();
+            bt709_0_0_1_xyz.PrintInfo();
+
+            float vertex[] = {
+                    // 蓝绿黑
+                    bt709_0_0_1_xyz.x(), bt709_0_0_1_xyz.y(), bt709_0_0_1_xyz.z(),
+                    bt709_0_1_0_xyz.x(), bt709_0_1_0_xyz.y(), bt709_0_1_0_xyz.z(),
+                    bt709_0_0_0_xyz.x(), bt709_0_0_0_xyz.y(), bt709_0_0_0_xyz.z(),
+                    // 蓝绿甸
+                    bt709_0_0_1_xyz.x(), bt709_0_0_1_xyz.y(), bt709_0_0_1_xyz.z(),
+                    bt709_0_1_0_xyz.x(), bt709_0_1_0_xyz.y(), bt709_0_1_0_xyz.z(),
+                    bt709_0_1_1_xyz.x(), bt709_0_1_1_xyz.y(), bt709_0_1_1_xyz.z(),
+
+
+                    //红蓝黑
+                    bt709_1_0_0_xyz.x(), bt709_1_0_0_xyz.y(), bt709_1_0_0_xyz.z(),
+                    bt709_0_0_1_xyz.x(), bt709_0_0_1_xyz.y(), bt709_0_0_1_xyz.z(),
+                    bt709_0_0_0_xyz.x(), bt709_0_0_0_xyz.y(), bt709_0_0_0_xyz.z(),
+                    //红蓝紫
+                    bt709_1_0_0_xyz.x(), bt709_1_0_0_xyz.y(), bt709_1_0_0_xyz.z(),
+                    bt709_0_0_1_xyz.x(), bt709_0_0_1_xyz.y(), bt709_0_0_1_xyz.z(),
+                    bt709_1_0_1_xyz.x(), bt709_1_0_1_xyz.y(), bt709_1_0_1_xyz.z(),
+
+
+                    //红绿黑
+                    bt709_1_0_0_xyz.x(), bt709_1_0_0_xyz.y(), bt709_1_0_0_xyz.z(),
+                    bt709_0_1_0_xyz.x(), bt709_0_1_0_xyz.y(), bt709_0_1_0_xyz.z(),
+                    bt709_0_0_0_xyz.x(), bt709_0_0_0_xyz.y(), bt709_0_0_0_xyz.z(),
+                    //红绿黄
+                    bt709_1_0_0_xyz.x(), bt709_1_0_0_xyz.y(), bt709_1_0_0_xyz.z(),
+                    bt709_0_1_0_xyz.x(), bt709_0_1_0_xyz.y(), bt709_0_1_0_xyz.z(),
+                    bt709_1_1_0_xyz.x(), bt709_1_1_0_xyz.y(), bt709_1_1_0_xyz.z(),
+
+
+                    //红紫黄
+                    bt709_1_0_0_xyz.x(), bt709_1_0_0_xyz.y(), bt709_1_0_0_xyz.z(),
+                    bt709_1_0_1_xyz.x(), bt709_1_0_1_xyz.y(), bt709_1_0_1_xyz.z(),
+                    bt709_1_1_0_xyz.x(), bt709_1_1_0_xyz.y(), bt709_1_1_0_xyz.z(),
+                    //紫黄白
+                    bt709_1_0_1_xyz.x(), bt709_1_0_1_xyz.y(), bt709_1_0_1_xyz.z(),
+                    bt709_1_1_0_xyz.x(), bt709_1_1_0_xyz.y(), bt709_1_1_0_xyz.z(),
+                    bt709_1_1_1_xyz.x(), bt709_1_1_1_xyz.y(), bt709_1_1_1_xyz.z(),
+
+                    //蓝紫甸
+                    bt709_0_0_1_xyz.x(), bt709_0_0_1_xyz.y(), bt709_0_0_1_xyz.z(),
+                    bt709_1_0_1_xyz.x(), bt709_1_0_1_xyz.y(), bt709_1_0_1_xyz.z(),
+                    bt709_0_1_1_xyz.x(), bt709_0_1_1_xyz.y(), bt709_0_1_1_xyz.z(),
+                    //紫甸白
+                    bt709_1_0_1_xyz.x(), bt709_1_0_1_xyz.y(), bt709_1_0_1_xyz.z(),
+                    bt709_0_1_1_xyz.x(), bt709_0_1_1_xyz.y(), bt709_0_1_1_xyz.z(),
+                    bt709_1_1_1_xyz.x(), bt709_1_1_1_xyz.y(), bt709_1_1_1_xyz.z(),
+
+                    //绿甸黄
+                    bt709_0_1_0_xyz.x(), bt709_0_1_0_xyz.y(), bt709_0_1_0_xyz.z(),
+                    bt709_0_1_1_xyz.x(), bt709_0_1_1_xyz.y(), bt709_0_1_1_xyz.z(),
+                    bt709_1_1_0_xyz.x(), bt709_1_1_0_xyz.y(), bt709_1_1_0_xyz.z(),
+
+                    //甸黄白
+                    bt709_0_1_1_xyz.x(), bt709_0_1_1_xyz.y(), bt709_0_1_1_xyz.z(),
+                    bt709_1_1_0_xyz.x(), bt709_1_1_0_xyz.y(), bt709_1_1_0_xyz.z(),
+                    bt709_1_1_1_xyz.x(), bt709_1_1_1_xyz.y(), bt709_1_1_1_xyz.z(),
+            };
+            float coor[] = {
+                    0.0, 0.0, 1.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 0.0, 0.0,
+
+                    0.0, 0.0, 1.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 1.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 0.0, 1.0,
+                    0.0, 0.0, 0.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 0.0, 1.0,
+                    1.0, 0.0, 1.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 0.0, 0.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    1.0, 1.0, 0.0,
+
+                    1.0, 0.0, 0.0,
+                    1.0, 0.0, 1.0,
+                    1.0, 1.0, 0.0,
+
+                    1.0, 0.0, 1.0,
+                    1.0, 1.0, 0.0,
+                    1.0, 1.0, 1.0,
+
+                    0.0, 0.0, 1.0,
+                    1.0, 0.0, 1.0,
+                    0.0, 1.0, 1.0,
+
+                    1.0, 0.0, 1.0,
+                    0.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0,
+
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 1.0,
+                    1.0, 1.0, 0.0,
+
+                    0.0, 1.0, 1.0,
+                    1.0, 1.0, 0.0,
+                    1.0, 1.0, 1.0
+            };
+            unsigned int vertexIndex[] = {
+                    0, 1, 2,
+                    3, 4, 5,
+                    6, 7, 8,
+                    9, 10, 11,
+                    12, 13, 14,
+                    15, 16, 17,
+                    18, 19, 20,
+                    21, 22, 23,
+                    24, 25, 26,
+                    27, 28, 29,
+                    30, 31, 32,
+                    33, 34, 35
+            };
+            MVPCustomSpirit * bt709 = new MVPCustomSpirit((float *)vertex, sizeof(vertex), (float *)coor, sizeof(coor), (unsigned int *)vertexIndex, sizeof(vertexIndex));
+            {
+                EyerKey key = baseKey;
+                key.frame = 360 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(0.0, 0.0, 0.0, 0.0);
+                bt709->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 365 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+                bt709->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 470 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+                bt709->AddKey(key);
+            }
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 475 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.0);
+                bt709->AddKey(key);
+            }
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 560 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.0);
+                bt709->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 570 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.5);
+                bt709->AddKey(key);
+            }
+
+            {
+                EyerKey key = baseKey;
+                key.frame = endFrame;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.5);
+                bt709->AddKey(key);
+            }
+            scene.AddSpirit(bt709);
+        }
+
+
+        {
+            SphereSpirit * redPoint = new SphereSpirit();
+
+            float a = bt709_1_0_0_xyz.x() + bt709_1_0_0_xyz.y() + bt709_1_0_0_xyz.z();
+            EectorF3 bt709_1_0_0_xyz_norm = bt709_1_0_0_xyz * (1.0 / a);
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 420.0 * fps;
+                key.position = bt709_1_0_0_xyz;
+                redPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 500.0 * fps;
+                key.position = bt709_1_0_0_xyz;
+                redPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 505.0 * fps;
+                key.position = bt709_1_0_0_xyz_norm;
+                redPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 520.0 * fps;
+                key.position = bt709_1_0_0_xyz_norm;
+                redPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 525.0 * fps;
+                key.position = bt709_1_0_0_xyz_norm;
+                key.position.SetZ(0.0);
+                redPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 550 * fps;
+                key.position = bt709_1_0_0_xyz_norm;
+                key.position.SetZ(0.0);
+                redPoint->AddKey(key);
+            }
+            scene.AddSpirit(redPoint);
+        }
+
+        {
+            SphereSpirit * greenPoint = new SphereSpirit();
+
+            float a = bt709_0_1_0_xyz.x() + bt709_0_1_0_xyz.y() + bt709_0_1_0_xyz.z();
+            EectorF3 bt709_0_1_0_xyz_norm = bt709_0_1_0_xyz * (1.0 / a);
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 435.0 * fps;
+                key.position = bt709_0_1_0_xyz;
+                greenPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 500.0 * fps;
+                key.position = bt709_0_1_0_xyz;
+                greenPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 505.0 * fps;
+                key.position = bt709_0_1_0_xyz_norm;
+                greenPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 520.0 * fps;
+                key.position = bt709_0_1_0_xyz_norm;
+                greenPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 525.0 * fps;
+                key.position = bt709_0_1_0_xyz_norm;
+                key.position.SetZ(0.0);
+                greenPoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 550 * fps;
+                key.position = bt709_0_1_0_xyz_norm;
+                key.position.SetZ(0.0);
+                greenPoint->AddKey(key);
+            }
+            scene.AddSpirit(greenPoint);
+        }
+
+        {
+            SphereSpirit * bluePoint = new SphereSpirit();
+            float a = bt709_0_0_1_xyz.x() + bt709_0_0_1_xyz.y() + bt709_0_0_1_xyz.z();
+            EectorF3 bt709_0_0_1_xyz_norm = bt709_0_0_1_xyz * (1.0 / a);
+            {
+                EyerKey key = baseKey;
+                key.frame = 450.0 * fps;
+                key.position = bt709_0_0_1_xyz;
+                bluePoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 500.0 * fps;
+                key.position = bt709_0_0_1_xyz;
+                bluePoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 505.0 * fps;
+                key.position = bt709_0_0_1_xyz_norm;
+                bluePoint->AddKey(key);
+            }
+
+            {
+                EyerKey key = baseKey;
+                key.frame = 520.0 * fps;
+                key.position = bt709_0_0_1_xyz_norm;
+                bluePoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 525.0 * fps;
+                key.position = bt709_0_0_1_xyz_norm;
+                key.position.SetZ(0.0);
+                bluePoint->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 550 * fps;
+                key.position = bt709_0_0_1_xyz_norm;
+                key.position.SetZ(0.0);
+                bluePoint->AddKey(key);
+            }
+            scene.AddSpirit(bluePoint);
+        }
+
+
+        {
+            Eyer::EectorF3 bt709_0_0_0(0.0, 0.0, 0.0);
+
+            MVPLineSpirit * lineSpiritA = new MVPLineSpirit(bt709_1_0_0_xyz, bt709_0_0_0);
+            MVPLineSpirit * lineSpiritB = new MVPLineSpirit(bt709_0_1_0_xyz, bt709_0_0_0);
+            MVPLineSpirit * lineSpiritC = new MVPLineSpirit(bt709_0_0_1_xyz, bt709_0_0_0);
+
+            EyerKey baseKey;
+            baseKey.position = EectorF3(0, 0, 0);
+            baseKey.rotato = EectorF4(1.0, 0.0, 0.0, 0.0);
+            float scale = 2.0;
+            baseKey.scale = EectorF3(scale, scale, scale);
+            baseKey.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+            {
+                EyerKey key = baseKey;
+                key.frame = 490 * fps;
+                lineSpiritA->AddKey(key);
+                lineSpiritB->AddKey(key);
+                lineSpiritC->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 505 * fps;
+                lineSpiritA->AddKey(key);
+                lineSpiritB->AddKey(key);
+                lineSpiritC->AddKey(key);
+            }
+            scene.AddSpirit(lineSpiritA);
+            scene.AddSpirit(lineSpiritB);
+            scene.AddSpirit(lineSpiritC);
+        }
+
+
+        {
+            float a = bt709_1_0_0_xyz.x() + bt709_1_0_0_xyz.y() + bt709_1_0_0_xyz.z();
+            EectorF3 bt709_1_0_0_xyz_norm = bt709_1_0_0_xyz * (1.0 / a);
+            EectorF3 bt709_1_0_0_xyz_norm_ = bt709_1_0_0_xyz_norm;
+            bt709_1_0_0_xyz_norm_.SetZ(0.0);
+
+            a = bt709_0_1_0_xyz.x() + bt709_0_1_0_xyz.y() + bt709_0_1_0_xyz.z();
+            EectorF3 bt709_0_1_0_xyz_norm = bt709_0_1_0_xyz * (1.0 / a);
+            EectorF3 bt709_0_1_0_xyz_norm_ = bt709_0_1_0_xyz_norm;
+            bt709_0_1_0_xyz_norm_.SetZ(0.0);
+
+            a = bt709_0_0_1_xyz.x() + bt709_0_0_1_xyz.y() + bt709_0_0_1_xyz.z();
+            EectorF3 bt709_0_0_1_xyz_norm = bt709_0_0_1_xyz * (1.0 / a);
+            EectorF3 bt709_0_0_1_xyz_norm_ = bt709_0_0_1_xyz_norm;
+            bt709_0_0_1_xyz_norm_.SetZ(0.0);
+
+            MVPLineSpirit * lineSpiritA = new MVPLineSpirit(bt709_1_0_0_xyz_norm, bt709_1_0_0_xyz_norm_);
+            MVPLineSpirit * lineSpiritB = new MVPLineSpirit(bt709_0_1_0_xyz_norm, bt709_0_1_0_xyz_norm_);
+            MVPLineSpirit * lineSpiritC = new MVPLineSpirit(bt709_0_0_1_xyz_norm, bt709_0_0_1_xyz_norm_);
+
+            EyerKey baseKey;
+            baseKey.position = EectorF3(0, 0, 0);
+            baseKey.rotato = EectorF4(1.0, 0.0, 0.0, 0.0);
+            float scale = 1.0;
+            baseKey.scale = EectorF3(scale, scale, scale);
+            baseKey.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+            {
+                EyerKey key = baseKey;
+                key.frame = 515 * fps;
+                key.color = EectorF4(0.0, 0.0, 0.0, 1.0);
+                lineSpiritA->AddKey(key);
+                lineSpiritB->AddKey(key);
+                lineSpiritC->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 520 * fps;
+                key.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+                lineSpiritA->AddKey(key);
+                lineSpiritB->AddKey(key);
+                lineSpiritC->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 525 * fps;
+                key.color = EectorF4(1.0, 1.0, 1.0, 1.0);
+                lineSpiritA->AddKey(key);
+                lineSpiritB->AddKey(key);
+                lineSpiritC->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 530 * fps;
+                key.color = EectorF4(0.0, 0.0, 0.0, 1.0);
+                lineSpiritA->AddKey(key);
+                lineSpiritB->AddKey(key);
+                lineSpiritC->AddKey(key);
+            }
+            scene.AddSpirit(lineSpiritA);
+            scene.AddSpirit(lineSpiritB);
+            scene.AddSpirit(lineSpiritC);
+        }
+
+        Eyer::EectorF3 bt2020_1_0_0(1.0, 0.0, 0.0);
+        Eyer::EectorF3 bt2020_0_1_0(0.0, 1.0, 0.0);
+        Eyer::EectorF3 bt2020_0_0_1(0.0, 0.0, 1.0);
+
+        Eyer::EectorF3 bt2020_1_1_0(1.0, 1.0, 0.0);
+        Eyer::EectorF3 bt2020_0_1_1(0.0, 1.0, 1.0);
+        Eyer::EectorF3 bt2020_1_0_1(1.0, 0.0, 1.0);
+
+        Eyer::EectorF3 bt2020_1_1_1(1.0, 1.0, 1.0);
+
+        Eyer::EectorF3 bt2020_1_0_0_xyz = bt2020_xyz_mat * bt2020_1_0_0;// 红色
+        Eyer::EectorF3 bt2020_0_1_0_xyz = bt2020_xyz_mat * bt2020_0_1_0;// 绿色
+        Eyer::EectorF3 bt2020_0_0_1_xyz = bt2020_xyz_mat * bt2020_0_0_1;// 蓝色
+
+        Eyer::EectorF3 bt2020_1_1_0_xyz = bt2020_xyz_mat * bt2020_1_1_0;// 黄色
+        Eyer::EectorF3 bt2020_0_1_1_xyz = bt2020_xyz_mat * bt2020_0_1_1;// 甸色
+        Eyer::EectorF3 bt2020_1_0_1_xyz = bt2020_xyz_mat * bt2020_1_0_1;// 紫色
+
+        Eyer::EectorF3 bt2020_0_0_0_xyz(0.0, 0.0, 0.0); // 黑色
+        Eyer::EectorF3 bt2020_1_1_1_xyz = bt2020_xyz_mat * bt2020_1_1_1;// 白色
+        {
+            EyerLog("==========xxxxxxxx=========\n");
+            bt2020_1_0_0_xyz.PrintInfo();
+            bt2020_0_1_0_xyz.PrintInfo();
+            bt2020_0_0_1_xyz.PrintInfo();
+
+            float vertex[] = {
+                    // 蓝绿黑
+                    bt2020_0_0_1_xyz.x(), bt2020_0_0_1_xyz.y(), bt2020_0_0_1_xyz.z(),
+                    bt2020_0_1_0_xyz.x(), bt2020_0_1_0_xyz.y(), bt2020_0_1_0_xyz.z(),
+                    bt2020_0_0_0_xyz.x(), bt2020_0_0_0_xyz.y(), bt2020_0_0_0_xyz.z(),
+                    // 蓝绿甸
+                    bt2020_0_0_1_xyz.x(), bt2020_0_0_1_xyz.y(), bt2020_0_0_1_xyz.z(),
+                    bt2020_0_1_0_xyz.x(), bt2020_0_1_0_xyz.y(), bt2020_0_1_0_xyz.z(),
+                    bt2020_0_1_1_xyz.x(), bt2020_0_1_1_xyz.y(), bt2020_0_1_1_xyz.z(),
+
+
+                    //红蓝黑
+                    bt2020_1_0_0_xyz.x(), bt2020_1_0_0_xyz.y(), bt2020_1_0_0_xyz.z(),
+                    bt2020_0_0_1_xyz.x(), bt2020_0_0_1_xyz.y(), bt2020_0_0_1_xyz.z(),
+                    bt2020_0_0_0_xyz.x(), bt2020_0_0_0_xyz.y(), bt2020_0_0_0_xyz.z(),
+                    //红蓝紫
+                    bt2020_1_0_0_xyz.x(), bt2020_1_0_0_xyz.y(), bt2020_1_0_0_xyz.z(),
+                    bt2020_0_0_1_xyz.x(), bt2020_0_0_1_xyz.y(), bt2020_0_0_1_xyz.z(),
+                    bt2020_1_0_1_xyz.x(), bt2020_1_0_1_xyz.y(), bt2020_1_0_1_xyz.z(),
+
+
+                    //红绿黑
+                    bt2020_1_0_0_xyz.x(), bt2020_1_0_0_xyz.y(), bt2020_1_0_0_xyz.z(),
+                    bt2020_0_1_0_xyz.x(), bt2020_0_1_0_xyz.y(), bt2020_0_1_0_xyz.z(),
+                    bt2020_0_0_0_xyz.x(), bt2020_0_0_0_xyz.y(), bt2020_0_0_0_xyz.z(),
+                    //红绿黄
+                    bt2020_1_0_0_xyz.x(), bt2020_1_0_0_xyz.y(), bt2020_1_0_0_xyz.z(),
+                    bt2020_0_1_0_xyz.x(), bt2020_0_1_0_xyz.y(), bt2020_0_1_0_xyz.z(),
+                    bt2020_1_1_0_xyz.x(), bt2020_1_1_0_xyz.y(), bt2020_1_1_0_xyz.z(),
+
+
+                    //红紫黄
+                    bt2020_1_0_0_xyz.x(), bt2020_1_0_0_xyz.y(), bt2020_1_0_0_xyz.z(),
+                    bt2020_1_0_1_xyz.x(), bt2020_1_0_1_xyz.y(), bt2020_1_0_1_xyz.z(),
+                    bt2020_1_1_0_xyz.x(), bt2020_1_1_0_xyz.y(), bt2020_1_1_0_xyz.z(),
+                    //紫黄白
+                    bt2020_1_0_1_xyz.x(), bt2020_1_0_1_xyz.y(), bt2020_1_0_1_xyz.z(),
+                    bt2020_1_1_0_xyz.x(), bt2020_1_1_0_xyz.y(), bt2020_1_1_0_xyz.z(),
+                    bt2020_1_1_1_xyz.x(), bt2020_1_1_1_xyz.y(), bt2020_1_1_1_xyz.z(),
+
+                    //蓝紫甸
+                    bt2020_0_0_1_xyz.x(), bt2020_0_0_1_xyz.y(), bt2020_0_0_1_xyz.z(),
+                    bt2020_1_0_1_xyz.x(), bt2020_1_0_1_xyz.y(), bt2020_1_0_1_xyz.z(),
+                    bt2020_0_1_1_xyz.x(), bt2020_0_1_1_xyz.y(), bt2020_0_1_1_xyz.z(),
+                    //紫甸白
+                    bt2020_1_0_1_xyz.x(), bt2020_1_0_1_xyz.y(), bt2020_1_0_1_xyz.z(),
+                    bt2020_0_1_1_xyz.x(), bt2020_0_1_1_xyz.y(), bt2020_0_1_1_xyz.z(),
+                    bt2020_1_1_1_xyz.x(), bt2020_1_1_1_xyz.y(), bt2020_1_1_1_xyz.z(),
+
+                    //绿甸黄
+                    bt2020_0_1_0_xyz.x(), bt2020_0_1_0_xyz.y(), bt2020_0_1_0_xyz.z(),
+                    bt2020_0_1_1_xyz.x(), bt2020_0_1_1_xyz.y(), bt2020_0_1_1_xyz.z(),
+                    bt2020_1_1_0_xyz.x(), bt2020_1_1_0_xyz.y(), bt2020_1_1_0_xyz.z(),
+
+                    //甸黄白
+                    bt2020_0_1_1_xyz.x(), bt2020_0_1_1_xyz.y(), bt2020_0_1_1_xyz.z(),
+                    bt2020_1_1_0_xyz.x(), bt2020_1_1_0_xyz.y(), bt2020_1_1_0_xyz.z(),
+                    bt2020_1_1_1_xyz.x(), bt2020_1_1_1_xyz.y(), bt2020_1_1_1_xyz.z(),
+            };
+            float coor[] = {
+                    0.0, 0.0, 1.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 0.0, 0.0,
+
+                    0.0, 0.0, 1.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 1.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 0.0, 1.0,
+                    0.0, 0.0, 0.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 0.0, 1.0,
+                    1.0, 0.0, 1.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 0.0, 0.0,
+
+                    1.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    1.0, 1.0, 0.0,
+
+                    1.0, 0.0, 0.0,
+                    1.0, 0.0, 1.0,
+                    1.0, 1.0, 0.0,
+
+                    1.0, 0.0, 1.0,
+                    1.0, 1.0, 0.0,
+                    1.0, 1.0, 1.0,
+
+                    0.0, 0.0, 1.0,
+                    1.0, 0.0, 1.0,
+                    0.0, 1.0, 1.0,
+
+                    1.0, 0.0, 1.0,
+                    0.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0,
+
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 1.0,
+                    1.0, 1.0, 0.0,
+
+                    0.0, 1.0, 1.0,
+                    1.0, 1.0, 0.0,
+                    1.0, 1.0, 1.0
+            };
+            unsigned int vertexIndex[] = {
+                    0, 1, 2,
+                    3, 4, 5,
+                    6, 7, 8,
+                    9, 10, 11,
+                    12, 13, 14,
+                    15, 16, 17,
+                    18, 19, 20,
+                    21, 22, 23,
+                    24, 25, 26,
+                    27, 28, 29,
+                    30, 31, 32,
+                    33, 34, 35
+            };
+            MVPCustomSpirit * bt2020 = new MVPCustomSpirit((float *)vertex, sizeof(vertex), (float *)coor, sizeof(coor), (unsigned int *)vertexIndex, sizeof(vertexIndex));
+            {
+                EyerKey key = baseKey;
+                key.frame = 660 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.0);
+                bt2020->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = 670 * fps;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.35);
+                bt2020->AddKey(key);
+            }
+            {
+                EyerKey key = baseKey;
+                key.frame = endFrame;
+                key.scale = EectorF3(1.0, 1.0, 1.0);
+                key.color = EectorF4(1.0, 1.0, 1.0, 0.35);
+                bt2020->AddKey(key);
+            }
+            scene.AddSpirit(bt2020);
+        }
+
         return 0;
     }
 
@@ -1254,8 +2437,8 @@ namespace Eyer
         double time = dTime / 1000.0;
 
 
-        time *= 3;
-        time += 340;
+        time *= 1;
+        // time += 550;
 
 
         if(time < 0){
@@ -1264,7 +2447,7 @@ namespace Eyer
 
         int frame = time * fps;
 
-        scene.Render(frame);
+        scene.Render(time);
         frameIndex++;
 
         return 0;
