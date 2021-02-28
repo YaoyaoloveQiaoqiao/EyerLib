@@ -1126,6 +1126,7 @@ namespace Eyer
                 EyerKey key = baseKey;
                 key.frame = 365 * fps;
                 key.position = bt709_red_xyz;
+                key.color = EectorF4(1.0, 0.0, 0.0, 1.0);
                 red->AddKey(key);
             }
 
@@ -1133,6 +1134,7 @@ namespace Eyer
                 EyerKey key = baseKey;
                 key.frame = endFrame;
                 key.position = bt709_red_xyz;
+                key.color = EectorF4(1.0, 0.0, 0.0, 1.0);
                 red->AddKey(key);
             }
             scene.AddSpirit(red);
@@ -1159,6 +1161,7 @@ namespace Eyer
                 EyerKey key = baseKey;
                 key.frame = 365 * fps;
                 key.position = bt709_green_xyz;
+                key.color = EectorF4(0.0, 1.0, 0.0, 1.0);
                 green->AddKey(key);
             }
 
@@ -1166,6 +1169,7 @@ namespace Eyer
                 EyerKey key = baseKey;
                 key.frame = endFrame;
                 key.position = bt709_green_xyz;
+                key.color = EectorF4(0.0, 1.0, 0.0, 1.0);
                 green->AddKey(key);
             }
             scene.AddSpirit(green);
@@ -1191,6 +1195,7 @@ namespace Eyer
                 EyerKey key = baseKey;
                 key.frame = 365 * fps;
                 key.position = bt709_blue_xyz;
+                key.color = EectorF4(0.0, 0.0, 1.0, 1.0);
                 blue->AddKey(key);
             }
 
@@ -1198,6 +1203,7 @@ namespace Eyer
                 EyerKey key = baseKey;
                 key.frame = endFrame;
                 key.position = bt709_blue_xyz;
+                key.color = EectorF4(0.0, 0.0, 1.0, 1.0);
                 blue->AddKey(key);
             }
             scene.AddSpirit(blue);
