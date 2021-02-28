@@ -6,6 +6,6 @@ namespace Eyer
 {
     float Eath::DegreesToRadians(float degrees)
     {
-        return degrees * float(M_PI/180);
+        return degrees * float(EYER_PI/180);
     }
 }
