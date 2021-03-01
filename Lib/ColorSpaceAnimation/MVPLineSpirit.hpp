@@ -12,7 +12,7 @@ namespace Eyer
     class MVPLineSpirit : public EyerSpirit
     {
     public:
-        MVPLineSpirit(Eyer::EectorF3 & a, Eyer::EectorF3 & b);
+        MVPLineSpirit(const Eyer::EectorF3 & a, const Eyer::EectorF3 & b);
 
         virtual int RenderInit();
         virtual int RenderDestory();
