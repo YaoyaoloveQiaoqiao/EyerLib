@@ -7,6 +7,13 @@
 
 TEST(EyerAVC, NALUReader)
 {
+    char a = -1;
+    Eyer::EyerBitStream bitStream((uint8_t *)(&a), sizeof(a));
+    for(int i=0;i<8;i++){
+        int aa = bitStream.bs_read_u1();
+        printf(" %d ", aa);
+    }
+    printf("\n");
     // Eyer::EyerAnnexB annexB("./demo_video_176x144_baseline.h264");
     Eyer::EyerAnnexB annexB("./a_1.h264");
     // Eyer::EyerAnnexB annexB("./demo_video.h264");
