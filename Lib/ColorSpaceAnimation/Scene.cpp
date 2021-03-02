@@ -2437,8 +2437,8 @@ namespace Eyer
         double time = dTime / 1000.0;
 
 
-        time *= 1;
-        // time += 550;
+        time *= 6;
+        time += 0;
 
 
         if(time < 0){
@@ -2447,7 +2447,7 @@ namespace Eyer
 
         int frame = time * fps;
 
-        scene.Render(time);
+        scene.Render(frame);
         frameIndex++;
 
         return 0;

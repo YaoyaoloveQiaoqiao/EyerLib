@@ -20,7 +20,9 @@ add_executable(
         MVPNormalizePlaneSpirit.hpp
         MVPLineSpirit.cpp
         MVPLineSpirit.hpp
-        MVPCustomSpirit.cpp MVPCustomSpirit.hpp)
+        MVPCustomSpirit.cpp 
+	MVPCustomSpirit.hpp
+)
 
 include_directories (../)
 

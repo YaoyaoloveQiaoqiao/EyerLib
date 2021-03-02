@@ -8,7 +8,7 @@
 #include "EyerGL/GLHeader.h"
 
 int main(int argc,char **argv){
-    eyer_log_param(1, 1, 0, 0, 0);
+    eyer_log_param(1, 1, 1, 0, 0);
 
     EyerLog("Hello World\n");
 
@@ -25,6 +25,8 @@ int main(int argc,char **argv){
     scene.Start();
 
     while (!window.ShouldClose()){
+        // Eyer::BLOCK_TIME blockTime("Update");
+
         window.Clear();
         scene.Update();
 
