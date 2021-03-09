@@ -18,6 +18,8 @@ namespace Eyer
 
         int Render(EatrixF4x4 & vp, int frameIndex);
 
+        EectorF4 GetColor(int frameIndex);
+
         virtual int RenderContent(EatrixF4x4 & vp, EyerKey & key) = 0;
         virtual int RenderInit() = 0;
         virtual int RenderDestory() = 0;

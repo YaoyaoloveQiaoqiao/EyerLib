@@ -2,7 +2,7 @@
 
 namespace Eyer
 {
-    MVPLineSpirit::MVPLineSpirit(Eyer::EectorF3 & _a, Eyer::EectorF3 & _b)
+    MVPLineSpirit::MVPLineSpirit(const Eyer::EectorF3 & _a, const Eyer::EectorF3 & _b)
     {
         a = _a;
         b = _b;

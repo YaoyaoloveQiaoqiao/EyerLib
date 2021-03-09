@@ -8,6 +8,39 @@
 #include "EyerGL/GLHeader.h"
 
 int main(int argc,char **argv){
+    eyer_log_param(1, 1, 1, 0, 0);
+
+    EyerLog("Hello World\n");
+
+    int width = 1920;
+    int height = 1080;
+
+    Eyer::EyerGLWindow window("ColorSpace", width, height);
+
+    window.Open();
+    window.SetBGColor(0.0, 0.0, 0.0, 1.0);
+
+    Eyer::Scene scene(width, height);
+
+    scene.Start();
+
+    while (!window.ShouldClose()){
+        // Eyer::BLOCK_TIME blockTime("Update");
+
+        window.Clear();
+        scene.Update();
+
+        glFinish();
+
+        window.Loop();
+    }
+
+    window.Close();
+
+    return 0;
+}
+
+int main2(int argc,char **argv){
     eyer_log_param(1, 1, 0, 0, 0);
 
     EyerLog("Hello World\n");

@@ -40,6 +40,50 @@ namespace Eyer
         return 0;
     }
 
+    EectorF4 EyerSpirit::GetColor(int frameIndex)
+    {
+        EectorF4 color(1.0, 1.0, 1.0, 0.0);
+
+        EyerKey * A = nullptr;
+        EyerKey * B = nullptr;
+
+        // 0, 40, 18000
+
+        for(int i=0;i<keyList.size();i++){
+            int frame = keyList[i]->frame;
+            if(frame < frameIndex){
+                if(A == nullptr){
+                    A = keyList[i];
+                }
+                else{
+                    if(A->frame < frame){
+                        A = keyList[i];
+                    }
+                }
+            }
+            if(frame >= frameIndex){
+                if(B == nullptr){
+                    B = keyList[i];
+                }
+                else{
+                    if(B->frame >= frame){
+                        B = keyList[i];
+                    }
+                }
+            }
+        }
+
+        if(A == nullptr || B == nullptr){
+            return color;
+        }
+
+        Eyer::EnterPolation<float> C(A->color, B->color, A->frame, B->frame);
+
+        color = C.Get(frameIndex);
+
+        return color;
+    }
+
     int EyerSpirit::Render(EatrixF4x4 & vp, int frameIndex)
     {
         EyerKey * A = nullptr;
