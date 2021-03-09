@@ -53,7 +53,6 @@ namespace Eyer {
         };
         adobeRGB_xyz_mat = Eyer::Eatrix<float>(3, 3);
         adobeRGB_xyz_mat.SetData(adobeRGB_xyz, 9);
-
     }
 
     EyerColorSpaceMat *EyerColorSpaceMat::GetInstance() {
