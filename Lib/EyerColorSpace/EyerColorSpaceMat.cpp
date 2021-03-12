@@ -61,7 +61,6 @@ namespace Eyer {
         };
         DCI_P3_xyz_mat = Eyer::Eatrix<float>(3, 3);
         DCI_P3_xyz_mat.SetData(DCI_P3_xyz, 9);
-
     }
 
     EyerColorSpaceMat *EyerColorSpaceMat::GetInstance() {

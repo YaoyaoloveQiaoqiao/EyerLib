@@ -36,7 +36,7 @@ namespace Eyer {
         memcpy(str, _str, _strLen);
     }
 
-    const EyerString & EyerString::operator = (const EyerString & s)
+    EyerString & EyerString::operator = (const EyerString & s)
     {
         if(this == &s){
             return *this;
@@ -92,7 +92,7 @@ namespace Eyer {
         return false;
     }
 
-    EyerString EyerString::operator + (const EyerString & s){
+    const EyerString EyerString::operator + (const EyerString & s) const{
         EyerString outStr;
 
         if(IsEmpty() && s.IsEmpty()){
@@ -129,11 +129,10 @@ namespace Eyer {
         return outStr;
     }
 
-    EyerString EyerString::operator += (const EyerString & s)
+    const EyerString & EyerString::operator += (const EyerString & s)
     {
-        EyerString outStr;
-        outStr = *this + s;
-        return outStr;
+        *this = *this + s;
+        return *this;
     }
 
     bool EyerString::IsEmpty() const

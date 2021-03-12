@@ -327,4 +327,90 @@ namespace Eyer
             color = vec4(f,f*f,f*f*f,1.0);
         }
     );
+
+
+
+
+
+
+
+    char * EYER_GL_SHADER::MVP_PLANE_VERTEX_SHADER = (char *)SHADER(
+                                                                     layout (location = 0) in vec3 pos;
+                                                                     layout (location = 1) in vec3 coor;
+                                                                     out vec3 outCoor;
+
+                                                                     uniform mat4 mvp;
+
+                                                                     void main(){
+                                                                         outCoor = coor;
+                                                                         gl_Position = mvp * vec4(pos * 1.0, 1.0);
+                                                                     }
+                                                             );
+    char * EYER_GL_SHADER::MVP_PLANE_FRAGMENT_SHADER = (char *)SHADER(
+                                                                       out vec4 color;
+                                                                       in vec3 outCoor;
+
+                                                                       void main()
+                                                                       {
+                                                                           color = vec4(outCoor, 1.0f);
+                                                                       }
+                                                               );
+
+    char * EYER_GL_SHADER::MVP_GEOM_VERTEX_SHADER = (char *)SHADER(
+                                                                    layout (location = 0) in vec3 pos;
+                                                                    layout (location = 1) in vec3 coor;
+                                                                    out vec3 outCoor;
+
+                                                                    uniform mat4 mvp;
+
+                                                                    void main(){
+                                                                        outCoor = coor;
+                                                                        gl_Position = mvp * vec4(pos * 1.0, 1.0);
+                                                                        gl_PointSize = 5.0;
+                                                                    }
+                                                            );
+    char * EYER_GL_SHADER::MVP_GEOM_FRAGMENT_SHADER = (char *)SHADER(
+                                                                      out vec4 color;
+                                                                      in vec3 outCoor;
+
+                                                                      uniform float color_r;
+                                                                      uniform float color_g;
+                                                                      uniform float color_b;
+                                                                      uniform float color_a;
+
+                                                                      void main()
+                                                                      {
+                                                                          // color = vec4(outCoor, 1.0f);
+                                                                          color = vec4(color_r, color_g, color_b, color_a);
+                                                                      }
+                                                              );
+
+    char * EYER_GL_SHADER::IMAGE_PLANE_VERTEX_SHADER = (char *)SHADER(
+                                                                       layout (location = 0) in vec3 pos;
+                                                                       layout (location = 1) in vec3 coor;
+
+                                                                       out vec3 outCoor;
+
+                                                                       uniform mat4 mvp;
+
+                                                                       void main()
+                                                                       {
+                                                                           outCoor = coor;
+                                                                           gl_Position = mvp * vec4(pos, 1.0);
+                                                                       }
+                                                               );
+
+    char * EYER_GL_SHADER::IMAGE_PLANE_FRAGMENT_SHADER = (char *)SHADER(
+
+                                                                         out vec4 color;
+
+                                                                         in vec3 outCoor;
+
+                                                                         uniform sampler2D image;
+
+                                                                         void main(){
+                                                                             vec2 t = vec2(outCoor.x, 1.0 - outCoor.y);
+                                                                             color = texture(image, t);
+                                                                         }
+                                                                 );
 }

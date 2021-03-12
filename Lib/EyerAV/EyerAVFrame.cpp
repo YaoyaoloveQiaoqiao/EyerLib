@@ -28,6 +28,11 @@ namespace Eyer {
             delete piml;
             piml = nullptr;
         }
+
+        for(int i=0;i<dataManager.size();i++){
+            delete dataManager[i];
+        }
+        dataManager.clear();
     }
 
     EyerAVFrame::EyerAVFrame(const EyerAVFrame & frame) : EyerAVFrame()
@@ -368,5 +373,48 @@ namespace Eyer {
     uint8_t * EyerAVFrame::GetData(int channel)
     {
         return piml->frame->data[channel];
+    }
+
+    int EyerAVFrame::SetVideoData420P(unsigned char * _y, unsigned char * _u, unsigned char * _v, int _width, int _height)
+    {
+        unsigned char * y = (unsigned char *)malloc(_width * _height);
+        memcpy(y, _y, _width * _height);
+
+        unsigned char * u = (unsigned char *)malloc(_width * _height / 4);
+        memcpy(u, _u, _width * _height / 4);
+
+        unsigned char * v = (unsigned char *)malloc(_width * _height / 4);
+        memcpy(v, _v, _width * _height / 4);
+
+        dataManager.push_back(y);
+        dataManager.push_back(u);
+        dataManager.push_back(v);
+
+        piml->frame->format = AV_PIX_FMT_YUV420P;
+        piml->frame->width = _width;
+        piml->frame->height = _height;
+
+        piml->frame->linesize[0] = _width;
+        piml->frame->linesize[1] = _width / 2;
+        piml->frame->linesize[2] = _width / 2;
+
+        piml->frame->data[0] = y;
+        piml->frame->data[1] = u;
+        piml->frame->data[2] = v;
+
+        /*
+        int ret = av_image_alloc(piml->frame->data, piml->frame->linesize, _width, _height, AV_PIX_FMT_YUV420P, 16);
+
+        EyerLog("=====================================\n");
+        EyerLog("linesize[0]:%d\n", piml->frame->linesize[0]);
+        EyerLog("linesize[1]:%d\n", piml->frame->linesize[1]);
+        EyerLog("linesize[2]:%d\n", piml->frame->linesize[2]);
+
+        memcpy(piml->frame->data[0], _y, _width * _height);
+        memcpy(piml->frame->data[1], _u, _width * _height / 4);
+        memcpy(piml->frame->data[2], _v, _width * _height / 4);
+        */
+
+        return 0;
     }
 }
